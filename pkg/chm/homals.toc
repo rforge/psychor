@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HEAD></HEAD><HTML><BODY>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package homals:  Contents">
+<param name="Local" value="00Index.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package homals:  R objects">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="homals-package">
+<param name="Local" value="homals-package.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="galo">
+<param name="Local" value="galo.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="gubell">
+<param name="Local" value="gubell.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="hartigan">
+<param name="Local" value="hartigan.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="homals">
+<param name="Local" value="homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="house">
+<param name="Local" value="house.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="mammals">
+<param name="Local" value="mammals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="neumann">
+<param name="Local" value="neumann.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot.homals">
+<param name="Local" value="plot.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot3d.homals">
+<param name="Local" value="plot.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="predict.homals">
+<param name="Local" value="predict.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="print.homals">
+<param name="Local" value="print.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="print.predict.homals">
+<param name="Local" value="predict.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="roskam">
+<param name="Local" value="roskam.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="scatterplot3d.homals">
+<param name="Local" value="plot.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="senate">
+<param name="Local" value="senate.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="sleeping">
+<param name="Local" value="sleeping.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="small">
+<param name="Local" value="small.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="summary.homals">
+<param name="Local" value="print.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="summary.predict.homals">
+<param name="Local" value="predict.homals.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package homals:  Titles">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Classification tables for homals solutions">
+<param name="Local" value="predict.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="GALO dataset">
+<param name="Local" value="galo.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Guttman-Bell dataset">
+<param name="Local" value="gubell.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Hartigan's Hardware">
+<param name="Local" value="hartigan.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Homogeneity Analysis">
+<param name="Local" value="homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Homogeneity Analysis ">
+<param name="Local" value="homals-package.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="House">
+<param name="Local" value="house.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Mammals dataset">
+<param name="Local" value="mammals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Neumann dataset">
+<param name="Local" value="neumann.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Plot methods for homals">
+<param name="Local" value="plot.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Roskam dataset">
+<param name="Local" value="roskam.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="S3 methods for homals objects">
+<param name="Local" value="print.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Senate votes">
+<param name="Local" value="senate.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Sleeping Bags">
+<param name="Local" value="sleeping.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Small dataset">
+<param name="Local" value="small.html">
+</OBJECT>
+</UL>
+</UL>
+</BODY></HTML>

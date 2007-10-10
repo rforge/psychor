@@ -1,0 +1,17 @@
+Package: homals
+Type: Package
+Title: Homogeneity Analysis
+Version: 0.8-9
+Date: 2007-10-4
+Author: Jan de Leeuw, Patrick Mair
+Maintainer: Jan de Leeuw <deleeuw@ucla.edu>
+Description: This package performs a homogeneity analysis, aka a multiple correspondence
+  analysis, but with many additional options. Variables can be grouped into
+  sets, in order to emulate regression analysis and canonical analysis. For
+  each variable there are, in addition, rank constraints on the category
+  quantifications (or transformations) and level constraints (which allows
+  one to treat a variable as nominal, ordinal, or numerical).
+License: GPL
+Imports: graphics, stats
+Depends: rgl, ape, scatterplot3d
+Packaged: Mon Sep 24 10:04:41 2007; admin

@@ -1,0 +1,12 @@
+scatterplot3d <- function(x, y = NULL, z = NULL, color = par("col"), pch = NULL,
+    main = NULL, sub = NULL, xlim = NULL, ylim = NULL, zlim = NULL,
+    xlab = NULL, ylab = NULL, zlab = NULL, scale.y = 1, angle = 40,
+    axis = TRUE, tick.marks = TRUE, label.tick.marks = TRUE,
+    x.ticklabs = NULL, y.ticklabs = NULL, z.ticklabs = NULL,
+    y.margin.add = 0, grid = TRUE, box = TRUE, lab = par("lab"),
+    lab.z = mean(lab[1:2]), type = "p", highlight.3d = FALSE,
+    mar = c(5, 3, 4, 3) + 0.1, col.axis = par("col.axis"), col.grid = "grey",
+    col.lab = par("col.lab"), cex.symbols = par("cex"), cex.axis = par("cex.axis"),
+    cex.lab = 0.8 * par("cex.lab"), font.axis = par("font.axis"),
+    font.lab = par("font.lab"), lty.axis = par("lty"), lty.grid = par("lty"),
+    lty.hide = NULL, log = "", ...)UseMethod("scatterplot3d")
