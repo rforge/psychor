@@ -5,8 +5,8 @@
 \description{Print and summary method for objects of class \code{"homals"}
 }
 \usage{
-print.homals(x, ...)
-summary.homals(object, ...)
+\method{print}{homals}(x, ...)
+\method{summary}{homals}(object, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

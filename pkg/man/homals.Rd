@@ -11,7 +11,7 @@
 }
 \usage{
 homals(dframe, sets = 0, ndim = 2, active = TRUE, rank = ndim, level = "nominal", 
-       eps1 = -Inf, eps2 = 1e-06, itermax = 100)
+       eps1 = 1e-06, eps2 = 1e-06, itermax = 100)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -58,7 +58,7 @@ homals(dframe, sets = 0, ndim = 2, active = TRUE, rank = ndim, level = "nominal"
   \item{niter}{Number of iterations.}
   \item{level}{Vector with variable levels.}
   \item{eigenvalues}{Final eigenvalues.}
-  \item{gain}{Final gain values.}
+  \item{loss}{Value of the loss function.}
   \item{rank.vec}{Vector with ranks for each variable.}
   \item{scores}{Matrix with object scores on single dimension.}
   \item{rank.cat}{List of rank restriced category quantifications.}

@@ -1,5 +1,5 @@
 <html><head><title>Homogeneity Analysis</title>
-<meta http-equiv="Content-Type" content="text/html; charset=">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" type="text/css" href="Rchm.css">
 </head>
 <body>
@@ -29,7 +29,7 @@ one to treat a variable as nominal, ordinal, or numerical).
 
 <pre>
 homals(dframe, sets = 0, ndim = 2, active = TRUE, rank = ndim, level = "nominal", 
-       eps1 = -Inf, eps2 = 1e-06, itermax = 100)
+       eps1 = 1e-06, eps2 = 1e-06, itermax = 100)
 </pre>
 
 
@@ -119,9 +119,9 @@ Vector with variable levels.</td></tr>
 <tr valign="top"><td><code>eigenvalues</code></td>
 <td>
 Final eigenvalues.</td></tr>
-<tr valign="top"><td><code>gain</code></td>
+<tr valign="top"><td><code>loss</code></td>
 <td>
-Final gain values.</td></tr>
+Value of the loss function.</td></tr>
 <tr valign="top"><td><code>rank.vec</code></td>
 <td>
 Vector with ranks for each variable.</td></tr>
@@ -190,6 +190,6 @@ Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
 
 
 
-<hr><div align="center">[Package <em>homals</em> version 0.8-9 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>homals</em> version 0.8-10 <a href="00Index.html">Index]</a></div>
 
 </body></html>

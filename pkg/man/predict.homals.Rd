@@ -10,7 +10,7 @@ the variable. We can then find out how well we have reconstructed the
 original data in terms of a classification table.
 }
 \usage{
-predict.homals(object, ...)
+\method{predict}{homals}(object, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

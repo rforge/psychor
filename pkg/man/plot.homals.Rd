@@ -6,13 +6,13 @@
 \description{These methods provide various 2D and 3D plots for objects of class \code{"homals"}.
 }
 \usage{
-plot.homals(x, plot.dim = c(1, 2), plot.type, var.subset, main, type, xlab, ylab, xlim, ylim, 
+\method{plot}{homals}(x, plot.dim = c(1, 2), plot.type, var.subset, main, type, xlab, ylab, xlim, ylim, 
 leg.pos = "topright", ...)
 
-plot3d.homals(x, plot.dim = c(1, 2, 3), plot.type, var.subset, type, xlab, ylab, 
+\method{plot3d}{homals}(x, plot.dim = c(1, 2, 3), plot.type, var.subset, type, xlab, ylab, 
 zlab, col, main, sphere = TRUE, bgpng = "particle.png", ax.grid = TRUE, ...)
 
-scatterplot3d.homals(x, plot.dim = c(1, 2, 3), plot.type, var.subset, main, type, 
+\method{scatterplot3d}{homals}(x, plot.dim = c(1, 2, 3), plot.type, var.subset, main, type, 
 xlab, ylab, zlab, xlim, ylim, zlim, ...)
 
 }
@@ -40,7 +40,7 @@ xlab, ylab, zlab, xlim, ylim, zlim, ...)
   \item{sphere}{Whether 3D-sphere should be drawn.}
   \item{bgpng}{Background image in /library/rgl/textures/. If \code{NULL}, blank background.}
   \item{ax.grid}{If \code{TRUE} grid is drawn.}
-  \item{\dots}{Further arguments passed to \code{\link{plot}}}
+  \item{\dots}{Further arguments passed to \code{\link{plot}}, plot3d, or scatterplot3d.}
 }
 \details{The \code{rgl} method \code{plot3d} produces a object plot only, whereas 
 \code{scatterplot3d} allows for object plots, label plots, and category quantification plots.

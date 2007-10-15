@@ -1,5 +1,5 @@
 <html><head><title>Plot methods for homals</title>
-<meta http-equiv="Content-Type" content="text/html; charset=">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" type="text/css" href="Rchm.css">
 </head>
 <body>
@@ -25,13 +25,16 @@ These methods provide various 2D and 3D plots for objects of class <code>"homals
 <h3>Usage</h3>
 
 <pre>
-plot.homals(x, plot.dim = c(1, 2), plot.type, var.subset, main, type, xlab, ylab, xlim, ylim, 
+## S3 method for class 'homals':
+plot(x, plot.dim = c(1, 2), plot.type, var.subset, main, type, xlab, ylab, xlim, ylim, 
 leg.pos = "topright", ...)
 
-plot3d.homals(x, plot.dim = c(1, 2, 3), plot.type, var.subset, type, xlab, ylab, 
+## S3 method for class 'homals':
+plot3d(x, plot.dim = c(1, 2, 3), plot.type, var.subset, type, xlab, ylab, 
 zlab, col, main, sphere = TRUE, bgpng = "particle.png", ax.grid = TRUE, ...)
 
-scatterplot3d.homals(x, plot.dim = c(1, 2, 3), plot.type, var.subset, main, type, 
+## S3 method for class 'homals':
+scatterplot3d(x, plot.dim = c(1, 2, 3), plot.type, var.subset, main, type, 
 xlab, ylab, zlab, xlim, ylim, zlim, ...)
 
 </pre>
@@ -98,7 +101,7 @@ Background image in /library/rgl/textures/. If <code>NULL</code>, blank backgrou
 If <code>TRUE</code> grid is drawn.</td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
-Further arguments passed to <code><a onclick="findlink('graphics', 'plot.html')" style="text-decoration: underline; color: blue; cursor: hand">plot</a></code></td></tr>
+Further arguments passed to <code><a onclick="findlink('graphics', 'plot.html')" style="text-decoration: underline; color: blue; cursor: hand">plot</a></code>, plot3d, or scatterplot3d.</td></tr>
 </table>
 
 <h3>Details</h3>
@@ -195,6 +198,6 @@ location.href = link;
 </script>
 
 
-<hr><div align="center">[Package <em>homals</em> version 0.8-9 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>homals</em> version 0.8-10 <a href="00Index.html">Index]</a></div>
 
 </body></html>

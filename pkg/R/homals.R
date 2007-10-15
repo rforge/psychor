@@ -1,87 +1,94 @@
 `homals` <-
 function(dframe,   # data (in data-frame)
-sets=0,              	# list of vectors of indices
-	ndim=2,              	# dimensionality (default 2)
-	active=TRUE,            # which variables are active (single TRUE means all)
-  rank=ndim,           	# which quantification ranks (default all ndim)
-  level = "nominal",
-  eps1=-Inf,           	# iteration precision eigenvalues (default 1e-6)
-	eps2=1e-6,           	# iteration precision eigenvectors (default 1e-6)
-	itermax=100         	# maximum number of iterations (default 100)
+		sets=0, 				# list of vectors of indices
+		ndim=2,              	# dimensionality (default 2)
+		active=TRUE,            # which variables are active (single TRUE means all)
+		rank=ndim,           	# which quantification ranks (default all ndim)
+		level="nominal",		# which measurement level (default all nominal)
+		eps1=1e-6,           	# iteration precision eigenvalues (default 1e-6)
+		eps2=1e-6,           	# iteration precision eigenvectors (default 1e-6)
+		itermax=100         	# maximum number of iterations (default 100)
 )
 
 {
 
-name <- deparse(substitute(dframe))
-nobj <- dim(dframe)[1]                         #number of objects
-nvar <- dim(dframe)[2]                         #number of variables
-if ((length(level) > 1) && (length(level) != nvar)) 
-  stop ("Level vector does not match number of variables!")
+#-----------------------------set some constants--------------------------------
+verbose <- FALSE	
+name <- deparse(substitute(dframe))		# frame name
+nobj <- nrow(dframe)					# number of objects
+nvar <- ncol(dframe)					# number of variables
+vname <- names(dframe)					# variable names
+rname <- rownames(dframe)				# object names
 
-
-iter <- 0
-pops <- 0
+#-----------------------------convert to factors--------------------------------
 
 for (j in 1:nvar) {
 	dframe[, j] <- as.factor(dframe[, j])
     levels(dframe[, j])<-sort(levels(dframe[, j]))
 	}
 
+#-----------------------------parameter consistency-----------------------------
+
+active<-checkPars(active,nvar)
+rank<-checkPars(rank,nvar)
+level<-checkPars(level,nvar)
+
 if (length(sets) == 1) sets <- lapply(1:nvar,"c")              #variable sets
-pca <- (max(sapply(sets,length)) <= 1)
-
 nset <- length(sets)                                           #number of sets
-if (pca) { mis <- apply(dframe,1,function (x) sum(ifelse(is.na(x),0,1)))
-} else {
-   mis <- apply(sapply(1:nset,
-		function(s) apply(cbind(dframe[,sets[[s]]]),1,
-		function (x) prod(ifelse(is.na(x),0,1)))),1,sum)
-}
 
-vname <- attr(dframe,"names")
-rname <- attr(dframe,"row.names")
+af <- function(s) rowSums(ifelse(outer(1:nvar,sets[[s]],"=="),1,0))
+rs <- rowSums(sapply(1:nset,af))
+if (max(rs) > 1) stop("overlapping sets !")
+ws<-which(rs == 0)
+if (length(ws) > 0) {
+	warning("Some variables not assigned to sets, made passive")
+	active[ws]<-FALSE
+	sets <- c(sets,list(ws))
+	}
 
-if (length(active)==1) active<-rep(active,nvar)
+bf <- function (x) prod(ifelse(is.na(x),0,1))
+cf <- function (s) apply(cbind(dframe[,sets[[s]]]),1,bf)
+mis <- apply(sapply(1:nset,cf),1,sum)
 
-if (length(rank)==1) rank <- rep(rank,nvar)                  #quantification rank
-if (length(level)==1) level<-rep(level,nvar)                 #nominal (quantification) level
+# do we need this ?
 
 for (j in 1:nvar) {
-  k<-length(levels(dframe[,j]))
+	k<-length(levels(dframe[,j]))
 	if (rank[j] > min(ndim,k-1)) rank[j]<-min(ndim,k-1)
 	}
 	
+#----------------initialize scores and counters-----------------------------
+
 x <- cbind(orthogonalPolynomials(mis,1:nobj,ndim))
 x <- normX(centerX(x,mis),mis)$q
 y <- lapply(1:nvar, function(j) computeY(dframe[,j],x))
+y <- updateY(dframe,x,y,active,rank,level,sets)
+sold <- totalLoss(dframe,x,y,active,rank,level,sets)
+iter <- pops <- 0
 
 #-----------------------------main computation--------------------------------
+
 repeat {
-	iter <- iter+1
-	totsum <- array(0.0,dim(x))
-	if (pca) {
-    up.y <- pcaUpdateY(dframe,x,y,totsum,active,rank,level,nset)
-  } else {
-    up.y <- ccaUpdateY(dframe,x,y,totsum,active,rank,level,sets)
-  }
-	y <- up.y$y
-  totsum <- up.y$totsum
-	qv <- normX(centerX((1/mis)*totsum,mis),mis)
+	iter <- iter + 1
+	y<-updateY(dframe,x,y,active,rank,level,sets,verbose=FALSE)
+	smid <- totalLoss(dframe,x,y,active,rank,level,sets)
+	ssum <- totalSum(dframe,x,y,active,rank,level,sets)
+	qv <- normX(centerX((1/mis)*ssum,mis),mis)
 	z <- qv$q
-  r<-qv$r
-  ops <- sum(r)
-  aps <- sum(La.svd(crossprod(x,mis*z),0,0)$d)/ndim
-  if (iter == itermax) {
-		warning("maximum number of iterations reached")
-		break()
+	snew<-totalLoss(dframe,z,y,active,rank,level,sets)
+	if (verbose) cat("Itel:",formatC(iter,digits=3,width=3),"Loss Total: ", formatC(c(sold,smid,snew),digits=6,width=9,format="f"),"\n")
+	r <- qv$r
+	if (iter == itermax) {
+		stop("maximum number of iterations reached")
 		}
-  if (pops > ops) {
-		warning(cat("loss function increases in iteration ",iter,"\n"))
-		break()
+	if (snew > sold) {
+		stop(cat("loss function increases in iteration ",iter,"\n"))
 		}
-  if (((ops - pops) < eps1) || ((1.0 - aps) < eps2)) break()
-		else {x<-z; pops<-ops}
-}
+	if ((sold - snew) < eps1) break()
+		else {x <- z; sold <- snew}
+	}
+
+#-----------------------------store final version--------------------------------
 
 ylist<-alist<-clist<-ulist<-NULL
 for (j in 1:nvar) {
@@ -92,6 +99,7 @@ for (j in 1:nvar) {
 }
 
 #--------------------------preparing/labeling output----------------------------
+
 dimlab <- paste("D", 1:ndim, sep = "")
 for (i in 1:nvar) {
   rownames(ylist[[i]]) <- rownames(ulist[[i]]) <- rownames(clist[[i]])
@@ -103,10 +111,11 @@ names(ylist) <- names(ulist) <- names(clist) <- names(alist) <- colnames(dframe)
 rownames(z) <- rownames(dframe)
 colnames(z) <- dimlab
 #alist.t <- lapply(alist,t)
+
 #--------------------------end preparing/labeling output------------------------
 
 result <- list(datname = name, dframe = dframe, ndim = ndim, niter = iter, level = level, 
-               eigenvalues = r, gain = c(ops, aps), rank.vec = rank,
+               eigenvalues = r, loss = snew, rank.vec = rank,
                scores = z, rank.cat = ylist, cat.centroids = clist,
                cat.loadings = alist, low.rank = ulist)
 class(result) <- "homals"

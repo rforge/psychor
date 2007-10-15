@@ -14,8 +14,8 @@
 \tabular{ll}{
 Package: \tab homals\cr
 Type: \tab Package\cr
-Version: \tab 0.8-9\cr
-Date: \tab 2007-04-10\cr
+Version: \tab 0.8-10\cr
+Date: \tab 2007-10-15\cr
 License: \tab GPL\cr
 }
 The basic function of the homals package is \code{homals(data)} which performs 
