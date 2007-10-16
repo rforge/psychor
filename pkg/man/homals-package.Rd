@@ -14,7 +14,7 @@
 \tabular{ll}{
 Package: \tab homals\cr
 Type: \tab Package\cr
-Version: \tab 0.8-10\cr
+Version: \tab 0.9-0\cr
 Date: \tab 2007-10-15\cr
 License: \tab GPL\cr
 }
