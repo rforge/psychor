@@ -1,7 +1,9 @@
 \name{plot.homals}
 \alias{plot.homals}
+\alias{plot3dstatic}
+\alias{plot3dstatic.homals}
 \alias{plot3d.homals}
-\alias{scatterplot3d.homals}
+
 \title{Plot methods for homals}
 \description{These methods provide various 2D and 3D plots for objects of class \code{"homals"}.
 }
@@ -12,7 +14,7 @@ leg.pos = "topright", ...)
 \method{plot3d}{homals}(x, plot.dim = c(1, 2, 3), plot.type, var.subset, type, xlab, ylab, 
 zlab, col, main, sphere = TRUE, bgpng = "particle.png", ax.grid = TRUE, ...)
 
-\method{scatterplot3d}{homals}(x, plot.dim = c(1, 2, 3), plot.type, var.subset, main, type, 
+\method{plot3dstatic}{homals}(x, plot.dim = c(1, 2, 3), plot.type, var.subset, main, type, 
 xlab, ylab, zlab, xlim, ylim, zlim, ...)
 
 }
@@ -20,10 +22,10 @@ xlab, ylab, zlab, xlim, ylim, zlim, ...)
 \arguments{
   \item{x}{Object of class \code{"homals"}}
   \item{plot.dim}{Vector with dimensions to be plotted against.}
-  \item{plot.type}{String indicating which type of plot to be produced: \code{"catplot"} 
-  (also for scatterplot3d), \code{"graphplot"}, \code{"hullplot"}, \code{"labplot"} (also for scatterplot3d), 
-  \code{"lossplot"}, \code{"objplot"} (also for scatterplot3d), \code{"prjplot"}, \code{"spanplot"}, \code{"starplot"}, \code{"trfplot"}, \code{"vecplot"}, 
-  \code{"vorplot"}.}
+  \item{plot.type}{String indicating which type of plot to be produced: \code{"jointplot"}, \code{"catplot"} 
+  \code{"labplot"}, \code{"objplot"}, \code{"starplot"}, \code{"graphplot"}, \code{"hullplot"},
+  \code{"lossplot"}, \code{"prjplot"}, \code{"spanplot"}, , \code{"trfplot"}, \code{"vecplot"}, 
+  \code{"vorplot"}, \code{"loadplot"} (Not all of these are provided as 3d-plots, see below).}
   \item{var.subset}{Numeric vector for subsetting variables to be plotted. If missing, all
   variables are taken into account. Ignored for non separate variable plots.} 
   \item{main}{Plot title.}
@@ -40,10 +42,10 @@ xlab, ylab, zlab, xlim, ylim, zlim, ...)
   \item{sphere}{Whether 3D-sphere should be drawn.}
   \item{bgpng}{Background image in /library/rgl/textures/. If \code{NULL}, blank background.}
   \item{ax.grid}{If \code{TRUE} grid is drawn.}
-  \item{\dots}{Further arguments passed to \code{\link{plot}}, plot3d, or scatterplot3d.}
+  \item{\dots}{Further plot arguments passed: see \code{\link[graphics]{plot}}, \code{\link[rgl]{plot3d}} in package \code{rgl}, and \code{\link[scatterplot3d]{scatterplot3d}} in package \code{scatterplot3d} for detailed information.
 }
-\details{The \code{rgl} method \code{plot3d} produces a object plot only, whereas 
-\code{scatterplot3d} allows for object plots, label plots, and category quantification plots.
+}
+\details{Plot description:
  
 - Object plot (\code{plot.type = "objplot"}): Plots the scores of the objects (rows in data set) on two or
 three dimensions.
@@ -82,6 +84,8 @@ projected onto a straight line determined by the rank restricted category quanti
 
 - Transformation plot (\code{plot.type = "trfplot"}): Plots the original (categorical) scale against the
 transformed (metric) scale on each dimension over the categories of each variable separately.
+
+- Loadings plot (\code{plot.type = "loadplot"}): Plots the loadings of the variables and connects them with the origin. Three-dimensional version is available.
 }
 
 \seealso{\code{\link{homals}}}
@@ -97,7 +101,7 @@ plot(res, plot.dim = c(1,3), plot.type = "graphplot")
 plot3d(res, plot.type = "starplot", var.subset = c(2,4))
 
 ##Static 3D joint plot for thread and bottom
-scatterplot3d(res, plot.type = "jointplot", var.subset = c(1,4))
+plot3dstatic(res, plot.type = "jointplot", var.subset = c(1,4))
 }
 
 \keyword{ hplot }

@@ -48,6 +48,28 @@ if (plot.type == "objplot")
 }
 #---------------------------------end objplot-----------------------------------
 
+#----------------------------------loadplot-------------------------------------
+if (plot.type == "loadplot") {
+  xycoor <- t(sapply(x$cat.loadings, function(xy) xy[1,c(pd1,pd2,pd3)]))  #first solution only
+  if (missing(main)) main1 <- "Loadings plot" else main1 <- main
+ 
+  rgl.open()
+  rgl.bg(sphere = sphere, texture = texture1, back = "filled", color = "white", ...)
+  points3d(xycoor, col = "RED", size = 2)
+  text3d(xycoor, texts = rownames(xycoor), col = "RED")
+  
+  for (i in 1:nvar)
+    lines3d(rbind(xycoor[i,],c(0,0,0)), col = 4)
+    
+  axes3d(c('x','y','z'), labels = TRUE, color = 1)
+  title3d(xlab = xlab, ylab = ylab, zlab = zlab, main = main1, color = "black")
+  if (ax.grid) grid3d(c('x','y','z'))
+  
+}
+#-------------------------------- end loadplot ---------------------------------
+
+
+
 #--------------------------------------labplot----------------------------------
 #plot labeled object scores (for each variable separately)
 
@@ -112,11 +134,11 @@ if (plot.type == "starplot") {
 
 if (plot.type == "jointplot") {
    
-  if (missing(main)) main <- "Joint Plot"
+  if (missing(main)) main1 <- "Joint Plot" else main1 <- main
   catcol <- rainbow(nvar)
 
   rgl.open()
-  rgl.bg(sphere = sphere, texture = texture1, back = "filled", color = "white")  
+  rgl.bg(sphere = sphere, texture = texture1, back = "filled", color = "white", ...)  
   text3d(x1, y1, z1, texts = rownames(x$dframe), col = 1) 
   for (i in var.subset) 
     text3d((x$rank.cat[[i]][,c(pd1,pd2,pd3)]), texts = rownames(x$rank.cat[[i]]), col = catcol[i])

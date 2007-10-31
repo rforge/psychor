@@ -1,6 +1,6 @@
-import("stats", "graphics")
+import("stats", "graphics", "rgl", "scatterplot3d")
 export(homals)
-export(scatterplot3d)
+export(plot3dstatic)
 
 S3method(print, homals)
 S3method(summary, homals)
@@ -9,7 +9,6 @@ S3method(plot3d, homals)
 S3method(predict, homals)
 S3method(print, predict.homals)
 S3method(summary, predict.homals)
-S3method(scatterplot3d, homals)
-S3method(scatterplot3d, default)
+S3method(plot3dstatic, homals)
 
 

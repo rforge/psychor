@@ -50,6 +50,14 @@
 <param name="Local" value="plot.homals.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot3dstatic">
+<param name="Local" value="plot.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot3dstatic.homals">
+<param name="Local" value="plot.homals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
 <param name="Name" value="predict.homals">
 <param name="Local" value="predict.homals.html">
 </OBJECT>
@@ -64,10 +72,6 @@
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="roskam">
 <param name="Local" value="roskam.html">
-</OBJECT>
-<LI> <OBJECT type="text/sitemap">
-<param name="Name" value="scatterplot3d.homals">
-<param name="Local" value="plot.homals.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="senate">
