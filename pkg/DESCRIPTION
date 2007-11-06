@@ -2,7 +2,7 @@ Package: homals
 Type: Package
 Title: Homogeneity Analysis
 Version: 0.9-3
-Date: 2007-10-29
+Date: 2007-11-05
 Author: Jan de Leeuw, Patrick Mair
 Maintainer: Jan de Leeuw <deleeuw@ucla.edu>
 Description: This package performs a homogeneity analysis, aka a multiple correspondence

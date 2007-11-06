@@ -76,7 +76,7 @@ are connected with the category centroid. Three-dimensional version is provided.
 - Loss plot (\code{plot.type = "lossplot"}): Plots the rank-restricted category quantifications against the
 unrestricted for each variable separately.
 
-- Projection plot (\code{plot.type = "prjplot"}): For variables of rank 1 the category scores (two-dimensional)
+- Projection plot (\code{plot.type = "prjplot"}): For variables of rank 1 the object scores (two-dimensional)
 are projected onto a straight line determined by the rank restricted category quantifications.
 
 - Vector plot (\code{plot.type = "vecplot"}): For variable of rank 1 the object scores (two-dimensional) are

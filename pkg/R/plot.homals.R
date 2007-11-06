@@ -170,7 +170,7 @@ if (plot.type == "lossplot") {
   
   for (i in var.subset) { 
     
-    if (missing(main)) main1 <- paste("Lossplot for",colnames(x$dframe[i])) 
+    if (missing(main)) main1 <- paste("Lossplot for",colnames(x$dframe[i])) else main1 <- main
     
     z <- computeY(x$dframe[,i], x$scores[,c(pd1,pd2)])
     k <- dim(z)[1]
@@ -339,8 +339,8 @@ if (plot.type == "vecplot") {
 if (plot.type == "trfplot") {
 
    if (missing(type)) type <- "b"
-   if (missing(xlab)) xlab <- "original"
-   if (missing(ylab)) ylab <- "transformed"
+   if (missing(xlab)) xlab <- "original scale"
+   if (missing(ylab)) ylab <- "transformed scale"
 
    for (i in var.subset) {
      
@@ -352,8 +352,8 @@ if (plot.type == "trfplot") {
      
      par("ask" = TRUE)                     #first dimensions
      matplot(x$low.rank[[i]], type = type, main = main1, ylim = ylim1, xlab = xlab, 
-            ylab = xlab, xaxt = "n", pch = 20, col = 1:p, lty = 1:p,...)
-     legend(leg.pos,paste("Solution",1:p),col = 1:p, lty = 1:p,...)
+            ylab = ylab, xaxt = "n", pch = 20, col = 1:p, lty = 1:p,...)
+     if (p != 1) legend(leg.pos,paste("Solution",1:p),col = 1:p, lty = 1:p,...)
      axis(1, at = 1:length(vlev), labels = vlev)
      
    }
