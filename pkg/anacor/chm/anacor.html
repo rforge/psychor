@@ -1,0 +1,196 @@
+<html><head><title>Simple and Canonical Correspondence Analysis</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>anacor(anacor)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   anacor">
+<param name="keyword" value="R:   print.anacor">
+<param name="keyword" value="R:   summary.anacor">
+<param name="keyword" value=" Simple and Canonical Correspondence Analysis">
+</object>
+
+
+<h2>Simple and Canonical Correspondence Analysis</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This function performs simple and canonical CA for incomplete tables based on SVD. 
+Different scaling methods for row and column scores are provided.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+anacor(tab, ndim = 2, row.covariates, col.covariates, scaling = c("Benzecri","Benzecri"), eps = 1e-06)
+
+## S3 method for class 'anacor':
+print(x,...)
+## S3 method for class 'anacor':
+summary(object,...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>tab</code></td>
+<td>
+Data frame of dimension n times m with frequencies. Missings are coded as <code>NA</code>.</td></tr>
+<tr valign="top"><td><code>ndim</code></td>
+<td>
+Number of dimensions.</td></tr>
+<tr valign="top"><td><code>row.covariates</code></td>
+<td>
+Matrix with n rows containing covariates for the row scores.</td></tr>
+<tr valign="top"><td><code>col.covariates</code></td>
+<td>
+Matrix with m rows containing covariates for the column scores.</td></tr>
+<tr valign="top"><td><code>scaling</code></td>
+<td>
+A vector with two elements. The first one corresponds to the method for row scaling, the 
+second one for column scaling. Available scaling methods are <code>"standard"</code>, <code>"centroid"</code>, 
+<code>"Benzecri"</code>, <code>"Goodman"</code>.</td></tr>
+<tr valign="top"><td><code>eps</code></td>
+<td>
+Convergence criterion for reconstitution algorithm.</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+Object of class <code>"anacor"</code> in <code>print.anacor</code>.</td></tr>
+<tr valign="top"><td><code>object</code></td>
+<td>
+Object of class <code>"anacor"</code> in <code>summary.anacor</code>.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Additional arguments ignored.</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Missing values in <code>tab</code> are imputed using the reconstitution algorithm. 
+Setting <code>scaling</code> to <code>"standard"</code> leads to standard coordinates. 
+Principal coordinates can be computed by means of Benzecri decomposition. 
+Furthermore, scores can be scaled around their centroid. 
+Goodman scaling is based on Fisher-Maung decomposition.
+</p>
+
+
+<h3>Value</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>row.scores</code></td>
+<td>
+Scaled row scores.</td></tr>
+<tr valign="top"><td><code>col.scores</code></td>
+<td>
+Scaled column scores.</td></tr>
+<tr valign="top"><td><code>ndim</code></td>
+<td>
+Number of dimensions extracted.</td></tr>
+<tr valign="top"><td><code>chisq</code></td>
+<td>
+Total chi-square value.</td></tr>
+<tr valign="top"><td><code>chisq.decomp</code></td>
+<td>
+Chi-square decomposition across dimensions with p-values.</td></tr>
+<tr valign="top"><td><code>singular.values</code></td>
+<td>
+Singular values without trivial solution.</td></tr>
+<tr valign="top"><td><code>se.singular.values</code></td>
+<td>
+Standard errors for the singular values.</td></tr>
+<tr valign="top"><td><code>left.singvec</code></td>
+<td>
+Left singular vectors without trivial solution.</td></tr>
+<tr valign="top"><td><code>right.singvec</code></td>
+<td>
+Right singular vectors without trivial solution.</td></tr>
+<tr valign="top"><td><code>eigen.values</code></td>
+<td>
+Eigenvalues without trivial solution.</td></tr>
+<tr valign="top"><td><code>datname</code></td>
+<td>
+Name of the dataset.</td></tr>
+<tr valign="top"><td><code>tab</code></td>
+<td>
+Table with imputed frequencies in case of missings.</td></tr>
+<tr valign="top"><td><code>row.covariates</code></td>
+<td>
+Matrix with row covariates.</td></tr>
+<tr valign="top"><td><code>col.covariates</code></td>
+<td>
+Matrix with column covariates.</td></tr>
+<tr valign="top"><td><code>scaling</code></td>
+<td>
+Scaling Method.</td></tr>
+<tr valign="top"><td><code>bdmat</code></td>
+<td>
+List of matrices with observed and fitted Benzecri distances for rows and columns.</td></tr>
+<tr valign="top"><td><code>rmse</code></td>
+<td>
+Root mean squared error of Bezencri distances (rows and columns).</td></tr>
+<tr valign="top"><td><code>row.acov</code></td>
+<td>
+Covariance matrix for row scores.</td></tr>
+<tr valign="top"><td><code>col.acov</code></td>
+<td>
+Covariance matrix for column scores.</td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Jan de Leeuw, Patrick Mair
+</p>
+
+
+<h3>References</h3>
+
+<p>
+de Leeuw, J., &amp; Mair, P. (2007). Simple and canonical correspondence 
+analysis using the R package anacor. Preprint available at <a href="http://gifi.stat.ucla.edu/anacor.pdf">http://gifi.stat.ucla.edu/anacor.pdf</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="plot.anacor.html">plot.anacor</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+## simple CA on Tocher data, asymmetric coordinates
+data(tocher)
+res &lt;- anacor(tocher, scaling = c("standard", "centroid"))
+res
+summary(res)
+
+## 2- and 5-dimensional solutions for bitterling data, Benzecri scaling
+data(bitterling)
+res1 &lt;- anacor(bitterling, ndim = 2, scaling = c("Benzecri", "Benzecri"))
+res2 &lt;- anacor(bitterling, ndim = 5, scaling = c("Benzecri", "Benzecri"))
+res1
+res2
+
+## Canonical CA on Maxwell data, Goodman scaling
+data(maxwell)
+res &lt;- anacor(maxwell$table, row.covariates = maxwell$row.covariates, scaling = c("Goodman", "Goodman"))
+res
+summary(res)
+
+</pre>
+
+
+
+<hr><div align="center">[Package <em>anacor</em> version 0.9-0 <a href="00Index.html">Index]</a></div>
+
+</body></html>

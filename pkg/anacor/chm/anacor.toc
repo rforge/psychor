@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HEAD></HEAD><HTML><BODY>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package anacor:  Contents">
+<param name="Local" value="00Index.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package anacor:  R objects">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="anacor-package">
+<param name="Local" value="anacor-package.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="anacor">
+<param name="Local" value="anacor.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="bitterling">
+<param name="Local" value="bitterling.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="burtTable">
+<param name="Local" value="burtTable.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="expandFrame">
+<param name="Local" value="expandFrame.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="galton">
+<param name="Local" value="galton.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="glass">
+<param name="Local" value="glass.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="maxwell">
+<param name="Local" value="maxwell.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="mkIndiList">
+<param name="Local" value="mkIndiList.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot.anacor">
+<param name="Local" value="plot.anacor.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot3d.anacor">
+<param name="Local" value="plot.anacor.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot3dstatic">
+<param name="Local" value="plot.anacor.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot3dstatic.anacor">
+<param name="Local" value="plot.anacor.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="print.anacor">
+<param name="Local" value="anacor.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="spider">
+<param name="Local" value="spider.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="srole">
+<param name="Local" value="srole.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="summary.anacor">
+<param name="Local" value="anacor.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="tocher">
+<param name="Local" value="tocher.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package anacor:  Titles">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="2-D and 3D plots for anacor solution">
+<param name="Local" value="plot.anacor.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Bitterling">
+<param name="Local" value="bitterling.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Converts Table to Indicator Matrix">
+<param name="Local" value="mkIndiList.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Creates Burt Matrix">
+<param name="Local" value="burtTable.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Galton's RFF data">
+<param name="Local" value="galton.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Glass data">
+<param name="Local" value="glass.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Hunting spider data">
+<param name="Local" value="spider.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Maxwell's data">
+<param name="Local" value="maxwell.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Simple and Canonical Correspondence Analysis">
+<param name="Local" value="anacor.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Simple and Canonical Correspondence Analysis ">
+<param name="Local" value="anacor-package.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Srole Data">
+<param name="Local" value="srole.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Tocher's eye/hair color data.">
+<param name="Local" value="tocher.html">
+</OBJECT>
+</UL>
+</UL>
+</BODY></HTML>

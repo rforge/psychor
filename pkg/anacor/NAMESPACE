@@ -1,0 +1,14 @@
+import("stats", "graphics", "rgl", "scatterplot3d")
+export(anacor)
+export(plot3dstatic)
+export(burtTable)
+export(expandFrame)
+export(mkIndiList)
+
+S3method(print, anacor)
+S3method(summary, anacor)
+S3method(plot, anacor)
+S3method(plot3d, anacor)
+S3method(plot3dstatic, anacor)
+
+

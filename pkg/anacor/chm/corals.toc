@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HEAD></HEAD><HTML><BODY>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package corals:  Contents">
+<param name="Local" value="00Index.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package corals:  R objects">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="corals-package">
+<param name="Local" value="corals-package.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="bitterling">
+<param name="Local" value="bitterling.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="corals">
+<param name="Local" value="corals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="galton">
+<param name="Local" value="galton.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="glass">
+<param name="Local" value="glass.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="maxwell">
+<param name="Local" value="maxwell.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot.corals">
+<param name="Local" value="plot.corals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot3d.corals">
+<param name="Local" value="plot.corals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot3dstatic">
+<param name="Local" value="plot.corals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="plot3dstatic.corals">
+<param name="Local" value="plot.corals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="print.corals">
+<param name="Local" value="corals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="spider">
+<param name="Local" value="spider.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="srole">
+<param name="Local" value="srole.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="summary.corals">
+<param name="Local" value="corals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="tocher">
+<param name="Local" value="tocher.html">
+</OBJECT>
+</UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Package corals:  Titles">
+</OBJECT>
+<UL>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="2-D and 3D plots for corals solution">
+<param name="Local" value="plot.corals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Bitterling">
+<param name="Local" value="bitterling.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Galton's RFF data">
+<param name="Local" value="galton.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Glass data">
+<param name="Local" value="glass.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Hunting spider data">
+<param name="Local" value="spider.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Maxwell's data">
+<param name="Local" value="maxwell.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Simple and Canonical Correspondence Analysis">
+<param name="Local" value="corals.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Simple and Canonical Correspondence Analysis with Missing Values ">
+<param name="Local" value="corals-package.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Tocher's eye/hair color data.">
+<param name="Local" value="tocher.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="~~ data name/kind ... ~~">
+<param name="Local" value="srole.html">
+</OBJECT>
+</UL>
+</UL>
+</BODY></HTML>
