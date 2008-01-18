@@ -18,7 +18,7 @@ smacofSym(diss, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE, ties = "
   \item{metric}{If \code{TRUE} metric MDS is performed, if \code{FALSE} non-metric MDS}
   \item{ties}{Tie specification for PAVA (for non-metric MDS only)}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
-  \item{relax}{hmmm}
+  \item{relax}{Block relaxation}
   \item{modulus}{Modulus for non-metric MDS}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
