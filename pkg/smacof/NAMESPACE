@@ -1,0 +1,8 @@
+import("stats", "graphics")
+export(smacofSym)
+
+S3method(print, smacofB)
+S3method(summary, smacofB)
+
+
+
