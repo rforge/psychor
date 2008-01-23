@@ -1,8 +1,8 @@
 Package: smacof
 Type: Package
 Title: smacof for Multidimensional Scaling.
-Version: 0.0-1
-Date: 2008-01-17
+Version: 0.0-2
+Date: 2008-01-23
 Author: Jan de Leeuw, Patrick Mair 
 Maintainer: Jan de Leeuw <deleeuw@stat.ucla.edu>
 Description: This package provides various versions of multidimensional scaling (MDS) based on stress minization by means of majorization (smacof): Simple smacof on symmetric dissimilarity matrices, smacof for rectangular matrices, three-way smacof as well as extensions in terms of quadratic surfaces and simple constraints on the configuration.

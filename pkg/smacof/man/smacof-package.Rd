@@ -10,16 +10,15 @@
 \tabular{ll}{
 Package: \tab smacof\cr
 Type: \tab Package\cr
-Version: \tab 0.0-1\cr
-Date: \tab 2008-01-17\cr
+Version: \tab 0.0-2\cr
+Date: \tab 2008-01-23\cr
 License: \tab GPL\cr
 }
-The function for basic smacof on symmetric dissimilarity matrices is \code{smacofSym}.
+The function for basic SMACOF on symmetric dissimilarity matrices is \code{smacofSym()}. For rectangular input matrices (unfolding model) \code{smacofRect()} is appropriate and by means of \code{smacofIndDiff()} individual difference models (three-way MDS) can be computed.
 
 }
 \author{
 Jan de Leeuw, Patrick Mair
-Who wrote it
 
 Maintainer: Jan de Leeuw <deleeuw@stat.ucla.edu>
 
