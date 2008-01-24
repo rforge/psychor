@@ -4,7 +4,7 @@ function(object, ...)
 # object ... object of class "anacor"
   cat("\nz-test for singular values:\n")
   z.values <- object$singular.values/object$se.singular.values
-  pvalues <- (1-pnorm(abs(z.values)))*2
+  pvalues <- (1-pnorm(abs(z.values)))
   stestmat <- data.frame(round(object$singular.values,4),round(object$se.singular.values,4),round(pvalues,4))
   colnames(stestmat) <- c("Singular Values","Asymptotical SE","p-value")
   rownames(stestmat) <- paste("D", 1:object$ndim, sep = "")
