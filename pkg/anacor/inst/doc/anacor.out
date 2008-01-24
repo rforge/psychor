@@ -1,0 +1,15 @@
+\BOOKMARK [1][-]{Section.0.Introduction.1}{Introduction}{}
+\BOOKMARK [1][-]{Section.1.Simple Correspondence Analysis.1}{Simple Correspondence Analysis}{}
+\BOOKMARK [2][-]{Subsection.2.0.Basic Principles of Simple CA.2}{Basic Principles of Simple CA}{Section.1.Simple Correspondence Analysis.1}
+\BOOKMARK [2][-]{Subsection.2.1.Methods of Scaling in Simple CA.2}{Methods of Scaling in Simple CA}{Section.1.Simple Correspondence Analysis.1}
+\BOOKMARK [1][-]{Section.2.Canonical Correspondence Analysis.1}{Canonical Correspondence Analysis}{}
+\BOOKMARK [2][-]{Subsection.3.0.Basic Principles of Canonical CA.2}{Basic Principles of Canonical CA}{Section.2.Canonical Correspondence Analysis.1}
+\BOOKMARK [2][-]{Subsection.3.1.Methods of Scaling in Canonical CA.2}{Methods of Scaling in Canonical CA}{Section.2.Canonical Correspondence Analysis.1}
+\BOOKMARK [1][-]{Section.3.Additional Topics.1}{Additional Topics}{}
+\BOOKMARK [2][-]{Subsection.4.0.Confidence Ellipsoids Using the Delta Method.2}{Confidence Ellipsoids Using the Delta Method}{Section.3.Additional Topics.1}
+\BOOKMARK [2][-]{Subsection.4.1.Reconstitution Algorithm for Incomplete Tables.2}{Reconstitution Algorithm for Incomplete Tables}{Section.3.Additional Topics.1}
+\BOOKMARK [1][-]{Section.4.Applications of Simple and Canonical CA.1}{Applications of Simple and Canonical CA}{}
+\BOOKMARK [2][-]{Subsection.5.0.Plotting options in anacor.2}{Plotting options in anacor}{Section.4.Applications of Simple and Canonical CA.1}
+\BOOKMARK [2][-]{Subsection.5.1.Applications of Simple CA.2}{Applications of Simple CA}{Section.4.Applications of Simple and Canonical CA.1}
+\BOOKMARK [2][-]{Subsection.5.2.Canonical CA on Maxwell Data.2}{Canonical CA on Maxwell Data}{Section.4.Applications of Simple and Canonical CA.1}
+\BOOKMARK [1][-]{Section.5.Discussion.1}{Discussion}{}

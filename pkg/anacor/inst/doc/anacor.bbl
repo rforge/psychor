@@ -1,0 +1,139 @@
+\begin{thebibliography}{22}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Benz\'ecri(1973)}]{Benzecri:73}
+Benz\'ecri JP (1973).
+\newblock \emph{Analyse des Donn\'ees}.
+\newblock Dunod, Paris, France.
+
+\bibitem[{Chessel \emph{et~al.}(2004)Chessel, Dofour, and
+  Thioulouse}]{Chessel+Dufour+Thioulouse:04}
+Chessel D, Dofour AB, Thioulouse J (2004).
+\newblock \enquote{The ade4 package \uppercase{I}: One-table methods.}
+\newblock \emph{R News}, \textbf{4/1}, 5--10.
+
+\bibitem[{{de Leeuw}(2008)}]{deLeeuw:2008}
+{de Leeuw} J (2008).
+\newblock \enquote{Derivatives of generalized eigen systems, with
+  applications.}
+\newblock \emph{Journal of Statistical Software}, \textbf{forthcoming}.
+
+\bibitem[{{de Leeuw} and Mair(2008)}]{deLeeuw+Mair:08}
+{de Leeuw} J, Mair P (2008).
+\newblock \enquote{Homogeneity Analysis in R: The package homals.}
+\newblock \emph{Journal of Statistical Software}, \textbf{forthcoming}.
+
+\bibitem[{{de Leeuw} and Meulman(1986)}]{deLeeuw+Meulman:86}
+{de Leeuw} J, Meulman J (1986).
+\newblock \enquote{Principal component analysis and restricted multidimensional
+  scaling.}
+\newblock In W~Gaul, M~Schrader (eds.), \enquote{Classification as a tool of
+  research,} pp. 83--96. North Holland Publishing Company, Amsterdam.
+
+\bibitem[{{de Leeuw} and {van der Heiden}(1988)}]{deLeeuw+vanderHeiden:88}
+{de Leeuw} J, {van der Heiden} P (1988).
+\newblock \enquote{Correspondence analysis of incomplete contingency tables.}
+\newblock \emph{Psychometrika}, \textbf{53}, 223--233.
+
+\bibitem[{Dixon(2003)}]{dixon:03}
+Dixon P (2003).
+\newblock \enquote{\uppercase{VEGAN}: A package of \uppercase{R} functions for
+  community ecology.}
+\newblock \emph{Journal of Vegetation Science}, \textbf{14}, 927--930.
+
+\bibitem[{Dray \emph{et~al.}(2007)Dray, Dofour, and
+  Chessel}]{Dray+Dufour+Chessel:07}
+Dray S, Dofour AB, Chessel D (2007).
+\newblock \enquote{The ade4 package \uppercase{II}: Two-table and
+  \uppercase{K}-table methods.}
+\newblock \emph{R News}, \textbf{7/2}, 47--52.
+
+\bibitem[{Gifi(1990)}]{Gifi:90}
+Gifi A (1990).
+\newblock \emph{Nonlinear Multivariate Analysis}.
+\newblock Wiley, Chichester, England.
+
+\bibitem[{Glass(1954)}]{Glass:54}
+Glass DV (1954).
+\newblock \emph{Social Mobility in Britain}.
+\newblock Free Press, Glencoe.
+
+\bibitem[{Greenacre(1984)}]{Greenacre:84}
+Greenacre M (1984).
+\newblock \emph{Theory and Applications of Correspondence Analysis}.
+\newblock Academic Press, London, England.
+
+\bibitem[{Greenacre(2007)}]{Greenacre:07}
+Greenacre M (2007).
+\newblock \emph{Correspondence Analysis in Practice}.
+\newblock Chapman \& Hall/CRC, Boca Raton, FL, 2nd edition.
+
+\bibitem[{Greenacre and Blasius(2006)}]{Greenacre+Blasius:06}
+Greenacre M, Blasius J (2006).
+\newblock \emph{Multiple Correspondence Analysis and Related Methods}.
+\newblock Chapman \& Hall/CRC, Boca Raton, FL.
+
+\bibitem[{Mair and Hatzinger(2007)}]{Mair+Hatzinger:07}
+Mair P, Hatzinger R (2007).
+\newblock \enquote{Psychometrics Task View.}
+\newblock \emph{R News}, \textbf{forthcoming}.
+
+\bibitem[{Maung(1941)}]{Maung:41}
+Maung K (1941).
+\newblock \enquote{Discriminant analysis of \uppercase{T}ocher's eye colour
+  data for \uppercase{S}cottish school children.}
+\newblock \emph{Annals of Eugenics}, \textbf{11}, 64--67.
+
+\bibitem[{Maxwell(1961)}]{Maxwell:61}
+Maxwell AE (1961).
+\newblock \enquote{Canonical variate analysis when the variables are
+  dichotomous.}
+\newblock \emph{Educational and Psychological Measurement}, \textbf{21},
+  259--271.
+
+\bibitem[{Nenadi\'c and Greenacre(2006)}]{Nenadic+Greenacre:06}
+Nenadi\'c O, Greenacre M (2006).
+\newblock \enquote{Correspondence analysis in \uppercase{R}, with two- and
+  three-dimensional Graphics: The \pkg{ca} package.}
+\newblock \emph{Journal of Statistical Software}, \textbf{20(3)}, 1--13.
+
+\bibitem[{Nora(1975)}]{Nora:75}
+Nora C (1975).
+\newblock \emph{Une m\'ethode de reconstitution et d'analyse de donn\'ees
+  incompl\`etes [A method for reconstruction and for the analysis of incomplete
+  data]}.
+\newblock Unpublished Th\`ese d'Etat, Universit\'e P. et M. Curie, Paris VI.
+
+\bibitem[{{R Development Core Team}(2007)}]{R:07}
+{R Development Core Team} (2007).
+\newblock \emph{R: A Language and Environment for Statistical Computing}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria.
+\newblock {ISBN} 3-900051-07-0, \urlprefix\url{http://www.R-project.org}.
+
+\bibitem[{{Ter Braak}(1986)}]{TerBraak:86}
+{Ter Braak} CJF (1986).
+\newblock \enquote{Canonical correspondence analysis: A new eigenvector
+  technique for multivariate direct gradients.}
+\newblock \emph{Ecology}, \textbf{67}, 1167--1179.
+
+\bibitem[{{van der Heiden} and {de Leeuw}(1985)}]{vanderHeiden+deLeeuw:85}
+{van der Heiden} P, {de Leeuw} J (1985).
+\newblock \enquote{Correspondence analysis used complementary to loglinear
+  analysis.}
+\newblock \emph{Psychometrika}, \textbf{50}, 429--447.
+
+\bibitem[{Wiepkema(1961)}]{Wiepkema:61}
+Wiepkema PR (1961).
+\newblock \enquote{An ethological analysis of the reproductive behavior of the
+  bitterling (rhodeus amarus bloch).}
+\newblock \emph{Archives Neerlandais Zoologique}, \textbf{14}, 103--199.
+
+\end{thebibliography}
