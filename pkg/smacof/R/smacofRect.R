@@ -1,9 +1,10 @@
-smacofRect <- function(diss, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
+smacofRect <- function(delta, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
                        itmax = 100, reg = 1e-6, eps = 1e-6)
 
 # init ... either a list of 2 matrices of dimension n \times p and m \times p with starting values. if NULL, svd is used.
 {
 
+  diss <- delta
   if (is.data.frame(diss)) diss <- as.matrix(diss)
   n <- dim(diss)[1]                       #number of individuals
   m <- dim(diss)[2]                       #number of objects

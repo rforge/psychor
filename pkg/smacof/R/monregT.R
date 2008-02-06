@@ -1,3 +1,5 @@
+#tertiary approach to ties
+
 `monregT` <-
 function(x,y,w=rep(1,length(x)),block=weighted.mean)
 {

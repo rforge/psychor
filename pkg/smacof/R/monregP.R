@@ -1,3 +1,4 @@
+# primary approach to ties
 `monregP` <-
 function(x, y, w = rep(1,length(x)), block = weighted.mean)
 {

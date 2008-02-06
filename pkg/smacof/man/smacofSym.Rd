@@ -6,20 +6,20 @@
 Basic smacof on symmetric dissimilarity matrix 
 }
 \usage{
-smacofSym(diss, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE, ties = "primary", verbose = FALSE, relax = 1, modulus = 1, itmax = 100, eps = 1e-06)
+smacofSym(delta, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE, ties = "primary", verbose = FALSE, relax = 1, modulus = 1, itmax = 100, eps = 1e-06)
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{diss}{Either a symmetric dissimilarity matrix or an object of class \code{dist}}
+  \item{delta}{Either a symmetric dissimilarity matrix or an object of class \code{dist}}
   \item{ndim}{Number of dimensions}
   \item{weightmat}{Optional matrix with dissimilarity weights}
   \item{init}{Matrix with starting values for configurations (optional)}
-  \item{metric}{If \code{TRUE} metric MDS is performed, if \code{FALSE} non-metric MDS}
-  \item{ties}{Tie specification for PAVA (for non-metric MDS only)}
+  \item{metric}{If \code{FALSE} non-metric MDS is performed}
+  \item{ties}{Tie specification for non-metric MDS only}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
-  \item{relax}{Block relaxation}
-  \item{modulus}{Modulus for non-metric MDS}
+  \item{relax}{Relaxed smacof update}
+   \item{modulus}{Number of smacof iterations per monotone regression call}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
 }
@@ -27,7 +27,7 @@ smacofSym(diss, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE, ties = "
 to be added
 }
 \value{
-  \item{obsdiss}{Observed dissimilarities}
+  \item{obsdiss}{Observed dissimilarities, normalized}
   \item{confdiss}{Configuration dissimilarities}
   \item{conf}{Matrix of final configurations}
   \item{stress.m}{stress value for metric MDS}

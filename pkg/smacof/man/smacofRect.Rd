@@ -5,18 +5,18 @@
 \description{Variant of smacof for rectangular matrices (typically ratings, preferences) which is also known as metric unfolding.
 }
 \usage{
-smacofRect(diss, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
+smacofRect(delta, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
            itmax = 100, reg = 1e-6, eps = 1e-6)
 }
 
 \arguments{
-  \item{diss}{Data frame or matrix of preferences, ratings, dissimilarities.}
+  \item{delta}{Data frame or matrix of preferences, ratings, dissimilarities.}
   \item{ndim}{Number of dimensions}
   \item{weightmat}{Optional matrix with dissimilarity weights}
   \item{init}{Matrix with starting values for configurations (optional)}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
   \item{itmax}{Maximum number of iterations}
-  \item{reg}{Scalar for configuration distances}
+  \item{reg}{Regularization factor, prevents distances from beeing 0}
   \item{eps}{Convergence criterion}
 }
 \details{Creates an object of class \code{smacofR}. 
