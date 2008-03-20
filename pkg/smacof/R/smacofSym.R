@@ -1,9 +1,9 @@
 `smacofSym` <-
 function(delta, ndim = 2, weightmat = NULL, init = NULL, 
                       metric = TRUE, ties = "primary",	verbose = FALSE, 
-                      relax = 1, modulus = 1, itmax = 100, eps = 1e-6)  
+                      relax = 1, modulus = 1, itmax = 1000, eps = 1e-6)  
 {
-# diss ... dissimilarity matrix 
+# delta ... dissimilarity matrix 
 # wghts ... weight structure. if not specified, weights is 1-structure
 # p ... number of dimensions
 # init ... matrix with starting values of dimension n \times p
@@ -15,11 +15,17 @@ function(delta, ndim = 2, weightmat = NULL, init = NULL,
 # eps ... change in loss function
   
   diss <- delta
-  if ((is.matrix(diss)) || (is.data.frame(diss))) diss <- strucprep(diss)  #if data are provided as dissimilarity matrix
+  if ((is.matrix(diss)) || (is.data.frame(diss))) {
+    diss <- strucprep(diss)  #if data are provided as dissimilarity matrix
+    attr(diss, "Labels") <- rownames(delta)
+  }
+  
   p <- ndim                                     
   n <- attr(diss,"Size")
   m <- length(diss)
-
+  
+  if (is.null(attr(diss, "Labels"))) attr(diss, "Labels") <- paste(1:n)
+  
   if (is.null(weightmat)) {
     wgths <- initWeights(diss)
   }  else  wgths <- weightmat
@@ -40,7 +46,8 @@ function(delta, ndim = 2, weightmat = NULL, init = NULL,
 
   sold <- sum(wgths*(dhat-d)^2)           #stress (to be minimized in repeat loop)
 
-  repeat {                                #majorization loop             
+ #--------------- begin majorization --------------------
+ repeat {                                #majorization loop             
 	b <- bmat(dhat,wgths,d)            
   y <- v%*%b%*%x                    #apply Guttman transform denoted as \bar(Y) in the paper
 	y <- x+relax*(y-x)                #n \times p matrix of Guttman transformed distances x's
@@ -67,13 +74,22 @@ function(delta, ndim = 2, weightmat = NULL, init = NULL,
   d <- e                           #update configuration distances
   sold <- snon                     #update stress
   itel <- itel+1	                 #increase iterations
-   }
-   colnames(y) <- paste("D",1:(dim(y)[2]),sep="")
+ }
+ #------------------ end majorization --------------- 
+ 
+ if (metric) snon <- NULL          #no non-metric stress
+ if (!metric) ssma <- NULL
+
+ colnames(y) <- paste("D",1:(dim(y)[2]),sep="")
+ rownames(y) <- labels(diss)
+ dhat <- structure(dhat, Size = n, call = quote(as.dist.default(m=b)), class = "dist", Diag = FALSE, Upper = FALSE) 
+ attr(dhat, "Labels") <- labels(diss)
+ attr(e, "Labels") <- labels(diss)
 
 #return configurations, configuration distances, normalized observed distances 
 result <- list(obsdiss = dhat, confdiss = e, conf = y, stress.m = ssma, stress.nm = snon,
                ndim = p, model = "Symmetric SMACOF", niter = itel, nobj = n) 
-class(result) <- "smacofB"
+class(result) <- c("smacofB","smacof")
 result 
 }
 

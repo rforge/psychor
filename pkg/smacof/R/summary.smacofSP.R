@@ -1,4 +1,4 @@
-`summary.smacofB` <-
+`summary.smacofSP` <-
 function(object, ...)
 {
   cat("\n")

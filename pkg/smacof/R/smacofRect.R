@@ -1,10 +1,12 @@
 smacofRect <- function(delta, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
-                       itmax = 100, reg = 1e-6, eps = 1e-6)
+                       itmax = 1000, reg = 1e-6, eps = 1e-6)
 
-# init ... either a list of 2 matrices of dimension n \times p and m \times p with starting values. if NULL, svd is used.
+# init ... either a list of 2 matrices of dimension n \times p and m \times p with 
+# starting values. if NULL, svd is used.
 {
 
   diss <- delta
+  rnames <- rownames(delta)
   if (is.data.frame(diss)) diss <- as.matrix(diss)
   n <- dim(diss)[1]                       #number of individuals
   m <- dim(diss)[2]                       #number of objects
@@ -66,9 +68,10 @@ smacofRect <- function(delta, ndim = 2, weightmat = NULL, init = NULL, verbose =
   }
 
 colnames(y) <- colnames(x) <- paste("D",1:(dim(y)[2]),sep="")
+rownames(x) <- rownames(diss) <- rownames(d) <- rnames
   
 #return configuration distances, row and column configurations, stress 
-result <- list(confdiss = d, conf.row = x, conf.col = y, stress = lnew, 
+result <- list(obsdiss = diss, confdiss = d, conf.row = x, conf.col = y, stress = lnew, 
                ndim = p, model = "Rectangular smacof", niter = itel, nind = n, nobj = m) 
 class(result) <- "smacofR"
 result 

@@ -6,26 +6,24 @@
 Basic smacof on symmetric dissimilarity matrix 
 }
 \usage{
-smacofSym(delta, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE, ties = "primary", verbose = FALSE, relax = 1, modulus = 1, itmax = 100, eps = 1e-06)
+smacofSym(delta, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE, ties = "primary", verbose = FALSE, relax = 1, modulus = 1, itmax = 1000, eps = 1e-06)
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{delta}{Either a symmetric dissimilarity matrix or an object of class \code{dist}}
+  \item{delta}{Either a symmetric dissimilarity matrix or an object of class \code{"dist"}}
   \item{ndim}{Number of dimensions}
   \item{weightmat}{Optional matrix with dissimilarity weights}
   \item{init}{Matrix with starting values for configurations (optional)}
   \item{metric}{If \code{FALSE} non-metric MDS is performed}
-  \item{ties}{Tie specification for non-metric MDS only}
+  \item{ties}{Tie specification for non-metric MDS only: \code{"primary"}, \code{"secondary"}, or \code{"tertiary"}}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
   \item{relax}{Relaxed smacof update}
    \item{modulus}{Number of smacof iterations per monotone regression call}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
 }
-\details{
-to be added
-}
+
 \value{
   \item{obsdiss}{Observed dissimilarities, normalized}
   \item{confdiss}{Configuration dissimilarities}
@@ -40,12 +38,19 @@ to be added
 \references{de Leeuw, J. \& Mair, P. (2008). Multidimensional scaling using majorization: The R package smacof.}
 \author{Jan de Leeuw and Patrick Mair}
 
-\seealso{to be added}
+\seealso{\code{\link{smacofConstraint}}, \code{\link{smacofRect}}, \code{\link{smacofIndDiff}}, \code{\link{smacofSphere.primal}}, \code{\link{smacofSphere.dual}}}
 \examples{
-data(ekman)
-res <- smacofSym(ekman)
+
+## simple SMACOF solution for kinship data
+data(kinshipdelta)
+res <- smacofSym(kinshipdelta)
 res
 summary(res)
+
+## 3D nonmetric SMACOF solution for trading data
+data(trading)
+res <- smacofSym(trading, ndim = 3, metric = FALSE, ties = "secondary")
+res
 }
 
 \keyword{models}

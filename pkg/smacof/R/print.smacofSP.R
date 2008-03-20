@@ -1,4 +1,4 @@
-`print.smacofB` <-
+`print.smacofSP` <-
 function(x,...)
 {
   cat("\n")

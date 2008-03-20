@@ -7,8 +7,8 @@ function(object, ...)
   cat("\n")
   cat("Objects configurations (columns):\n")
   print(round(object$conf.col,4))
-  cat("\nConfiguration dissimilarities: \n")
-  print(round(object$confdiss,4))
+  #cat("\nConfiguration dissimilarities: \n")
+  #print(round(object$confdiss,4))
 }
 
 

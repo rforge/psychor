@@ -7,35 +7,35 @@
 \usage{data(breakfast)}
 \format{Data frame with students in the rows and breakfast items in the columns. 
 
-V1: toast pop-up
+toast: toast pop-up
 
-V2: buttered toast
+butoast: buttered toast
 
-V3: English muffin and margarine
+engmuff: English muffin and margarine
 
-V4: jelly donut
+jdonut: jelly donut
 
-V5: cinnamon toast
+cintoast: cinnamon toast
 
-V6: blueberry muffin and margarine
+bluemuff: blueberry muffin and margarine
 
-V7: hard rolls and butter
+hrolls: hard rolls and butter
 
-V8: toast and marmalade
+toastmarm: toast and marmalade
 
-V9: buttered toast and jelly
+butoastj: buttered toast and jelly
 
-V10: toast and margarine
+toastmarg: toast and margarine
 
-V11: cinnamon bun
+cinbun: cinnamon bun
 
-V12: Danish pastry
+danpastry: Danish pastry
 
-V13: glazed donut
+gdonut: glazed donut
 
-V14: coffee cake
+cofcake: coffee cake
 
-V15: corn muffin and butter
+cornmuff: corn muffin and butter
 
 }
 

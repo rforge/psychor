@@ -2,7 +2,7 @@
 
 smacofIndDiff <- function(delta, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE,
                           ties = "primary", constraint = NULL, verbose = FALSE, modulus = 1,
-                          itmax = 100, eps = 1e-6)
+                          itmax = 1000, eps = 1e-6)
   
 # delta ... list of input objects: either of class dist() or a symmetric matrix
 # contstraint ... either NULL, "identity", "diagonal", "idioscal"
@@ -15,19 +15,21 @@ smacofIndDiff <- function(delta, ndim = 2, weightmat = NULL, init = NULL, metric
   p <- ndim
   wgths <- weightmat
   constr <- constraint
-
-  #insert lapply for transforming dist structure into matrix
-  
+ 
   if (!is.list(diss)) diss <- list(diss)
   if ((is.matrix(diss[[1]])) || (is.data.frame(diss[[1]]))) diss <- lapply(diss, strucprep)
 
   if (is.null(weightmat)) wgths <- initWeights(diss)
   if (!is.list(wgths)) wgths <- list(wgths)
-
   
   n <- attr(diss[[1]],"Size")
   m <- length(diss)
   itel <- 1
+  
+  if (is.null(attr(diss[[1]], "Labels"))) {
+     for (i in 1:m) attr(diss[[i]], "Labels") <- paste(1:n)
+  }
+  
       
   dr <- list()
   wr <- list()
@@ -44,8 +46,8 @@ smacofIndDiff <- function(delta, ndim = 2, weightmat = NULL, init = NULL, metric
 
   if (is.null(init)) {  
     aconf <- torgerson(sumList(diss),p)        #torgerson
-  } #else aconf <- matrix(rnorm(n*p),n,p)      
-  else xr <- init                              #list of starting values 
+  } else xr <- init                              #list of starting values 
+  #else aconf <- matrix(rnorm(n*p),n,p)     
   
   bconf <- repList(diag(p),m)                  #1-matrix
   for (j in 1:m) {                             
@@ -57,10 +59,10 @@ smacofIndDiff <- function(delta, ndim = 2, weightmat = NULL, init = NULL, metric
   
   lb <- sf1/sf2                                #normalization constant
   for (j in 1:m) {                             #normalize X, D, compute stress
-	aconf <- lb*aconf
-	xr[[j]] <- lb*xr[[j]]
-        dr[[j]] <- lb*dr[[j]]
-	sold <- sold + sum(wgths[[j]]*(dh[[j]]-dr[[j]])^2)
+   	aconf <- lb*aconf                          
+  	xr[[j]] <- lb*xr[[j]]
+    dr[[j]] <- lb*dr[[j]]
+	  sold <- sold + sum(wgths[[j]]*(dh[[j]]-dr[[j]])^2)
   }
 
   #--------------- begin majorization ------------------
@@ -78,62 +80,64 @@ smacofIndDiff <- function(delta, ndim = 2, weightmat = NULL, init = NULL, metric
     }
     scon<-sunc
 
-    #----- impose constraints ------
+    #--------- impose constraints ---------
     if (!is.null(constr)) {
-	scon <- 0
-        er <- list()
+	     scon <- 0
+       er <- list()
 
-        if (constr=="identity") {
-		z <- matrix(0,n,p)
-                u <- matrix(0,n,n)
-		for (j in 1:m) {
-			z<-z+wr[[j]]%*%yr[[j]]
-			u<-u+wr[[j]]
-		}
-		aconf<-myGenInv(u)%*%z
-                yr<-repList(aconf,m)
-	}
+       #-- same configurations across ways, configuration weights I
+       if (constr=="identity") {
+		    z <- matrix(0,n,p)
+        u <- matrix(0,n,n)
+		    for (j in 1:m) {
+			   z<-z+wr[[j]]%*%yr[[j]]
+			   u<-u+wr[[j]]
+		    }
+		   aconf<-myGenInv(u)%*%z
+       yr<-repList(aconf,m)
+	     }
 
-        if (constr=="diagonal") {
-		aux0<-matrix(0,n,p)
-		for (j in 1:m) {
-			aux1<-diag(crossprod(aconf,wr[[j]]%*%yr[[j]]))
-			aux2<-diag(crossprod(aconf,wr[[j]]%*%aconf))
-			bconf[[j]]<-diag(aux1/aux2)
-			aux0<-aux0+(wr[[j]]%*%yr[[j]]%*%bconf[[j]])		    			    
-		}
-		for (s in 1:p) {
-			aux1<-matrix(0,n,n)
-			for (j in 1:m) 
-				aux1<-aux1+(bconf[[j]][s,s]^2)*wr[[j]]
-				aconf[,s]<-myGenInv(aux1)%*%aux0[,s]
-			}
-		for (j in 1:m)
-			yr[[j]]<-aconf%*%bconf[[j]]
-			}
+       #-- configuration weights diagonal
+       if (constr=="diagonal") {
+		    aux0<-matrix(0,n,p)
+		    for (j in 1:m) {
+			   aux1<-diag(crossprod(aconf,wr[[j]]%*%yr[[j]]))
+			   aux2<-diag(crossprod(aconf,wr[[j]]%*%aconf))
+			   bconf[[j]]<-diag(aux1/aux2)
+			   aux0<-aux0+(wr[[j]]%*%yr[[j]]%*%bconf[[j]])		    			    
+		    } 
+		    for (s in 1:p) {
+			   aux1<-matrix(0,n,n)
+			   for (j in 1:m) aux1<-aux1+(bconf[[j]][s,s]^2)*wr[[j]]
+				 aconf[,s]<-myGenInv(aux1)%*%aux0[,s]
+		  	}
+		    for (j in 1:m) yr[[j]]<-aconf%*%bconf[[j]]
+			 }
 
-        if (constr=="idioscal") {
-		aux0<-matrix(0,n,p); auxk<-matrix(0,(n*p),(n*p))
-		for (j in 1:m) {
-			aux1<-crossprod(aconf,wr[[j]]%*%yr[[j]])
-			aux2<-crossprod(aconf,wr[[j]]%*%aconf)
-			auxb<-solve(aux2,aux1); bconf[[j]]<-auxb
-			auxc<-crossprod(t(auxb))
-			aux0<-aux0+(wr[[j]]%*%yr[[j]]%*%t(auxb))	
-			auxk<-auxk+kronecker(auxc,wr[[j]])    			    
-		}
-		auxv<-kronecker(diag(p),matrix((1/n),n,n))
-		aconf<-matrix(solve(auxk+auxv,as.vector(aux0)),n,p)
-		for (j in 1:m)
-			yr[[j]]<-aconf%*%bconf[[j]]
-	}
+       #-- no constraints, idioscal ---- 
+       if (constr=="idioscal") {
+		    aux0<-matrix(0,n,p); auxk<-matrix(0,(n*p),(n*p))
+		    for (j in 1:m) {
+			    aux1<-crossprod(aconf,wr[[j]]%*%yr[[j]])
+			    aux2<-crossprod(aconf,wr[[j]]%*%aconf)
+			    auxb<-solve(aux2,aux1); bconf[[j]]<-auxb
+			    auxc<-crossprod(t(auxb))
+			    aux0<-aux0+(wr[[j]]%*%yr[[j]]%*%t(auxb))	
+			    auxk<-auxk+kronecker(auxc,wr[[j]])    			    
+		   }
+		   auxv<-kronecker(diag(p),matrix((1/n),n,n))
+		   aconf<-matrix(solve(auxk+auxv,as.vector(aux0)),n,p)
+		   for (j in 1:m)  yr[[j]]<-aconf%*%bconf[[j]]
+	    }
 
-        for (j in 1:m) {
-		er <- appendList(er,dist(yr[[j]]))
-		scon <- scon+sum(wgths[[j]]*(dh[[j]]-er[[j]])^2) #constraint stress computation
-        }
+      for (j in 1:m) {
+		    er <- appendList(er,dist(yr[[j]]))
+		    scon <- scon+sum(wgths[[j]]*(dh[[j]]-er[[j]])^2) #constraint stress computation
+      }
 
     }
+    #FIXME: aconf for constr = NULL?
+    
     #-------- end constraints -----------
     
     snon <- scon                                
@@ -171,11 +175,23 @@ smacofIndDiff <- function(delta, ndim = 2, weightmat = NULL, init = NULL, metric
   #------------ end majorization -----------------
   names(dh) <- names(er) <- names(yr) <- names(delta)
   cnames <- paste("D", 1:p, sep = "")
-  for (i in 1:length(yr)) colnames(yr[[i]]) <- cnames
+  for (i in 1:length(yr)) {
+    colnames(yr[[i]]) <- cnames
+    rownames(yr[[i]]) <- labels(diss[[i]])
+    rownames(bconf[[i]]) <- colnames(bconf[[i]]) <- cnames
+    dh[[i]] <- structure(dh[[i]], Size = n, call = quote(as.dist.default(m=b)), class = "dist", Diag = FALSE, Upper = FALSE) 
+    attr(dh[[i]], "Labels") <- attr(er[[i]], "Labels") <- labels(diss[[i]])
+  }
   colnames(aconf) <- cnames
+  rownames(aconf) <- labels(diss[[1]])
+  names(bconf) <- names(dh)
+  
+  if (metric) snon <- NULL          #no non-metric stress
+  if (!metric) sold <- NULL
+  if (is.null(constraint)) scon <- NULL
   
   #return configurations, configuration distances, normalized observed distances 
-  result <- list(obsdiss = dh, confdiss = er, conf = yr, aconf = aconf, bconf = bconf,
+  result <- list(obsdiss = dh, confdiss = er, conf = yr, gspace = aconf, cweights = bconf,
                  stress.m = sold, stress.nm = snon, stress.uc = sunc, stress.co = scon,
                  ndim = p, model = "Three-way SMACOF", niter = itel, nobj = n) 
   class(result) <- "smacofID"

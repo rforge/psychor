@@ -8,7 +8,7 @@
 
 
 \title{S3 methods for smacof}
-\description{S3 methods for objects of class \code{smacofB}, \code{smacofR}, and \code{smacofID}.
+\description{Print and summary methods for objects of class \code{smacofB}, \code{smacofR} (rectangular), and \code{smacofID} (individual differences).
 }
 \usage{
 \method{summary}{smacofB}(object, ...)
@@ -19,20 +19,18 @@
 \method{print}{smacofID}(x, ...)
 }
 \arguments{
-  \item{object}{Object of class \code{smacofB}}
-  \item{x}{Object of class \code{smacofB}}
+  \item{object}{Object of class \code{smacofB}, \code{smacofR}, \code{smacofID}}
+  \item{x}{Object of class \code{smacofB}, \code{smacofR}, \code{smacofID}}
   \item{\dots}{Ignored}
-}
-\details{
-to be added  
 }
 
 \examples{
-data(ekman)
-res <- smacofSym(ekman)
+data(kinshipdelta)
+res <- smacofSym(kinshipdelta)
 res
 summary(res)
 
+
 }
-\keyword{models}
+\keyword{methods}
 

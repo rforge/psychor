@@ -6,7 +6,7 @@
 }
 \usage{
 smacofRect(delta, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
-           itmax = 100, reg = 1e-6, eps = 1e-6)
+           itmax = 1000, reg = 1e-6, eps = 1e-6)
 }
 
 \arguments{
@@ -24,6 +24,7 @@ smacofRect(delta, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
 }
 
 \value{
+  \item{obsdiss}{Observed dissimilarities}
   \item{confdiss}{Configuration dissimilarities}
   \item{conf.row}{Matrix of final row configurations}
   \item{conf.col}{Matrix of final column configurations}
@@ -37,7 +38,7 @@ smacofRect(delta, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
 \references{de Leeuw, J. \& Mair, P. (2008). Multidimensional scaling using majorization: The R package smacof.}
 \author{Jan de Leeuw and Patrick Mair}
 
-\seealso{to be added}
+\seealso{\code{\link{smacofConstraint}}, \code{\link{smacofSym}}, \code{\link{smacofIndDiff}}, \code{\link{smacofSphere.primal}}, \code{\link{smacofSphere.dual}}}
 
 \examples{
 data(breakfast)

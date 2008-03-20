@@ -2,16 +2,20 @@
 \alias{smacof-package}
 \alias{smacof}
 \docType{package}
-\title{smacof for Multidimensional Scaling.
+\title{SMACOF for Multidimensional Scaling.
 }
-\description{This package provides various versions of multidimensional scaling (MDS) based on stress minization by means of majorization (smacof): Simple smacof on symmetric dissimilarity matrices, smacof for rectangular matrices, three-way smacof as well as extensions in terms of quadratic surfaces and simple constraints on the configuration.
+\description{This package provides various versions of multidimensional scaling (MDS) 
+based on stress minization by means of majorization (smacof): Simple smacof on 
+symmetric dissimilarity matrices, smacof for rectangular matrices, 
+three-way smacof as well as extensions in terms of quadratic surfaces and 
+simple constraints on the configuration.
 }
 \details{
 \tabular{ll}{
 Package: \tab smacof\cr
 Type: \tab Package\cr
-Version: \tab 0.0-3\cr
-Date: \tab 2008-02-05\cr
+Version: \tab 0.0-10\cr
+Date: \tab 2008-03-20\cr
 License: \tab GPL\cr
 }
 The function for basic SMACOF on symmetric dissimilarity matrices is \code{smacofSym()}. For rectangular input matrices (unfolding model) \code{smacofRect()} is appropriate and by means of \code{smacofIndDiff()} individual difference models (three-way MDS) can be computed.
@@ -24,15 +28,16 @@ Maintainer: Jan de Leeuw <deleeuw@stat.ucla.edu>
 
 }
 \references{
-de Leeuw, J. \& Mair, P. (2008). Multidimensional scaling using majorization: The R package smacof.
+de Leeuw, J. \& Mair, P. (2008). Multidimensional scaling using majorization: The R package smacof. Journal of Statistical Software, forthcoming.
 }
 
 \keyword{ package }
-\seealso{\code{\link{smacofSym}}
-
+\seealso{\code{\link{smacofSym}}, \code{\link{smacofRect}}, \code{\link{smacof}}, \code{\link{smacofIndDiff}}, \code{\link{smacofSphere.primal}}, \code{\link{smacofSphere.dual}}
 }
-\examples{
-data(ekman)
-res <- smacofSym(ekman)
 
+
+\examples{
+data(trading)
+res <- smacofSym(trading)
+res
 }
