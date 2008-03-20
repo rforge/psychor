@@ -1,0 +1,89 @@
+<html><head><title>SMACOF for Multidimensional Scaling.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>smacof-package(smacof)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   smacof-package">
+<param name="keyword" value="R:   smacof">
+<param name="keyword" value=" SMACOF for Multidimensional Scaling.">
+</object>
+
+
+<h2>SMACOF for Multidimensional Scaling.</h2>
+
+
+<h3>Description</h3>
+
+<p>
+This package provides various versions of multidimensional scaling (MDS) 
+based on stress minization by means of majorization (smacof): Simple smacof on 
+symmetric dissimilarity matrices, smacof for rectangular matrices, 
+three-way smacof as well as extensions in terms of quadratic surfaces and 
+simple constraints on the configuration.
+</p>
+
+
+<h3>Details</h3>
+
+<p>
+<table summary="Rd table">
+<tr>
+  <td align="left">Package: </td>  <td align="left"> smacof</td>
+</tr>
+<tr>
+  <td align="left"> Type: </td>  <td align="left"> Package</td>
+</tr>
+<tr>
+  <td align="left"> Version: </td>  <td align="left"> 0.0-10</td>
+</tr>
+<tr>
+  <td align="left"> Date: </td>  <td align="left"> 2008-03-20</td>
+</tr>
+<tr>
+  <td align="left"> License: </td>  <td align="left"> GPL</td>
+</tr>
+</table>
+<p>
+The function for basic SMACOF on symmetric dissimilarity matrices is <code>smacofSym()</code>. For rectangular input matrices (unfolding model) <code>smacofRect()</code> is appropriate and by means of <code>smacofIndDiff()</code> individual difference models (three-way MDS) can be computed.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>
+Jan de Leeuw, Patrick Mair
+</p>
+<p>
+Maintainer: Jan de Leeuw &lt;deleeuw@stat.ucla.edu&gt;
+</p>
+
+
+<h3>References</h3>
+
+<p>
+de Leeuw, J. &amp; Mair, P. (2008). Multidimensional scaling using majorization: The R package smacof. Journal of Statistical Software, forthcoming.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="smacofSym.html">smacofSym</a></code>, <code><a href="smacofRect.html">smacofRect</a></code>, <code><a href="smacof-package.html">smacof</a></code>, <code><a href="smacofIndDiff.html">smacofIndDiff</a></code>, <code><a href="smacofSphere.dual.html">smacofSphere.primal</a></code>, <code><a href="smacofSphere.dual.html">smacofSphere.dual</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(trading)
+res &lt;- smacofSym(trading)
+res
+</pre>
+
+
+
+<hr><div align="center">[Package <em>smacof</em> version 0.0-10 <a href="00Index.html">Index]</a></div>
+
+</body></html>

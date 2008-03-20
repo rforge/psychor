@@ -1,0 +1,151 @@
+<html><head><title>Spherical SMACOF</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>smacofSphere.dual(smacof)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   smacofSphere.dual">
+<param name="keyword" value="R:   smacofSphere.primal">
+<param name="keyword" value=" Spherical SMACOF">
+</object>
+
+
+<h2>Spherical SMACOF</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Dual and primal approach for spherical SMACOF.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+smacofSphere.dual &lt;- function(delta, penalty = 100, ndim = 2, weightmat = NULL, init = NULL, 
+metric = TRUE, ties = "primary", verbose = FALSE, relax = 1, modulus = 1, itmax = 100, eps = 1e-6)
+
+smacofSphere.primal (delta, ndim = 2, weightmat = NULL, init = NULL,
+metric = TRUE, ties = "primary", verbose = FALSE, modulus = 1, itmax = 100, eps = 1e-6)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>delta</code></td>
+<td>
+Either a symmetric dissimilarity matrix or an object of class <code>dist</code></td></tr>
+<tr valign="top"><td><code>penalty</code></td>
+<td>
+Penalty parameter for dual algorithm (larger 0)</td></tr>
+<tr valign="top"><td><code>ndim</code></td>
+<td>
+Number of dimensions</td></tr>
+<tr valign="top"><td><code>weightmat</code></td>
+<td>
+Optional matrix with dissimilarity weights</td></tr>
+<tr valign="top"><td><code>init</code></td>
+<td>
+Matrix with starting values for configurations (optional)</td></tr>
+<tr valign="top"><td><code>metric</code></td>
+<td>
+If <code>FALSE</code> non-metric MDS is performed</td></tr>
+<tr valign="top"><td><code>ties</code></td>
+<td>
+Tie specification for non-metric MDS only</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+If <code>TRUE</code>, intermediate stress is printed out</td></tr>
+<tr valign="top"><td><code>relax</code></td>
+<td>
+Relaxed smacof update</td></tr>
+<tr valign="top"><td><code>modulus</code></td>
+<td>
+Number of smacof iterations per monotone regression call</td></tr>
+<tr valign="top"><td><code>itmax</code></td>
+<td>
+Maximum number of iterations</td></tr>
+<tr valign="top"><td><code>eps</code></td>
+<td>
+Convergence criterion</td></tr>
+</table>
+
+<h3>Value</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obsdiss</code></td>
+<td>
+Observed dissimilarities, normalized</td></tr>
+<tr valign="top"><td><code>obsdiss1</code></td>
+<td>
+Dual SMACOF: Observed dissimilarities</td></tr>
+<tr valign="top"><td><code>obsdiss2</code></td>
+<td>
+Dual SMACOF: Restriction matrix</td></tr>
+<tr valign="top"><td><code>confdiss</code></td>
+<td>
+Configuration dissimilarities</td></tr>
+<tr valign="top"><td><code>conf</code></td>
+<td>
+Matrix of final configurations</td></tr>
+<tr valign="top"><td><code>stress.m</code></td>
+<td>
+stress value for metric MDS</td></tr>
+<tr valign="top"><td><code>stress.nm</code></td>
+<td>
+stress value for non-metric MDS (if computed)</td></tr>
+<tr valign="top"><td><code>ndim</code></td>
+<td>
+Number of dimensions</td></tr>
+<tr valign="top"><td><code>model</code></td>
+<td>
+Type of smacof model</td></tr>
+<tr valign="top"><td><code>niter</code></td>
+<td>
+Number of iterations</td></tr>
+<tr valign="top"><td><code>nobj</code></td>
+<td>
+Number of objects</td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Jan de Leeuw and Patrick Mair
+</p>
+
+
+<h3>References</h3>
+
+<p>
+de Leeuw, J. &amp; Mair, P. (2008). Multidimensional scaling using majorization: The R package smacof.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="smacofRect.html">smacofRect</a></code>, <code><a href="smacofIndDiff.html">smacofIndDiff</a></code>, <code><a href="smacofSym.html">smacofSym</a></code>,<code><a href="smacofConstraint.html">smacofConstraint</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+## spherical SMACOF solution for trading data
+data(trading)
+res &lt;- smacofSphere.dual(trading)
+res
+summary(res)
+
+</pre>
+
+
+
+<hr><div align="center">[Package <em>smacof</em> version 0.0-9 <a href="00Index.html">Index]</a></div>
+
+</body></html>

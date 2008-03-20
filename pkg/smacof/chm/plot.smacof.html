@@ -1,0 +1,146 @@
+<html><head><title>2D SMACOF plots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>plot.smacof(smacof)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   plot.smacof">
+<param name="keyword" value="R:   plot.smacofR">
+<param name="keyword" value="R:   plot.smacofID">
+<param name="keyword" value=" 2D SMACOF plots">
+</object>
+
+
+<h2>2D SMACOF plots</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These methods provide various 2D plots for SMACOF models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'smacof':
+plot(x, plot.type = "confplot", plot.dim = c(1,2), sphere = TRUE, 
+main, xlab, ylab, ...)
+
+## S3 method for class 'smacofR':
+plot(x, plot.type = "confplot", joint = FALSE, plot.dim = c(1,2), 
+main, xlab, ylab, ...)
+
+## S3 method for class 'smacofID':
+plot(x, plot.type = "confplot", plot.dim = c(1,2), main, xlab, ylab, ...)
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+Object of class <code>"smacof"</code>, <code>"smacofR"</code>, and <code>"smacofID"</code> (see details)</td></tr>
+<tr valign="top"><td><code>plot.type</code></td>
+<td>
+String indicating which type of plot to be produced: <code>"confplot"</code>, <code>"resplot"</code> 
+<code>"Shepard"</code>, <code>"stressplot"</code> (see details)</td></tr>
+<tr valign="top"><td><code>plot.dim</code></td>
+<td>
+Vector with dimensions to be plotted.</td></tr>
+<tr valign="top"><td><code>main</code></td>
+<td>
+Plot title.</td></tr>
+<tr valign="top"><td><code>xlab</code></td>
+<td>
+Label of x-axis.</td></tr>
+<tr valign="top"><td><code>ylab</code></td>
+<td>
+Label of y-axis.</td></tr>
+<tr valign="top"><td><code>sphere</code></td>
+<td>
+In case of spherical smacof, whether sphere should be plotted or not.</td></tr>
+<tr valign="top"><td><code>joint</code></td>
+<td>
+If <code>TRUE</code>, the configurations are plotted jointly in rectangular smacof.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Further plot arguments passed: see <code><a onclick="findlink('graphics', 'plot.html')" style="text-decoration: underline; color: blue; cursor: hand">plot</a></code></td></tr>
+</table>
+<p>
+ in package <code>scatterplot3d</code> for detailed information.</p>
+
+<h3>Details</h3>
+
+<p>
+<code>smacofSym()</code> creates object of class <code>"smacof"</code>, whereas <code>smacofRect()</code> produces 
+<code>"smacofR"</code> and <code>smacofIndDiff()</code> generates <code>"smacofID"</code>.
+</p>
+<p>
+Plot description:
+</p>
+<p>
+- Configuration plot (<code>plot.type = "confplot"</code>): Plots the MDS configurations.
+</p>
+<p>
+- Residual plot (<code>plot.type = "resplot"</code>): Plots the configuration distances against  
+the corresponding residuals. 
+</p>
+<p>
+- Shepard diagram (<code>plot.type = "Shepard"</code>): Diagram with the observed against the fitted distances including
+isotonic regression line.
+</p>
+<p>
+- Stress decomposition plot (<code>plot.type = "stressplot"</code>): Plots the stress contribution in of each observation.
+</p>
+<p>
+For <code>smacofIndDiff()</code> the residual plot, Shepard diagram, and stress plot are based on the sum of the residuals across individuals/ways. 
+The configuration plot represents the group stimulus space (i.e., joint configurations).
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="plot3d.smacof.html">plot3d.smacof</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+## 2D plots for spherical SMACOF
+data(trading)
+res &lt;- smacofSphere.dual(trading)
+plot(res, plot.type = "confplot", sphere = TRUE)
+plot(res, plot.type = "resplot")
+plot(res, plot.type = "Shepard")
+plot(res, plot.type = "stressplot")
+
+## Joint configuration plot and row/column stressplots for rectangular SMACOF
+data(breakfast)
+res &lt;- smacofRect(breakfast)
+plot(res, plot.type = "confplot", joint = TRUE)
+plot(res, plot.type = "stressplot")
+
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>smacof</em> version 0.0-9 <a href="00Index.html">Index]</a></div>
+
+</body></html>

@@ -1,0 +1,150 @@
+<html><head><title>3D SMACOF plots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>plot3d.smacof(smacof)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   plot3d.smacof">
+<param name="keyword" value="R:   plot3d.smacofR">
+<param name="keyword" value="R:   plot3d.smacofID">
+<param name="keyword" value="R:   plot3dstatic">
+<param name="keyword" value="R:   plot3dstatic.smacof">
+<param name="keyword" value="R:   plot3dstatic.smacofR">
+<param name="keyword" value="R:   plot3dstatic.smacofID">
+<param name="keyword" value=" 3D SMACOF plots">
+</object>
+
+
+<h2>3D SMACOF plots</h2>
+
+
+<h3>Description</h3>
+
+<p>
+These methods produce static and dynamic 3D configuration plots for SMACOF models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'smacof':
+plot3d(x, plot.dim = c(1,2,3), sphere = TRUE, xlab, ylab, zlab, 
+col, main, bgpng = "particle.png", ax.grid = TRUE, sphere.rgl = TRUE,...)
+
+## S3 method for class 'smacofR':
+plot3d(x, plot.dim = c(1,2,3), joint = FALSE, xlab, ylab, zlab, 
+col, main, bgpng = "particle.png", ax.grid = TRUE, sphere.rgl = TRUE,...)
+
+## S3 method for class 'smacofID':
+plot3d(x, plot.dim = c(1,2,3), xlab, ylab, zlab, 
+col, main, bgpng = "particle.png", ax.grid = TRUE, sphere.rgl = TRUE,...)
+
+## S3 method for class 'smacof':
+plot3dstatic(x, plot.dim = c(1,2,3), main, xlab, ylab, zlab, col, ...)
+
+## S3 method for class 'smacofR':
+plot3dstatic(x, plot.dim = c(1,2,3), main, xlab, ylab, zlab, col, joint = FALSE, ...)
+
+## S3 method for class 'smacofID':
+plot3dstatic(x, plot.dim = c(1,2,3), main, xlab, ylab, zlab, col, ...)
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+Object of class <code>"smacof"</code>, <code>"smacofR"</code>, and <code>"smacofID"</code> (see details)</td></tr>
+<tr valign="top"><td><code>plot.dim</code></td>
+<td>
+Vector of length 3 with dimensions to be plotted.</td></tr>
+<tr valign="top"><td><code>sphere</code></td>
+<td>
+Spherical SMACOF: Whether sphere should be plotted or not.</td></tr>
+<tr valign="top"><td><code>joint</code></td>
+<td>
+Rectangular SMACOF: If <code>TRUE</code>, the configurations are plotted jointly.</td></tr>
+<tr valign="top"><td><code>main</code></td>
+<td>
+Plot title.</td></tr>
+<tr valign="top"><td><code>xlab</code></td>
+<td>
+Label of x-axis.</td></tr>
+<tr valign="top"><td><code>ylab</code></td>
+<td>
+Label of y-axis.</td></tr>
+<tr valign="top"><td><code>zlab</code></td>
+<td>
+Label of z-axis.</td></tr>
+<tr valign="top"><td><code>col</code></td>
+<td>
+Color of the text labels.</td></tr>
+<tr valign="top"><td><code>bgpng</code></td>
+<td>
+Background image from rgl library; <code>NULL</code> for white background</td></tr>
+<tr valign="top"><td><code>ax.grid</code></td>
+<td>
+If <code>TRUE</code>, axes grid is plotted.</td></tr>
+<tr valign="top"><td><code>sphere.rgl</code></td>
+<td>
+If <code>TRUE</code>, rgl sphere (background) is plotted.</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+Further plot arguments passed: see <code><a onclick="findlink('graphics', 'plot.html')" style="text-decoration: underline; color: blue; cursor: hand">plot</a></code></td></tr>
+</table>
+<p>
+ in package <code>scatterplot3d</code> for detailed information.</p>
+
+<h3>Details</h3>
+
+<p>
+<code>smacofSym()</code> creates object of class <code>"smacof"</code>, whereas <code>smacofRect()</code> produces 
+<code>"smacofR"</code> and <code>smacofIndDiff()</code> generates <code>"smacofID"</code>.
+</p>
+<p>
+For <code>smacofIndDiff()</code> the configuration plot represents the group stimulus space (i.e., joint configurations).
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="plot.smacof.html">plot.smacof</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+## 3D plot for spherical SMACOF
+data(trading)
+res &lt;- smacofSphere.dual(trading, ndim = 3)
+plot3d(res, plot.type = "confplot", sphere = TRUE, sphere.rgl = FALSE, bgpng = NULL)
+plot3dstatic(res)
+
+## Group stimulus space for rectangular SMACOF
+data(breakfast)
+res &lt;- smacofRect(breakfast, ndim = 3)
+plot3d(res, joint = TRUE)
+
+</pre>
+
+<script Language="JScript">
+function findlink(pkg, fn) {
+var Y, link;
+Y = location.href.lastIndexOf("\\") + 1;
+link = location.href.substring(0, Y);
+link = link + "../../" + pkg + "/chtml/" + pkg + ".chm::/" + fn;
+location.href = link;
+}
+</script>
+
+
+<hr><div align="center">[Package <em>smacof</em> version 0.0-10 <a href="00Index.html">Index]</a></div>
+
+</body></html>

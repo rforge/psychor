@@ -1,0 +1,136 @@
+<html><head><title>Rectangular smacof</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>smacofRect(smacof)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   smacofRect">
+<param name="keyword" value=" Rectangular smacof">
+</object>
+
+
+<h2>Rectangular smacof</h2>
+
+
+<h3>Description</h3>
+
+<p>
+Variant of smacof for rectangular matrices (typically ratings, preferences) which is also known as metric unfolding.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+smacofRect(delta, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
+           itmax = 1000, reg = 1e-6, eps = 1e-6)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>delta</code></td>
+<td>
+Data frame or matrix of preferences, ratings, dissimilarities.</td></tr>
+<tr valign="top"><td><code>ndim</code></td>
+<td>
+Number of dimensions</td></tr>
+<tr valign="top"><td><code>weightmat</code></td>
+<td>
+Optional matrix with dissimilarity weights</td></tr>
+<tr valign="top"><td><code>init</code></td>
+<td>
+Matrix with starting values for configurations (optional)</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+If <code>TRUE</code>, intermediate stress is printed out</td></tr>
+<tr valign="top"><td><code>itmax</code></td>
+<td>
+Maximum number of iterations</td></tr>
+<tr valign="top"><td><code>reg</code></td>
+<td>
+Regularization factor, prevents distances from beeing 0</td></tr>
+<tr valign="top"><td><code>eps</code></td>
+<td>
+Convergence criterion</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+Creates an object of class <code>smacofR</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obsdiss</code></td>
+<td>
+Observed dissimilarities</td></tr>
+<tr valign="top"><td><code>confdiss</code></td>
+<td>
+Configuration dissimilarities</td></tr>
+<tr valign="top"><td><code>conf.row</code></td>
+<td>
+Matrix of final row configurations</td></tr>
+<tr valign="top"><td><code>conf.col</code></td>
+<td>
+Matrix of final column configurations</td></tr>
+<tr valign="top"><td><code>stress</code></td>
+<td>
+Final stress value</td></tr>
+<tr valign="top"><td><code>ndim</code></td>
+<td>
+Number of dimensions</td></tr>
+<tr valign="top"><td><code>model</code></td>
+<td>
+Type of smacof model</td></tr>
+<tr valign="top"><td><code>niter</code></td>
+<td>
+Number of iterations</td></tr>
+<tr valign="top"><td><code>nind</code></td>
+<td>
+Number of individuals (rows)</td></tr>
+<tr valign="top"><td><code>nobj</code></td>
+<td>
+Number of objects (columns)</td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Jan de Leeuw and Patrick Mair
+</p>
+
+
+<h3>References</h3>
+
+<p>
+de Leeuw, J. &amp; Mair, P. (2008). Multidimensional scaling using majorization: The R package smacof.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>
+<code><a href="smacofConstraint.html">smacofConstraint</a></code>, <code><a href="smacofSym.html">smacofSym</a></code>, <code><a href="smacofIndDiff.html">smacofIndDiff</a></code>, <code><a href="smacofSphere.dual.html">smacofSphere.primal</a></code>, <code><a href="smacofSphere.dual.html">smacofSphere.dual</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(breakfast)
+res &lt;- smacofRect(breakfast)
+res
+summary(res)
+</pre>
+
+
+
+<hr><div align="center">[Package <em>smacof</em> version 0.0-9 <a href="00Index.html">Index]</a></div>
+
+</body></html>
