@@ -3,6 +3,7 @@
 \alias{print.pava}
 \alias{weighted.median}
 \alias{weighted.pth.fractile}
+\alias{plot.pava}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Generalized PAVA}
 \description{PAVA for general convex functions, including 

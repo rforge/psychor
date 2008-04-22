@@ -1,5 +1,5 @@
 `gpava` <-
-function(x, y, w = NULL, solver = weighted.mean, merger = c, ties = "none")
+function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none")
 {
 # y ... response; either a single vector or a list of vectors (blocks)
 # x ... predictor (1 predictor only so far, maybe extension to >1, i.e. generalized pava)
@@ -20,15 +20,24 @@ function(x, y, w = NULL, solver = weighted.mean, merger = c, ties = "none")
     
  #------------- ties -----------------
  #!!!FIXME: so far this works for y-vectors only!!! to be extended to lists
- if ((is.list(y)) && (ties != "none")) ties <- "none" 
+    if ((is.list(y)) && (ties != "none")) ties <- "none"   #to be removed later
   
+    if (ties == "none") {
+      if (!is.null(x)) {
+        o <- order(x)
+        y <- y[o]
+        w <- w[o]
+      }
+    }
+
     if (ties == "primary") {
       o <- order(x,y)
       r <- order(o)
       y <- y[o]
       w <- w[o]
     }
-    if (ties == "secondary") {
+    
+    if ((ties == "secondary") || (ties == "tertiary" )) {
       wag <- tapply(w,x,sum) 
       yag <- tapply(y,x,mean)
       xag <- tapply(x,x,mean) 
@@ -37,15 +46,7 @@ function(x, y, w = NULL, solver = weighted.mean, merger = c, ties = "none")
       y <- yag[o]
       w <- wag[o]
     }
-    if (ties == "tertiary") {
-      wag <- tapply(w,x,sum)
-      yag <- tapply(y,x,mean)
-      xag <- tapply(x,x,mean)
-      o <- order(xag)
-      r <- order(o)
-      y <- yag[o]
-      w <- wag[o]  
-    }
+    
   #----------- end ties --------------    
     n <- length(y)
     if(is.null(w)) {

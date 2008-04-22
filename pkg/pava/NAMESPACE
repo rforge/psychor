@@ -4,6 +4,7 @@ export(weighted.median)
 export(weighted.pth.fractile)
 
 S3method(print, pava)
+S3method(plot, pava)
 
 
 
