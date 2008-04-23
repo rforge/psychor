@@ -38,9 +38,9 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none
     }
     
     if ((ties == "secondary") || (ties == "tertiary" )) {
-      wag <- tapply(w,x,sum) 
-      yag <- tapply(y,x,mean)
-      xag <- tapply(x,x,mean) 
+      wag <- tapply(w,x,sum)              #sum weights (within tie)
+      yag <- tapply(y,x,mean)             #mean response (within tie)
+      xag <- tapply(x,x,mean)             #mean predictor (within tie)
       o <- order(xag)
       r <- order(o)
       y <- yag[o]
@@ -48,6 +48,7 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none
     }
     
   #----------- end ties --------------    
+
     n <- length(y)
     if(is.null(w)) {
         w <- if(is.list(y))
@@ -57,20 +58,16 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none
     } else if(is.list(y)) 
         w <- as.list(w)
     inds <- as.list(seq_len(n))    
-    vals <- mapply(solver, y, w)
+    vals <- mapply(solver, y, w)          #applies solver for each list element (e.g. list of weighted means)     
     
 
     ## Combine blocks i and i + 1.    
-    combine <- if(is.list(y)) {
-        ## In the repeated data case, we explicitly merge the data (and
-        ## weight) lists.
-        function(i) {
-            ## Merge the data and indices, solve, and put things back
-            ## into position i, dropping position i + 1.
+    combine <- if(is.list(y)) {           #In the repeated data case, we explicitly merge the data (and weight) lists.
+        function(i) {                     #Merge the data and indices, solve, and put things back into position i, dropping position i + 1.
             j <- i + 1L
-            y[[i]] <<- merger(y[[i]], y[[j]])
+            y[[i]] <<- merger(y[[i]], y[[j]])        #append observations 
             w[[i]] <<- c(w[[i]], w[[j]])
-            vals[i] <<- solver(y[[i]], w[[i]])
+            vals[i] <<- solver(y[[i]], w[[i]])       #z_i; apply function for element[[i]]
             inds[[i]] <<- c(inds[[i]], inds[[j]])
             keep <- seq_len(n)[-j]
             y <<- y[keep]
@@ -80,30 +77,29 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none
             n <<- n - 1L
         }
     } else {
-        function(i) {
-            ## In the "simple" case, merge only indices and values.
+        function(i) {                     #In the "simple" case, merge only indices and values.
             j <- i + 1L
-            inds[[i]] <<- c(inds[[i]], inds[[j]])
-            vals[i] <<- solver(y[inds[[i]]], w[inds[[i]]])
+            inds[[i]] <<- c(inds[[i]], inds[[j]])    #append index c(i, i+1)
+            vals[i] <<- solver(y[inds[[i]]], w[inds[[i]]]) #compute target function (i, i+1)
             keep <- seq_len(n)[-j]
-            vals <<- vals[keep]
-            inds <<- inds[keep]
-            n <<- n - 1L
+            vals <<- vals[keep]                      #delete (i+1)th y-value 
+            inds <<- inds[keep]                      #delete (i+1)th y-value    index                 
+            n <<- n - 1L                             #decrease number of observations
         }
     }
         
     i <- 1L
     repeat {
         if(i < n) {
-            if((vals[i] > vals[i + 1])) {
+            if((vals[i] > vals[i + 1])) {            #if decreasing
                 combine(i)
-                while((i > 1L) && (vals[i - 1L] > vals[i])) {
-                    combine(i - 1L)
-                    i <- i - 1L
+                while((i > 1L) && (vals[i - 1L] > vals[i])) {  #as long as i>1 and decreasing
+                    combine(i - 1L)                  #go back 1 elementstep
+                    i <- i - 1L                      
                 }
             }
             else
-                i <- i + 1L
+                i <- i + 1L                          #move on in data vector/index
             }
         else break
     }
