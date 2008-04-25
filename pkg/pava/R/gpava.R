@@ -1,5 +1,5 @@
 `gpava` <-
-function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none")
+function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
 {
 # y ... response; either a single vector or a list of vectors (blocks)
 # x ... predictor (1 predictor only so far, maybe extension to >1, i.e. generalized pava)
@@ -7,8 +7,9 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none
 # solver ... either weighted.mean, weighted.median, weighted.pth.fractile, or a user-specified function
 # ties ... string for tie treatment: either "primary", "secondary", "tertiary".
     
-    
+    merger <- c
     n <- length(y)
+    if(is.null(x)) x <- 1:n
     if(is.null(w)) {
         w <- if(is.list(y))
             lapply(sapply(y, length), function(u) rep.int(1, u))
@@ -16,31 +17,31 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none
             rep.int(1, n)
     } else if(is.list(y)) 
         w <- as.list(w)
+    w1 <- w
     y1 <- y
     
  #------------- ties -----------------
- #!!!FIXME: so far this works for y-vectors only!!! to be extended to lists
-    if ((is.list(y)) && (ties != "none")) ties <- "none"   #to be removed later
-  
-    if (ties == "none") {
-      if (!is.null(x)) {
-        o <- order(x)
-        y <- y[o]
-        w <- w[o]
-      }
-    }
-
     if (ties == "primary") {
-      o <- order(x,y)
+      if (is.list(y)) {
+        o <- order(x, mapply(solver, y, w))    #collapse y-list into val (vector)
+      } else { 
+        o <- order(x,y)
+      }
       r <- order(o)
-      y <- y[o]
-      w <- w[o]
-    }
+      y <- y[o]                                
+      w <- w[o]                                    }
     
     if ((ties == "secondary") || (ties == "tertiary" )) {
-      wag <- tapply(w,x,sum)              #sum weights (within tie)
-      yag <- tapply(y,x,mean)             #mean response (within tie)
-      xag <- tapply(x,x,mean)             #mean predictor (within tie)
+      if (is.list(y)) {
+        yag <- tapply(y, x, function(cps) {   
+                         colMeans(do.call(rbind, cps))})
+        wag <- tapply(w, x, function(cps) {    
+                         colSums(do.call(rbind, cps))})
+      } else {
+        wag <- tapply(w,x,sum)              #sum weights (within tie); collapsed
+        yag <- tapply(y,x,mean)             #mean response (within tie); collapsed
+      }  
+      xag <- tapply(x,x,mean)               #mean predictor (within tie); collapsed
       o <- order(xag)
       r <- order(o)
       y <- yag[o]
@@ -50,13 +51,6 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none
   #----------- end ties --------------    
 
     n <- length(y)
-    if(is.null(w)) {
-        w <- if(is.list(y))
-            lapply(sapply(y, length), function(u) rep.int(1, u))
-        else
-            rep.int(1, n)
-    } else if(is.list(y)) 
-        w <- as.list(w)
     inds <- as.list(seq_len(n))    
     vals <- mapply(solver, y, w)          #applies solver for each list element (e.g. list of weighted means)     
     
@@ -87,7 +81,10 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none
             n <<- n - 1L                             #decrease number of observations
         }
     }
-        
+
+  #--------- end combine ----------------
+
+  #--------- PAVA iterations -----------        
     i <- 1L
     repeat {
         if(i < n) {
@@ -103,16 +100,22 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, merger = c, ties = "none
             }
         else break
     }
+
+ #------------- end iterations ----------------
+
  yfit.notie <- rep.int(vals, sapply(inds, length))
  
- if (ties == "none") yfit <- yfit.notie
  if (ties == "primary") yfit <- yfit.notie[r]
  if (ties == "secondary") yfit <- as.vector(ifelse(outer(x,xag,"=="),1,0)%*%yfit.notie[r])
- if (ties == "tertiary") yfit <- as.vector(y1 + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-yag[o]))
+ if (ties == "tertiary") 
+   if (is.list(y1)) {
+     yfit <- as.vector(y1 + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-yag[o]))
+   } else {
+     yfit <- as.vector((mapply(solver, y1, w1)) + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-(mapply(solver, yag[o], wag[o]))))
+   }
  
- result <- list(yfit = yfit, y = y1, x = x)  
- class(result) <- "pava"
+ result <- list(yfit = yfit, x = x, y = y1, w = w1, solver = solver, call = match.call())  
+ class(result) <- "gpava"
  result
-
 }
 

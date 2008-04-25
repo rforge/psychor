@@ -1,8 +1,8 @@
 Package: pava
 Type: Package
 Title: PAVA for general convex functions
-Version: 0.0-3
-Date: 2008-04-23
+Version: 0.0-4
+Date: 2008-04-24
 Author: Kurt Hornik, Jan de Leeuw, Patrick Mair
 Maintainer: Kurt Hornik <kurt.hornik@wu-wien.ac.at>
 Description: This package extends the classical pool-adjacent-violators algorithm (PAVA) for monotonic regression in terms of specifications of general convex functions, optimization over index sets, observation weights, and various algorithms for handling ties. 

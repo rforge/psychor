@@ -3,8 +3,8 @@ export(gpava)
 export(weighted.median)
 export(weighted.pth.fractile)
 
-S3method(print, pava)
-S3method(plot, pava)
+S3method(print, gpava)
+S3method(plot, gpava)
 
 
 
