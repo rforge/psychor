@@ -8,6 +8,8 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
 # ties ... string for tie treatment: either "primary", "secondary", "tertiary".
     
     merger <- c
+    if ((is.matrix(y)) || (is.data.frame(y))) y <- c(as.data.frame(t(y))) #generate list
+    
     n <- length(y)
     if(is.null(x)) x <- 1:n
     if(is.null(w)) {
