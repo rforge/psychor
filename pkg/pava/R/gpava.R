@@ -9,6 +9,7 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
     
     merger <- c
     if ((is.matrix(y)) || (is.data.frame(y))) y <- c(as.data.frame(t(y))) #generate list
+    if ((is.matrix(w)) || (is.data.frame(w))) w <- c(as.data.frame(t(w))) #generate list
     
     n <- length(y)
     if(is.null(x)) x <- 1:n
@@ -31,7 +32,8 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
       }
       r <- order(o)
       y <- y[o]                                
-      w <- w[o]                                    }
+      w <- w[o]
+    }
     
     if ((ties == "secondary") || (ties == "tertiary" )) {
       if (is.list(y)) {
@@ -110,7 +112,7 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
  if (ties == "primary") yfit <- yfit.notie[r]
  if (ties == "secondary") yfit <- as.vector(ifelse(outer(x,xag,"=="),1,0)%*%yfit.notie[r])
  if (ties == "tertiary") 
-   if (is.list(y1)) {
+   if (!is.list(y1)) {
      yfit <- as.vector(y1 + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-yag[o]))
    } else {
      yfit <- as.vector((mapply(solver, y1, w1)) + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-(mapply(solver, yag[o], wag[o]))))
