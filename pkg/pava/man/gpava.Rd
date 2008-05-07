@@ -48,19 +48,23 @@ de Leeuw, J., Hornik, K., Mair, P. (2008). Pool-Adjacent-Violators Algorithm (PA
 Forthcoming.
 }
 \author{Kurt Hornik, Jan de Leeuw, Patrick Mair}
+
+
 \examples{
 
-x <- c(1,1,2,2,2,3,3,3,3)
-y <- c(1,4,0,3,3,5,6,7,4)
-
-gpava(x, y, ties = "primary")        ##primary approach
-gpava(x, y, ties = "secondary")      ##secondary approach
-gpava(x, y, ties = "tertiary")       ##tertiary appraoch
+data(pituitary)
+res1 <- gpava(pituitary[,1],pituitary[,2], ties = "primary")
+res2 <- gpava(pituitary[,1],pituitary[,2], ties = "secondary")
+res3 <- gpava(pituitary[,1],pituitary[,2], ties = "tertiary")
 
 ##now with three different functions
-gpava(1:9, y, ties = "primary", solver = weighted.mean)
-gpava(1:9, y, ties = "primary", solver = weighted.median)
-gpava(1:9, y, ties = "primary", solver = weighted.pth.fractile)
+res.mean <- gpava(pituitary[,1],pituitary[,2], solver = weighted.mean)
+res.median <- gpava(pituitary[,1],pituitary[,2], solver = weighted.median)
+
+##repeated measures
+data(posturo)
+res <- gpava(posturo[,1],posturo[,2:4], ties = "secondary")
+plot(res)
 
 }
 \keyword{models}
