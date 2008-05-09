@@ -1,7 +1,7 @@
 import("stats", "graphics")
 export(gpava)
 export(weighted.median)
-export(weighted.pth.fractile)
+export(weighted.fractile)
 
 S3method(print, gpava)
 S3method(plot, gpava)

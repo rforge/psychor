@@ -1,15 +1,22 @@
 `gpava` <-
-function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
+function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
 {
 # y ... response; either a single vector or a list of vectors (blocks)
 # x ... predictor (1 predictor only so far, maybe extension to >1, i.e. generalized pava)
 # w ... weights; either a single vector or a list if vectors (weights)
-# solver ... either weighted.mean, weighted.median, weighted.pth.fractile, or a user-specified function
+# solver ... either weighted.mean, weighted.median, weighted.fractile, or a user-specified function
 # ties ... string for tie treatment: either "primary", "secondary", "tertiary".
+# a,b... fractiles for weighted.fractile solver, otherwise ignored.
     
     merger <- c
     if ((is.matrix(y)) || (is.data.frame(y))) y <- c(as.data.frame(t(y))) #generate list
     if ((is.matrix(w)) || (is.data.frame(w))) w <- c(as.data.frame(t(w))) #generate list
+    
+    if (any(is.na(c(a,b)))) {               #additional arguments a,b
+      moreargs <- NULL
+    } else {
+      moreargs <- list(a=a,b=b)
+    }
     
     n <- length(y)
     if(is.null(x)) x <- 1:n
@@ -26,7 +33,7 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
  #------------- ties -----------------
     if (ties == "primary") {
       if (is.list(y)) {
-        o <- order(x, mapply(solver, y, w))    #collapse y-list into val (vector)
+          o <- order(x, mapply(solver, y, w, MoreArgs = moreargs))    #collapse y-list into val (vector)
       } else { 
         o <- order(x,y)
       }
@@ -56,7 +63,7 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
 
     n <- length(y)
     inds <- as.list(seq_len(n))    
-    vals <- mapply(solver, y, w)          #applies solver for each list element (e.g. list of weighted means)     
+    vals <- mapply(solver, y, w, MoreArgs = moreargs)          #applies solver for each list element (e.g. list of weighted means)     
     
 
     ## Combine blocks i and i + 1.    
@@ -65,7 +72,13 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
             j <- i + 1L
             y[[i]] <<- merger(y[[i]], y[[j]])        #append observations 
             w[[i]] <<- c(w[[i]], w[[j]])
-            vals[i] <<- solver(y[[i]], w[[i]])       #z_i; apply function for element[[i]]
+            
+            if (is.null(moreargs)) {
+              vals[i] <<- solver(y[[i]], w[[i]])       #z_i; apply function for element[[i]]
+            } else {
+               vals[i] <<- solver(y[[i]], w[[i]], a = a, b = b)       #weighted fractile
+            }
+            
             inds[[i]] <<- c(inds[[i]], inds[[j]])
             keep <- seq_len(n)[-j]
             y <<- y[keep]
@@ -78,7 +91,12 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
         function(i) {                     #In the "simple" case, merge only indices and values.
             j <- i + 1L
             inds[[i]] <<- c(inds[[i]], inds[[j]])    #append index c(i, i+1)
-            vals[i] <<- solver(y[inds[[i]]], w[inds[[i]]]) #compute target function (i, i+1)
+             if (is.null(moreargs)) {
+               vals[i] <<- solver(y[inds[[i]]], w[inds[[i]]]) #compute target function (i, i+1)
+            } else {
+               vals[i] <<- solver(y[inds[[i]]], w[inds[[i]]], a = a, b = b) #fractile
+            }
+            
             keep <- seq_len(n)[-j]
             vals <<- vals[keep]                      #delete (i+1)th y-value 
             inds <<- inds[keep]                      #delete (i+1)th y-value    index                 
@@ -115,7 +133,8 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary")
    if (!is.list(y1)) {
      yfit <- as.vector(y1 + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-yag[o]))
    } else {
-     yfit <- as.vector((mapply(solver, y1, w1)) + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-(mapply(solver, yag[o], wag[o]))))
+     #FIXME evtl. mean anstatt solver
+     yfit <- as.vector((mapply(solver, y1, w1, MoreArgs = moreargs)) + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-(mapply(solver, yag[o], wag[o], MoreArgs = moreargs))))
    }
  
  result <- list(yfit = yfit, x = x, y = y1, w = w1, solver = solver, call = match.call())  

@@ -2,23 +2,25 @@
 \alias{gpava}
 \alias{print.pava}
 \alias{weighted.median}
-\alias{weighted.pth.fractile}
+\alias{weighted.fractile}
 \alias{plot.pava}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Generalized PAVA}
 \description{PAVA for general convex functions, including 
 }
 \usage{
-gpava(x, y, w = NULL, solver = weighted.mean, ties = "primary")
+gpava(x, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{Vector of list of vectors of predictors}
   \item{y}{Vector of list of vectors of responses}
   \item{w}{Vector of list of vectors of observation weights}
-  \item{solver}{Either \code{weighted.mean}, \code{weighted.median}, \code{weighted.pth.fractile}, or 
+  \item{solver}{Either \code{weighted.mean}, \code{weighted.median}, \code{weighted.fractile}, or 
   a user-specified function (see below)}
   \item{ties}{Treatment of ties, either "primary", "secondary", or "tertiary"}
+  \item{a}{Fractile specification for \code{weighted.fractile} solver}
+  \item{b}{Fractile specification for \code{weighted.fractile} solver}
 }
 \details{A Pool Adjacent Violators Algorithm framework for minimizing problems
 like 
@@ -45,7 +47,7 @@ should return a single numerical value.
 }
 \references{
 de Leeuw, J., Hornik, K., Mair, P. (2008). Pool-Adjacent-Violators Algorithm (PAVA) in R. 
-Forthcoming.
+Journal of Statistical Software, forthcoming.
 }
 \author{Kurt Hornik, Jan de Leeuw, Patrick Mair}
 
@@ -53,13 +55,16 @@ Forthcoming.
 \examples{
 
 data(pituitary)
-res1 <- gpava(pituitary[,1],pituitary[,2], ties = "primary")
-res2 <- gpava(pituitary[,1],pituitary[,2], ties = "secondary")
-res3 <- gpava(pituitary[,1],pituitary[,2], ties = "tertiary")
+##different tie approaches
+gpava(pituitary[,1],pituitary[,2], ties = "primary")
+gpava(pituitary[,1],pituitary[,2], ties = "secondary")
+gpava(pituitary[,1],pituitary[,2], ties = "tertiary")
 
-##now with three different functions
-res.mean <- gpava(pituitary[,1],pituitary[,2], solver = weighted.mean)
-res.median <- gpava(pituitary[,1],pituitary[,2], solver = weighted.median)
+##different target functions
+gpava(pituitary[,1],pituitary[,2], solver = weighted.mean)
+gpava(pituitary[,1],pituitary[,2], solver = weighted.median)
+gpava(pituitary[,1],pituitary[,2], solver = weighted.fractile, a = 0.25, b = 0.75)
+
 
 ##repeated measures
 data(posturo)
