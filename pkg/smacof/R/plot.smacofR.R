@@ -31,10 +31,11 @@ plot.smacofR <- function(x, plot.type = "confplot", joint = FALSE, plot.dim = c(
       if (missing(main)) main1 <- paste("Joint Configuration Plot") else main1 <- main        
       if (missing(xlab)) xlab1 <- paste("Configurations D", x1,sep = "") else xlab1 <- xlab  
       if (missing(ylab)) ylab1 <- paste("Configurations D", y1,sep = "") else ylab1 <- ylab
-      fullconf <- rbind(x$conf.col[,c(x1,y1)],x$conf.row[,c(x1,y1)])
-      xlim1 <- range(fullconf[,1])
-      ylim1 <- range(fullconf[,2])
-      plot(x$conf.col[,x1], x$conf.col[,y1], main = main1, xlab = xlab1, ylab = ylab1, xlim = xlim1, ylim = ylim1, type = "n",...)
+      #fullconf <- rbind(x$conf.col[,c(x1,y1)],x$conf.row[,c(x1,y1)])
+      #xlim1 <- range(fullconf[,1])
+      #ylim1 <- range(fullconf[,2])
+      #if (missing(xlim)) xlim <- xlim1 else xlim <- xlim
+      plot(x$conf.col[,x1], x$conf.col[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = "n",...)
       text(x$conf.col[,x1], x$conf.col[,y1], labels = rownames(x$conf.col), col = "BLUE")
       points(x$conf.row[,x1], x$conf.row[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = "n")
       text(x$conf.row[,x1], x$conf.row[,y1], labels = rownames(x$conf.row), col = "RED")
