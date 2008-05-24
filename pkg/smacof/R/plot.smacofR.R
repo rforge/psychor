@@ -23,7 +23,7 @@ plot.smacofR <- function(x, plot.type = "confplot", joint = FALSE, plot.dim = c(
       if (missing(main)) main1 <- paste("Configuration Plot - Rows") else main1 <- main       #plot row configurations
       if (missing(xlab)) xlab1 <- paste("Column Configurations D", x1,sep = "") else xlab1 <- xlab
       if (missing(ylab)) ylab1 <- paste("Column Configurations D", y1,sep = "") else ylab1 <- ylab
-      get(getOption("device"))()
+      dev.new()
       plot(x$conf.row[,x1], x$conf.row[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = "n", ...)
       text(x$conf.row[,x1], x$conf.row[,y1], labels = rownames(x$conf.row), col = "RED")
       
@@ -85,7 +85,7 @@ plot.smacofR <- function(x, plot.type = "confplot", joint = FALSE, plot.dim = c(
     for (i in 1:length(sdecomp.stress)) lines(c(i,i), c(sdecomp.stress[i],0), col = "lightgray", lty = 2)                               
  
     #column-wise
-    get(getOption("device"))()
+    dev.new()
     stress.c <- colSums(stress.ri)
     decomp.stress <- stress.c/(sum(stress.c))*100
     sdecomp.stress <- sort(decomp.stress, decreasing = TRUE)

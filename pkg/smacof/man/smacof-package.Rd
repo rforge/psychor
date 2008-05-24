@@ -4,18 +4,14 @@
 \docType{package}
 \title{SMACOF for Multidimensional Scaling.
 }
-\description{This package provides various versions of multidimensional scaling (MDS) 
-based on stress minization by means of majorization (smacof): Simple smacof on 
-symmetric dissimilarity matrices, smacof for rectangular matrices, 
-three-way smacof as well as extensions in terms of quadratic surfaces and 
-simple constraints on the configuration.
+\description{This package provides the following approaches of multidimensional scaling (MDS) based on stress minimization by means of majorization (smacof): Simple smacof on symmetric dissimilarity matrices, smacof for rectangular matrices (unfolding models), smacof with constraints on the configuration, three-way smacof for individual differences (including constraints for idioscal, indscal, and identity), and spherical smacof (primal and dual algorithm). Each of these approaches is implemented in a metric and nonmetric manner including primary, secondary, and tertiary approaches for tie handling. 
 }
 \details{
 \tabular{ll}{
 Package: \tab smacof\cr
 Type: \tab Package\cr
-Version: \tab 0.0-11\cr
-Date: \tab 2008-05-21\cr
+Version: \tab 0.9-0\cr
+Date: \tab 2008-05-24\cr
 License: \tab GPL\cr
 }
 The function for basic SMACOF on symmetric dissimilarity matrices is \code{smacofSym()}. For rectangular input matrices (unfolding model) \code{smacofRect()} is appropriate and by means of \code{smacofIndDiff()} individual difference models (three-way MDS) can be computed.
