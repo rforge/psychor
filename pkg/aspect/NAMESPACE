@@ -1,0 +1,12 @@
+import("stats", "graphics")
+export(maxAspect)
+export(lineals)
+
+S3method(print, aspect)
+S3method(summary, aspect)
+
+
+
+
+
+
