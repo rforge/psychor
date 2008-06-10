@@ -11,8 +11,8 @@ Aspects of Multivariables
 \tabular{ll}{
 Package: \tab aspect\cr
 Type: \tab Package\cr
-Version: \tab 0.0-1\cr
-Date: \tab 2008-06-06\cr
+Version: \tab 0.0-2\cr
+Date: \tab 2008-06-10\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }

@@ -17,6 +17,8 @@ function(data, itmax = 100, eps = 1e-6)
   names(y) <- colnames(data)
 
   burt <- burtTable(data)                               #create Burt matrix (each variable is taken as categorical)
+  nameslist <- apply(data, 2, unique)
+  colnames(burt) <- rownames(burt) <- unlist(lapply(nameslist, sort))
   d <- diag(burt)                                       #diagonal of the Burt matrix
 
   for (j in 1:m) {                                      #compute category scores (normalized to y'burt y = 1)
@@ -76,7 +78,8 @@ function(data, itmax = 100, eps = 1e-6)
   rownames(r) <- colnames(r) <- colnames(t) <- rownames(t) <- colnames(scoremat)
   for (i in 1:length(y)) names(y[[i]]) <- unique(data[,i])
   
-  result <- list(loss = f, catscores = y, cormat = r, cor.rat = t, indmat = dummy.mat, scoremat = scoremat, niter = itel, call = match.call())
+  result <- list(loss = f, catscores = y, cormat = r, cor.rat = t, indmat = dummy.mat, 
+  scoremat = scoremat, data = data, burtmat = burt, niter = itel, call = match.call())
   class(result) <- "aspect"
   result
 }
