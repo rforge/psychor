@@ -76,7 +76,7 @@ function(data, itmax = 100, eps = 1e-6)
   scoremat <- t(apply(dummy.mat, 1, function(xx) scorevec[which(xx == 1)]))
   colnames(scoremat) <- colnames(data)
   rownames(r) <- colnames(r) <- colnames(t) <- rownames(t) <- colnames(scoremat)
-  for (i in 1:length(y)) names(y[[i]]) <- unique(data[,i])
+  for (i in 1:length(y)) names(y[[i]]) <- sort(unique(data[,i]))
   
   result <- list(loss = f, catscores = y, cormat = r, cor.rat = t, indmat = dummy.mat, 
   scoremat = scoremat, data = data, burtmat = burt, niter = itel, call = match.call())
