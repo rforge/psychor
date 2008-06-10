@@ -26,6 +26,7 @@ maxAspect(data, aspect = aspectSum, itmax = 100, eps = 1e-06, extra = 1)
   \item{eigencor}{Eigenvalues of the correlation matrix}
   \item{indmat}{Indicator matrix (dummy coded)}
   \item{scoremat}{Transformed data matrix (i.e with category scores resulting from optimal scaling)}
+  \item{burtmat}{Burt matrix}
   \item{niter}{Number of iterations}
 }
 \references{

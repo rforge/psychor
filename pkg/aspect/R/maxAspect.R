@@ -16,6 +16,8 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, extra = 1)
   names(y) <- colnames(data)
 
   burt <- burtTable(data)                                      #compute Burt matrix
+  nameslist <- apply(data, 2, unique)
+  colnames(burt) <- rownames(burt) <- unlist(lapply(nameslist, sort))
   d <- diag(burt)
 
   for (j in 1:m) {                                             #initial scaling of y such that y' burt y = 1
@@ -85,7 +87,7 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, extra = 1)
   }
  
   
-  result <- list(loss = f, catscores = y, cormat = r, eigencor = eigen(r,only.values=TRUE)$values, indmat = dummy.mat, scoremat = scoremat, niter = itel, call = match.call())
+  result <- list(loss = f, catscores = y, cormat = r, eigencor = eigen(r,only.values=TRUE)$values, indmat = dummy.mat, scoremat = scoremat, data = data, burtmat = burt, niter = itel, call = match.call())
   class(result) <- "aspect"
   result
 }
