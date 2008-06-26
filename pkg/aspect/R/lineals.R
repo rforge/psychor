@@ -28,46 +28,54 @@ function(data, itmax = 100, eps = 1e-6)
     y[[j]] <- y[[j]]/sqrt(sum(dj*y[[j]]*y[[j]]))        #burt normalization
   }
   
-  #--------- start lineals iterations (maximize f) ----------------
+  #y1 <- updateY(dframe, x, y, active = TRUE, rank = 1, level = level, sets = 0)
+  
+#------------------ start lineals iterations ---------------------
   repeat {
-    f <- 0                                              #loss value
+    f <- 0                                              
+    #------------- loss update -----------------
     for (j in 1:m) {
       indj <- (ccat[j]+1):ccat[j+1]
       yj <- y[[j]]
       for (l in 1:m) {
-	indl <- (ccat[l]+1):ccat[l+1]
+	      indl <- (ccat[l]+1):ccat[l+1]
         dl <- d[indl]
         yl <- y[[l]]
-	r[j,l] <- sum(burt[indj,indl]*outer(yj,yl))                  #correlation matrix
-	c <- burt[indj,indl]%*%diag(1/pmax(1,dl))%*%burt[indl,indj]
-	t[j,l] <- sum(c*outer(yj,yj))			             #correlation ratios
-	f <- f+(t[j,l]-r[j,l]^2)                                     #loss update (cf. p. 448, de Leeuw 1988)
+        #
+	      r[j,l] <- sum(burt[indj,indl]*outer(yj,yl))    #correlation matrix
+        c <- burt[indj,indl]%*%diag(1/pmax(1,dl))%*%burt[indl,indj]
+        t[j,l] <- sum(c*outer(yj,yj))			             #correlation ratios
+	      f <- f+(t[j,l]-r[j,l]^2)                       #loss update (cf. p. 448, de Leeuw 1988)
       }
     }
 
+    #------------ scores update ----------------
     for (j in 1:m) {                                                 #score updating  
-	indj <- (ccat[j]+1):ccat[j+1]
+	      indj <- (ccat[j]+1):ccat[j+1]
         nc <- ncat[j]
         yj <- y[[j]]
-	dj <- d[indj]
+	      dj <- d[indj]
         c <- matrix(0,nc,nc)
-	for (l in 1:m) {
-	  if (j != l) {
-	    indl <- (ccat[l]+1):ccat[l+1]
+	      for (l in 1:m) {
+	        if (j != l) {
+	          indl <- (ccat[l]+1):ccat[l+1]
             dl <- d[indl]
             yl <- y[[l]]
-	    u <- burt[indj,indl]%*%(diag(1/pmax(1,dl)) - 2*outer(yl,yl))%*%burt[indl,indj] 
-	    c <- c+u 
-	  }
-	}
-	e <- eigen(c/sqrt(outer(dj,dj)))
-	y[[j]] <- e$vectors[,nc]/sqrt(dj)                              #scores update
+	          u <- burt[indj,indl]%*%(diag(1/pmax(1,dl)) - 2*outer(yl,yl))%*%burt[indl,indj] 
+	          c <- c+u 
+	        }
+	      }
+	      e <- eigen(c/sqrt(outer(dj,dj)))
+	      y[[j]] <- e$vectors[,nc]/sqrt(dj)                              #scores update
         #FIXME!!! incorporate optimal scaling
      }
      if (((fold-f) < eps) || (itel == itmax)) break
      itel <- itel+1
      fold <- f
   }
+  
+#------------------------ end lineals iterations ---------------------
+ 
 
   if (itel == itmax) warning("Maximum iteration limit reached!")
 
