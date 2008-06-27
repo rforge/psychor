@@ -118,12 +118,19 @@ rownames(z) <- rownames(dframe)
 colnames(z) <- dimlab
 #alist.t <- lapply(alist,t)
 
+#------ score and dummy matrix -------
+dummymat <- as.matrix(expandFrame(data))         #indicator matrix
+catscores.d1 <-  do.call(rbind, ylist)[,1]       #category scores D1
+dummy.scores <- t(t(dummymat) * catscores.d1)
+scoremat <- t(apply(dummy.scores, 1, function(xx) xx[xx!=0]))  #data matrix with category scores
+colnames(scoremat) <- colnames(data)
+
 #--------------------------end preparing/labeling output------------------------
 
-result <- list(datname = name, dframe = dframe, ndim = ndim, niter = iter, level = level, 
-               eigenvalues = r, loss = snew, rank.vec = rank,
-               scores = z, rank.cat = ylist, cat.centroids = clist,
-               cat.loadings = alist, low.rank = ulist, active = active)
+result <- list(datname = name, catscores = ylist, scoremat = scoremat, objscores = z, 
+               cat.centroids = clist, ind.mat = dummymat, cat.loadings = alist, 
+               low.rank = ulist, ndim = ndim, niter = iter, level = level, 
+               eigenvalues = r, loss = snew, rank.vec = rank, active = active, dframe = dframe)
 class(result) <- "homals"
 result
 }
