@@ -1,5 +1,5 @@
 `homals` <-
-function(data, ndim = 2, level = "nominal", sets = 0, rank = ndim, active = TRUE,        
+function(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE,        
          eps = 1e-6, itermax = 100,	verbose = 0)
 {
 
