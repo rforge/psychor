@@ -1,19 +1,19 @@
 `homals` <-
-function(dframe,   # data (in data-frame)
-		sets=0, 				# list of vectors of indices
-		ndim=2,              	# dimensionality (default 2)
-		active=TRUE,            # which variables are active (single TRUE means all)
-		rank=ndim,           	# which quantification ranks (default all ndim)
-		level="nominal",		# which measurement level (default all nominal)
-		eps=1e-6,           	# iteration precision eigenvalues (default 1e-6)
-		itermax=100,         	# maximum number of iterations (default 100)
-		verbose=0				# debugging output level
-)
-
+function(data, ndim = 2, level = "nominal", sets = 0, rank = ndim, active = TRUE,        
+         eps = 1e-6, itermax = 100,	verbose = 0)
 {
+
+#data ... data frame
+#sets ...  list of vectors of set indices 
+#level ... which measurement level (either single string or vector
+#ndim ... number of dimensions
+#active ... which variables are active (single TRUE means all)
+#rank ... which category quantification ranks (default all ndim)
+#eps ... iteration precision eigenvalues (default 1e-6)
 
 #-----------------------------set some constants--------------------------------
 
+dframe <- data
 name <- deparse(substitute(dframe))		# frame name
 nobj <- nrow(dframe)					# number of objects
 nvar <- ncol(dframe)					# number of variables
