@@ -1,5 +1,5 @@
 `homals` <-
-function(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE,        
+function(data, ndim = 2, level = "nominal", sets = 0, rank = ndim, active = TRUE,        
          eps = 1e-6, itermax = 100,	verbose = 0)
 {
 
@@ -119,10 +119,20 @@ colnames(z) <- dimlab
 #alist.t <- lapply(alist,t)
 
 #------ score and dummy matrix -------
-dummymat <- as.matrix(expandFrame(data))         #indicator matrix
+dummymat <- as.matrix(expandFrame(data), zero = FALSE)         #indicator matrix
+dummymat[dummymat == 2] <- NA
 catscores.d1 <-  do.call(rbind, ylist)[,1]       #category scores D1
 dummy.scores <- t(t(dummymat) * catscores.d1)
-scoremat <- t(apply(dummy.scores, 1, function(xx) xx[xx!=0]))  #data matrix with category scores
+if (!any(is.na(dummy.scores))) {
+  scoremat <- t(apply(dummy.scores, 1, function(xx) xx[xx!=0]))  #data matrix with category scores
+} else {
+  cat.ind <- sequence(sapply(apply(data, 2, table), length))     #category index
+  scoremat <- t(apply(dummy.scores, 1, function(xx) {              #NA treatment
+                                         ind.el <- which(xx == 0)
+                                         ind.nael <- which((is.na(xx) + (cat.ind != 1)) == 2)
+                                         xx[-c(ind.el, ind.nael)]
+                                       }))  #list of scores
+}   
 colnames(scoremat) <- colnames(data)
 
 #--------------------------end preparing/labeling output------------------------

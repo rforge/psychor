@@ -15,7 +15,7 @@ for (j in 1:m) {
 	g<-cbind(g,ifelse(outer(y,h,"=="),1,0))
 	l<-c(l,paste(lab2[j],"_",h,sep=""))
 	}
-if (zero) g<-ifelse(is.na(g),0,as.matrix(g))
+if (zero) g<-ifelse(is.na(g),2,as.matrix(g))
 if (clean) {
 	g<-g[which(rowSums(g)>0),which(colSums(g)>0)]
 	g<-g[,which(colSums(g)<n)]
