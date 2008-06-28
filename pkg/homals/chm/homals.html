@@ -28,7 +28,7 @@ one to treat a variable as nominal, ordinal, or numerical).
 <h3>Usage</h3>
 
 <pre>
-homals(dframe, sets = 0, ndim = 2, active = TRUE, rank = ndim, level = "nominal", 
+homals(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE, 
        eps = 1e-06, itermax = 100, verbose = 0)
 </pre>
 
@@ -36,27 +36,27 @@ homals(dframe, sets = 0, ndim = 2, active = TRUE, rank = ndim, level = "nominal"
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>dframe</code></td>
+<tr valign="top"><td><code>data</code></td>
 <td>
-Data in data-frame.</td></tr>
-<tr valign="top"><td><code>sets</code></td>
-<td>
-List of vectors of indices.</td></tr>
+Data in data frame.</td></tr>
 <tr valign="top"><td><code>ndim</code></td>
 <td>
 Number of dimensions to be extracted.</td></tr>
-<tr valign="top"><td><code>active</code></td>
-<td>
-Which variables are active for computation (<code>TRUE</code> means all)</td></tr>
 <tr valign="top"><td><code>rank</code></td>
 <td>
 Which quantification ranks. Default is number of dimensions <code>ndim</code></td></tr>
 <tr valign="top"><td><code>level</code></td>
 <td>
-Which quantification levels. Possible values are <code>"nominal"</code>,
+Which quantification levels. Possible values are <code>"nominal"</code>,  
 <code>"ordinal"</code>, <code>"numerical"</code>, and <code>"polynomial"</code> which can be defined as single 
 character (if all variable are of the same level) or as vector which length corresponds to the
 number of variables.</td></tr>
+<tr valign="top"><td><code>sets</code></td>
+<td>
+List of vectors of indices.</td></tr>
+<tr valign="top"><td><code>active</code></td>
+<td>
+Which variables are active for computation (<code>TRUE</code> means all)</td></tr>
 <tr valign="top"><td><code>eps</code></td>
 <td>
 Iteration precision eigenvalues.</td></tr>
@@ -104,18 +104,30 @@ Returns an object of class <code>"homals"</code>.
 <tr valign="top"><td><code>datname</code></td>
 <td>
 Name of the data file.</td></tr>
-<tr valign="top"><td><code>dframe</code></td>
+<tr valign="top"><td><code>catscores</code></td>
 <td>
-Data file.</td></tr>
-<tr valign="top"><td><code>ndim</code></td>
+List of category scores for each variable.</td></tr>
+<tr valign="top"><td><code>scoremat</code></td>
 <td>
-Number of dimensions.</td></tr>
+Reproduced data matrix with category scores.</td></tr>
+<tr valign="top"><td><code>objscores</code></td>
+<td>
+Matrix with object scores on each dimension.</td></tr>
+<tr valign="top"><td><code>cat.centroids</code></td>
+<td>
+List of category centroids.</td></tr>
+<tr valign="top"><td><code>ind.mat</code></td>
+<td>
+Dummy coded indicator matrix.</td></tr>
+<tr valign="top"><td><code>cat.loadings</code></td>
+<td>
+List of category loadings.</td></tr>
+<tr valign="top"><td><code>low.rank</code></td>
+<td>
+List of lower rank quantifications.</td></tr>
 <tr valign="top"><td><code>niter</code></td>
 <td>
 Number of iterations.</td></tr>
-<tr valign="top"><td><code>level</code></td>
-<td>
-Vector with variable levels.</td></tr>
 <tr valign="top"><td><code>eigenvalues</code></td>
 <td>
 Final eigenvalues.</td></tr>
@@ -125,21 +137,6 @@ Value of the loss function.</td></tr>
 <tr valign="top"><td><code>rank.vec</code></td>
 <td>
 Vector with ranks for each variable.</td></tr>
-<tr valign="top"><td><code>scores</code></td>
-<td>
-Matrix with object scores on single dimension.</td></tr>
-<tr valign="top"><td><code>rank.cat</code></td>
-<td>
-List of rank restriced category quantifications.</td></tr>
-<tr valign="top"><td><code>cat.centroids</code></td>
-<td>
-List of category centroids.</td></tr>
-<tr valign="top"><td><code>cat.loadings</code></td>
-<td>
-List of category loadings.</td></tr>
-<tr valign="top"><td><code>low.rank</code></td>
-<td>
-List of lower rank quantifications.</td></tr>
 <tr valign="top"><td><code>active</code></td>
 <td>
 Vector with active/inactive variables.</td></tr>
@@ -205,6 +202,6 @@ Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
 
 
 
-<hr><div align="center">[Package <em>homals</em> version 0.9-3 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>homals</em> version 0.9-5 <a href="00Index.html">Index]</a></div>
 
 </body></html>
