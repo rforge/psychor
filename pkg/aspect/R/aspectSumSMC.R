@@ -1,5 +1,5 @@
 `aspectSumSMC` <-
-function(r,extra) {
+function(r) {
   m <- dim(r)[1]
   f <- 0
   g <- matrix(0,m,m)

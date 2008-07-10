@@ -1,5 +1,6 @@
 `aspectSMC` <-
-function(r, nvar) {
+function(r, targvar) {
+  nvar <- targvar
   m <- dim(r)[1]
   ind <- which(1:m!=nvar)
   rn <- as.vector(r[nvar,ind])

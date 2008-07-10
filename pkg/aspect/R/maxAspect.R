@@ -1,5 +1,5 @@
 `maxAspect` <-
-function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, extra = 1) 
+function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...) 
 {
 # aspect ... function names: either "aspectSum", "aspectAbs", "aspectSMC", "aspectSumSMC", "aspectEigen", "aspectDeterminant" or a user-specified function
 
@@ -28,22 +28,24 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, extra = 1)
   }
 
   #----------------- aspect string/function check --------------
-  if (!is.function(aspect)) {
-    if (aspect == "aspectSum") aspectfun <- aspectSum
-    if (aspect == "aspectAbs") aspectfun <- aspectAbs
-    if (aspect == "aspectSMC") aspectfun <- aspectSMC
-    if (aspect == "aspectSumSMC") aspectfun <- aspectSumSMC
-    if (aspect == "aspectEigen") aspectfun <- aspectEigen
-    if (aspect == "aspectDeterminant") aspectfun <- aspectDeterminant
+  #functions must return the value (1st argument) and the derivative (second argument) 
+  
+  if (!is.function(aspect)) {                                        
+    if (aspect == "aspectSum") aspectfun <- aspectSum                 #r, pow = 1 (power for r); sum of r_ij^pow 
+    if (aspect == "aspectAbs") aspectfun <- aspectAbs                 #r, pow = 1 (power for r); sum of |r_ij|^pow
+    if (aspect == "aspectSMC") aspectfun <- aspectSMC                 #r, targvar = 1 (index of target variable y); squared multiple correlation 
+    if (aspect == "aspectSumSMC") aspectfun <- aspectSumSMC           #r; sum of SMC's between each SMC combination  
+    if (aspect == "aspectEigen") aspectfun <- aspectEigen             #r, p (number of eigenvalues); sum of first p eigenvalues
+    if (aspect == "aspectDeterminant") aspectfun <- aspectDeterminant #r; -log determinant of r
   } else {
-    aspectfun <- aspect
+    aspectfun <- aspect                                               #r needed plus additonal arguments passed by ...
   }
 
   #---------------------- end aspect check ---------------------
   
-  #-------------------------------------------------------------
+  #------------------------ begin optimization -------------------
   repeat {
-    for (j in 1:m) {
+    for (j in 1:m) {                                #maybe accelerate a bit
        indj <- (ccat[j]+1):ccat[j+1]
 	for (l in 1:m) {
 	  indl <- (ccat[l]+1):ccat[l+1]
@@ -51,15 +53,16 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, extra = 1)
 	}
     }
 
-    #FIXME!!! implement aspect as function
-    a <- aspectfun(r, extra)                           #call aspect as a function of the correlation matrix r (and extra)
-    f <- a$f                                        #value of the aspect function
-    g <- a$g
+    a <- aspectfun(r, ...)                        #call aspect as a function of the correlation matrix r (and extra)
+    f <- a[[1]]                                     #value of the aspect function
+    g <- a[[2]]
 
     #print(f)
 
     for (j in 1:m) {
-      indj<-(ccat[j]+1):ccat[j+1]; y[[j]]<-rep(0,ncat[j]); dj<-d[indj]
+      indj<-(ccat[j]+1):ccat[j+1]
+      y[[j]]<-rep(0,ncat[j])
+      dj<-d[indj]
       for (l in 1:m) {
 	indl<-(ccat[l]+1):ccat[l+1]
 	if (j != l) y[[j]] <- y[[j]]+g[j,l]*burt[indj,indl]%*%y[[l]]
@@ -72,8 +75,10 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, extra = 1)
     itel<-itel+1
     fold<-f
   }
+  #--------------------------- end optimization -------------------
+  
 
-  #returns: function value (total discrepancy), scores, correlation matrix of the scores, eigenvalues (of r)
+  #returns: function value (total discrepancy f), category scores y, correlation matrix of the scores r, eigenvalues (of r) eigen
   if (itel == itmax) warning("Maximum iteration limit reached!")
 
   dummy.mat <- as.matrix(expandFrame(data))

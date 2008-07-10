@@ -7,7 +7,7 @@
 \description{This function performs optimal scaling by maximizing a certain aspect of the correlation matrix.
 }
 \usage{
-maxAspect(data, aspect = aspectSum, itmax = 100, eps = 1e-06, extra = 1)
+maxAspect(data, aspect = aspectSum, itmax = 100, eps = 1e-06, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -15,9 +15,24 @@ maxAspect(data, aspect = aspectSum, itmax = 100, eps = 1e-06, extra = 1)
   \item{aspect}{Function on the correlation matrix (see details)}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
-  \item{extra}{Extra parameter for aspect}
+  \item{...}{Additional parameters for aspect}
 }
-\details{We provide various pre-specified aspects: \code{"aspectAbs"} takes the sum of the absolute values of the correlations, \code{"aspectSum"} the sum of the correlations, \code{"aspectDeterminant"} the determinant of the correlation matrix, \code{"aspectEigen"} the sum of the first p eigenvalues (principal component analysis), \code{"aspectSMC"} the squared multiple correlations (multiple regression), \code{"aspectSumSMC"} uses the sum of p SMC's (path analysis). optionally, the user can specify his own aspects. 
+\details{We provide various pre-specified aspects: 
+
+\code{"aspectAbs"} takes the sum of the absolute values of the correlations to the power \code{pow}. The optional argument \code{pow = 1}. 
+
+\code{"aspectSum"} the sum of the correlations to the power of \code{pow}. Again, as default \code{pow = 1}. 
+
+\code{"aspectDeterminant"} computes the determinant of the correlation matrix; no additional arguments needed.
+
+\code{"aspectEigen"} the sum of the first p eigenvalues (principal component analysis). By default the argument \code{p = 1}. 
+
+\code{"aspectSMC"} the squared multiple correlations (multiple regression) with respect to a target variable. By default \code{targvar = 1} which implies that the first variable of the dataset is taken as response. 
+
+\code{"aspectSumSMC"} uses the sum of all squared multiple correlations (path analysis). 
+
+Alternatively, the user can write his own aspect, e.g. the function \code{myAspect(r, ...)} with r as the correlation matrix. This function must return a list with the function value as first list element and the first derivative with respect to r as the second. Then \code{aspect = myAspect} and additional arguments go into \code{...} in \code{maxAspect()}. 
+    
 }
 \value{
   \item{loss}{Final value of the loss function}
@@ -38,8 +53,45 @@ de Leeuw, J. (1988). Multivariate analysis with optimal scaling. In S. Das Gupta
 
 \seealso{\code{\link{lineals}}}
 \examples{
+
+## maximizes the first eigenvalue
 data(galo)
-res.eig <- maxAspect(galo[,1:4], aspect = "aspectEigen")
+res.eig1 <- maxAspect(galo[,1:4], aspect = "aspectEigen")
+res.eig1
+summary(res.eig1)
+
+## maximizes the first 2 eigenvalues
+res.eig2 <- maxAspect(galo[,1:4], aspect = "aspectEigen", p = 2)
+res.eig2
+
+## maximizes the absolute value of cubic correlations
+res.abs3 <- maxAspect(galo[,1:4], aspect = "aspectAbs", pow = 3)
+res.abs3
+
+## maximizes the sum of squared correlations
+res.cor2 <- maxAspect(galo[,1:4], aspect = "aspectSum", pow = 2)
+res.cor2
+
+## maximizes the determinant
+res.det <- maxAspect(galo[,1:4], aspect = "aspectDeterminant")
+res.det
+
+## maximizes SMC, IQ as target variable
+res.smc <- maxAspect(galo[,1:4], aspect = "aspectSMC", targvar = 2)
+res.smc
+
+## maximizes the sum of SMC
+res.sumsmc <- maxAspect(galo[,1:4], aspect = "aspectSumSMC")
+res.sumsmc
+
+## some user-defined non-sense aspect
+## first list element corresponds to function value, second to first derivative
+myAspect <- function(r, a = 1, b = 1) list(a*b*r, matrix(a*b, nrow = nrow(r), ncol = ncol(r)))
+res.my <- maxAspect(galo[,1:4], aspect = myAspect, a = 2, b = 4)
+res.my
+
+
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
