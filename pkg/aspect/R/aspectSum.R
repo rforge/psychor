@@ -3,7 +3,7 @@
 `aspectSum` <-
 function(r, pow = 1)                 
 {
-  m <- dim(r)[1]
-  list(f = sum(r^pow), g = pow*r^(pow-1))
+  rl <- r[lower.tri(r)]
+  list(f = sum(rl^pow), g = pow*rl^(pow-1))
 }
 
