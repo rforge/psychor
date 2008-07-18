@@ -1,6 +1,6 @@
 `homals` <-
 function(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE,        
-         eps = 1e-6, itermax = 100,	verbose = 0)
+         eps = 1e-6, itermax = 1000,	verbose = 0)
 {
 
 #data ... data frame
@@ -108,7 +108,13 @@ for (i in 1:nvar) {
     clist[[i]] <- cbind(clist[[i]])
     #alist[[i]] <- cbind(alist[[i]])
   }
-  rownames(ylist[[i]]) <- rownames(ulist[[i]]) <- rownames(clist[[i]])
+  
+  options(warn = -1)
+  rnames <- sort(as.numeric((rownames(clist[[i]]))))             #convert row names into integers
+  options(warn = 0)
+  if ((any(is.na(rnames))) || (length(rnames) == 0)) rnames <- rownames(clist[[i]])
+  
+  rownames(ylist[[i]]) <- rownames(ulist[[i]]) <- rownames(clist[[i]]) <- rnames
   rownames(alist[[i]]) <- paste(1:dim(alist[[i]])[1])
   colnames(clist[[i]]) <- colnames(ylist[[i]]) <- colnames(alist[[i]]) <- dimlab
   colnames(ulist[[i]]) <- paste(1:dim(as.matrix(ulist[[i]]))[2])
@@ -120,19 +126,20 @@ colnames(z) <- dimlab
 
 #------ score and dummy matrix -------
 dummymat <- as.matrix(expandFrame(data), zero = FALSE)         #indicator matrix
-dummymat[dummymat == 2] <- NA
+dummymat[dummymat == 2] <- NA                    #missing observations
+dummymat[dummymat == 0] <- Inf                   #irrelevant entries
 catscores.d1 <-  do.call(rbind, ylist)[,1]       #category scores D1
-dummy.scores <- t(t(dummymat) * catscores.d1)
-if (!any(is.na(dummy.scores))) {
-  scoremat <- t(apply(dummy.scores, 1, function(xx) xx[xx!=0]))  #data matrix with category scores
-} else {
-  cat.ind <- sequence(sapply(apply(data, 2, table), length))     #category index
-  scoremat <- t(apply(dummy.scores, 1, function(xx) {              #NA treatment
-                                         ind.el <- which(xx == 0)
-                                         ind.nael <- which((is.na(xx) + (cat.ind != 1)) == 2)
-                                         xx[-c(ind.el, ind.nael)]
-                                       }))  #list of scores
-}   
+dummy.scores <- t(t(dummymat) * catscores.d1)    #full score matrix (Inf, -Inf)
+
+cat.ind <- sequence(sapply(apply(data, 2, table), length))     #category indices (sequence)
+scoremat <- t(apply(dummy.scores, 1, function(ds) {             #data matrix with category scores
+                          ind.infel <- which(ds == Inf)                         #identify Inf entries
+                          ind.minfel <- which(ds == -Inf)                       #identify -Inf entries
+                          ind.nan <- which(is.nan(ds))
+                          ind.nael <- which((is.na(ds) + (cat.ind != 1)) == 2)  #identify NA entries
+                          ds[-c(ind.infel, ind.minfel, ind.nael, ind.nan)]               #return scored entries
+                      } )) 
+  
 colnames(scoremat) <- colnames(data)
 
 #--------------------------end preparing/labeling output------------------------

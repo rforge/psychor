@@ -92,7 +92,7 @@ if (plot.type == "jointplot") {
   catleg <- NULL
   for (j in var.subset)
   {
-    text(x$catscores[[j]][,c(pd1,pd2)], labels = rownames(x$catscores[[j]]), col = catcol[j])
+    text(x$catscores[[j]][,c(pd1,pd2)], labels = rownames(x$catscores[[j]]), col = catcol[j], cex = 0.8)
     catleg <- c(catleg, catcol[j])
   }
   legend(leg.pos,colnames(x$dframe)[var.subset], col = catleg, pch = 22)
@@ -121,7 +121,7 @@ if (plot.type == "graphplot") {
   varnames <- rep(colnames(x$dframe),repvec)
   rownames(dmat) <- paste(varnames, rownames(dmat))
   xycoor <- rbind(dmat, x$objscores[,c(pd1,pd2)])
-  identify(xycoor, labels = rownames(xycoor))
+  identify(xycoor, labels = rownames(xycoor), cex = 0.7)
 }
 
 #----------------------------------end graphplot--------------------------------
