@@ -11,7 +11,7 @@ function(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE
 #rank ... which category quantification ranks (default all ndim)
 #eps ... iteration precision eigenvalues (default 1e-6)
 
-#-----------------------------set some constants--------------------------------
+#----------------------------- constants --------------------------------
 
 dframe <- data
 name <- deparse(substitute(dframe))		# frame name
@@ -20,13 +20,21 @@ nvar <- ncol(dframe)					# number of variables
 vname <- names(dframe)					# variable names
 rname <- rownames(dframe)				# object names
 
-#-----------------------------convert to factors--------------------------------
+#-----------------------------convert to factors, check data -------------------
 
 for (j in 1:nvar) {
 	dframe[, j] <- as.factor(dframe[, j])
-    levels(dframe[, j])<-sort(levels(dframe[, j]))
-	}
+	levfreq <- table(dframe[,j])
+	if (any(levfreq == 0)) {
+    newlev <- levels(dframe[, j])[-which(levfreq == 0)]
+  } else {
+    newlev <- levels(dframe[,j])
+  }
+  dframe[,j] <- factor(dframe[,j], levels = sort(newlev))
+}
 
+varcheck <- apply(dframe, 2, function(tl) length(table(tl)))	
+if (any(varcheck == 1)) stop("Variable with only 1 value detected! Can't proceed with estimation!")
 #-----------------------------parameter consistency-----------------------------
 
 active<-checkPars(active,nvar)
@@ -125,13 +133,15 @@ colnames(z) <- dimlab
 #alist.t <- lapply(alist,t)
 
 #------ score and dummy matrix -------
-dummymat <- as.matrix(expandFrame(data), zero = FALSE)         #indicator matrix
+dummymat <- as.matrix(expandFrame(dframe, zero = FALSE, clean = FALSE))         #indicator matrix
+dummymat01 <- dummymat                           #final indicator matrix
 dummymat[dummymat == 2] <- NA                    #missing observations
 dummymat[dummymat == 0] <- Inf                   #irrelevant entries
 catscores.d1 <-  do.call(rbind, ylist)[,1]       #category scores D1
 dummy.scores <- t(t(dummymat) * catscores.d1)    #full score matrix (Inf, -Inf)
 
-cat.ind <- sequence(sapply(apply(data, 2, table), length))     #category indices (sequence)
+freqlist <- apply(dframe, 2, function(dtab) as.list(table(dtab)))
+cat.ind <- sequence(sapply(freqlist, length))     #category indices (sequence)
 scoremat <- t(apply(dummy.scores, 1, function(ds) {             #data matrix with category scores
                           ind.infel <- which(ds == Inf)                         #identify Inf entries
                           ind.minfel <- which(ds == -Inf)                       #identify -Inf entries
@@ -140,12 +150,12 @@ scoremat <- t(apply(dummy.scores, 1, function(ds) {             #data matrix wit
                           ds[-c(ind.infel, ind.minfel, ind.nael, ind.nan)]               #return scored entries
                       } )) 
   
-colnames(scoremat) <- colnames(data)
+colnames(scoremat) <- colnames(dframe)
 
 #--------------------------end preparing/labeling output------------------------
 
 result <- list(datname = name, catscores = ylist, scoremat = scoremat, objscores = z, 
-               cat.centroids = clist, ind.mat = dummymat, cat.loadings = alist, 
+               cat.centroids = clist, ind.mat = dummymat01, cat.loadings = alist, 
                low.rank = ulist, ndim = ndim, niter = iter, level = level, 
                eigenvalues = r, loss = snew, rank.vec = rank, active = active, dframe = dframe)
 class(result) <- "homals"

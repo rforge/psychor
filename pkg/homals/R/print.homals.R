@@ -15,5 +15,6 @@ function(x, ...)
   cat("Loadings (first solution only):\n")
   print(loadmat)
   cat("\n")
+  invisible(x)
 }
 

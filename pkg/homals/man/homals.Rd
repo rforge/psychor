@@ -11,7 +11,7 @@
 }
 \usage{
 homals(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE, 
-       eps = 1e-06, itermax = 100, verbose = 0)
+       eps = 1e-06, itermax = 1000, verbose = 0)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
