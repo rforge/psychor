@@ -93,17 +93,25 @@ repeat {
 		stop(cat("loss function increases in iteration ",iter,"\n"))
 		}
 	if ((sold - snew) < eps) break()
-		else {x <- z; sold <- snew}
+		else {x <- z; sold <- snew}            #result: object scores
 	}
 
 #-----------------------------store final version--------------------------------
 
+#---------------------------- Cone restricted SVD ------------------------------
 ylist<-alist<-clist<-ulist<-NULL
-for (j in 1:nvar) {
-  gg<-dframe[,j]; c<-computeY(gg,z); d<-as.vector(table(gg))
-  lst<-restrictY(d,c,rank[j],level[j])
-  y<-lst$y; a<-lst$a; u<-lst$z
-  ylist<-c(ylist,list(y)); alist<-c(alist,list(a)); clist<-c(clist,list(c)); ulist<-c(ulist,list(u))
+for (j in 1:nvar) {                        #final score computation based on SVD
+  gg <- dframe[,j]
+  c <- computeY(gg,z)                      #category centroids based on object scores z
+  d <- as.vector(table(gg))
+  lst <- restrictY(d,c,rank[j],level[j])   #based on category centroids
+  y <- lst$y                               #category scores Y = ZA'
+  a <- lst$a                               #category loadings (weights A)
+  u <- lst$z                               #(single) category scores (low rank quantifications)
+  ylist <- c(ylist,list(y))                #list of final category scores Y
+  alist <- c(alist,list(a))                #list of category loadings A
+  clist <- c(clist,list(c))                #list of category centroids C
+  ulist <- c(ulist,list(u))                #list of low rank quantifications U (aka Z)
 }
 
 #--------------------------preparing/labeling output----------------------------
@@ -121,6 +129,7 @@ for (i in 1:nvar) {
   rnames <- sort(as.numeric((rownames(clist[[i]]))))             #convert row names into integers
   options(warn = 0)
   if ((any(is.na(rnames))) || (length(rnames) == 0)) rnames <- rownames(clist[[i]])
+  if (!is.matrix(ulist[[i]])) ulist[[i]] <- as.matrix(ulist[[i]])
   
   rownames(ylist[[i]]) <- rownames(ulist[[i]]) <- rownames(clist[[i]]) <- rnames
   rownames(alist[[i]]) <- paste(1:dim(alist[[i]])[1])
@@ -157,7 +166,7 @@ colnames(scoremat) <- colnames(dframe)
 result <- list(datname = name, catscores = ylist, scoremat = scoremat, objscores = z, 
                cat.centroids = clist, ind.mat = dummymat01, cat.loadings = alist, 
                low.rank = ulist, ndim = ndim, niter = iter, level = level, 
-               eigenvalues = r, loss = snew, rank.vec = rank, active = active, dframe = dframe)
+               eigenvalues = r, loss = snew, rank.vec = rank, active = active, dframe = dframe, call = match.call())
 class(result) <- "homals"
 result
 }

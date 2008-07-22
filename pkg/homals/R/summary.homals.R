@@ -1,7 +1,6 @@
 `summary.homals` <-
 function(object, ...)
 {
-  cat("\nHomals results for ",object$datname,":\n", sep="")
   cat("\nNumber of dimensions:",object$ndim)
   cat("\nNumber of iterations:",object$niter)
   cat("\n")
