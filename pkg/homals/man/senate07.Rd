@@ -1,5 +1,5 @@
 \name{senate07}
-\alias{senate}
+\alias{senate07}
 
 \docType{data07}
 \title{Senate votes 2007}
@@ -30,7 +30,7 @@ was adopted 51-46. Jan. 17, 2007. A no vote is a +.
 I2. HR 2. Minimum Wage Increase: Motion to invoke cloture (thus limiting debate) on
 a Baucus (D-MT) substitute amendment to raise the minimum wage to \$7.25 per hour
 over two years and provide \$8.3 billion in small-business tax incentives. The tax
-provisions would be offset with revenue increases, including a $1 million cap on
+provisions would be offset with revenue increases, including a \$1 million cap on
 the amount of executive compensation that can be tax-deferred in any year and extend
 certain restrictions on certain sale-in-leaseout deals. (Three-fifths of the total Senate,
 60 votes, is required to invoke cloture.) Motion agreed to 87-10. Jan 30, 2007. A
@@ -38,7 +38,7 @@ yes vote is a +.
 
 I3. S 574. Iraq War 'Surge': Motion to invoke cloture and proceed to a bill that
 would express the sense of Congress in support of U.S. military serving in Iraq,
-while disapproving of President Bush's ''surge'' decision to deploy more than
+while disapproving of President Bush's 'surge' decision to deploy more than
 20000 additional U.S. combat troops to that country and requiring the President to
 submit a report to Congress every 30 days on military progress in Iraq. Motion rejected
 56-34. Feb. 17, 2007. A yes vote is a +.
@@ -97,7 +97,7 @@ I10. S 2011. FISA: Passage of a bill to amend the Foreign Intelligence Surveilla
 Act of 1978 (FISA) to expand the authority  of the Attorney General and the Director of
 National Intelligence to conduct surveillance of communication between one suspected
 foreign terrorist and another without a court warrant. Communications companies
-would be compelled to comply with the government’s conduct of such surveillance.
+would be compelled to comply with the government's conduct of such surveillance.
 Within 10 days of initiating the electronic surveillance, the Administration would be
 required to describe to the FISA court the procedures they used to determine whether
 the intelligence acquisition being conducted without a warrant is directed at foreign
@@ -127,7 +127,7 @@ billion. To offset the cost of the expansion, the bill would increase the tax on
 by 61 cents to \$1 per pack and raise taxes on other tobacco products. Motion agreed to
 69-30. Sept. 27, 2007. A yes vote is a +.
 
-I14. HR 3043. Fiscal 2008 Labor - HHS-Education Appropriations – Limiting Abortion Funding: 
+I14. HR 3043. Fiscal 2008 Labor - HHS-Education Appropriations - Limiting Abortion Funding: 
 Vitter (R-LA) amendment to Harkin (D-IA) legislation. The Vitter amendment would prohibit the
 distribution of Title X family planning funds to abortion providers except when a woman
 suffers from a physical disorder, injury, or illness that would risk the life of the
@@ -200,7 +200,6 @@ in determining their level of food stamp benefits. It also would authorize \$1.1
 billion to promote farm-based renewable energy and effi ciency. (Before passage, the
 Senate adopted a Harkin (D-IA) substitute amendment by voice vote.) Passed 79-14.
 Dec. 14, 2007. A yes vote is a +.
-
 }
 
 \references{

@@ -1,6 +1,6 @@
 `homals` <-
 function(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE,        
-         eps = 1e-6, itermax = 1000,	verbose = 0)
+         eps = 1e-6, itermax = 1000, verbose = 0)
 {
 
 #data ... data frame
@@ -146,20 +146,23 @@ dummymat <- as.matrix(expandFrame(dframe, zero = FALSE, clean = FALSE))         
 dummymat01 <- dummymat                           #final indicator matrix
 dummymat[dummymat == 2] <- NA                    #missing observations
 dummymat[dummymat == 0] <- Inf                   #irrelevant entries
-catscores.d1 <-  do.call(rbind, ylist)[,1]       #category scores D1
-dummy.scores <- t(t(dummymat) * catscores.d1)    #full score matrix (Inf, -Inf)
 
-freqlist <- apply(dframe, 2, function(dtab) as.list(table(dtab)))
-cat.ind <- sequence(sapply(freqlist, length))     #category indices (sequence)
-scoremat <- t(apply(dummy.scores, 1, function(ds) {             #data matrix with category scores
+scoremat <- array(NA, dim = c(dim(dframe), ndim), dimnames = list(rownames(dframe), colnames(dframe), paste("dim", 1:ndim, sep = "")))  #initialize array for score matrix (n*p*ndim)
+
+for (i in 1:ndim) {
+  catscores.d1 <-  do.call(rbind, ylist)[,i]       #category scores for dimension i
+  dummy.scores <- t(t(dummymat) * catscores.d1)    #full score matrix (Inf, -Inf)
+
+  freqlist <- apply(dframe, 2, function(dtab) as.list(table(dtab)))
+  cat.ind <- sequence(sapply(freqlist, length))     #category indices (sequence)
+  scoremat[,,i] <- t(apply(dummy.scores, 1, function(ds) {             #data matrix with category scores
                           ind.infel <- which(ds == Inf)                         #identify Inf entries
                           ind.minfel <- which(ds == -Inf)                       #identify -Inf entries
                           ind.nan <- which(is.nan(ds))
                           ind.nael <- which((is.na(ds) + (cat.ind != 1)) == 2)  #identify NA entries
                           ds[-c(ind.infel, ind.minfel, ind.nael, ind.nan)]               #return scored entries
-                      } )) 
-  
-colnames(scoremat) <- colnames(dframe)
+                      } ))
+}
 
 #--------------------------end preparing/labeling output------------------------
 

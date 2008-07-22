@@ -24,10 +24,14 @@ function(dframe,x,y,active,rank,level,sets,verbose=0){
 		  ss[ii,] <- ss[ii,]+yy[gg,]
 		  s2 <- sum((x[ii,]-ss[ii,])^2)
 		  y[[j]]<-yy
-		  if (verbose > 1) {at("Set: ",formatC(l,digits=3,width=3),
-		  	" After Variable: ",formatC(j,digits=3,width=3),
-		  	" Loss: ", formatC(c(s1,s2),digits=6,width=9, format="f"),"\n")	
-      }	
+		  if (verbose > 1) {
+                    cat("\nSet:", l)
+                    cat("\nAfter Variable:", j)
+                    cat("\nLoss:", c(s1, s2))
+         		#at("Set: ",formatC(l,digits=3,width=3),
+		  	#" After Variable: ",formatC(j,digits=3,width=3),
+		  	#" Loss: ", formatC(c(s1,s2),digits=6,width=9, format="f"),"\n")	
+                  } 	
    	}
   }
 return(y)
