@@ -1,7 +1,8 @@
 `maxAspect` <-
 function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...) 
 {
-# aspect ... function names: either "aspectSum", "aspectAbs", "aspectSMC", "aspectSumSMC", "aspectEigen", "aspectDeterminant" or a user-specified function
+# aspect ... function names: either "aspectSum", "aspectAbs", "aspectSMC", "aspectSumSMC", "aspectEigen", "aspectDeterminant"
+# or a user-specified function (specific argument for this funtion go into "...")
 
   m <- dim(data)[2]
   n <- dim(data)[1]
@@ -10,7 +11,7 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...)
   itel<-1
 
   ncat <- sapply(1:m,function(j) length(table(data[,j])))
-  ccat <- c(0,cumsum(ncat))
+  ccat <- c(0,cumsum(ncat))                                   #cumulated number of categories (plus 0 as first element)
   y <- list()
   for (j in 1:m) y<-c(y,list(1:ncat[j]))
   names(y) <- colnames(data)
@@ -20,10 +21,10 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...)
   colnames(burt) <- rownames(burt) <- unlist(lapply(nameslist, sort))
   d <- diag(burt)
 
-  for (j in 1:m) {                                             #initial scaling of y such that y' burt y = 1
+  for (j in 1:m) {                                             #initial scaling of y such that y'*burt*y = 1
     indj <-(ccat[j]+1):ccat[j+1]
     dj <- d[indj]
-    y[[j]] <- y[[j]]-sum(dj*y[[j]])/n
+    y[[j]] <- y[[j]]-sum(dj*y[[j]])/n                          #category scores (theta in paper)
     y[[j]] <- y[[j]]/sqrt(sum(dj*y[[j]]*y[[j]])/n)
   }
 
@@ -39,35 +40,38 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...)
     if (aspect == "aspectDeterminant") aspectfun <- aspectDeterminant #r; -log determinant of r
   } else {
     aspectfun <- aspect                                               #r needed plus additonal arguments passed by ...
+  #FIXME: implement check for user-defined aspect (list output, 2 elements function value, derivative)
   }
 
   #---------------------- end aspect check ---------------------
   
   #------------------------ begin optimization -------------------
   repeat {
-    for (j in 1:m) {                                #maybe accelerate a bit
+
+    #updates correlation matrix  
+    for (j in 1:m) {                             
        indj <- (ccat[j]+1):ccat[j+1]
 	for (l in 1:m) {
 	  indl <- (ccat[l]+1):ccat[l+1]
-	  r[j,l] <- sum(y[[j]]*(burt[indj,indl]%*%y[[l]]))/n
+	  r[j,l] <- sum(y[[j]]*(burt[indj,indl]%*%y[[l]]))/n          #correlation matrix R(theta)
 	}
     }
 
-    a <- aspectfun(r, ...)                        #call aspect as a function of the correlation matrix r (and extra)
-    f <- a[[1]]                                     #value of the aspect function
-    g <- a[[2]]
+    #apply aspect to correlation matrix
+    a <- aspectfun(r, ...)                        #call aspect as a function of the correlation matrix r (and additional parameters)
+    f <- a[[1]]                                   #value of the aspect function (only needed for convergence checking)
+    g <- a[[2]]                                   #first derivative (needed for score update)
 
-    #print(f)
-
-    for (j in 1:m) {
-      indj<-(ccat[j]+1):ccat[j+1]
-      y[[j]]<-rep(0,ncat[j])
-      dj<-d[indj]
+    #update scores
+    for (j in 1:m) {                              #variable index
+      indj <- (ccat[j]+1):ccat[j+1]               #row index
+      y[[j]] <- rep(0,ncat[j])
+      dj <- d[indj]                               #frequency vector from Burt matrix
       for (l in 1:m) {
-	indl<-(ccat[l]+1):ccat[l+1]
-	if (j != l) y[[j]] <- y[[j]]+g[j,l]*burt[indj,indl]%*%y[[l]]
+	indl <- (ccat[l]+1):ccat[l+1]             #subsetting indices from Burt matrix
+	if (j != l) y[[j]] <- y[[j]] + (g[j,l]*burt[indj,indl]%*%y[[l]])  #\sum dphi/dr_jl*burt*theta_l
       }
-      y[[j]] <- y[[j]]/dj
+      y[[j]] <- y[[j]]/dj                         #normalize scores
       y[[j]] <- y[[j]]-sum(dj*y[[j]])/n
       y[[j]] <- y[[j]]/sqrt(sum(dj*y[[j]]*y[[j]])/n)
     }
