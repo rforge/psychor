@@ -38,11 +38,10 @@ function(data, itmax = 100, eps = 1e-6)
       indj <- (ccat[j]+1):ccat[j+1]
       yj <- y[[j]]
       for (l in 1:m) {
-	indl <- (ccat[l]+1):ccat[l+1]
+        indl <- (ccat[l]+1):ccat[l+1]
         dl <- d[indl]
-        yl <- y[[l]]
-        
-	r[j,l] <- sum(burt[indj,indl]*outer(yj,yl))    #correlation matrix
+        yl <- y[[l]]    
+ 	      r[j,l] <- sum(burt[indj,indl]*outer(yj,yl))    #correlation matrix
         c <- burt[indj,indl]%*%diag(1/pmax(1,dl))%*%burt[indl,indj]
         t[j,l] <- sum(c*outer(yj,yj))			             #correlation ratios
 	      f <- f+(t[j,l]-r[j,l]^2)                       #loss update (cf. p. 448, de Leeuw 1988)
@@ -51,23 +50,24 @@ function(data, itmax = 100, eps = 1e-6)
 
     #------------ scores update ----------------
     for (j in 1:m) {                                                 #score updating  
-	indj <- (ccat[j]+1):ccat[j+1]
+        indj <- (ccat[j]+1):ccat[j+1]
         nc <- ncat[j]
         yj <- y[[j]]
-	dj <- d[indj]
+	      dj <- d[indj]
         c <- matrix(0,nc,nc)
-	for (l in 1:m) {
-	  if (j != l) {
-	    indl <- (ccat[l]+1):ccat[l+1]
-            dl <- d[indl]
-            yl <- y[[l]]
-	    u <- burt[indj,indl]%*%(diag(1/pmax(1,dl)) - 2*outer(yl,yl))%*%burt[indl,indj] 
-	    c <- c+u 
-	  }
+	    for (l in 1:m) {                                 #j fixed, run over remaining variables
+	      if (j != l) {
+	        indl <- (ccat[l]+1):ccat[l+1]                #index of categories of variable j
+          dl <- d[indl]                                #category frequencies
+          yl <- y[[l]]
+	        u <- burt[indj,indl]%*%(diag(1/pmax(1,dl)) - 2*outer(yl,yl))%*%burt[indl,indj] 
+	        c <- c+u                                     #sum up u's 
+	     }
 	}
-	e <- eigen(c/sqrt(outer(dj,dj)))
+	c.norm <- c/sqrt(outer(dj,dj))                       #normalize 
+	e <- eigen(c.norm)
 	y[[j]] <- e$vectors[,nc]/sqrt(dj)                              #scores update
-        #FIXME!!! incorporate optimal scaling with restrictions for the scales
+        
      }
      if (((fold-f) < eps) || (itel == itmax)) break
      itel <- itel+1

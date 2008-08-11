@@ -1,5 +1,5 @@
-\name{maxAspect}
-\alias{maxAspect}
+\name{corAspect}
+\alias{corAspect}
 \alias{print.aspect}
 \alias{summary.aspect}
 %- Also NEED an '\alias' for EACH other topic documented here.
@@ -7,7 +7,7 @@
 \description{This function performs optimal scaling by maximizing a certain aspect of the correlation matrix.
 }
 \usage{
-maxAspect(data, aspect = aspectSum, itmax = 100, eps = 1e-06, ...)
+maxAspect(data, aspect = "aspectSum", itmax = 100, eps = 1e-06, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

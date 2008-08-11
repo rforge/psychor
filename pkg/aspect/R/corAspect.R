@@ -1,4 +1,4 @@
-`maxAspect` <-
+`corAspect` <-
 function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...) 
 {
 # aspect ... function names: either "aspectSum", "aspectAbs", "aspectSMC", "aspectSumSMC", "aspectEigen", "aspectDeterminant"
