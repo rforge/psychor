@@ -58,6 +58,7 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...)
     }
 
     #apply aspect to correlation matrix
+    #a <- aspectfun(r)
     a <- aspectfun(r, ...)                        #call aspect as a function of the correlation matrix r (and additional parameters)
     f <- a[[1]]                                   #value of the aspect function (only needed for convergence checking)
     g <- a[[2]]                                   #first derivative (needed for score update)
@@ -91,7 +92,8 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...)
   colnames(scoremat) <- colnames(data)
   rownames(r) <- colnames(r) <- colnames(scoremat)
   for (i in 1:length(y)) {
-    rownames(y[[i]]) <- unique(data[,i])
+    rownames(y[[i]]) <- sort(unique(data[,i]))             
+    #rownames(y[[i]]) <- unique(data[,i])
     colnames(y[[i]]) <- "score"
   }
  

@@ -20,53 +20,60 @@ m <- dim(tab)[2]
 #draws a before and after regression plot for a table and a set of scores
 
 if (plot.type == "regplot") {
-  par(mfrow = c(1, 2))
 
-  if (missing(xlab)) xlab1 = var1 else xlab1 <- xlab       #FIXME
-  if (missing(ylab)) ylab1 = var2 else ylab1 <- ylab
-  if (missing(main)) main1 <- "Unscaled Solution" else main1 <- main
-  if (missing(main)) main2 <- "Scaled Solution" else main2 <- main
-  if (missing(type)) type <- "b"
+    par(mfrow = c(1,2))
+ 
+    if (missing(xlab)) xlab1 = var1 else xlab1 <- xlab      
+    if (missing(ylab)) ylab1 = var2 else ylab1 <- ylab
+    if (missing(main)) main1 <- "Unscaled Solution" else main1 <- main
+    if (missing(main)) main2 <- "Scaled Solution" else main2 <- main
+    if (missing(type)) type <- "b"
     
   #before lineals plot
-  tau <- sum(tab)
-  pr <- tab/tau                                     #relative frequencies
-  r <- rowSums(pr)                                    #relative row margin
-  c <- colSums(pr)                                    #relative column margins
-  xave <- as.vector(as.matrix(pr)%*%1:m)/r            #
-  yave <- as.vector(1:n%*%as.matrix(pr))/c
-  z <- c(1:n,1:m) 
-  plot(z, z, type = "n", xlab = paste(xlab1," categories"), ylab = paste(ylab1, " categories"), main = main1, 
-  xaxt = "n", yaxt = "n", xlim = c(1,n), ylim = c(1,m),...)
+    tau <- sum(tab)
+    pr <- tab/tau                                     #relative frequencies
+    r <- rowSums(pr)                                    #relative row margin
+    c <- colSums(pr)                                    #relative column margins
+    xave <- as.vector(as.matrix(pr)%*%1:m)/r            #
+    yave <- as.vector(1:n%*%as.matrix(pr))/c
+    z <- c(1:n,1:m) 
+    plot(z, z, type = "n", xlab = paste(xlab1," categories"), ylab = paste(ylab1, " categories"), main = main1, 
+    xaxt = "n", yaxt = "n", xlim = c(1,n), ylim = c(1,m),...)
 
-  axis(1, at = 1:n, labels = rownames(tab))
-  axis(2, at = 1:m, labels = colnames(tab))
-  points(1:n, xave, type = type, col = "RED")
-  points(yave, 1:m, type= type, col = "BLUE")
-  abline(v=1:n, h=1:m, col = "lightgray", lty = 2 )
-  for (i in 1:n) text(rep((1:n)[i],m),1:m,as.character(tab[i,]),cex=.8, col = "lightgray")
+    axis(1, at = 1:n, labels = rownames(tab))
+    axis(2, at = 1:m, labels = colnames(tab))
+    points(1:n, xave, type = type, col = "RED")
+    points(yave, 1:m, type= type, col = "BLUE")
+    abline(v=1:n, h=1:m, col = "lightgray", lty = 2 )
+    for (i in 1:n) text(rep((1:n)[i],m),1:m,as.character(tab[i,]),cex=.8, col = "lightgray")
 
   #----------- scaled solution------------
-  v1.ind <- which(names(x$catscores) == var1)
-  v2.ind <- which(names(x$catscores) == var2)
+    #v1.ind <- which(names(x$catscores) == var1)
+    #v2.ind <- which(names(x$catscores) == var2)
+    #xa.temp <- x$catscores[[v1.ind]]
+    #xa <- xa.temp[order(rownames(xa.temp))]                #FIXME: check alphabetical order
+    #ya.temp <- x$catscores[[v2.ind]]
+    #ya <- ya.temp[order(rownames(ya.temp))]                #FIXME: check alphabetical order
+    xa <- as.vector(x$catscores[[plot.var[1]]])          
+    ya <- as.vector(x$catscores[[plot.var[2]]])
+
+    xave <- as.vector(as.matrix(pr)%*%ya)/r
+    yave <- as.vector(xa%*%as.matrix(pr))/c
+    z <- c(xa,ya) 
   
-  xa.temp <- x$catscores[[v1.ind]]
-  xa <- xa.temp[order(names(xa.temp))]                #FIXME: check alphabetical order
-  ya.temp <- x$catscores[[v2.ind]]
-  ya <- ya.temp[order(names(ya.temp))]                #FIXME: check alphabetical order
-  xave <- as.vector(as.matrix(pr)%*%ya)/r
-  yave <- as.vector(xa%*%as.matrix(pr))/c
-  z <- c(xa,ya) 
+    plot(z, z, type = "n", xlab = paste(xlab1," scores"), ylab = paste(ylab1," scores"),main = main2,  
+    xlim = range(xa), ylim = range(ya),...)
+
+    #plot(z, z, type = "n", xlab = paste(xlab1," scores"), ylab = paste(ylab1," scores"),main = main2,  
+    #xlim = range(xa), ylim = range(ya))
   
-  plot(z, z, type = "n", xlab = paste(xlab1," scores"), ylab = paste(ylab1," scores"),main = main2,  
-  xlim = range(xa), ylim = range(ya),...)
-  
-  points(xa[order(xa)], xave[order(xa)], type = type, col = "RED")
-  points(yave[order(ya)], ya[order(ya)], type = type, col = "BLUE")
-  abline(v = xa, h = ya, col = "lightgray", lty = 2)
-  for (i in 1:n) text(rep(xa[i],m),ya,as.character(tab[i,]),cex=.8, col = "lightgray")
-  axis(3, at = xa, labels = names(xa), cex.axis = 0.6, col.axis = "lightgray", padj = 1)
-  axis(4, at = ya, labels = names(ya), cex.axis = 0.6, col.axis = "lightgray", padj = -1)
+    points(xa[order(xa)], xave[order(xa)], type = type, col = "RED")
+    points(yave[order(ya)], ya[order(ya)], type = type, col = "BLUE")
+    abline(v = xa, h = ya, col = "lightgray", lty = 2)
+    for (i in 1:n) text(rep(xa[i],m),ya,as.character(tab[i,]),cex=.8, col = "lightgray")
+    axis(3, at = xa, labels = round(xa, 3), cex.axis = 0.6, col.axis = "lightgray", padj = 1)
+    axis(4, at = ya, labels = round(ya, 3), cex.axis = 0.6, col.axis = "lightgray", padj = -1)
+
 }
 
 #-------------------------------- end regplot -------------------------------

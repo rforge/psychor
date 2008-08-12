@@ -33,7 +33,7 @@ de Leeuw, J. (1988). Multivariate analysis with linearizable regressions. Psycho
 }
 \author{Jan de Leeuw, Patrick Mair}
 
-\seealso{\code{\link{maxAspect}}}
+\seealso{\code{\link{corAspect}}}
 \examples{
 data(galo)
 res.lin <- lineals(galo)

@@ -1,5 +1,5 @@
 import("stats", "graphics")
-export(maxAspect)
+export(corAspect)
 export(lineals)
 
 S3method(print, aspect)

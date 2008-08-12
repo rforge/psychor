@@ -34,15 +34,15 @@ The transformation plot (\code{"transplot"}) plots the raw categories against th
 \references{de Leeuw, J., \& Mair, P. (2007). Aspects of multivariables in R. Preprint available at \url{http://gifi.stat.ucla.edu/aspect.pdf}}
 \author{Jan de Leeuw, Patrick Mair}
 
-\seealso{\code{\link{lineals}}, \code{\link{maxAspect}}}
+\seealso{\code{\link{lineals}}, \code{\link{corAspect}}}
 
 \examples{
 
-##Regression plots using Glass data
+##Regression plots using galo data
 data(galo)
 res <- lineals(galo[,1:4])
-plot(res, plot.type = "regplot", plot.var = c("advice","SES"))
-plot(res, plot.type = "transplot")
+#plot(res, plot.type = "regplot", plot.var = c("advice","SES"))
+#plot(res, plot.type = "transplot")
 }
 
 \keyword{hplot}

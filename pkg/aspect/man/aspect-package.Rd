@@ -11,8 +11,8 @@ Aspects of Multivariables
 \tabular{ll}{
 Package: \tab aspect\cr
 Type: \tab Package\cr
-Version: \tab 0.0-3\cr
-Date: \tab 2008-06-11\cr
+Version: \tab 0.1-3\cr
+Date: \tab 2008-08-12\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }
@@ -23,11 +23,11 @@ Jan de Leeuw, Patrick Mair
 Maintainer: Jan de Leeuw <deleeuw@stat.ucla.edu>
 }
 \references{
-Mair, P., & de Leeuw, J. (2008). Scaling variables by optimizing correlational and non-correlational aspects in R. Journal of Statistical Software, forthcoming.
+Mair, P., & de Leeuw, J. (2008). A general framework for multivariate analysis with optimal scaling: The R package aspect. Journal of Statistical Software, forthcoming.
 }
 
 \keyword{ package }
-\seealso{\code{\link{maxAspect}}, \code{\link{lineals}}
+\seealso{\code{\link{corAspect}}, \code{\link{lineals}}
 }
 \examples{
 data(galo)
