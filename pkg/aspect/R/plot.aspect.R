@@ -34,7 +34,8 @@ if (plot.type == "regplot") {
     pr <- tab/tau                                     #relative frequencies
     r <- rowSums(pr)                                    #relative row margin
     c <- colSums(pr)                                    #relative column margins
-    xave <- as.vector(as.matrix(pr)%*%1:m)/r            #
+
+    xave <- as.vector(as.matrix(pr)%*%1:m)/r            
     yave <- as.vector(1:n%*%as.matrix(pr))/c
     z <- c(1:n,1:m) 
     plot(z, z, type = "n", xlab = paste(xlab1," categories"), ylab = paste(ylab1, " categories"), main = main1, 
@@ -48,12 +49,6 @@ if (plot.type == "regplot") {
     for (i in 1:n) text(rep((1:n)[i],m),1:m,as.character(tab[i,]),cex=.8, col = "lightgray")
 
   #----------- scaled solution------------
-    #v1.ind <- which(names(x$catscores) == var1)
-    #v2.ind <- which(names(x$catscores) == var2)
-    #xa.temp <- x$catscores[[v1.ind]]
-    #xa <- xa.temp[order(rownames(xa.temp))]                #FIXME: check alphabetical order
-    #ya.temp <- x$catscores[[v2.ind]]
-    #ya <- ya.temp[order(rownames(ya.temp))]                #FIXME: check alphabetical order
     xa <- as.vector(x$catscores[[plot.var[1]]])          
     ya <- as.vector(x$catscores[[plot.var[2]]])
 
@@ -63,16 +58,13 @@ if (plot.type == "regplot") {
   
     plot(z, z, type = "n", xlab = paste(xlab1," scores"), ylab = paste(ylab1," scores"),main = main2,  
     xlim = range(xa), ylim = range(ya),...)
-
-    #plot(z, z, type = "n", xlab = paste(xlab1," scores"), ylab = paste(ylab1," scores"),main = main2,  
-    #xlim = range(xa), ylim = range(ya))
   
     points(xa[order(xa)], xave[order(xa)], type = type, col = "RED")
     points(yave[order(ya)], ya[order(ya)], type = type, col = "BLUE")
-    abline(v = xa, h = ya, col = "lightgray", lty = 2)
+    abline(v = xa, h = ya, col = "lightgray", lty = 2)                                           #adds grid
     for (i in 1:n) text(rep(xa[i],m),ya,as.character(tab[i,]),cex=.8, col = "lightgray")
-    axis(3, at = xa, labels = round(xa, 3), cex.axis = 0.6, col.axis = "lightgray", padj = 1)
-    axis(4, at = ya, labels = round(ya, 3), cex.axis = 0.6, col.axis = "lightgray", padj = -1)
+    axis(3, at = xa, labels = names(xave[order(xave)]), cex.axis = 0.6, col.axis = "lightgray", padj = 1)    #adds labels on x-axis (top)
+    axis(4, at = ya, labels = names(yave[order(yave)]), cex.axis = 0.6, col.axis = "lightgray", padj = -1)   #adds labels on y-axis (right)
 
 }
 
