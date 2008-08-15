@@ -3,7 +3,7 @@
 
 
 \title{Plot method for aspect solutions}
-\description{This method provides regression plots and transformation plots for objects of class \code{"aspect"}, i.e. solutions of \code{maxAspect} and \code{lineals}
+\description{This method provides regression plots and transformation plots for objects of class \code{"aspect"}, i.e. solutions of \code{corAspect} and \code{lineals}
 }
 \usage{
 \method{plot}{aspect}(x, plot.type, plot.var = c(1,2), xlab, ylab, main, type, ...)
