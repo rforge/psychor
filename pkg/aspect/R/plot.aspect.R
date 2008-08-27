@@ -38,15 +38,15 @@ if (plot.type == "regplot") {
     xave <- as.vector(as.matrix(pr)%*%1:m)/r            
     yave <- as.vector(1:n%*%as.matrix(pr))/c
     z <- c(1:n,1:m) 
-  #  plot(z, z, type = "n", xlab = paste(xlab1," categories"), ylab = paste(ylab1, " categories"), main = main1, 
-  #  xaxt = "n", yaxt = "n", xlim = c(1,n), ylim = c(1,m),...)
+    plot(z, z, type = "n", xlab = paste(xlab1," categories"), ylab = paste(ylab1, " categories"), main = main1, 
+    xaxt = "n", yaxt = "n", xlim = c(1,n), ylim = c(1,m),...)
 
-  #  axis(1, at = 1:n, labels = rownames(tab))
-  #  axis(2, at = 1:m, labels = colnames(tab))
-  #  points(1:n, xave, type = type, col = "RED")
-  #  points(yave, 1:m, type= type, col = "BLUE")
-  #  abline(v=1:n, h=1:m, col = "lightgray", lty = 2 )
-  #  for (i in 1:n) text(rep((1:n)[i],m),1:m,as.character(tab[i,]),cex=.8, col = "lightgray")
+    axis(1, at = 1:n, labels = rownames(tab))
+    axis(2, at = 1:m, labels = colnames(tab))
+    points(1:n, xave, type = type, col = "RED")
+    points(yave, 1:m, type= type, col = "BLUE")
+    abline(v=1:n, h=1:m, col = "lightgray", lty = 2 )
+    for (i in 1:n) text(rep((1:n)[i],m),1:m,as.character(tab[i,]),cex=.8, col = "lightgray")
 
   #----------- scaled solution------------
     xa <- as.vector(x$catscores[[plot.var[1]]])          
@@ -56,7 +56,7 @@ if (plot.type == "regplot") {
     yave <- as.vector(xa%*%as.matrix(pr))/c
     z <- c(xa,ya) 
 
-  #  dev.new()
+    dev.new()
     plot(z, z, type = "n", xlab = paste(xlab1," scores"), ylab = paste(ylab1," scores"),main = main2,  
     xlim = range(xa), ylim = range(ya),...)
   
