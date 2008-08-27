@@ -26,9 +26,9 @@ function(data, itmax = 100, eps = 1e-6)
     dj <- d[indj]
     y[[j]] <- y[[j]] - sum(dj*y[[j]])/n
     y[[j]] <- y[[j]]/sqrt(sum(dj*y[[j]]*y[[j]]))        #burt normalization
+    #insert level restrictions here
   }
   
-  #y1 <- updateY(dframe, x, y, active = TRUE, rank = 1, level = level, sets = 0)
   
 #------------------ start lineals iterations ---------------------
   repeat {
@@ -67,6 +67,7 @@ function(data, itmax = 100, eps = 1e-6)
 	c.norm <- c/sqrt(outer(dj,dj))                       #normalize 
 	e <- eigen(c.norm)
 	y[[j]] <- e$vectors[,nc]/sqrt(dj)                              #scores update
+        #insert level restrictions here
         
      }
      if (((fold-f) < eps) || (itel == itmax)) break
