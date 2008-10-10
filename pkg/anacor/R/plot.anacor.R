@@ -249,7 +249,7 @@ if (plot.type == "benzplot")
    dmax <- max(dr,do)
    if (missing(main)) main2 <- paste("Benzecri Distances - Columns") else main2 <- paste(main," - Columns")
   
-   get(getOption("device"))()
+   dev.new()
    plot(do, dr, xlim = c(0,dmax), ylim = c(0,dmax), xlab = "observed distances", ylab = "fitted distances",
         main = main2, axes=FALSE, col = "BLUE",...)
    abline(0,1)

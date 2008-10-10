@@ -9,8 +9,8 @@ This package performs simple correspondence analysis (CA) on a two-way frequency
 \tabular{ll}{
 Package: \tab anacor\cr
 Type: \tab Package\cr
-Version: \tab 0.9-3\cr
-Date: \tab 2008-08-26\cr
+Version: \tab 0.9-4\cr
+Date: \tab 2008-10-10\cr
 License: \tab GPL\cr
 }
 The main function of the package is \code{anacor()} which performs simple CA. The input dataset \code{tab} is a (incomplete) frequency table. 
