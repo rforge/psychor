@@ -1,0 +1,16 @@
+pSolver<-function(x,a,extra) {
+    w<-extra$w; z<-extra$z; aw<-extra$aw; bw<-extra$bw; n<-length(z)
+    if (length(a)==0) return(list(y=z,l=0,f=0))
+    if (is.vector(a)) a<-matrix(a,1,2)
+    indi<-mkIndi(a,n)
+    m<-ncol(indi); h<-rep(0,m)
+    for (j in 1:m) {
+        ij<-which(indi[,j]==1)
+        zj<-z[ij]; wj<-w[ij]
+        h[j]<-weightedFractile(zj,wj,aw,bw)
+        }
+    y<-drop(indi%*%h); dv<-ifelse(y<=z,w*aw*(z-y),w*bw*(y-z))
+    f<-sum(dv); gy<-ifelse(y<=z,-w*aw,w*bw)
+    lbd<-mkLagrange(a,gy)
+    return(list(y=y,lbd=lbd,f=f,gy=gy))
+}

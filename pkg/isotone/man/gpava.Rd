@@ -6,8 +6,7 @@
 \alias{plot.pava}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Generalized PAVA}
-\description{PAVA for general convex functions, including 
-}
+\description{PAVA for general convex functions}
 \usage{
 gpava(x, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
 }

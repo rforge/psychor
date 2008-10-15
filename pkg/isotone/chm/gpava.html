@@ -1,0 +1,147 @@
+<html><head><title>Generalized PAVA</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="Rchm.css">
+</head>
+<body>
+
+<table width="100%"><tr><td>gpava(isotone)</td><td align="right">R Documentation</td></tr></table><object type="application/x-oleobject" classid="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+<param name="keyword" value="R:   gpava">
+<param name="keyword" value="R:   print.pava">
+<param name="keyword" value="R:   weighted.median">
+<param name="keyword" value="R:   weighted.fractile">
+<param name="keyword" value="R:   plot.pava">
+<param name="keyword" value=" Generalized PAVA">
+</object>
+
+
+<h2>Generalized PAVA</h2>
+
+
+<h3>Description</h3>
+
+<p>
+PAVA for general convex functions
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+gpava(x, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+Vector of list of vectors of predictors</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+Vector of list of vectors of responses</td></tr>
+<tr valign="top"><td><code>w</code></td>
+<td>
+Vector of list of vectors of observation weights</td></tr>
+<tr valign="top"><td><code>solver</code></td>
+<td>
+Either <code>weighted.mean</code>, <code>weighted.median</code>, <code>weighted.fractile</code>, or 
+a user-specified function (see below)</td></tr>
+<tr valign="top"><td><code>ties</code></td>
+<td>
+Treatment of ties, either "primary", "secondary", or "tertiary"</td></tr>
+<tr valign="top"><td><code>a</code></td>
+<td>
+Fractile specification for <code>weighted.fractile</code> solver</td></tr>
+<tr valign="top"><td><code>b</code></td>
+<td>
+Fractile specification for <code>weighted.fractile</code> solver</td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+A Pool Adjacent Violators Algorithm framework for minimizing problems
+like 
+</p>
+<p align="center"><i>sum_i sum_{J_i} w_{ij} f(y_{ij}, m_i)</i></p>
+<p>
+under the constraint <i>m_1 &lt;= ... &lt;= m_n</i> with <i>f</i> a convex function in m. Note that this formulation allows for repeated data in each block
+(i.e. each list element of <code>y</code>, and hence is more general than the usual pava/isoreg ones.  
+</p>
+<p>
+A solver for the unconstrained <i>sum_k w_k f(y_k, m) -&gt; min!</i> can be specified. 
+Typical cases are <i>f(y, m) = |y - m|^p</i> for <i>p = 2</i> (solved by weighted mean) and <i>p = 1</i> (solved by weighted median), respectively. 
+The user can also specify his own function <code>foo(y, w)</code> with responses and weights as arguments. It 
+should return a single numerical value.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+Generates an object of class <code>gpava</code>.
+</p>
+<table summary="R argblock">
+<tr valign="top"><td><code>yfit</code></td>
+<td>
+Fitted values</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+Observed response</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+Observed predictors</td></tr>
+<tr valign="top"><td><code>w</code></td>
+<td>
+Weights</td></tr>
+<tr valign="top"><td><code>solver</code></td>
+<td>
+Convex function</td></tr>
+<tr valign="top"><td><code>call</code></td>
+<td>
+Matched call</td></tr>
+</table>
+
+<h3>Author(s)</h3>
+
+<p>
+Kurt Hornik, Jan de Leeuw, Patrick Mair
+</p>
+
+
+<h3>References</h3>
+
+<p>
+de Leeuw, J., Hornik, K., Mair, P. (2008). Pool-Adjacent-Violators Algorithm (PAVA) in R. 
+Journal of Statistical Software, forthcoming.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+data(pituitary)
+##different tie approaches
+gpava(pituitary[,1],pituitary[,2], ties = "primary")
+gpava(pituitary[,1],pituitary[,2], ties = "secondary")
+gpava(pituitary[,1],pituitary[,2], ties = "tertiary")
+
+##different target functions
+gpava(pituitary[,1],pituitary[,2], solver = weighted.mean)
+gpava(pituitary[,1],pituitary[,2], solver = weighted.median)
+gpava(pituitary[,1],pituitary[,2], solver = weighted.fractile, a = 0.25, b = 0.75)
+
+##repeated measures
+data(posturo)
+res &lt;- gpava(posturo[,1],posturo[,2:4], ties = "secondary")
+plot(res)
+
+</pre>
+
+
+
+<hr><div align="center">[Package <em>isotone</em> version 0.1-0 <a href="00Index.html">Index]</a></div>
+
+</body></html>
