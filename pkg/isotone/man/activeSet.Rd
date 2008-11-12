@@ -31,7 +31,7 @@ activeSet(x, isomat, mySolver = lsSolver, ups = 1e-12, check = FALSE, ...)
   \item{mySolver}{Various functions are pre-defined (see details). For user-specified functions \code{fSolver} with additional 
   arguments can be used (see details as well).}
   \item{ups}{Upper boundary}
-  \item{check}{If TRUE, feasibility checks of the solution are performed}
+  \item{check}{If TRUE, KKT feasibility checks for isotonicity of the solution are performed}
   \item{...}{Additional arguments for \code{fSolver} (see details)}
 }
 \details{The following solvers are specified: \code{aSolver()} for asymmetric least squares, \code{dSolver()} for the least 
@@ -46,14 +46,13 @@ More descriptions can be found in the package vignette.
 
 \value{
   Generates an object of class \code{activeset}.
-  \item{x}{Solution}
-  \item{lbd}{}
-  \item{fval}{Value of the target function}
-  \item{ay}{}
-  \item{hl}{}
-  \item{gradient}{Gradient vector}
-  \item{isocheck}{List containing \code{ckFeasibility} , \code{ckLagrange} , \code{ckCompSlack} , \code{ckGrad} if feasibility 
-  checks were performed.}
+  \item{x}{Vector containing the fitted values}
+  \item{lambda}{Vector with Lagrange multipliers}
+  \item{func.vals}{Value of the target function}
+  \item{constr.vals}{Vector with the values of isotonicity constraints}
+  \item{Alambda}{Constraint matrix multiplied by lambda (should be equal to gradient)}
+  \item{gradient}{Gradient}
+  \item{isocheck}{List containing the KKT checks for stationarity, primal feasibility, dual feasibility, and complementary slackness}
   \item{call}{Matched call}
 }
 \references{

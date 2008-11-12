@@ -60,7 +60,7 @@ arguments can be used (see details as well).</td></tr>
 Upper boundary</td></tr>
 <tr valign="top"><td><code>check</code></td>
 <td>
-If TRUE, feasibility checks of the solution are performed</td></tr>
+If TRUE, KKT feasibility checks for isotonicity of the solution are performed</td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
 Additional arguments for <code>fSolver</code> (see details)</td></tr>
@@ -89,26 +89,25 @@ Generates an object of class <code>activeset</code>.
 <table summary="R argblock">
 <tr valign="top"><td><code>x</code></td>
 <td>
-Solution</td></tr>
-<tr valign="top"><td><code>lbd</code></td>
+Vector containing the fitted values</td></tr>
+<tr valign="top"><td><code>lambda</code></td>
 <td>
-</td></tr>
-<tr valign="top"><td><code>fval</code></td>
+Vector with Lagrange multipliers</td></tr>
+<tr valign="top"><td><code>func.vals</code></td>
 <td>
 Value of the target function</td></tr>
-<tr valign="top"><td><code>ay</code></td>
+<tr valign="top"><td><code>constr.vals</code></td>
 <td>
-</td></tr>
-<tr valign="top"><td><code>hl</code></td>
+Vector with the values of isotonicity constraints</td></tr>
+<tr valign="top"><td><code>Alambda</code></td>
 <td>
-</td></tr>
+Constraint matrix multiplied by lambda (should be equal to gradient)</td></tr>
 <tr valign="top"><td><code>gradient</code></td>
 <td>
-Gradient vector</td></tr>
+Gradient</td></tr>
 <tr valign="top"><td><code>isocheck</code></td>
 <td>
-List containing <code>ckFeasibility</code> , <code>ckLagrange</code> , <code>ckCompSlack</code> , <code>ckGrad</code> if feasibility 
-checks were performed.</td></tr>
+List containing the KKT checks for stationarity, primal feasibility, dual feasibility, and complementary slackness</td></tr>
 <tr valign="top"><td><code>call</code></td>
 <td>
 Matched call</td></tr>
@@ -206,6 +205,6 @@ activeSet(x0, btree, lsSolver, check = TRUE, w = wu, z = z)
 
 
 
-<hr><div align="center">[Package <em>isotone</em> version 0.1-0 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>isotone</em> version 0.1-1 <a href="00Index.html">Index]</a></div>
 
 </body></html>

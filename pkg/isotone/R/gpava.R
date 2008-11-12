@@ -106,7 +106,7 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA
 
   #--------- end combine ----------------
 
-  #--------- PAVA iterations -----------        
+  #--------- PAVA iterations -----------
     i <- 1L
     repeat {
         if(i < n) {
@@ -133,7 +133,6 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA
    if (!is.list(y1)) {
      yfit <- as.vector(y1 + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-yag[o]))
    } else {
-     #FIXME evtl. mean anstatt solver
      yfit <- as.vector((mapply(solver, y1, w1, MoreArgs = moreargs)) + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-(mapply(solver, yag[o], wag[o], MoreArgs = moreargs))))
    }
  
