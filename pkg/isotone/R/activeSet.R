@@ -1,8 +1,9 @@
 #active set methods for different solver
 
 
-activeSet <- function(x, isomat, mySolver = lsSolver, ups = 1e-12, check = FALSE, ...) 
+activeSet <- function(z, isomat, mySolver = lsSolver, ups = 1e-12, check = FALSE, ...) 
 {
+  x <- z
   a <- isomat                      #matrix with order restrictions
   extra <- list(...)
   n <- length(x)
@@ -19,10 +20,10 @@ activeSet <- function(x, isomat, mySolver = lsSolver, ups = 1e-12, check = FALSE
     }
     yl <- mySolver(xold, aia, extra)  #call solver
     
-    y <- yl$y                      #fitted values
+    y <- yl$x                      #fitted values
     lbd <- yl$lbd                  #Lagrange multiplier (KKT vector lambda)
     fy <- yl$f                     #value target function
-    gy <- yl$gy                    #gradient
+    gy <- yl$gx                    #gradient
     ay <- aTx(a,y)                 #compute Ax
     iy <- which.min(ay)            #restriction with the largest violation of Ax >= 0
     my <- ay[iy]                   #value of this restriction (worst one)

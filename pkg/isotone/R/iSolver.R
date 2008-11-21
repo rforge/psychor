@@ -1,18 +1,22 @@
 # SILF Loss
 
-# SILF Loss
+# SILF Loss (Chu et al., 2004)
 
-iSolver<-function(x,a,extra) {
-w<-extra$w; z<-extra$z; eps<-extra$eps; beta<-extra$beta
-fobj<-function(x) {
-    y<-abs(x-z)
-    g<-((y-(1-beta)*eps)^2)/(4*beta*eps)
-    g[which(y < (1-beta)*eps)]<-0
-    ii<-which(y > (1+beta)*eps)
-    g[ii]<-y[ii]-eps
+iSolver<-function(z, a, extra) {
+  x <- z
+  w <- extra$weights
+  z <- extra$y
+  eps <- extra$eps
+  beta<-extra$beta
+  fobj<-function(x) {
+    delta<-abs(x-z)
+    g<-((delta-(1-beta)*eps)^2)/(4*beta*eps)
+    g[which(delta < (1-beta)*eps)]<-0
+    ii<-which(delta > (1+beta)*eps)
+    g[ii]<-delta[ii]-eps
     return(sum(w*g))
     }
-gobj<-function(x) {
+  gobj<-function(x) {
     y<-x-z
     g<-rep(0,length(y))
     g[which(y < -(1+beta)*eps)]<--1

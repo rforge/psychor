@@ -1,5 +1,10 @@
-mSolver<-function(x,a,extra) {
-    w<-extra$w; z<-extra$z; n<-length(z)
+#Chebyshev norm
+
+mSolver<-function(z, a, extra) {
+    x <- z
+    w<-extra$weights
+    z<-extra$y
+    n<-length(z)
     if (length(a)==0) return(list(y=z,l=0,f=0))
     if (is.vector(a)) a<-matrix(a,1,2)
     indi<-mkIndi(a,n)
@@ -18,5 +23,5 @@ mSolver<-function(x,a,extra) {
     lbd2<-mkLagrange(a,gy2)
     lbd<-(w[i2]*lbd1+w[i1]*lbd2)/(w[i1]+w[i2])
     gy<-(w[i2]*gy1+w[i1]*gy2)/(w[i1]+w[i2])
-    return(list(y=y,lbd=lbd,f=f,gy=gy))
+    return(list(x = y, lbd = lbd, f = f, gx = gy))
 }

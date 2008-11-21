@@ -15,19 +15,19 @@
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="aSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="aSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="dSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="dSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="eSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="eSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="fSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="fSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="gpava">
@@ -35,19 +35,19 @@
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="hSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="hSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="iSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="iSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="lfSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="lfSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="lsSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="lsSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="mendota">
@@ -55,11 +55,11 @@
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="mSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="mSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="oSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="oSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="pituitary">
@@ -83,11 +83,11 @@
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="pSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="pSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="sSolver">
-<param name="Local" value="activeSet.html">
+<param name="Local" value="sSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="weighted.fractile">
@@ -103,24 +103,72 @@
 </OBJECT>
 <UL>
 <LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Absolute Value Norm">
+<param name="Local" value="dSolver.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Active Set Methods for Isotone Optimization">
 <param name="Local" value="activeSet.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Asymmetric Least Squares">
+<param name="Local" value="aSolver.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Chebyshev norm">
+<param name="Local" value="mSolver.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="General Least Squares Loss Function">
+<param name="Local" value="lfSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Generalized PAVA">
 <param name="Local" value="gpava.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Huber Loss Function">
+<param name="Local" value="hSolver.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="L1 approximation">
+<param name="Local" value="eSolver.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Least Squares Loss Function">
+<param name="Local" value="lsSolver.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Lp norm">
+<param name="Local" value="oSolver.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Negative Poisson Log-Likelihood">
+<param name="Local" value="sSolver.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Number of freezing days at Lake Mendota">
 <param name="Local" value="mendota.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Quantile Regression">
+<param name="Local" value="pSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Repeated posturographic measures">
 <param name="Local" value="posturo.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
+<param name="Name" value="SILF Loss">
+<param name="Local" value="iSolver.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Size of pituitary fissue">
 <param name="Local" value="pituitary.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="User-Specified Loss Function">
+<param name="Local" value="fSolver.html">
 </OBJECT>
 </UL>
 </UL>

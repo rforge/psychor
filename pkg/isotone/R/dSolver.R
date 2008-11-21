@@ -1,5 +1,10 @@
-dSolver<-function(x,a,extra) {
-    w<-extra$w; z<-extra$z; n<-length(z)
+#Solves the weighted absolute value norm
+
+dSolver<-function(z, a, extra) {
+    x <- z
+    w <- extra$weights
+    z <- extra$y
+    n <- length(z)
     if (length(a)==0) return(list(y=z,l=0,f=0))
     if (is.vector(a)) a<-matrix(a,1,2)
     indi<-mkIndi(a,n)
@@ -9,7 +14,9 @@ dSolver<-function(x,a,extra) {
         zj<-z[ij]; wj<-w[ij]
         h[j]<-weightedMedian(zj,wj)
         }
-    y<-drop(indi%*%h); f<-sum(w*abs(z-y)); gy<-w*sign(y-z)
+    y<-drop(indi%*%h)
+    f<-sum(w*abs(z-y))
+    gy<-w*sign(y-z)
     lbd<-mkLagrange(a,gy)
-    return(list(y=y,lbd=lbd,f=f,gy=gy))
+    return(list(x = y, lbd = lbd, f = f, gx = gy))
 }

@@ -1,5 +1,10 @@
-lfSolver<-function(x,a,extra) {
-    w<-extra$w; z<-extra$z; n<-length(z)
+#solver the general LS norm (y-x)'W(y-x)
+
+lfSolver<-function(z, a, extra) {
+    x <- z
+    w <- extra$weights
+    z <- extra$y
+    n <- length(z)
     if (length(a)==0) return(list(y=z,l=0,f=0))
     if (is.vector(a)) a<-matrix(a,1,length(a))
     indi<-mkIndi(a,n)
@@ -7,5 +12,5 @@ lfSolver<-function(x,a,extra) {
     b<-solve(h,r); y<-drop(indi%*%b); gy<-2*drop(w%*%(y-z))
     lbd<-mkLagrange(a,gy)
     f<-sum(w*outer(y-z,y-z))
-    return(list(y=y,lbd=lbd,f=f,gy=gy))
+    return(list(x = y, lbd = lbd, f = f, gx = gy))
 }

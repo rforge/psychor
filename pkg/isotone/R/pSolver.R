@@ -1,5 +1,12 @@
-pSolver<-function(x,a,extra) {
-    w<-extra$w; z<-extra$z; aw<-extra$aw; bw<-extra$bw; n<-length(z)
+#Quantile Regression
+
+pSolver<-function(z, a, extra) {
+    x <- z
+    w<-extra$weights
+    z<-extra$y
+    aw <- extra$aw
+    bw <- extra$bw
+    n<-length(z)
     if (length(a)==0) return(list(y=z,l=0,f=0))
     if (is.vector(a)) a<-matrix(a,1,2)
     indi<-mkIndi(a,n)
@@ -12,5 +19,5 @@ pSolver<-function(x,a,extra) {
     y<-drop(indi%*%h); dv<-ifelse(y<=z,w*aw*(z-y),w*bw*(y-z))
     f<-sum(dv); gy<-ifelse(y<=z,-w*aw,w*bw)
     lbd<-mkLagrange(a,gy)
-    return(list(y=y,lbd=lbd,f=f,gy=gy))
+    return(list(x = y, lbd = lbd, f = f, gx = gy))
 }
