@@ -5,7 +5,7 @@ lfSolver<-function(z, a, extra) {
     w <- extra$weights
     z <- extra$y
     n <- length(z)
-    if (length(a)==0) return(list(y=z,l=0,f=0))
+    if (length(a)==0) return(list(x=z,lbd=0,f=0))
     if (is.vector(a)) a<-matrix(a,1,length(a))
     indi<-mkIndi(a,n)
     h<-crossprod(indi,w%*%indi); r<-drop(crossprod(indi,w%*%z))

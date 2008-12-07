@@ -19,7 +19,7 @@ export(sSolver)
 S3method(print, gpava)
 S3method(plot, gpava)
 S3method(print, activeset)
-
+S3method(summary, activeset)                           
 
 
 

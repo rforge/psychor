@@ -1,9 +1,11 @@
 Package: isotone
 Type: Package
-Title: Isotone Optimization
-Version: 0.3-0
-Date: 2008-11-21
+Title: Active set and generalized PAVA for isotone optimization
+Version: 0.6-0
+Date: 2008-12-07
 Author: Jan de Leeuw, Kurt Hornik, Patrick Mair
 Maintainer: Kurt Hornik <kurt.hornik@wu-wien.ac.at>
 Description: This package contains two main functions: gpava() for solving general isotone regression problem using the pool-adjacent-violators algorithm (PAVA). activeSet() provides a framwork of active set methods for isotone optimization problems. Various loss functions are pre-spcified.
 License: GPL
+URL: http://r-forge.r-project.org/projects/psychor/
+LazyLoad: yes

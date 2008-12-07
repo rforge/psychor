@@ -1,13 +1,15 @@
 `gpava` <-
-function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
+function(z = NULL, y, weights = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
 {
 # y ... response; either a single vector or a list of vectors (blocks)
-# x ... predictor (1 predictor only so far, maybe extension to >1, i.e. generalized pava)
+# z ... predictor (1 predictor only so far, maybe extension to >1, i.e. generalized pava)
 # w ... weights; either a single vector or a list if vectors (weights)
 # solver ... either weighted.mean, weighted.median, weighted.fractile, or a user-specified function
 # ties ... string for tie treatment: either "primary", "secondary", "tertiary".
 # a,b... fractiles for weighted.fractile solver, otherwise ignored.
     
+    x <- z
+    w <- weights
     merger <- c
     if ((is.matrix(y)) || (is.data.frame(y))) y <- c(as.data.frame(t(y))) #generate list
     if ((is.matrix(w)) || (is.data.frame(w))) w <- c(as.data.frame(t(w))) #generate list
@@ -136,7 +138,7 @@ function(x = NULL, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA
      yfit <- as.vector((mapply(solver, y1, w1, MoreArgs = moreargs)) + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-(mapply(solver, yag[o], wag[o], MoreArgs = moreargs))))
    }
  
- result <- list(yfit = yfit, x = x, y = y1, w = w1, solver = solver, call = match.call())  
+ result <- list(x = yfit, z = x, y = y1, w = w1, solver = solver, call = match.call())  
  class(result) <- "gpava"
  result
 }

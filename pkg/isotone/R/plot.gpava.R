@@ -1,10 +1,11 @@
-plot.gpava <- function (x, main = "PAVA Plot", xlab = "Predictor", ylab = "Response", col = "lightblue",...)
+plot.gpava <- function (x, main = "PAVA Plot", xlab = "Predictor", ylab = "Response", 
+col = "lightblue",...)
 {
 #x ... object of class pava
 
-  o <- order(x$x)
-  xval <- x$x[o]
-  yval <- x$yfit[o]
+  o <- order(x$z)
+  xval <- x$z[o]
+  yval <- x$x[o]
   xcum <-  c(xval[1] - mean(diff(xval)), xval) 
   jumps <- ((1:length(yval))[!duplicated(yval)]-1)[-1]   #jumps of fitted step function
   jumps <- c(1, jumps, length(xval))

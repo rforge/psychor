@@ -9,7 +9,7 @@ lsSolver <- function(z, a, extra)
     w <- extra$weights                           #weights
     z <- extra$y                                 #response
     n <- length(z)
-    if (length(a)==0) return(list(y=z,l=0,f=0))  #no active set, break
+    if (length(a)==0) return(list(x = z, l = 0, f = 0))  #no active set, break
     if (is.vector(a)) a <- matrix(a,1,length(a)) #only 1 active set (as matrix)
     
     indi <- mkIndi(a,n)                          #compute indicators

@@ -1,18 +1,20 @@
 #active set methods for different solver
 
 
-activeSet <- function(z, isomat, mySolver = lsSolver, ups = 1e-12, check = FALSE, ...) 
+activeSet <- function(z, isomat, mySolver = lsSolver, ups = 1e-12, check = TRUE, ...) 
 {
   x <- z
   a <- isomat                      #matrix with order restrictions
   extra <- list(...)
   n <- length(x)
-  xold <- x
+  xold <- x                        #predictor values
   ax <- aTx(a, xold)               #difference between order restrictions
   ia <- is.active(ax, ups = ups)   #which constraints are active 
+  iter <- 0
 
   #-------------- start active set iterations ------------------------
   repeat {
+    iter <- iter + 1
     if (length(ia)==0) {           #no set active (typically 1st iteration)
       aia <- NULL                  
     } else {                       #active set
@@ -65,7 +67,8 @@ activeSet <- function(z, isomat, mySolver = lsSolver, ups = 1e-12, check = FALSE
     ck <- NULL
   }
 
-  result <- list(x = y, lambda = lup, func.vals = fy, constr.val = ay, Alambda = hl, gradient = gy, isocheck = ck, call = match.call())
+  result <- list(x = y, z = x, lambda = lup, fval = fy, constr.val = ay, Alambda = hl, 
+  gradient = gy, isocheck = ck, niter = iter, call = match.call())
   class(result) <- "activeset"
   result
 }

@@ -90,6 +90,10 @@
 <param name="Local" value="sSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
+<param name="Name" value="summary.activeset">
+<param name="Local" value="activeSet.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
 <param name="Name" value="weighted.fractile">
 <param name="Local" value="gpava.html">
 </OBJECT>
@@ -123,7 +127,7 @@
 <param name="Local" value="lfSolver.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
-<param name="Name" value="Generalized PAVA">
+<param name="Name" value="Generalized Pooled-Adjacent-Violators Algorithm (PAVA)">
 <param name="Local" value="gpava.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">

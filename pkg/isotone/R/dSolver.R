@@ -5,7 +5,7 @@ dSolver<-function(z, a, extra) {
     w <- extra$weights
     z <- extra$y
     n <- length(z)
-    if (length(a)==0) return(list(y=z,l=0,f=0))
+    if (length(a)==0) return(list(x=z,l=0,f=0))
     if (is.vector(a)) a<-matrix(a,1,2)
     indi<-mkIndi(a,n)
     m<-ncol(indi); h<-rep(0,m)

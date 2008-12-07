@@ -1,4 +1,4 @@
-<html><head><title>Generalized PAVA</title>
+<html><head><title>Generalized Pooled-Adjacent-Violators Algorithm (PAVA)</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" type="text/css" href="Rchm.css">
 </head>
@@ -10,37 +10,38 @@
 <param name="keyword" value="R:   weighted.median">
 <param name="keyword" value="R:   weighted.fractile">
 <param name="keyword" value="R:   plot.pava">
-<param name="keyword" value=" Generalized PAVA">
+<param name="keyword" value=" Generalized Pooled-Adjacent-Violators Algorithm (PAVA)">
 </object>
 
 
-<h2>Generalized PAVA</h2>
+<h2>Generalized Pooled-Adjacent-Violators Algorithm (PAVA)</h2>
 
 
 <h3>Description</h3>
 
 <p>
-PAVA for general convex functions
+Pooled-adjacent-violators algorithm for general isotone regression problems. It allows for general convex target function, 
+multiple measurements, and different approaches for handling ties.
 </p>
 
 
 <h3>Usage</h3>
 
 <pre>
-gpava(x, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
+gpava(z, y, weights = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
 </pre>
 
 
 <h3>Arguments</h3>
 
 <table summary="R argblock">
-<tr valign="top"><td><code>x</code></td>
+<tr valign="top"><td><code>z</code></td>
 <td>
 Vector of list of vectors of predictors</td></tr>
 <tr valign="top"><td><code>y</code></td>
 <td>
 Vector of list of vectors of responses</td></tr>
-<tr valign="top"><td><code>w</code></td>
+<tr valign="top"><td><code>weights</code></td>
 <td>
 Vector of list of vectors of observation weights</td></tr>
 <tr valign="top"><td><code>solver</code></td>
@@ -83,13 +84,13 @@ should return a single numerical value.
 Generates an object of class <code>gpava</code>.
 </p>
 <table summary="R argblock">
-<tr valign="top"><td><code>yfit</code></td>
+<tr valign="top"><td><code>x</code></td>
 <td>
 Fitted values</td></tr>
 <tr valign="top"><td><code>y</code></td>
 <td>
 Observed response</td></tr>
-<tr valign="top"><td><code>x</code></td>
+<tr valign="top"><td><code>z</code></td>
 <td>
 Observed predictors</td></tr>
 <tr valign="top"><td><code>w</code></td>
@@ -113,8 +114,8 @@ Kurt Hornik, Jan de Leeuw, Patrick Mair
 <h3>References</h3>
 
 <p>
-de Leeuw, J., Hornik, K., Mair, P. (2008). Pool-Adjacent-Violators Algorithm (PAVA) in R. 
-Journal of Statistical Software, forthcoming.
+de Leeuw, J., Hornik, K., Mair, P. (2008). Isotone Optimization in R: Pool-Adjacent-Violators 
+Algorithm (PAVA) and Active Set Methods. Journal of Statistical Software, forthcoming.
 </p>
 
 
@@ -142,6 +143,6 @@ plot(res)
 
 
 
-<hr><div align="center">[Package <em>isotone</em> version 0.1-1 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>isotone</em> version 0.6-0 <a href="00Index.html">Index]</a></div>
 
 </body></html>

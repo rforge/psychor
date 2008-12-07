@@ -5,16 +5,17 @@
 \alias{weighted.fractile}
 \alias{plot.pava}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Generalized PAVA}
-\description{PAVA for general convex functions}
+\title{Generalized Pooled-Adjacent-Violators Algorithm (PAVA)}
+\description{Pooled-adjacent-violators algorithm for general isotone regression problems. It allows for general convex target function, 
+multiple measurements, and different approaches for handling ties.}
 \usage{
-gpava(x, y, w = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
+gpava(z, y, weights = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{Vector of list of vectors of predictors}
+  \item{z}{Vector of list of vectors of predictors}
   \item{y}{Vector of list of vectors of responses}
-  \item{w}{Vector of list of vectors of observation weights}
+  \item{weights}{Vector of list of vectors of observation weights}
   \item{solver}{Either \code{weighted.mean}, \code{weighted.median}, \code{weighted.fractile}, or 
   a user-specified function (see below)}
   \item{ties}{Treatment of ties, either "primary", "secondary", or "tertiary"}
@@ -37,16 +38,16 @@ should return a single numerical value.
 
 \value{
   Generates an object of class \code{gpava}.
-  \item{yfit}{Fitted values}
+  \item{x}{Fitted values}
   \item{y}{Observed response}
-  \item{x}{Observed predictors}
+  \item{z}{Observed predictors}
   \item{w}{Weights}
   \item{solver}{Convex function}
   \item{call}{Matched call}
 }
 \references{
-de Leeuw, J., Hornik, K., Mair, P. (2008). Pool-Adjacent-Violators Algorithm (PAVA) in R. 
-Journal of Statistical Software, forthcoming.
+de Leeuw, J., Hornik, K., Mair, P. (2008). Isotone Optimization in R: Pool-Adjacent-Violators 
+Algorithm (PAVA) and Active Set Methods. Journal of Statistical Software, forthcoming. 
 }
 \author{Kurt Hornik, Jan de Leeuw, Patrick Mair}
 
