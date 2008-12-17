@@ -23,7 +23,7 @@ SMACOF with constraints on the configuration
 <h3>Usage</h3>
 
 <pre>
-smacofConstraint(delta, constraint = "linear", external, ndim = 2, weightmat = NULL, 
+smacofConstraint(delta, constraint = "linear", external, ndim = 2, weightmat = NULL, startconf = NULL,
 metric = TRUE, ties = "primary", verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
 
 </pre>
@@ -40,13 +40,16 @@ Either a symmetric dissimilarity matrix or an object of class <code>"dist"</code
 Type of constraint: <code>"linear"</code>, <code>"unique"</code>, <code>"diagonal"</code>, or a user-specified function (see details)</td></tr>
 <tr valign="top"><td><code>external</code></td>
 <td>
-Data frame or matrix with external covariates</td></tr>
+Data frame or matrix with external covariates, or list for simplex and circumplex (see details)</td></tr>
 <tr valign="top"><td><code>ndim</code></td>
 <td>
 Number of dimensions</td></tr>
 <tr valign="top"><td><code>weightmat</code></td>
 <td>
 Optional matrix with dissimilarity weights</td></tr>
+<tr valign="top"><td><code>startconf</code></td>
+<td>
+Optional matrix with starting values for configurations (see details)</td></tr>
 <tr valign="top"><td><code>metric</code></td>
 <td>
 If <code>FALSE</code> non-metric MDS is performed</td></tr>
@@ -70,10 +73,15 @@ Convergence criterion</td></tr>
 <h3>Details</h3>
 
 <p>
-The user can specify a function with the following arguments: configuration matrix
-(n x p), matrix V (based on the weight matrix, see vignette), external scale matrix. 
-The function must return a (n x p) matrix of resulting configurations. In the examples we show how linearly 
-restricted configurations can be specified by the user.
+The user can specify a function with the following arguments: configuration matrix with starting values, 
+matrix V (based on the weight matrix, see package vignette), external scale matrix. 
+The function must return a matrix of resulting configurations. 
+</p>
+<p>
+A matrix with starting configurations can be specifiied. For <code>constraint = "linear"</code> it has to be of dimension (n x p). For <code>constraint = "unique"</code> it is typically of the form X = (Y|D) with D as (n x n) diagonal matrix and Y (n x p) configuration matrix. Hence X is of dimension (n x (n + p)). For <code>constraint = "diagonal"</code> it is typically of dimension  (n x q) where q is the number of columns of the external scale matrix (and thus number of dimensions). If <code>constraint</code> is user-specified the specification of <code>startconf</code> is mandatory.
+</p>
+<p>
+The argument <code>external</code> allows for the specification of a covariate data frame (or matrix) of dimension (n x q). Alternatively, for simplex fitting the user can specify a list of the following structure: <code>external = list("simplex", dim2)</code> with <code>dim2</code> denoting the dimension of the simplex with dim2 &lt; n. For a circumplex the list has to be of the following form: <code>external = list("circumplex", dim2, k1, k2)</code> with 1 &lt;= k1 &lt;= k2 &lt;= n (see also examples section). k1 and k2 denote the circumplex width.
 </p>
 
 
@@ -121,6 +129,9 @@ Jan de Leeuw and Patrick Mair
 <p>
 de Leeuw, J. &amp; Mair, P. (2008). Multidimensional scaling using majorization: The R package smacof.
 </p>
+<p>
+de Leeuw, J., &amp; Heiser, W. (1980). Multidimensional scaling with restrictions on the configurations. In P. R. Krishnaiah (eds.), Multivariate Analysis V, pp. 501-522. North-Holland.
+</p>
 
 
 <h3>See Also</h3>
@@ -139,16 +150,22 @@ data(kinshipdelta)
 data(kinshipscales)
 res.lin1 &lt;- smacofConstraint(kinshipdelta, constraint = "linear", external = kinshipscales)
 
-## The same model, linear restrictions specified externally
-## constrfun &lt;- function(X, V, external) {
-##      return(external
-## }
-## res.lin2 &lt;- smacofConstraint(kinshipdelta, constraint = constrfun, external = kinshipscales)
+## SMACOF with unique constraints
+res.unique &lt;- smacofConstraint(kinshipdelta, constraint = "unique", external = kinshipscales)
+
+## SMACOF with diagonal constraints
+res.diag &lt;- smacofConstraint(kinshipdelta, constraint = "diagonal", external = kinshipscales)
+
+## Fitting a simplex with q = 14 (i.e., n-1), diagonal constraints
+res.simp &lt;- smacofConstraint(kinshipdelta, constraint = "diagonal", external = list("simplex", 14))
+
+## Fitting a circumplex with q = 10, k1 = 2, k2 = 8, diagonal constraints
+res.circ &lt;- smacofConstraint(kinshipdelta, constraint = "diagonal", external = list("circumplex", 10, 2, 8))
 
 </pre>
 
 
 
-<hr><div align="center">[Package <em>smacof</em> version 0.0-10 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>smacof</em> version 0.9-2 <a href="00Index.html">Index]</a></div>
 
 </body></html>
