@@ -21,8 +21,8 @@ xlim, ylim, zlim, ...)
 
 \arguments{
   \item{x}{Object of class \code{"anacor"}.}
-  \item{plot.type}{Type of plot to be produced (details see below): 2-D and 3-D for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}; 2-D for \code{"regplot}", \code{"graphplot"}, \code{"benzplot"}, and \code{"transplot"}.}
-  \item{plot.dim}{Vector of length 2 with Dimensions to be plotted. For \code{"regplot"} a single value should be provided, for  \code{"transplot"} more than two dimensions are allowed.}
+  \item{plot.type}{Type of plot to be produced (details see below): 2-D and 3-D for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}; 2-D for \code{"regplot"}, \code{"graphplot"}, \code{"benzplot"}, and \code{"transplot"}.}
+  \item{plot.dim}{Vector of length 2 with Dimensions to be plotted. For \code{"regplot"} a single value should be provided, for  \code{"transplot"} more than two dimensions are allowed, and for \code{"benzplot"} this argument is ignored.}
   \item{legpos}{Position of the legend (for \code{"transplot"} only)}
   \item{conf}{Ellipsoid confidence level for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}. If \code{NULL}, no ellipsoids are drawn.}
   \item{arrows}{If \code{TRUE} the points in \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"} are connected with the origin.}

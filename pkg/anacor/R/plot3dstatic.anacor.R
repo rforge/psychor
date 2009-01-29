@@ -1,5 +1,5 @@
 `plot3dstatic.anacor` <-
-function(x, plot.type,plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", arrows = TRUE, 
+function(x, plot.type = "jointplot", plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", arrows = TRUE, 
                                  main, xlab, ylab, zlab, xlim, ylim, zlim, ...)
 {
 #produces static 3D-scatterplot

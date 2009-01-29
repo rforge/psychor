@@ -13,7 +13,7 @@ burtTable(data, pf = FALSE)
   \item{pf}{\code{TRUE} for profile frequency matrix.}
 }
 
-\seealso{\code{\link{expandFrame}}, code{\link{mkIndiList}}}
+\seealso{\code{\link{expandFrame}}, \code{\link{mkIndiList}}}
 \examples{
 
 # artificial data 

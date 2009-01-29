@@ -1,5 +1,5 @@
 `plot.anacor` <-
-function(x, plot.type, plot.dim = c(1,2), legpos = "top", arrows = FALSE, conf = 0.95, 
+function(x, plot.type = "jointplot", plot.dim = c(1,2), legpos = "top", arrows = FALSE, conf = 0.95, 
          wlines = 0, xlab, ylab, main, type, xlim, ylim, ...)
 {
 # x         ... object of class "anacor"

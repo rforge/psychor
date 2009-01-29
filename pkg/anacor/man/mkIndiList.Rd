@@ -20,7 +20,7 @@ ord = rep(1,length(type)))
 }
 
 
-\seealso{\code{\link{expandFrame}}, code{\link{burtTable}}}
+\seealso{\code{\link{expandFrame}}, \code{\link{burtTable}}}
 \examples{
 
 # artificial data 

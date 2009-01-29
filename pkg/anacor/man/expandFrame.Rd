@@ -18,7 +18,7 @@ expandFrame(tab, clean = TRUE, zero = TRUE, returnFrame = TRUE)
   \item{returnFrame}{If \code{TRUE}, a data frame is returned; if \code{FALSE} a matrix.}
 }
 
-\seealso{\code{\link{burtTable}}, code{\link{mkIndiList}}}
+\seealso{\code{\link{burtTable}}, \code{\link{mkIndiList}}}
 \examples{
 
 ## Indicator matrix for tocher data
