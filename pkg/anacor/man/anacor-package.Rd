@@ -4,13 +4,13 @@
 \title{Simple and Canonical Correspondence Analysis
 }
 \description{
-This package performs simple correspondence analysis (CA) on a two-way frequency table (with missings) by means of SVD. Different scaling methods (standard, centroid, Benzecri, Goodman) as well as various plots including confidence ellipsoids are provided. }
+This package performs simple and canonical CA on a two-way frequency table (with missings) by means of SVD. Different scaling methods (standard, centroid, Benzecri, Goodman) as well as various plots including confidence ellipsoids are provided. }
 \details{
 \tabular{ll}{
 Package: \tab anacor\cr
 Type: \tab Package\cr
-Version: \tab 0.9-4\cr
-Date: \tab 2008-10-10\cr
+Version: \tab 0.9-6\cr
+Date: \tab 2009-1-31\cr
 License: \tab GPL\cr
 }
 The main function of the package is \code{anacor()} which performs simple CA. The input dataset \code{tab} is a (incomplete) frequency table. 
@@ -23,7 +23,7 @@ Utility functions to create various types of indicator matrices are implemented.
 Maintainer: Jan de Leeuw <deleeuw@stat.ucla.edu>
 }
 \references{
-de Leeuw, J. and Mair, P. (2007). Simple and Canonical Correspondence Analysis Using the R Package anacor. 
+de Leeuw, J. and Mair, P. (2009). Simple and Canonical Correspondence Analysis Using the R Package anacor. Journal of Statistical Software, forthcoming.
 }
 
 \keyword{ package }

@@ -4,7 +4,7 @@
 \usepackage{amsmath, amsfonts, thumbpdf}
 \usepackage{float, amssymb}
 \usepackage{amsbsy}
-\usepackage{arydshln}
+%\usepackage{arydshln}
 \usepackage{Sweave}
 
 \newcommand{\defi}{\mathop{=}\limits^{\Delta}}  

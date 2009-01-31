@@ -65,21 +65,53 @@ if (is.matrix(col.covariates)) {
   COL<-TRUE
 	}
 
-if (ROW) { z<-or%*%crossprod(xr,tab) 
+# prepare expressions for SVD
+if (ROW) {
+  z <- or%*%crossprod(xr,tab) 
 } else { 
-z<-tab/sqrt(r) }
+  z <- tab/sqrt(r)
+}
 
-if (COL) { z<-z%*%yr%*%oc 
+if (COL) {
+  z <- z%*%yr%*%oc 
 } else {
-z<-z/outer(rep(1,dim(z)[1]),sqrt(c)) }				#if ROW and COL false, z as above
+  z <- z/outer(rep(1,dim(z)[1]),sqrt(c))                         	#if ROW and COL false, z as above
+}			
 
 sv<-svd(z,nu=qdim,nv=qdim)					#SVD of Z --> $u lsv (P), $v rsv (Q), $d singular values
 								#number of lsv and rsv is qdim = ndim+1
 sval<-N*((sv$d[-1])^2)						#singval^2 times sample size (sv$d[1] trivial solution)	
 sigmavec <-(sv$d)[2:qdim] 						#singval
 
-if (ROW) x<-(xr%*%or%*%(sv$u))[,-1] else x<-((sv$u)/sqrt(r))[,-1]	#compute row scores (without trivial solution)
-if (COL) y<-(yr%*%oc%*%(sv$v))[,-1] else y<-((sv$v)/sqrt(c))[,-1]	#compute column scores (without trivial solution)
+dimlab <- paste("D", 1:ndim, sep = "")
+Tr <- Xstar <- isetCorRow <- NULL                               #init Ter Braak 
+Tc <- Ystar <- isetCorCol <- NULL
+if (ROW) {
+  x<-(xr%*%or%*%(sv$u))[,-1]                                    #canonial scores
+  U <- or%*%(sv$u)[,-1]                                         #row weights
+  Tr <- U%*%(diag(sigmavec))                                    #canonical coefficients (rows)
+  dimnames(Tr) <- list(paste("beta",1:(dim(Tr)[1]), sep = ""), dimlab)
+  #Tr2 <- solve(t(xr)%*%diag(r)%*%xr)%*%t(xr)%*%diag(r)%*%(diag(1/r)%*%tab%*%y)  #double check Tr (alternative formulation) 
+  Xstar <- (diag(1/r)%*%tab%*%y)                                #site scores (rows), unscaled
+  dimnames(Xstar) <- list(rownames(tab), dimlab)
+  isetCorRow <- cor(Xstar,row.covariates)                       #instraset correlations for the rows
+}
+else {
+  x <- ((sv$u)/sqrt(r))[,-1]                                    #compute row scores (without trivial solution)
+ 
+}
+
+if (COL) {
+  y <- (yr%*%oc%*%(sv$v))[,-1]
+  V <- oc%*%(sv$v)[,-1]                                         #column weights
+  Tc <- V%*%(diag(sigmavec))                                    #canonical coefficients
+  dimnames(Tc) <- list(paste("beta",1:(dim(Tc)[1]), sep = ""), dimlab)
+  Ystar <- (diag(1/c)%*%t(tab)%*%x)                             #site scores (columns), unscaled
+  dimnames(Ystar) <- list(colnames(tab), dimlab)
+  isetCorCol <- cor(Ystar, col.covariates)                      #instraset correlations for the rows
+} else {
+  y <- ((sv$v)/sqrt(c))[,-1]                                  	#compute column scores (without trivial solution)
+}
 
 #x... matrix of dimension n x ndim with row scores; X = D^(-1/2)*P 
 #y... matrix of dimension m x ndim with column scores; Y = E^(-1/2)*Q
@@ -110,12 +142,12 @@ se.sigma <- sqrt(diag(res.acov$acovd))                     #standard errors for 
 #------------------------ end generalized SVD and derivatives ------------------
 
 #---------------------- labels ---------------------
-dimlab <- paste("D", 1:ndim, sep = "")
 colnames(x) <- colnames(y) <- dimlab
 rownames(x) <- rownames(tab)
 rownames(y) <- colnames(tab)
 rownames(cs.mat) <- paste("Component", 1:dim(cs.mat)[1])
 colnames(cs.mat) <- c("Chisq","Proportion","Cumulative Proportion")
+
                                                
 result <- list(datname = name, tab = tab, ndim = ndim, row.covariates = row.covariates, 
                col.covariates = col.covariates, row.scores = x, col.scores = y, 
@@ -123,7 +155,8 @@ result <- list(datname = name, tab = tab, ndim = ndim, row.covariates = row.cova
                left.singvec = sv$u[,-1], right.singvec = sv$v[,-1],
                eigen.values = sigmavec^2, scaling = scaling,
                bdmat = benzres[1:4], rmse = benzres[5:6], 
-               row.acov = res.acov$acovu, col.acov = res.acov$acovv) 
+               row.acov = res.acov$acovu, col.acov = res.acov$acovv, cancoef = list(rows = Tr, columns = Tc),
+               sitescores = list(rows = Xstar, columns = Ystar), isetcor = list(rows = isetCorRow, columns = isetCorCol)) 
 class(result) <- "anacor"
 result
 

@@ -54,6 +54,9 @@ anacor(tab, ndim = 2, row.covariates, col.covariates, scaling = c("Benzecri","Be
   \item{rmse}{Root mean squared error of Bezencri distances (rows and columns).}
   \item{row.acov}{Covariance matrix for row scores.}
   \item{col.acov}{Covariance matrix for column scores.}
+  \item{cancoef}{List containing canonical coefficients (CCA only).}
+  \item{sitescores}{List containing the site scores (CCA only).}
+  \item{isetcor}{List containing the intraset correlations (CCA only).}
 }
 \references{de Leeuw, J., \& Mair, P. (2007). Simple and canonical correspondence 
 analysis using the R package anacor. Preprint available at \url{http://gifi.stat.ucla.edu/anacor.pdf}}
