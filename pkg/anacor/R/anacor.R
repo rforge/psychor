@@ -92,6 +92,7 @@ if (ROW) {
   Tr <- U%*%(diag(sigmavec))                                    #canonical coefficients (rows)
   dimnames(Tr) <- list(paste("beta",1:(dim(Tr)[1]), sep = ""), dimlab)
   #Tr2 <- solve(t(xr)%*%diag(r)%*%xr)%*%t(xr)%*%diag(r)%*%(diag(1/r)%*%tab%*%y)  #double check Tr (alternative formulation) 
+  if (COL)  y <- (yr%*%oc%*%(sv$v))[,-1] else y <- ((sv$v)/sqrt(c))[,-1]       
   Xstar <- (diag(1/r)%*%tab%*%y)                                #site scores (rows), unscaled
   dimnames(Xstar) <- list(rownames(tab), dimlab)
   isetCorRow <- cor(Xstar,row.covariates)                       #instraset correlations for the rows
