@@ -1,4 +1,4 @@
-%\VignetteIndexEntry{anacor} 
+%\VignetteIndexEntry{homals} 
 
 \documentclass[article]{Z}
 \usepackage{amsmath, amsfonts, thumbpdf}
