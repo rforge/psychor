@@ -1,10 +1,10 @@
 `plot.anacor` <-
 function(x, plot.type = "jointplot", plot.dim = c(1,2), legpos = "top", arrows = FALSE, conf = 0.95, 
-         wlines = 0, xlab, ylab, main, type, xlim, ylim, ...)
+         wlines = 0, xlab, ylab, main, type, xlim, ylim, cex.axis2, ...)
 {
 # x         ... object of class "anacor"
 # plot.type ... string with values "jointplot", "rowplot", "colplot", "benzplot", 
-#               "regplot", "transplot"
+#               "regplot", "transplot", "orddiag"
 # plot.dim  ... dimensions to be plotted 
 # conf ... confidence ellipsoids, either NULL of conf-value. 
 
@@ -37,8 +37,8 @@ if (plot.type == "regplot") {
   z <- c(1:n,1:m) 
   plot(z, z, type = "n", xlab = paste(xlab1," categories"), ylab = paste(ylab1, " categories"), main = main1, 
   xaxt = "n", yaxt = "n", xlim = c(1,n), ylim = c(1,m), ...)
-  axis(1, at = 1:(dim(x$tab)[1]), labels = rownames(x$tab))
-  axis(2, at = 1:(dim(x$tab)[2]), labels = colnames(x$tab))
+  axis(1, at = 1:(dim(x$tab)[1]), labels = rownames(x$tab), ...)
+  axis(2, at = 1:(dim(x$tab)[2]), labels = colnames(x$tab), ...)
   points(1:n, xave, type = type, col = "RED")
   points(yave, 1:m, type= type, col = "BLUE")
   abline(v=1:n, h=1:m, col = "lightgray", lty = 2 )
@@ -54,12 +54,20 @@ if (plot.type == "regplot") {
   z <- c(xa,ya) 
   plot(z, z, type = "n", xlab = paste(xlab1," scores"), ylab = paste(ylab1," scores"),main = main2,  
   xlim = range(x$row.scores[,plot.dim]), ylim = range(x$col.scores[,plot.dim]),...)
+  
   points(xa, xave, type = type, col = "RED")
   points(yave, ya, type = type, col = "BLUE")
   abline(v = xa, h = ya, col = "lightgray", lty = 2)
-  for (i in 1:n) text(rep(xa[i],m),ya,as.character(x$tab[i,]),cex=.8, col = "lightgray")
-  axis(3, at = xa, labels = names(xa), cex.axis = 0.6, col.axis = "lightgray", padj = 1)
-  axis(4, at = ya, labels = names(ya), cex.axis = 0.6, col.axis = "lightgray", padj = -1)
+
+  if (missing(cex.axis2)) cex.axis2 <- 0.6
+   
+  for (i in 1:n) text(rep(xa[i],m),ya,as.character(x$tab[i,]), col = "lightgray")
+
+  #axis(3, at = xa, labels = names(xa), cex.axis = 0.6, col.axis = "lightgray", padj = 1,...)
+  #axis(4, at = ya, labels = names(ya), cex.axis = 0.6, col.axis = "lightgray", padj = -1,...)
+  
+  axis(3, at = xa, labels = names(xa), cex.axis = cex.axis2, col.axis = "lightgray", padj = 1,...)
+  axis(4, at = ya, labels = names(ya), cex.axis = cex.axis2, col.axis = "lightgray", padj = -1,...)
   
 }
 
@@ -105,8 +113,8 @@ if (plot.type == "rowplot") {
   if (missing(ylab)) ylab <- paste("Dimension",plot.dim[2])
     
   xa <- x$row.scores[,plot.dim]
-  if (missing(xlim)) xlim <- range(xa[,1])
-  if (missing(ylim)) ylim <- range(xa[,2])
+  if (missing(xlim)) xlim <- range(xa)*1.2
+  if (missing(ylim)) ylim <- range(xa)*1.2
 
   plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, ylim = ylim,...)
   text(xa, rownames(x$row.scores), pos = 3, cex = 0.8, offset = 0.2, ...)
@@ -131,8 +139,8 @@ if (plot.type == "colplot") {
   if (missing(ylab)) ylab <- paste("Dimension",plot.dim[2])
     
   ya <- x$col.scores[,plot.dim]
-  if (missing(xlim)) xlim <- range(ya[,1])
-  if (missing(ylim)) ylim <- range(ya[,2])
+  if (missing(xlim)) xlim <- range(ya)*1.2
+  if (missing(ylim)) ylim <- range(ya)*1.2
   
   plot(ya, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, ylim = ylim,...)
   text(ya, rownames(x$col.scores), pos = 3, cex = 0.8, offset = 0.2)
@@ -160,8 +168,8 @@ if (plot.type == "jointplot") {
   xa <- x$row.scores[,plot.dim]
   ya <- x$col.scores[,plot.dim]
 
-  if (missing(xlim)) xlim <- range(c(xa[,1],ya[,1]))
-  if (missing(ylim)) ylim <- range(c(xa[,2],ya[,2]))                                 
+  if (missing(xlim)) xlim <- range(rbind(xa,ya))*1.2
+  if (missing(ylim)) ylim <- range(rbind(xa,ya))*1.2                                 
   
   plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, 
   ylim = ylim, col = "RED",...)
@@ -193,8 +201,8 @@ if (plot.type == "graphplot") {
   
   xa <- x$row.scores[,plot.dim]
   ya <- x$col.scores[,plot.dim]
-  if (missing(xlim)) xlim <- range(c(xa[,1],ya[,1]))
-  if (missing(ylim)) ylim <- range(c(xa[,2],ya[,2]))
+  if (missing(xlim)) xlim <- range(rbind(xa,ya))
+  if (missing(ylim)) ylim <- range(rbind(xa,ya))
   
   
   plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main, pch = 16, col = "RED",
@@ -262,5 +270,36 @@ if (plot.type == "benzplot")
 }
 #----------------------------------end benzplot --------------------------------
 
+#-------------------------------- ordination diagram ---------------------------
+if (plot.type == "orddiag") {
+  if (length(plot.dim) != 2) stop("plot.dim must be of length 2")
+  if (missing(xlab)) xlab <- paste("Dimension",plot.dim[1])
+  if (missing(ylab)) ylab <- paste("Dimension",plot.dim[2])
+  if (missing(main)) main1 <- paste("Ordination Diagram") else main1 <- main 
+  
+  xa <- x$row.scores[,plot.dim]
+  ya <- x$col.scores[,plot.dim]
+ 
+  crcor.t <- do.call(rbind, x$isetcor)
+  if (is.null(crcor.t)) stop("Ordination Diagram works for CCA only!") else crcor <- t(crcor.t)
+
+  if (missing(xlim)) xlim <- range(rbind(xa,ya, crcor))
+  if (missing(ylim)) ylim <- range(rbind(xa,ya, crcor))                                 
+  
+  plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, 
+  ylim = ylim, col = "RED",...)
+  points(ya, pch = 20, col = "BLUE")
+  text(xa, rownames(xa), col = "RED", pos = 3, cex = 0.8, offset = 0.2)
+  text(ya, rownames(ya), col = "BLUE", pos = 3, cex = 0.8, offset = 0.2)
+  abline(h = 0, v = 0, col = "lightgray", lty = 2)
+
+  #points(crcor, pch = 20, col = "GRAY")
+  text(crcor, rownames(crcor), col = "GRAY", cex = 0.8)
+  arrows(0,0,crcor[,1],crcor[,2], length = 0.05, col = "GRAY")
+
+}
+
+
+#-------------------------------- end ordination diagram ------------------------
 }
 

@@ -9,7 +9,7 @@
 }
 \usage{
 \method{plot}{anacor}(x, plot.type, plot.dim = c(1,2), legpos = "top", arrows = FALSE, conf = 0.95, 
-wlines = 0, xlab, ylab, main, type, xlim, ylim, ...)
+wlines = 0, xlab, ylab, main, type, xlim, ylim, cex.axis2, ...)
 
 \method{plot3d}{anacor}(x, plot.type, plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", arrows = TRUE, xlab, ylab, zlab, 
 main, ...)
@@ -21,7 +21,7 @@ xlim, ylim, zlim, ...)
 
 \arguments{
   \item{x}{Object of class \code{"anacor"}.}
-  \item{plot.type}{Type of plot to be produced (details see below): 2-D and 3-D for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}; 2-D for \code{"regplot"}, \code{"graphplot"}, \code{"benzplot"}, and \code{"transplot"}.}
+  \item{plot.type}{Type of plot to be produced (details see below): 2-D and 3-D for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}; 2-D for \code{"regplot"}, \code{"graphplot"}, \code{"benzplot"}, \code{"transplot"}, and \code{"orddiag"}.}
   \item{plot.dim}{Vector of length 2 with Dimensions to be plotted. For \code{"regplot"} a single value should be provided, for  \code{"transplot"} more than two dimensions are allowed, and for \code{"benzplot"} this argument is ignored.}
   \item{legpos}{Position of the legend (for \code{"transplot"} only)}
   \item{conf}{Ellipsoid confidence level for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}. If \code{NULL}, no ellipsoids are drawn.}
@@ -37,6 +37,7 @@ xlim, ylim, zlim, ...)
   \item{zlim}{Scale z-axis.}
   \item{main}{Plot title.}
   \item{type}{Whether points, lines or both should be plotted; for \code{"regplot"} and \code{"transplot"} only.}
+  \item{cex.axis2}{For \code{"regplot"} only. The magnification to be used for the category labels in the scaled solution relative to the current setting of cex.}
   \item{\dots}{Additional graphical parameters.}
 }
 \details{
@@ -53,7 +54,7 @@ the row scores (x-axis) and the column scores(y-axis).
 Now, instead of the row/column categories, the column scores (black line y-axis) 
 and the row scores (red line x-axis) are used.
 
-The transformation plot (\code{"transplot"}) plots the row/column categories against the row/column scores. The Benzecri plot (\code{"benzplot"}) plots the observed distances against the fitted distances. It is assumed that the CA result is Benzecri scaled. 
+The transformation plot (\code{"transplot"}) plots the row/column categories against the row/column scores. The Benzecri plot (\code{"benzplot"}) plots the observed distances against the fitted distances. It is assumed that the CA result is Benzecri scaled. The ordination diagram (\code{"orddiag"}) for CCA produces a joint plot and includes the column and row covariates based on intraset correlations. 
 }
 
 \references{de Leeuw, J., \& Mair, P. (2007). Simple and canonical correspondence analysis using the R package anacor. Preprint available at \url{http://gifi.stat.ucla.edu/anacor.pdf}}
@@ -77,12 +78,13 @@ res2
 plot(res1, plot.type = "benzplot", main = "Benzecri Distances (2D)")
 plot(res2, plot.type = "benzplot", main = "Benzecri Distances (5D)")
 
-## Column score plot and transformation plot for canonical CA
+## Column score plot,transformation plot, and ordination diagram for canonical CA
 data(maxwell)
 res <- anacor(maxwell$table, row.covariates = maxwell$row.covariates, scaling = c("Goodman", "Goodman"))
 res
 plot(res, plot.type = "colplot", xlim = c(-1.5,1), conf = NULL)
 plot(res, plot.type = "transplot", legpos = "topright")
+plot(res, plot.type = "orddiag")
 }
 
 \keyword{hplot}
