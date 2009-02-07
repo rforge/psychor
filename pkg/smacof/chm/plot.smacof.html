@@ -27,14 +27,14 @@ These methods provide various 2D plots for SMACOF models.
 <pre>
 ## S3 method for class 'smacof':
 plot(x, plot.type = "confplot", plot.dim = c(1,2), sphere = TRUE, 
-main, xlab, ylab, ...)
+main, xlab, ylab, xlim, ylim, ...)
 
 ## S3 method for class 'smacofR':
 plot(x, plot.type = "confplot", joint = FALSE, plot.dim = c(1,2), 
-main, xlab, ylab, ...)
+main, xlab, ylab, xlim, ylim, ...)
 
 ## S3 method for class 'smacofID':
-plot(x, plot.type = "confplot", plot.dim = c(1,2), main, xlab, ylab, ...)
+plot(x, plot.type = "confplot", plot.dim = c(1,2), main, xlab, ylab, xlim, ylim, ...)
 
 </pre>
 
@@ -61,6 +61,12 @@ Label of x-axis.</td></tr>
 <tr valign="top"><td><code>ylab</code></td>
 <td>
 Label of y-axis.</td></tr>
+<tr valign="top"><td><code>xlim</code></td>
+<td>
+Scale x-axis.</td></tr>
+<tr valign="top"><td><code>ylim</code></td>
+<td>
+Scale y-axis.</td></tr>
 <tr valign="top"><td><code>sphere</code></td>
 <td>
 In case of spherical smacof, whether sphere should be plotted or not.</td></tr>
@@ -141,6 +147,6 @@ location.href = link;
 </script>
 
 
-<hr><div align="center">[Package <em>smacof</em> version 0.0-9 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>smacof</em> version 0.9-3 <a href="00Index.html">Index]</a></div>
 
 </body></html>
