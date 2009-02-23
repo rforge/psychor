@@ -29,7 +29,7 @@ one to treat a variable as nominal, ordinal, or numerical).
 
 <pre>
 homals(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE, 
-       eps = 1e-06, itermax = 100, verbose = 0)
+       eps = 1e-06, itermax = 1000, verbose = 0)
 </pre>
 
 
@@ -109,7 +109,7 @@ Name of the data file.</td></tr>
 List of category scores for each variable.</td></tr>
 <tr valign="top"><td><code>scoremat</code></td>
 <td>
-Reproduced data matrix with category scores.</td></tr>
+Array containing the reproduced data matrix based on category scores.</td></tr>
 <tr valign="top"><td><code>objscores</code></td>
 <td>
 Matrix with object scores on each dimension.</td></tr>
@@ -119,12 +119,15 @@ List of category centroids.</td></tr>
 <tr valign="top"><td><code>ind.mat</code></td>
 <td>
 Dummy coded indicator matrix.</td></tr>
-<tr valign="top"><td><code>cat.loadings</code></td>
+<tr valign="top"><td><code>loadings</code></td>
 <td>
-List of category loadings.</td></tr>
+List of loadings of the variables on each dimension.</td></tr>
 <tr valign="top"><td><code>low.rank</code></td>
 <td>
 List of lower rank quantifications.</td></tr>
+<tr valign="top"><td><code>discrim</code></td>
+<td>
+Matrix with discrimination measures for each variable on each dimension.</td></tr>
 <tr valign="top"><td><code>niter</code></td>
 <td>
 Number of iterations.</td></tr>
@@ -152,7 +155,7 @@ Jan de Leeuw, Patrick Mair
 <h3>References</h3>
 
 <p>
-de Leeuw, J., &amp; Mair, P. (2007). Homogeneity analysis in R: The package homals. Preprint available at <a href="http://gifi.stat.ucla.edu/homalsR.pdf">http://gifi.stat.ucla.edu/homalsR.pdf</a>. 
+de Leeuw, J., &amp; Mair, P. (2007). Gifi models in R: The package homals. Preprint available at <a href="http://gifi.stat.ucla.edu/homalsR.pdf">http://gifi.stat.ucla.edu/homalsR.pdf</a>. 
 </p>
 <p>
 Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
@@ -183,7 +186,7 @@ Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
   ##Nonlinear canonical correlation (2 sets of variables)
   res &lt;- homals(galo, active = c(rep(TRUE, 4), FALSE), sets = list(c(1,2),c(3,4),5))
   
-  ##regression (numerical)
+  ##regression (linear)
   data(neumann)
   res &lt;- homals(neumann, sets = list(3, 1:2), level = "numerical", rank = 1)
   
@@ -202,6 +205,6 @@ Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
 
 
 
-<hr><div align="center">[Package <em>homals</em> version 0.9-5 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>homals</em> version 0.9-10 <a href="00Index.html">Index]</a></div>
 
 </body></html>

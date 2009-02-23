@@ -327,6 +327,7 @@ the orthogonal lines determined by the rank restricted category quantifications.
 The first example is a simple (i.e., no level or rank restrictions, no sets defined) three-dimensional homogeneity analysis for the \code{senate} data set \citep{Ada:02}. The data consists of 2001 senate votes on 20 issues selected by Americans for Democratic Action. The votes selected cover a full spectrum of domestic, foreign, economic, military, environmental and social issues. We tried to select votes which display sharp liberal/conservative contrasts. As a consequence, Democrat candidates have many more ``yes" responses than Republican candidates. Due to non-responses we have several missings which are coded as \code{NA}. A full description of the items can be found in the corresponding package help file. The first column of the data set (i.e., 50 Republicans vs. 49 Democrats and 1 Independent) is inactive and will be used for validation. 
 
 <<>>=
+library("homals")
 data(senate)
 res <- homals(senate, active = c(FALSE, rep(TRUE, 20)), ndim = 3)
 @

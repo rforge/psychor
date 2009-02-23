@@ -27,15 +27,15 @@ These methods provide various 2D and 3D plots for objects of class <code>"homals
 
 <pre>
 ## S3 method for class 'homals':
-plot(x, plot.dim = c(1, 2), plot.type, var.subset, main, type, xlab, ylab, xlim, ylim, 
+plot(x, plot.dim = c(1, 2), plot.type = "jointplot", var.subset, main, type, xlab, ylab, xlim, ylim, 
 leg.pos = "topright", ...)
 
 ## S3 method for class 'homals':
-plot3d(x, plot.dim = c(1, 2, 3), plot.type, var.subset, type, xlab, ylab, 
+plot3d(x, plot.dim = c(1, 2, 3), plot.type = "jointplot", var.subset, type, xlab, ylab, 
 zlab, col, main, sphere = TRUE, bgpng = "particle.png", ax.grid = TRUE, ...)
 
 ## S3 method for class 'homals':
-plot3dstatic(x, plot.dim = c(1, 2, 3), plot.type, var.subset, main, type, 
+plot3dstatic(x, plot.dim = c(1, 2, 3), plot.type = "jointplot", var.subset, main, type, 
 xlab, ylab, zlab, xlim, ylim, zlim, ...)
 
 </pre>
@@ -55,7 +55,7 @@ Vector with dimensions to be plotted against.</td></tr>
 String indicating which type of plot to be produced: <code>"jointplot"</code>, <code>"catplot"</code> 
 <code>"labplot"</code>, <code>"objplot"</code>, <code>"starplot"</code>, <code>"graphplot"</code>, <code>"hullplot"</code>,
 <code>"lossplot"</code>, <code>"prjplot"</code>, <code>"spanplot"</code>, , <code>"trfplot"</code>, <code>"vecplot"</code>, 
-<code>"vorplot"</code>, <code>"loadplot"</code> (Not all of these are provided as 3d-plots, see below).</td></tr>
+<code>"vorplot"</code>, <code>"loadplot"</code>, <code>"screeplot"</code>, <code>"dmplot"</code> (Not all of these are provided as 3d-plots, see below).</td></tr>
 <tr valign="top"><td><code>var.subset</code></td>
 <td>
 Numeric vector for subsetting variables to be plotted. If missing, all
@@ -165,6 +165,12 @@ transformed (metric) scale on each dimension over the categories of each variabl
 <p>
 - Loadings plot (<code>plot.type = "loadplot"</code>): Plots the loadings of the variables and connects them with the origin. Three-dimensional version is available.
 </p>
+<p>
+- Scree plot (<code>plot.type = "screeplot"</code>): Produces a scree plot based on the eigenvalues. 
+</p>
+<p>
+- Discrimination measures (<code>plot.type = "dmplot"</code>): Plots the discrimination measures for each variable.
+</p>
 
 
 <h3>See Also</h3>
@@ -202,6 +208,6 @@ location.href = link;
 </script>
 
 
-<hr><div align="center">[Package <em>homals</em> version 0.9-3 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>homals</em> version 0.9-10 <a href="00Index.html">Index]</a></div>
 
 </body></html>

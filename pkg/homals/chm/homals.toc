@@ -78,6 +78,10 @@
 <param name="Local" value="senate.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
+<param name="Name" value="senate07">
+<param name="Local" value="senate07.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
 <param name="Name" value="sleeping">
 <param name="Local" value="sleeping.html">
 </OBJECT>
@@ -149,6 +153,10 @@
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Senate votes">
 <param name="Local" value="senate.html">
+</OBJECT>
+<LI> <OBJECT type="text/sitemap">
+<param name="Name" value="Senate votes 2007">
+<param name="Local" value="senate07.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Sleeping Bags">
