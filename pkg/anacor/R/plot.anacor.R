@@ -47,13 +47,18 @@ if (plot.type == "regplot") {
  
   dev.new()
   #scaled solution
+  
+  scalevec <- c(as.vector(x$row.scores[,plot.dim]),as.vector(x$col.scores[,plot.dim]))
+  if (missing(xlim)) xlim <- range(scalevec)
+  if (missing(ylim)) ylim <- range(scalevec)
+  
   xa <- x$row.scores[,plot.dim]
   ya <- x$col.scores[,plot.dim]
   xave <- as.vector(as.matrix(pr)%*%ya)/r
   yave <- as.vector(xa%*%as.matrix(pr))/c
   z <- c(xa,ya) 
   plot(z, z, type = "n", xlab = paste(xlab1," scores"), ylab = paste(ylab1," scores"),main = main2,  
-  xlim = range(x$row.scores[,plot.dim]), ylim = range(x$col.scores[,plot.dim]),...)
+  xlim = xlim, ylim = ylim,...)
   
   points(xa, xave, type = type, col = "RED")
   points(yave, ya, type = type, col = "BLUE")

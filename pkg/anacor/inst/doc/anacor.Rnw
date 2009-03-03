@@ -1,11 +1,11 @@
 %\VignetteIndexEntry{anacor} 
 
-\documentclass[article]{Z}
+\documentclass[article]{jss1}
 \usepackage{amsmath, amsfonts, thumbpdf}
 \usepackage{float, amssymb}
 \usepackage{amsbsy}
+%\usepackage{Sweave}
 %\usepackage{arydshln}
-\usepackage{Sweave}
 
 \newcommand{\defi}{\mathop{=}\limits^{\Delta}}  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -31,19 +31,48 @@ This paper presents the \proglang{R} package \texttt{anacor} for the computation
 \Plainkeywords{anacor, simple correspondence analysis, canonical correspondence analysis, R} %% without formatting
 %% at least one keyword must be supplied
 
+%% publication information
+%% NOTE: This needs to filled out ONLY IF THE PAPER WAS ACCEPTED.
+%% If it was not (yet) accepted, leave them commented.
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Jan de Leeuw\\
+  Department of Statistics\\
+  University of California, Los Angeles\\
+  E-mail: \email{deleeuw@stat.ucla.edu}\\
+  URL: \url{http://www.stat.ucla.edu/~deleeuw/ } \\
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \begin{document}
 \section{Introduction}
-Correspondence Analysis \citep[CA;][]{Benzecri:73} is a multivariate descriptive method based on a data matrix with non-negative elements and related to principal component analysis (PCA). Basically, CA can be computed for any kind of data but typically it is applied to frequencies formed by categorical data. Being an exploratoy tool for data analysis, CA emphasizes two- and three-dimensional graphical representation of the results. 
+Correspondence Analysis \citep[CA;][]{Benzecri:73} is a multivariate descriptive method based on a data matrix with non-negative elements and related to principal component analysis (PCA). Basically, CA can be computed for any kind of data but typically it is applied to frequencies formed by categorical data. Being an exploratoy tool for data analysis, CA emphasizes two- and three-dimensional graphical representations of the results. 
 
-In this paper we revise briefly mathematical foundations of simple CA and canonical CA in terms of singular value decomposition (SVD). The main focus is on the computational implementation in \proglang{R} \citep{R:07}, on scaling methods based on Benz\'ecri distances, centroid principles, and Fischer-Maung decomposition and on the elaboration of corresponding graphical. More details about CA, various extensions and related methods can be found in \citet{Greenacre:84}, \citet{Gifi:90} and \citet{Greenacre+Blasius:06} and numerous practical issues are discussed in \citet{Greenacre:07}.
+In this paper we briefly review the mathematical foundations of simple CA and canonical CA in terms of the singular value decomposition (SVD). The main focus is on the computational implementation in \proglang{R} \citep{R:07}, on scaling methods based on Benz\'ecri distances, centroid principles, and Fischer-Maung decomposition and on the elaboration of corresponding graphical representations. More details about CA, various extensions and related methods can be found in \citet{Greenacre:84}, \citet{Gifi:90} and \citet{Greenacre+Blasius:06} and numerous practical issues are discussed in \citet{Greenacre:07}.
 
-Recently, several \proglang{R} packages have been implemented and updated, respectively. The \pkg{ca} package by \citet{Nenadic+Greenacre:06} allows for the computation of simple CA using SVD on standardized residuals. Multiple CA is carried out in terms of SVD on either the indicator matrix or the Burt matrix. Joint CA, which can be regarded as variant of multiple CA excluding the diagonal cross tabulations when establishing the Burt matrix, can be performed as well as subset CA. The package provides two- and three-dimensional plots of standard and principal coordinates with various scaling options. 
+Recently, several related \proglang{R} packages have been implemented and updated, respectively. The \pkg{ca} package by \citet{Nenadic+Greenacre:06} allows for the computation of simple CA using SVD on standardized residuals. Multiple CA is carried out in terms of SVD on either the indicator matrix or the Burt matrix. Joint CA, which can be regarded as a variant of multiple CA excluding the diagonal cross tabulations when establishing the Burt matrix, can be performed as well as subset CA. The package provides two- and three-dimensional plots of standard and principal coordinates with various scaling options. 
 
-The \pkg{ade4} package \citep{Chessel+Dufour+Thioulouse:04, Dray+Dufour+Chessel:07} which has been developed within an ecological context, allows for  multiple CA, canonical CA, disriminant CA, fuzzy CA and other extensions. Another related package is \pkg{vegan} \citep{dixon:03}, also developed within the field of ecology, which allows for constrained and partially constrained CA as well. Another related package is \pkg{homals} \citep{deLeeuw+Mair:08} which fits models of the Gifi-family (homogeneity analysis aka multiple CA, nonlinear PCA, nonlinear canonical correlation analysis). Additional CA-related packages and functions in \proglang{R} can be found in \citet{Mair+Hatzinger:07}.
+The \pkg{ade4} package \citep{Chessel+Dufour+Thioulouse:04, Dray+Dufour+Chessel:07} which has been developed in an ecological context, allows for  multiple CA, canonical CA, discriminant CA, fuzzy CA and other extensions. Another related package is \pkg{vegan} \citep{dixon:03}, also developed in the field of ecology, which allows for constrained and partially constrained CA as well. Another related package is \pkg{homals} \citep{deLeeuw+Mair:08} which fits models of the Gifi-family (homogeneity analysis aka multiple CA, nonlinear PCA, nonlinear canonical correlation analysis). Additional CA-related packages and functions in \proglang{R} can be found in \citet{Mair+Hatzinger:07}.
 
 The \pkg{anacor} package we present offers, compared to the packages above, additional possibilites for scaling the scores in
-simple CA and canonical CA, additional graphical features, and allows for missing values which are imputed using the Nora's algorithm \citep{Nora:75}.
+simple CA and canonical CA, additional graphical features including confidence ellipsoids. It also allows for missing values which are imputed using Nora's algorithm \citep{Nora:75}.
 
 \section{Simple Correspondence Analysis}
 \label{sec:sca}
@@ -63,14 +92,17 @@ x'Dx&=\mathfrak{n},\\
 y'Ey&=\mathfrak{n}.
 \end{align}
 \end{subequations}
-Such vectors, i.e. both centered and normalized, are called \emph{standardized}. The optimal \(x\) and \(y\) must satisfy the centering and normalization conditions in (\ref{E:cond}), as well as the stationary equations
+Such vectors, i.e. both centered and normalized, are called \emph{standardized}. 
+
+I order to solve the constrained optimization of $\lambda(x,y)$ over the vectors $(x,y)$ satisfying the conditions above we form the Lagrangian using
+undetermined multipliers $(\xi_x,\xi_y,\mu_x,\mu_y)$ and set the derivatives equal to zero. 
+Thus, the optimal \(x\) and \(y\) must satisfy the centering and normalization conditions in (\ref{E:cond}), as well as the stationary equations
 \begin{subequations}\label{E:lagr}
 \begin{align}
 Fy&=\xi_x Dx+\mu_x Du,\\
-F'x&=\xi_y Ey+\mu_y Eu,
+F'x&=\xi_y Ey+\mu_y Eu.
 \end{align}
 \end{subequations}
-where \((\xi_x,\xi_y,\mu_x.\mu_y)\) are Lagrange multipliers.
 By using the side constraints (\ref{E:cond}) we find that the Lagrange multipliers must satisfy \(\xi_x=\xi_y=\sigma(x,y)\) and \(\mu_x=\mu_y=0\). Thus we can solve the simpler system
 \begin{subequations}\label{E:svd}
 \begin{align}
@@ -116,7 +148,7 @@ In the simplest case we can use the standardized solution of $X_p$ and $Y_p$ wit
 
 An additional option of scaling is based on \emph{Benz\'ecri distances}, also known as \emph{chi-square distances}. A Benz\'ecri distance between two rows $i$ and $k$ is defined by
 \begin{equation}
-\delta_{ik}^2(F)=\sum_{j=1}^m\left(\frac{f_{ij}}{f_{i\bullet}}-\frac{f_{kj}}{f_{i\bullet}}\right)^2 /{f_{\bullet j}}. 
+\delta_{ik}^2(F)=\sum_{j=1}^m\left(\frac{f_{ij}}{f_{i\bullet}}-\frac{f_{kj}}{f_{k\bullet}}\right)^2 /{f_{\bullet j}}. 
 \end{equation}
 If we use \(e_i\) and \(e_k\) for unit vectors of length \(n\), then
 \begin{align*}
@@ -131,7 +163,7 @@ d_{ik}(X_1\Sigma_1)\leq d_{ik}(X_2\Sigma_2)\leq\cdots\leq d_{ik}(X_{m-1}\Sigma_{
 \end{equation}
 In the same way the Euclidean distances between the rows of \(Y\Sigma\) approximate the Benz\'ecri distances between the columns of \(F\). In CA terminology this type of coordinates is sometimes referred to as \emph{principal coordinates} of rows and columns. Based on these distances we can compute a Benz\'ecri root mean squared error (RSME) for the rows and columns separately \citep[see also][]{deLeeuw+Meulman:86}. For the rows it can be expressed as
 \begin{equation}
-RMSE = \sqrt{\frac{1}{n(n-1)}\sum_i\sum_k \left(\delta_{ik}(Z)-\delta_{ik}(X_p)\right)^2}.
+RMSE = \sqrt{\frac{1}{n(n-1)}\sum_i\sum_k \left(\delta_{ik}(F)-\delta_{ik}(X_p\Sigma_p)\right)^2}.
 \end{equation}
 
 A third way to scale the scores is based on the \emph{centroid principle}. The row centroids (averages) expressed by means of the column scores are \(\overline{X}(Y)=D^{-1}FY\). In the same way, the column centroids are given by
@@ -150,9 +182,9 @@ slopes \(\lambda\) and \(\lambda^{-1}\). Depending on whether $X$ and/or $Y$ are
 
 The same applies if we reverse the role of \(X_p\) and \(Y_p\). If we plot $\overline{Y}(X_p)$ and $\overline{X}(Y_p)$ in the plane, then distances between row points in the plane approximate Benz\'ecri distances between rows and distances between column points in the plane approximate Benz\'ecri distances between columns. Unfortunately, distances between row points and column points do not correspond directly to simple properties of the data. 
 
-A further possibility of scaling is \emph{Goodman scaling} which starts with the \emph{Fisher-Maung decomposition}. Straightforwardly, $Z=P\Sigma Q'$ can be rewritten as $D^{-\frac12}FE^{-\frac12}=D^{\frac12}X\Sigma Y'E^{\frac12}$. It follows that $F=DX\Sigma Y'E$. Now we plot the row-points  \(X_p\Sigma_p^{\frac12}\) and the column points \(Y_p\Sigma_p^\frac12\). The scalar product of the two sets of points approximates \(X\Sigma Y'\), which is the matrix of Pearson residuals
+A further possibility of scaling is \emph{Goodman scaling} which starts with the \emph{Fisher-Maung decomposition}. Straightforwardly, $Z=P\Sigma Q'$ can be rewritten as $\mathfrak{n}D^{-\frac12}FE^{-\frac12}=D^{\frac12}X\Sigma Y'E^{\frac12}$. It follows that $\mathfrak{n}F=DX\Sigma Y'E$. Now we plot the row-points  \(X_p\Sigma_p^{\frac12}\) and the column points \(Y_p\Sigma_p^\frac12\). The scalar product of the two sets of points approximates \(X\Sigma Y'\), which is the matrix of Pearson residuals (trivial dimension removed)
 \begin{equation}
-\frac{Nf_{ij}}{f_{i\bullet}f_{\bullet j}}-1.
+\frac{\mathfrak{n}f_{ij}}{f_{i\bullet}f_{\bullet j}}-1.
 \end{equation}
 For this Goodman scaling there does not seem to be an obvious interpretation in terms of distances. This is
 somewhat unfortunate because people find distances much easier to understand and
@@ -201,7 +233,14 @@ using the inverse of the symmetric
 square roots of \(A'DA\) and \(B'EB\). Suppose again that \(Z=P\Sigma Q'\) is the singular
 value decomposition of \(Z\). Then \(U=(A'DA)^{-\frac12}P\) and \(V=(B'EB)^{-\frac12}Q\)
 are the optimal solutions for the weights in our maximum correlation problem, and
-the corresponding scores are \(X=A(A'DA)^{-\frac12}P\) and \(Y=B(B'EB)^{-\frac12}Q\).
+the corresponding scores are 
+\begin{subequations}
+\begin{align}
+X=A(A'DA)^{-\frac12}P, \\
+Y=B(B'EB)^{-\frac12}Q. 
+\end{align}
+\end{subequations}
+
 Both \(X\) and \(Y\) are normalized, orthogonal, and, except for the dominant solution,
 centered. Again, $X$ and $Y$ are the standard coordinates which can be rescaled by means of the principles described in Section \ref{sec:scalecca}.
 
@@ -233,7 +272,7 @@ For the centroid principle we rewrite the stationary equations in (\ref{E:wsvd})
 A(A'DA)^{-1}A'DX^\star&=X\Sigma,\label{E:sub}\\
 B(B'EB)^{-1}B'EY^\star&=Y\Sigma,
 \end{align}
-where
+where the site scores are given by
 \begin{align}
 X^\star=D^{-1}FY&=\overline{X}(Y),\\
 Y^\star=E^{-1}F'X&=\overline{Y}(X),
@@ -241,22 +280,16 @@ Y^\star=E^{-1}F'X&=\overline{Y}(X),
 \end{subequations}
 and of course \(X=AU\) and \(Y=BV\). We see that the columns of \(X\)
 are proportional to the projections in the metric \(D\) of \(X^\star\) on 
-the space spanned by  the columns of \(A\). The same applies to the column scores \(Y\). Note that if we solve the linear regression regression problem of minimizing
+the space spanned by  the columns of \(A\). The same applies to the column scores \(Y\). Note that if we solve the linear regression problem of minimizing
 \begin{equation}
 \mathbf{tr}\ (X^\star-AT)'D(X^\star-AT)
 \end{equation}
 then the minimizer is \(T=(A'DA)^{-1}A'DX^\star\). As a solution of the 
 stationary equations is follows that \(T=U\Sigma\). \citet{TerBraak:86} calls \(T\) the \emph{canonical coefficients}. In our more general setup there are also canonical coefficients for the columns, which are the regression coefficients when regressing \(Y^\star\) on \(B\).
 
-Within the context of canonical CA there are various matrices of correlation coefficients that can be computed
-to give \emph{canonical loadings}. For the rows, we can correlate \(X,X^\star\),
-and \(A\). Now \(X'DX^\star=X'FY=\Sigma\). We know that \(X'DX=I\), but
-generally \(X^\star\) is not normalized, and thus the correlations are not equal to
-\(\Sigma\). In fact, using the Loewner order, \((X^\star)'DX^\star=Y'F'D^{-1}FY\lesssim Y'EY=I\) and, since
-\(\Lambda=(X^\star)'DA'(A'DA)^{-1}AD\) by \ref{E:sub}, also \((X^\star)'DX^\star\gtrsim\Lambda\). If the columns of \(A\) are centered and normalized, the correlations become $\Sigma$. For the columns, the situation is the same for \(Y,Y^\star\) and \(B\).
+Within the context of canonical CA there are various matrices of correlation coefficients that can be computed to give \emph{canonical loadings}. For the rows, we can correlate \(X,X^\star\), and \(A\) (intraset correlations). If the columns of \(A\) are centered and normalized, the correlations become $\Sigma$. For the columns, the situation is the same for \(Y,Y^\star\) and \(B\). The package returns the site scores, the intraset correlations, and the canonical loadings.  
 
-The Fisher-Maung decomposition is merely a rewriting of the singular value
-decomposition. The most obvious generalization in the constrained case uses
+The Fisher-Maung decomposition is merely a rewriting of the singular value decomposition. The most obvious generalization in the constrained case uses
 \begin{subequations}
 \begin{align}
 (A'DA)^{-\frac12}A'FB(B'EB)^{-\frac12}=P\Sigma Q',
@@ -282,16 +315,19 @@ Note that the joint plots pertaining to the different scaling methods are again 
 
 \section{Additional Topics}
 \subsection{Confidence Ellipsoids Using the Delta Method}
-The core computation in the \pkg{anacor} package is the SVD on $Z=P\Sigma Q'$. As a result we get the $n \times n$ matrix $P$ of left singular vectors, the $m \times m$ matrix $Q$ of the right singular vectors, the diagonal matrix $\Sigma$ of order $m$ containing the singular values, and, correspondingly, the eigenvalue matrix $\Lambda$. Based on these results the $n \times p$ row score matrix $X_p$ and the $m \times p$ column score matrix are computed (standard scores). At this point an important issue is the replication stability of the results in terms of confidence ellipsoids around the standard scores in the joint plot. 
+The core computation in the \pkg{anacor} package is the SVD on $Z=P\Sigma Q'$. As a result we get the $n \times m$ matrix $P$ of left singular vectors, the $m \times m$ matrix $Q$ of the right singular vectors, the diagonal matrix $\Sigma$ of order $m$ containing the singular values, and, correspondingly, the eigenvalue matrix $\Lambda$. Based on these results the $n \times p$ row score matrix $X_p$ and the $m \times p$ column score matrix are computed (standard scores). At this point an important issue is the replication stability of the results in terms of confidence ellipsoids around the standard scores in the joint plot.
 
-A general formal framework to examine stability in multivariate methods is given in \citet[][Chapter 12]{Gifi:90}. The starting point of the replication stability is the well-known \emph{delta method}. Let us assume that we have a sequence of multivariate random variables $\mathbf{x}_\mathfrak{n}$, it follows that $\sqrt{\mathfrak{n}}(\mathbf{x}_\mathfrak{n}-\mu)\stackrel{D}{\rightarrow}N(\mathbf{0},\Sigma)$. If we apply a transformation $\phi(\mathbf{x}_n)$ the delta method states that $\sqrt{\mathfrak{n}}(\phi{\mathbf{x}}_\mathfrak{n}-\phi(\mu)) = \sqrt{\mathfrak{n}}\nabla \phi(\mu)(\mathbf{x}_\mathfrak{n}-\mu) \stackrel{D}{\rightarrow}N(\mathbf{0},\nabla \phi(\mu)'\Sigma \nabla \phi(\mu))$. In simple words: The delta method provides the transformed variance-covariance (VC) matrix which is based on the gradient of $\phi$ evaluated at $\mu$. 
+A general formal framework to examine stability in multivariate methods is given in \citet[][Chapter 12]{Gifi:90}. The starting point of the replication stability is the well-known \emph{delta method}. Let us assume that we have a sequence of asymptotically normal random vectors $\mathbf{x}_\mathfrak{n}$. Thus $\sqrt{\mathfrak{n}}(\mathbf{x}_\mathfrak{n}-\mu)\stackrel{D}{\rightarrow}N(\mathbf{0},\Sigma)$. If we apply a transformation $\phi(\mathbf{x}_n)$ the delta method states that $\sqrt{\mathfrak{n}}(\phi(\mathbf{x}_\mathfrak{n})-\phi(\mu))\approx\sqrt{\mathfrak{n}}\nabla\phi(\mu)(\mathbf{x}_\mathfrak{n}-\mu) \stackrel{D}{\rightarrow}N(\mathbf{0},\nabla \phi(\mu)'\Sigma \nabla \phi(\mu))$. In simple words: The delta method provides the transformed variance-covariance (VC) matrix which is based on the gradient of $\phi$ evaluated at $\mu$.
 
-To apply this method for CA we have to embed our observations $p_{ij} = f_{ij}/\mathfrak{n}$ into a sequence of random variables, i.e. a sequence of multinomial distributed random variables with cell probabilities $\pi_{ij}$. Asymptotic theory states that $\sqrt{\mathfrak{n}}(\mathbf{p}-\boldsymbol{\pi})\stackrel{D}{\rightarrow}N(\mathbf{0},\Pi-\boldsymbol{\pi}\boldsymbol{\pi}')$ where $\mathbf{p}$ and $\boldsymbol{\pi}$ are the vectors of relative frequencies and probabilities and $\Pi$ is the diagonal matrix with the elements of $\boldsymbol{\pi}$ on the diagonal. 
+To apply this method for CA we have to embed our observations $p_{ij} = f_{ij}/\mathfrak{n}$ into a sequence of random variables, i.e. a sequence of multinomial distributed random variables with cell probabilities $\pi_{ij}$. Asymptotic theory states that $\sqrt{\mathfrak{n}}(\mathbf{p}-\boldsymbol{\pi})\stackrel{D}{\rightarrow}N(\mathbf{0},\Pi-\boldsymbol{\pi}\boldsymbol{\pi}')$ where $\mathbf{p}$ and $\boldsymbol{\pi}$ are the vectors of relative frequencies and probabilities and $\Pi$ is the diagonal matrix with the elements of $\boldsymbol{\pi}$ on the diagonal.
 
-The SVD system of transformations $\phi$ we use is $ZQ = P\Sigma$ and $Z'P = Q \Sigma$ with $P'P=Q'Q=I$. Expressions for the partial derivatives $\partial \phi / \partial p_{ij}$ as well as other related derivatives are given in \citet{deLeeuw:2008}. 
+The transformation of the proportions to the singular values and vectors are given by the equations in (\ref{E:svd}). Expressions for the partial derivatives $\frac{\partial\phi}{\partial p_{ij}}$ are long and complicated, and not very informative. They are special cases of the partials for the generalized singular value decompositions given in \citep[][Section 2.2.1]{deLeeuw:2007}. For CA they were given earlier by \citet{ONeill:1978a, ONeill:1978b} and \citet{Kuriki:2005}. 
+
 
 \subsection{Reconstitution Algorithm for Incomplete Tables}
-As an additional feature of the \pkg{anacor} package, incomplete tables are allowed. The algorithm we use was proposed by \citet{Nora:75} and revised by \citet{deLeeuw+vanderHeiden:88}. This algorithm should not be mistaken for the CA reconstitution formula which allows for the reconstruction of the data matrix from the scores. Nora's algorithm is rather based on the complementary use of CA and log-linear models \citep[see][]{vanderHeiden+deLeeuw:85} and provides a decomposition of the residuals from independence. We will describe briefly the \emph{reconstitution of order 0} which is implemented in \pkg{anacor}. 
+As an additional feature of the \pkg{anacor} package, incomplete tables are allowed. The algorithm we use was proposed by \citet{Nora:75} and revised by \citet{deLeeuw+vanderHeiden:88}. 
+
+This algorithm should not be mistaken for the CA reconstitution formula which allows for the reconstruction of the data matrix from the scores. Nora's algorithm is rather based on the complementary use of CA and log-linear models \citep[see][]{vanderHeiden+deLeeuw:85} and provides a decomposition of the residuals from independence. It is related, however, to Greenacre's \emph{joint correspondence analysis} (JCA) for multivariate data \citep{Greenacre:1988}. We will describe briefly the \emph{reconstitution of order 0} which is implemented in \pkg{anacor}. 
 
 We start at iteration $l=0$ by setting the missing values in $F$ to zero. The corresponding table which will be iteratively updated is denoted by $F^{(0)}$. Correspondingly, the row margins are $f_{i\bullet}^{(0)}$, the column margins $f_{\bullet j}^{(0)}$ and the grand mean $f_{\bullet \bullet}^{(0)}$. The elements of the new table $F^{(1)}$ are computed under independence. Pertaining to iteration $l$, this corresponds to
 \begin{equation}
@@ -299,24 +335,20 @@ f_{ij}^{(l+1)}=\frac{f_{i\bullet}^{(l)}f_{\bullet j}^{(l)}}{f_{\bullet \bullet}^
 \end{equation}
 Within each iteration a measure for the change in the frequencies is computed, i.e. $H^{(l)}=\sum_{i=1}^n \sum_{j=1}^m f_{ij}^{(0)}\log{f_{ij}^{(l)}}$. The iteration stops if $|H^{(l)}-H^{(l-1)}| < \epsilon$. After reaching convergence, we set $F:=F^{(l)}$ and we proceed with the computations from Section \ref{sec:sca} and Section \ref{sec:cca}, respectively.
 
+
 \section{Applications of Simple and Canonical CA}
 \label{sec:app}
 \subsection{Plotting options in anacor}
 \label{sec:plots}
-The basic function in the package is \code{anacor} which performs simple or canonical CA with different scaling options. The \code{NA} cells in the table will be imputed using the reconstitution algorithm. The results are stored in an object of class \texttt{"anacor"}. For objects of these class a \code{print.anacor} and a \code{summary.anacor} method is provided. Two-dimensional plots can be produced with \code{plot.anacor}, static 3-D plots with \code{plot3dstatic.anacor} and dynamic \code{rgl}-plots with \code{plot3d.anacor}. The type of the plot can be specified by the argument \texttt{plot.type}:
+The basic function in the package is \code{anacor} which performs simple or canonical CA with different scaling options. The \code{NA} cells in the table will be imputed using the reconstitution algorithm. The results are stored in an object of class \texttt{"anacor"}. For objects of this class a \code{print.anacor} and a \code{summary.anacor} method is provided. Two-dimensional plots can be produced with \code{plot.anacor}, static 3-D plots with \code{plot3dstatic.anacor} and dynamic \code{rgl}-plots with \code{plot3d.anacor}. The type of the plot can be specified by the argument \texttt{plot.type}:
 \begin{itemize}
  \item \texttt{"jointplot"}: Plots row and column scores into the same device (also available as 3-D).
  \item \texttt{"rowplot"}, \texttt{"colplot"}: Plots the row/column scores into separate devices (also available as 3-D).
  \item \texttt{"graphplot"}: This plot type is an unlabeled version of the joint plot where the points are connected by lines. Options are provided (i.e. \code{wlines}) to steer the line thickness indicating the connection strength.
- \item \texttt{"regplot"}: First, the unscaled solution is plotted. A frequency grid for the row 
-categories (x-axis) and column categories (y-axis) is produced. 
-The regression line is based on the category weighted means of the relative frequencies. More precise, the black line on the column-wise means (x-axis) and the column category on the y-axis, the red line is based on the row categories (x-axis) and the row-wise means on the y-axis. 
-In a second device the scaled solution is plotted. The frequency grid is determined by 
-the row scores (x-axis) and the column scores(y-axis). 
-Now, instead of the row/column categories, the column scores (black line y-axis) 
-and the row scores (red line x-axis) are used (see centroid principle in Section \ref{sec:scaling}).
+ \item \texttt{"regplot"}: Regression plots are conditional plots on the weighted score averages. First, the unscaled solution is plotted. Conditional on a particular category of one variable, the expected value (i.e., the weighted average score) of the other variable is plotted. This is done for both variables which leads to two regression lines within one plot. Second, the scaled solition is taken and plotted in the same manner. 
  \item \texttt{"transplot"}: The transformation plot plots the initial row/column categories against the scaled row/column scores.
  \item \texttt{"benzplot"}: The Benz\'ecri plot shows the observed distances against the fitted Benz\'ecri distances; assumed that the row and/or columns in the CA result are Benz\'ecri scaled. For the rows the observed distances are based on $D^{-\frac12}ZZ'D^{-\frac12}$ and the fitted distances on $X_p\Sigma^2_pX_p'$; for the columns on $E^{-\frac12}ZZ'E^{-\frac12}$ and $Y_pY_p'$, respectively.
+ \item \texttt{"orddiag"}: The ordination diagram for CCA produces a joint plot and includes the column and row covariates based on intraset correlations. 
 \end{itemize}
 In addition, \pkg{anacor} offers various CA utility functions: \code{expandFrame()} expands a data frame into a indicator supermatrix, \code{burtTable()} establishes the Burt matrix, and \code{mkIndiList()} returns a list of codings with options for crisp indicators, numerical versions, and fuzzy coding.
 
@@ -324,20 +356,17 @@ In addition, \pkg{anacor} offers various CA utility functions: \code{expandFrame
 We start with an application of simple CA on Tocher's eye color data \citep{Maung:41} collected on 5387 Scottish school children. This frequency table consists of the eye color in the rows (blue, light, medium, dark) and the hair color in the columns (fair, red, medium, dark, black).  
 
 <<>>=
-library(anacor)
+library("anacor")
 data(tocher)
 res <- anacor(tocher, scaling = c("standard", "centroid"))
 res
-@
-
-<<eval = FALSE>>=
-plot(res, plot.type = "jointplot", ylim = c(-1.5,1.5))
+plot(res, plot.type = "jointplot", xlim = c(-2,1.5), ylim = c(-2, 1.5))
 plot(res, plot.type = "graphplot", wlines = 5)
 @
 
 For this two-dimensional solution we use asymmetric scaling by having standard coordinates for the rows and principal coordinates for the columns. As graphical representation methods the joint plot including 95\% confidence ellipsoids and the graph plot are chosen (see Figure \ref{fig:tocher}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[height=70mm, width=70mm]{tocherjoint.pdf}
 \includegraphics[height=70mm, width=70mm]{tochergraph.pdf}
@@ -362,17 +391,14 @@ data(bitterling)
 res1 <- anacor(bitterling, ndim = 2, scaling = c("Benzecri", "Benzecri"))
 res2 <- anacor(bitterling, ndim = 5, scaling = c("Benzecri", "Benzecri"))
 res2
-@ 
-
-<<eval = FALSE>>=
 plot(res1, plot.type = "benzplot", main = "Benzecri Distances (2D)")
 plot(res2, plot.type = "benzplot", main = "Benzecri Distances (5D)")
-@
+@ 
  
 The improvement of the five-dimensional solution with respect to the two-dimensional one is reflected by the Benz\'ecri plots in Figure \ref{fig:bitterling}. For a perfect (saturated) solution the points would lie on the diagonal. 
 This plot can be used as an overall goodness-of-fit plot or, alternatively, single distances can be interpreted. 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[height=70mm, width=70mm]{bit2drows.pdf}
 \includegraphics[height=70mm, width=70mm]{bit2dcols.pdf}
@@ -384,13 +410,13 @@ This plot can be used as an overall goodness-of-fit plot or, alternatively, sing
 
 The data for the next example were collected by \citet{Glass:54}. In this $7 \times 7$ table the occupational status of fathers (rows) and sons (columns) of 3497 British families were cross-classified. The categories are professional and high administrative (PROF), managerial and executive (EXEC), higher supervisory (HSUP), lower supervisory (LSUP), skilled manual and routine non-manual (SKIL), semi-skilled manual (SEMI), and unskilled manual (UNSK). 
 
-<<eval = FALSE>>=
+<<>>=
 data(glass)
 res <- anacor(glass)
 plot(res, plot.type = "regplot", xlab = "fathers occupation", ylab = "sons occupation")
 @
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
 \includegraphics[height=70mm, width=70mm]{glassreg1.pdf}
 \includegraphics[height=70mm, width=70mm]{glassreg2.pdf}
@@ -398,11 +424,11 @@ plot(res, plot.type = "regplot", xlab = "fathers occupation", ylab = "sons occup
 \end{center}
 \end{figure}
 
-Figure \ref{fig:glassreg} represents regression plots for the first CA dimension. On the left hand side we show the unscaled solution. The father's occupation is on the abscissae and the occupation of the sons on the ordinate. The grid represents the (transposed) table with the corresponding frequencies. Let us focus on the red line first: The coordinates in x-direction correspond to single row categories aka father's occupation. Now, for each father occupation (i.e. conditional) the category-weighted average of the (relative) frequencies is computed. The weights range from 1 to $m$. The corresponding points are connected and we see that the son's occupation increases monotonically conditional on the father's occupation. The same applies to the black line. Conditional on each son's occupation the relative frequencies are weighted from 1 to $n$. The average values are plotted in x-direction and are again monotonically increasing. The monotonicity is not surprising since the categories (professions) are ordered in the table (from PROF down to UNSK) and the variables are highly dependent ($\chi^2 = 1361.742$, $df = 36$, $p < 0.000$).
+Figure \ref{fig:glassreg} represents regression plots for the first CA dimension. 
 
-On the right hand side of Figure \ref{fig:glassreg} we find the scaled solution. The first obvious characteristic is that the grid components are not equidistant anymore due to the category scaling. The ordering of the professions in terms of the scaled values is given on the top and the right, respectively. Compared to the unscaled solution they are reversed. By means of these grid margins we see that the differences between PROF, EXEC, and HSUP are considerably large compared to lower profession levels such as UNSK, SEMI, and SKIL. The regression lines are computed in an analogous fashion than in the unscaled solution; with the exception that the category scores are taken as weights. The red line is composed of the weighted averages conditional on the row scores on the abscissae, the black line by the weighted averages conditional on the columns scores on the ordinate. This leads to two linear ``regressions'' with the row/column scores as predictors. 
+On the left hand side we show the unscaled solution. The father's occupation is on the abscissae and the occupation of the sons on the ordinate. The grid represents the table with the corresponding frequencies. The red line is drawn conditional on the categories of father's occupation: For each of these categories the expected value of son's occupation is computed. Remind that before the CA computation the category values range from 1 to 7 (or $m$ in general). The observed frequencies represent the weights for the category scores. Based on the scores and the weights we can compute the expected value of son's occupation conditional on each category of father's occupation. Analogously, the blue line represents the expected father's occupation conditional on the son's occupation. The monotonicity of both line is not surprising since the categories (professions) are ordered in the table (from PROF down to UNSK) and the variables are highly dependent ($\chi^2 = 1361.742$, $df = 36$, $p < 0.000$).
 
-As a final interpretation we see that there is a positive relationship between the intra-familiar occupations: The higher the father's occupation level, the higher the son's occupation level. More detailed, if the father occupies one of the three highest levels, the son is (on the average) in the level below. For the three lowest levels we have the opposite case: On the average the son is in the next higher level.  
+On the right hand side of Figure \ref{fig:glassreg} we find the scaled solution. The first obvious characteristic is that the grid components are not equidistant anymore due to the category scaling performed by CA. The regression lines are computed in an analogous fashion than in the unscaled solution; with the exception that we operate on the transformed category scores. This leads to two linear ``regressions'' with the row/column scores as predictors. It is an important property of simple CA that the scores are always linearized. This phenomenon is known as \emph{bilinearizability}. A thorough discussion is given in \citet{Mair+deLeeuw:2009}.
 
 \subsection{Canonical CA on Maxwell Data}
 A hypothetical dataset by \citet{Maxwell:61} is used to demonstrate his method of discriminant analysis.
@@ -414,28 +440,26 @@ We fit a symmetric (Goodman scaled) two-dimensional solution and get an amount o
 data(maxwell)
 res <- anacor(maxwell$table, row.covariates = maxwell$row.covariates, scaling = c("Goodman", "Goodman"))
 res
-@
-
-<<eval = FALSE>>=
-plot(res, plot.type = "colplot", xlim = c(-1.5,1), arrows = TRUE, conf = NULL)
+plot(res, plot.type = "orddiag")
 plot(res, plot.type = "transplot", legpos = "topright")
 @
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \begin{center}
-\includegraphics[height=70mm, width=70mm]{maxcol.pdf}
+\includegraphics[height=70mm, width=70mm]{maxord.pdf}
 \includegraphics[height=70mm, width=70mm]{maxtrans.pdf}
-\caption{\label{fig:maxwell} Column Scores and Transformation Plot for Maxwell Data.}
+\caption{\label{fig:maxwell} Ordination Diagram and Transformation Plot for Maxwell Data.}
 \end{center}
 \end{figure}
 
-The plot of the column scores on the left hand side of Figure \ref{fig:maxwell} shows that the mental diseases go into somewhat different directions and thus they are not really related to each other. The transformation plot on the right hand side shows interesting patterns. For the first dimension a cyclic behavior over the predictors is identifiable. The scores (y-axis) for pairs of points 1-2, 3-4, 5-6, etc. do not change much within these pairs. Note that these pairs are contrasted by the (fourth) predictor ``delusions of guilt''. Between these pairs some obvious differences in the scores are noticeable. These between-pairs-differences are contrasted by the (third) predictor ``thought disorders'': 1-2 has 0, 3-4 has 1, 5-6 has 0 etc. Therefore, the first dimension mainly reflects thought disorders. 
+The ordination on the left hand side of Figure \ref{fig:maxwell} is a joint plot including the covariates based on the intraset correlations. It shows that the mental diseases go into somewhat different directions and thus they are not really related to each other. Furthermore we can see how each symptom pattern (determined by the covariates which are plotted as well) is related to each mental disease. 
+
+The transformation plot on the right hand side shows interesting patterns. For the first dimension a cyclic behavior over the predictors is identifiable. The scores (y-axis) for pairs of points 1-2, 3-4, 5-6, etc. do not change much within these pairs. Note that these pairs are contrasted by the (fourth) predictor ``delusions of guilt''. Between these pairs some obvious differences in the scores are noticeable. These between-pairs-differences are contrasted by the (third) predictor ``thought disorders'': 1-2 has 0, 3-4 has 1, 5-6 has 0 etc. Therefore, the first dimension mainly reflects thought disorders. 
 
 The second dimension shows an alternating behavior. Referring to the pair notation above, it reflects within-pair-differences based on ``delusions of guilt''. In addition a slight downward trend due to ``anxiety'' (first predictor) can be observed. 
 
 \section{Discussion}
 The \pkg{anacor} package provides additional features which are not offered by other CA packages on CRAN. These features are additional scaling methods for simple and canonical CA, missing data, and graphical representations such as regression plots, Benz\'ecri plots, transformation plots, and graphplots. The included utilities make it possible to switch from the data format used in \pkg{anacor} to the data format used in \pkg{homals}, and this gives the user a great deal of flexibility. The confidence ellipsoids from CA are a powerful tool to visualize the dispersions of the row and column projections in the plane. 
-
 
 \bibliography{anacor}
 

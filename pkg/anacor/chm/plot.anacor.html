@@ -28,7 +28,7 @@ These functions produce various 2- and 3-dimensional plots for objects of class 
 <pre>
 ## S3 method for class 'anacor':
 plot(x, plot.type, plot.dim = c(1,2), legpos = "top", arrows = FALSE, conf = 0.95, 
-wlines = 0, xlab, ylab, main, type, xlim, ylim, ...)
+wlines = 0, xlab, ylab, main, type, xlim, ylim, cex.axis2, ...)
 
 ## S3 method for class 'anacor':
 plot3d(x, plot.type, plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", arrows = TRUE, xlab, ylab, zlab, 
@@ -49,10 +49,10 @@ xlim, ylim, zlim, ...)
 Object of class <code>"anacor"</code>.</td></tr>
 <tr valign="top"><td><code>plot.type</code></td>
 <td>
-Type of plot to be produced (details see below): 2-D and 3-D for <code>"jointplot"</code>, <code>"rowplot"</code>, and <code>"colplot"</code>; 2-D for <code>"regplot</code>", <code>"graphplot"</code>, <code>"benzplot"</code>, and <code>"transplot"</code>.</td></tr>
+Type of plot to be produced (details see below): 2-D and 3-D for <code>"jointplot"</code>, <code>"rowplot"</code>, and <code>"colplot"</code>; 2-D for <code>"regplot"</code>, <code>"graphplot"</code>, <code>"benzplot"</code>, <code>"transplot"</code>, and <code>"orddiag"</code>.</td></tr>
 <tr valign="top"><td><code>plot.dim</code></td>
 <td>
-Vector of length 2 with Dimensions to be plotted. For <code>"regplot"</code> a single value should be provided, for  <code>"transplot"</code> more than two dimensions are allowed.</td></tr>
+Vector of length 2 with Dimensions to be plotted. For <code>"regplot"</code> a single value should be provided, for  <code>"transplot"</code> more than two dimensions are allowed, and for <code>"benzplot"</code> this argument is ignored.</td></tr>
 <tr valign="top"><td><code>legpos</code></td>
 <td>
 Position of the legend (for <code>"transplot"</code> only)</td></tr>
@@ -95,6 +95,9 @@ Plot title.</td></tr>
 <tr valign="top"><td><code>type</code></td>
 <td>
 Whether points, lines or both should be plotted; for <code>"regplot"</code> and <code>"transplot"</code> only.</td></tr>
+<tr valign="top"><td><code>cex.axis2</code></td>
+<td>
+For <code>"regplot"</code> only. The magnification to be used for the category labels in the scaled solution relative to the current setting of cex.</td></tr>
 <tr valign="top"><td><code>...</code></td>
 <td>
 Additional graphical parameters.</td></tr>
@@ -118,7 +121,7 @@ Now, instead of the row/column categories, the column scores (black line y-axis)
 and the row scores (red line x-axis) are used.
 </p>
 <p>
-The transformation plot (<code>"transplot"</code>) plots the row/column categories against the row/column scores. The Benzecri plot (<code>"benzplot"</code>) plots the observed distances against the fitted distances. It is assumed that the CA result is Benzecri scaled.
+The transformation plot (<code>"transplot"</code>) plots the row/column categories against the row/column scores. The Benzecri plot (<code>"benzplot"</code>) plots the observed distances against the fitted distances. It is assumed that the CA result is Benzecri scaled. The ordination diagram (<code>"orddiag"</code>) for CCA produces a joint plot and includes the column and row covariates based on intraset correlations.
 </p>
 
 
@@ -160,16 +163,17 @@ res2
 plot(res1, plot.type = "benzplot", main = "Benzecri Distances (2D)")
 plot(res2, plot.type = "benzplot", main = "Benzecri Distances (5D)")
 
-## Column score plot and transformation plot for canonical CA
+## Column score plot,transformation plot, and ordination diagram for canonical CA
 data(maxwell)
 res &lt;- anacor(maxwell$table, row.covariates = maxwell$row.covariates, scaling = c("Goodman", "Goodman"))
 res
 plot(res, plot.type = "colplot", xlim = c(-1.5,1), conf = NULL)
 plot(res, plot.type = "transplot", legpos = "topright")
+plot(res, plot.type = "orddiag")
 </pre>
 
 
 
-<hr><div align="center">[Package <em>anacor</em> version 0.9-0 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>anacor</em> version 0.9-8 <a href="00Index.html">Index]</a></div>
 
 </body></html>
