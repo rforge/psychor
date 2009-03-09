@@ -31,15 +31,15 @@ These methods produce static and dynamic 3D configuration plots for SMACOF model
 <pre>
 ## S3 method for class 'smacof':
 plot3d(x, plot.dim = c(1,2,3), sphere = TRUE, xlab, ylab, zlab, 
-col, main, bgpng = "particle.png", ax.grid = TRUE, sphere.rgl = TRUE,...)
+col, main, bgpng = NULL, ax.grid = TRUE, sphere.rgl = TRUE,...)
 
 ## S3 method for class 'smacofR':
 plot3d(x, plot.dim = c(1,2,3), joint = FALSE, xlab, ylab, zlab, 
-col, main, bgpng = "particle.png", ax.grid = TRUE, sphere.rgl = TRUE,...)
+col, main, bgpng = NULL, ax.grid = TRUE, sphere.rgl = TRUE,...)
 
 ## S3 method for class 'smacofID':
 plot3d(x, plot.dim = c(1,2,3), xlab, ylab, zlab, 
-col, main, bgpng = "particle.png", ax.grid = TRUE, sphere.rgl = TRUE,...)
+col, main, bgpng = NULL, ax.grid = TRUE, sphere.rgl = TRUE,...)
 
 ## S3 method for class 'smacof':
 plot3dstatic(x, plot.dim = c(1,2,3), main, xlab, ylab, zlab, col, ...)
@@ -124,13 +124,13 @@ For <code>smacofIndDiff()</code> the configuration plot represents the group sti
 ## 3D plot for spherical SMACOF
 data(trading)
 res &lt;- smacofSphere.dual(trading, ndim = 3)
-##plot3d(res, plot.type = "confplot", sphere = TRUE, sphere.rgl = FALSE, bgpng = NULL)
+plot3d(res, plot.type = "confplot", sphere = TRUE, sphere.rgl = FALSE)
 plot3dstatic(res)
 
 ## Group stimulus space for rectangular SMACOF
 data(breakfast)
 res &lt;- smacofRect(breakfast, ndim = 3)
-##plot3d(res, joint = TRUE)
+plot3d(res, joint = TRUE)
 
 </pre>
 
@@ -145,6 +145,6 @@ location.href = link;
 </script>
 
 
-<hr><div align="center">[Package <em>smacof</em> version 0.9-3 <a href="00Index.html">Index]</a></div>
+<hr><div align="center">[Package <em>smacof</em> version 0.9-4 <a href="00Index.html">Index</a>]</div>
 
 </body></html>

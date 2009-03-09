@@ -164,7 +164,7 @@
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Breakfast preferences">
-<param name="Local" value="breakfast.html">
+<param name="Local" value="bread.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Converts similarites to dissimilarities">
@@ -203,7 +203,7 @@
 <param name="Local" value="smacofIndDiff.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
-<param name="Name" value="SMACOF for Multidimensional Scaling. ">
+<param name="Name" value="SMACOF for Multidimensional Scaling.">
 <param name="Local" value="smacof-package.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
