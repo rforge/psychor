@@ -556,6 +556,8 @@ library("smacof")
 data(ekman)
 ekman.d <- sim2diss(ekman, method = 1)
 res.basic <- smacofSym(ekman.d, metric = FALSE)
+@
+<<eval = FALSE>>=
 res.sphere <- smacofSphere.primal(ekman.d, metric = FALSE)
 @
 
