@@ -1,8 +1,8 @@
 Package: aspect
 Type: Package
 Title: Aspects of Multivariables
-Version: 0.2-2
-Date: 2008-08-27
+Version: 0.2-4
+Date: 2008-03-12
 Author: Jan de Leeuw, Patrick Mair
 Maintainer: Jan de Leeuw <deleeuw@stat.ucla.edu>
 Description: This package consists of two main functions: The first function is corAspect() performs (optimal) scaling by maximizing an aspect (i.e. target function such as sum eigenvalues, sum of squared correlations, squared multiple correlations, etc.) of the corresponding correlation matrix. The second function is lineals() which performs scaling by mimimization a non-correlational aspect based on pairwise correlations and correlation ratios. The resulting correlation matrix and category scores can be used for further correlation based methods such as SEM. A platform including related PsychoR packages is provided on R-forge.

@@ -7,12 +7,13 @@
 \description{This function performs optimal scaling by maximizing a certain aspect of the correlation matrix.
 }
 \usage{
-corAspect(data, aspect = "aspectSum", itmax = 100, eps = 1e-06, ...)
+corAspect(data, aspect = "aspectSum", level = "nominal", itmax = 100, eps = 1e-06, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{data}{Data frame or matrix}
   \item{aspect}{Function on the correlation matrix (see details)}
+  \item{level}{Vector with scale level of the variables ("nominal" or "ordinal"). If all variables have the same scale level, only one value can be provided}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
   \item{...}{Additional parameters for aspect}

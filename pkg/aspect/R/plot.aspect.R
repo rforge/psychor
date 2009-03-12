@@ -38,6 +38,8 @@ if (plot.type == "regplot") {
     xave <- as.vector(as.matrix(pr)%*%1:m)/r            
     yave <- as.vector(1:n%*%as.matrix(pr))/c
     z <- c(1:n,1:m) 
+    
+    dev.new()
     plot(z, z, type = "n", xlab = paste(xlab1," categories"), ylab = paste(ylab1, " categories"), main = main1, 
     xaxt = "n", yaxt = "n", xlim = c(1,n), ylim = c(1,m),...)
 
@@ -49,8 +51,10 @@ if (plot.type == "regplot") {
     for (i in 1:n) text(rep((1:n)[i],m),1:m,as.character(tab[i,]),cex=.8, col = "lightgray")
 
   #----------- scaled solution------------
-    xa <- as.vector(x$catscores[[plot.var[1]]])          
+    xa <- as.vector(x$catscores[[plot.var[1]]])   
+    names(xa) <- rownames(x$catscores[[plot.var[1]]])       
     ya <- as.vector(x$catscores[[plot.var[2]]])
+    names(ya) <- rownames(x$catscores[[plot.var[2]]])   
 
     xave <- as.vector(as.matrix(pr)%*%ya)/r
     yave <- as.vector(xa%*%as.matrix(pr))/c
@@ -64,8 +68,8 @@ if (plot.type == "regplot") {
     points(yave[order(ya)], ya[order(ya)], type = type, col = "BLUE")
     abline(v = xa, h = ya, col = "lightgray", lty = 2)                                           #adds grid
     for (i in 1:n) text(rep(xa[i],m),ya,as.character(tab[i,]),cex=.8, col = "lightgray")
-    axis(3, at = xa, labels = names(xave[order(xave)]), cex.axis = 0.6, col.axis = "lightgray", padj = 1)    #adds labels on x-axis (top)
-    axis(4, at = ya, labels = names(yave[order(yave)]), cex.axis = 0.6, col.axis = "lightgray", padj = -1)   #adds labels on y-axis (right)
+    axis(3, at = xa[order(xa)], labels = names(xa[order(xa)]), cex.axis = 0.6, col.axis = "lightgray", padj = 1)    #adds labels on x-axis (top)
+    axis(4, at = ya[order(ya)], labels = names(ya[order(ya)]), cex.axis = 0.6, col.axis = "lightgray", padj = -1)   #adds labels on y-axis (right)
 
 }
 

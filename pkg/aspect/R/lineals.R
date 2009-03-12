@@ -1,8 +1,15 @@
 `lineals` <-
-function(data, itmax = 100, eps = 1e-6)
+function(data, level = "nominal", itmax = 100, eps = 1e-6)
 {
   
   m <- dim(data)[2]                                      #number of variables
+  lev.check <- match.arg(level, c("nominal","ordinal"), several.ok = TRUE)
+  if (length(lev.check) < length(level)) stop("Level argument should be one of nominal or ordinal!")
+  if (length(level) == 1) {
+    level <- rep(level, m)
+  } else {
+    if (length(level) != m) stop("Length of level vector must correspond to number of variables!")
+  }
   n <- dim(data)[1]                                      #number of observations
   r <- diag(m)
   t <- diag(m)
@@ -26,7 +33,6 @@ function(data, itmax = 100, eps = 1e-6)
     dj <- d[indj]
     y[[j]] <- y[[j]] - sum(dj*y[[j]])/n
     y[[j]] <- y[[j]]/sqrt(sum(dj*y[[j]]*y[[j]]))        #burt normalization
-    #insert level restrictions here
   }
   
   
@@ -55,20 +61,29 @@ function(data, itmax = 100, eps = 1e-6)
         yj <- y[[j]]
 	      dj <- d[indj]
         c <- matrix(0,nc,nc)
-	    for (l in 1:m) {                                 #j fixed, run over remaining variables
-	      if (j != l) {
+	      for (l in 1:m) {                                 #j fixed, run over remaining variables
+	       if (j != l) {
 	        indl <- (ccat[l]+1):ccat[l+1]                #index of categories of variable j
           dl <- d[indl]                                #category frequencies
           yl <- y[[l]]
 	        u <- burt[indj,indl]%*%(diag(1/pmax(1,dl)) - 2*outer(yl,yl))%*%burt[indl,indj] 
 	        c <- c+u                                     #sum up u's 
-	     }
-	}
-	c.norm <- c/sqrt(outer(dj,dj))                       #normalize 
-	e <- eigen(c.norm)
-	y[[j]] <- e$vectors[,nc]/sqrt(dj)                              #scores update
-        #insert level restrictions here
-        
+	       }
+	    }
+	    c.norm <- c/sqrt(outer(dj,dj))                       #normalize 
+	    e <- eigen(c.norm)
+	    y[[j]] <- e$vectors[,nc]/sqrt(dj)                              #scores update
+      
+      #--------- pava --------------
+      if (level[j] == "ordinal") {
+        relfreq <- table(data[,j])/n
+        pavares1 <- -pavasmacof(-y[[j]], relfreq)          #increasing          
+        sspava1 <- sum((pavares1-y[[j]])^2)
+        pavares2 <- -pavasmacof(y[[j]], relfreq)           #decreasing
+        sspava2 <- sum((pavares2-y[[j]])^2)
+        if (sspava1 <= sspava2) y[[j]] <- pavares1 else y[[j]] <- pavares2                  
+      } 
+      #---------- pava --------------  
      }
      if (((fold-f) < eps) || (itel == itmax)) break
      itel <- itel+1
@@ -87,7 +102,7 @@ function(data, itmax = 100, eps = 1e-6)
   rownames(r) <- colnames(r) <- colnames(t) <- rownames(t) <- colnames(scoremat)
   for (i in 1:length(y)) {
     names(y[[i]]) <- sort(unique(data[,i]))                       #label categories
-    y[[i]] <- -y[[i]]                                             #change sign                   
+    y[[i]] <- -y[[i]]                                                           
     y[[i]] <- as.matrix(y[[i]])                                   #represent as matrix
     colnames(y[[i]]) <- "score"
   }

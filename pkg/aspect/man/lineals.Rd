@@ -5,11 +5,12 @@
 \description{This function performs optimal scaling in order to achieve linearizing transformations for each bivariate regression.
 }
 \usage{
-lineals(data, itmax = 100, eps = 1e-06)
+lineals(data, level = "nominal", itmax = 100, eps = 1e-06)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{data}{Data frame or matrix}
+  \item{level}{Vector with scale level of the variables ("nominal" or "ordinal"). If all variables have the same scale level, only one value can be provided}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
 }

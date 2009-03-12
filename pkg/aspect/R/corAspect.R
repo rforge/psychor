@@ -1,10 +1,17 @@
 `corAspect` <-
-function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...) 
+function(data, aspect = "aspectSum", level = "nominal", itmax = 100, eps=1e-6, ...) 
 {
 # aspect ... function names: either "aspectSum", "aspectAbs", "aspectSMC", "aspectSumSMC", "aspectEigen", "aspectDeterminant"
 # or a user-specified function (specific argument for this funtion go into "...")
 
   m <- dim(data)[2]
+  lev.check <- match.arg(level, c("nominal","ordinal"), several.ok = TRUE)
+  if (length(lev.check) < length(level)) stop("Level argument should be one of nominal or ordinal!")
+  if (length(level) == 1) {
+    level <- rep(level, m)
+  } else {
+    if (length(level) != m) stop("Length of level vector must correspond to number of variables!")
+  }
   n <- dim(data)[1]
   r <- diag(m)
   fold <- -Inf
@@ -51,10 +58,10 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...)
     #updates correlation matrix  
     for (j in 1:m) {                             
        indj <- (ccat[j]+1):ccat[j+1]
-	for (l in 1:m) {
-	  indl <- (ccat[l]+1):ccat[l+1]
-	  r[j,l] <- sum(y[[j]]*(burt[indj,indl]%*%y[[l]]))/n          #correlation matrix R(theta)
-	}
+	     for (l in 1:m) {
+	       indl <- (ccat[l]+1):ccat[l+1]
+	       r[j,l] <- sum(y[[j]]*(burt[indj,indl]%*%y[[l]]))/n          #correlation matrix R(theta)
+	    }
     }
 
     #apply aspect to correlation matrix
@@ -69,12 +76,20 @@ function(data, aspect = "aspectSum", itmax = 100, eps=1e-6, ...)
       y[[j]] <- rep(0,ncat[j])
       dj <- d[indj]                               #frequency vector from Burt matrix
       for (l in 1:m) {
-	indl <- (ccat[l]+1):ccat[l+1]             #subsetting indices from Burt matrix
-	if (j != l) y[[j]] <- y[[j]] + (g[j,l]*burt[indj,indl]%*%y[[l]])  #\sum dphi/dr_jl*burt*theta_l
+	     indl <- (ccat[l]+1):ccat[l+1]             #subsetting indices from Burt matrix
+	     if (j != l) y[[j]] <- y[[j]] + (g[j,l]*burt[indj,indl]%*%y[[l]])  #\sum dphi/dr_jl*burt*theta_l
       }
       y[[j]] <- y[[j]]/dj                         #normalize scores
       y[[j]] <- y[[j]]-sum(dj*y[[j]])/n
       y[[j]] <- y[[j]]/sqrt(sum(dj*y[[j]]*y[[j]])/n)
+      
+      #------- pava -----------
+      if (level[j] == "ordinal") {
+        relfreq <- table(data[,j])/n
+        y[[j]] <- as.matrix(pavasmacof(y[[j]], relfreq))
+      }
+      #------- pava ----------- 
+      
     }
     if (((f-fold) < eps) || (itel == itmax)) break
     itel<-itel+1

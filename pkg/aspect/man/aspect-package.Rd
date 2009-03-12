@@ -11,12 +11,12 @@ Aspects of Multivariables
 \tabular{ll}{
 Package: \tab aspect\cr
 Type: \tab Package\cr
-Version: \tab 0.2-2\cr
-Date: \tab 2008-08-27\cr
+Version: \tab 0.2-4\cr
+Date: \tab 2008-03-12\cr
 License: \tab GPL\cr
 LazyLoad: \tab yes\cr
 }
-The main functions are \code{lineals} and \code{maxAspect}. Both produce an object of class \code{"aspect"}. For this class, print, summary and plot methods are provided.
+The main functions are \code{lineals} and \code{corAspect}. Both produce an object of class \code{"aspect"}. For this class, print, summary and plot methods are provided.
 }
 \author{
 Jan de Leeuw, Patrick Mair

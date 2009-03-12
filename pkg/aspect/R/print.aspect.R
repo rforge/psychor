@@ -2,9 +2,9 @@ print.aspect <- function(x, ...)
 {
   cat("\nCall:\n")
   print(x$call)
-  cat("\nLoss:",x$loss)
+  cat("\nValue target function:",round(x$loss,3))
   cat("\n\nCorrelation matrix of the transformed data:\n")
-  print(x$cormat)
+  print(round(x$cormat, 3))
   cat("\n")
   invisible(x)
 }
