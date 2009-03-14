@@ -1,0 +1,400 @@
+\begin{thebibliography}{65}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{Ayer \emph{et~al.}(1955)Ayer, Brunk, Ewing, Reid, and
+  Silverman}]{Ayer+Brunk+Ewing+Reid+Silverman:1955}
+Ayer M, Brunk HD, Ewing GM, Reid WT, Silverman E (1955).
+\newblock \enquote{An Empirical Distribution Function for Sampling with
+  Incomplete Information.}
+\newblock \emph{The Annals of Mathematical Statistics}, \textbf{26}, 641--647.
+
+\bibitem[{Barlow \emph{et~al.}(1972)Barlow, Bartholomew, Bremner, and
+  Brunk}]{bbbb}
+Barlow RE, Bartholomew RJ, Bremner JM, Brunk HD (1972).
+\newblock \emph{{Statistical Inference under Order Restrictions}}.
+\newblock Wiley, New York.
+
+\bibitem[{Bentler and Weeks(1978)}]{bwmds}
+Bentler PM, Weeks DG (1978).
+\newblock \enquote{{Restricted Multidimensional Scaling Models}.}
+\newblock \emph{Journal of Mathematical Psychology}, \textbf{17}, 138--151.
+
+\bibitem[{Blumenthal(1953)}]{blumenthal}
+Blumenthal LM (1953).
+\newblock \emph{{Theory and Applications of Distance Geometry}}.
+\newblock Clarendon Press, Oxford, England.
+
+\bibitem[{Borg and Groenen(2005)}]{borg-groenen-2}
+Borg I, Groenen PJF (2005).
+\newblock \emph{{Modern Multidimensional Scaling: Theory and Applications}}.
+\newblock Springer, {Second} edition.
+
+\bibitem[{Borg and Lingoes(1979)}]{borglin1}
+Borg I, Lingoes JC (1979).
+\newblock \enquote{{Multidimensional Scaling with Side Constraints on the
+  Distances}.}
+\newblock In {JC Lingoes and EE Roskam and I Borg} (ed.), \enquote{{Geometric
+  Representations of Relational Data},} Mathesis Press, Ann Arbor, Michigan.
+
+\bibitem[{Borg and Lingoes(1980)}]{borglin2}
+Borg I, Lingoes JC (1980).
+\newblock \enquote{{A Model and Algorithm for Multidimensional Scaling with
+  External Constraints on the Distances}.}
+\newblock \emph{Psychometrika}, \textbf{45}, 25--38.
+
+\bibitem[{Bro(1998)}]{Bro:1998}
+Bro R (1998).
+\newblock \emph{Multi-way Analysis in the Food Industry: Models, Algorithms,
+  and Applications}.
+\newblock Ph.D. thesis, University of Amsterdam (NL) \& Royal Veterinary and
+  Agricultural University (DK).
+
+\bibitem[{Carroll and Chang(1970)}]{carcha}
+Carroll J, Chang J (1970).
+\newblock \enquote{{Analysis of Individual Differences in Multidimensional
+  Scaling Via an N-way Generalization of Eckart-Young Decomposition}.}
+\newblock \emph{Psychometrika}, pp. 283--319.
+
+\bibitem[{Chen and Chen(2000)}]{Chen+Chen:2000}
+Chen CH, Chen JA (2000).
+\newblock \enquote{Interactive Diagnostic Plots for Multidimensional Scaling
+  with Applications in Psychosis Disorder Data Analysis.}
+\newblock \emph{Statistica Sinica}, \textbf{10}, 665--691.
+
+\bibitem[{Conn \emph{et~al.}(2000)Conn, Gould, and Toint}]{cogoto}
+Conn A, Gould N, Toint P (2000).
+\newblock \emph{{Trust-Region Methods}}.
+\newblock MPS-SIAM Series on Optimization. SIAM, Philadelphia, {PA}.
+
+\bibitem[{Coombs(1950)}]{Coombs:1950}
+Coombs CH (1950).
+\newblock \enquote{Psychological Scaling Without a Unit of Measurement.}
+\newblock \emph{Psychological Review}, \textbf{57}, 145--158.
+
+\bibitem[{Cox and Cox(1991)}]{coxcoxs}
+Cox TF, Cox MAA (1991).
+\newblock \enquote{Multidimensional scaling on a sphere.}
+\newblock \emph{Communications in Statistics: Theory and Methods}, \textbf{20},
+  2943--2953.
+
+\bibitem[{Cox and Cox(2001)}]{Cox+Cox:2001}
+Cox TF, Cox MAA (2001).
+\newblock \emph{Multidimensional Scaling}.
+\newblock Chapman \& Hall/CRC, Boca Raton, FL, 2nd edition.
+
+\bibitem[{{De Gruijter}(1967)}]{degruijter}
+{De Gruijter} DNM (1967).
+\newblock \enquote{{The Cognitive Structure of Dutch Political Parties in
+  1966}.}
+\newblock \emph{Report E019-67}, Psychological Institute, University of Leiden.
+
+\bibitem[{{De Leeuw}(1977{\natexlab{a}})}]{gren}
+{De Leeuw} J (1977{\natexlab{a}}).
+\newblock \enquote{{Applications of convex analysis to multidimensional
+  scaling}.}
+\newblock In J~Barra, F~Brodeau, G~Romier, BV~Cutsem (eds.), \enquote{Recent
+  Developments in Statistics,} pp. 133--145. North Holland Publishing Company,
+  Amsterdam, The Netherlands.
+
+\bibitem[{{De Leeuw}(1977{\natexlab{b}})}]{krusties}
+{De Leeuw} J (1977{\natexlab{b}}).
+\newblock \enquote{{Correctness of Kruskal's Algorithms for Monotone Regression
+  with Ties}.}
+\newblock \emph{Psychometrika}, \textbf{42}, 141--144.
+
+\bibitem[{{De Leeuw}(1988)}]{delcon}
+{De Leeuw} J (1988).
+\newblock \enquote{{Convergence of the Majorization Method for Multidimensional
+  Scaling}.}
+\newblock \emph{Journal of Classification}, \textbf{5}, 163--180.
+
+\bibitem[{{De Leeuw}(1994)}]{deLeeuw:1994}
+{De Leeuw} J (1994).
+\newblock \enquote{Block relaxation algorithms in statistics.}
+\newblock In HH~Bock, W~Lenski, MM~Richter (eds.), \enquote{Information Systems
+  and Data Analysis,} pp. 308--324. Springer.
+
+\bibitem[{{De Leeuw}(2008{\natexlab{a}})}]{deLeeuw:2008b}
+{De Leeuw} J (2008{\natexlab{a}}).
+\newblock \enquote{Accelerated Least Squares Multidimensional Scaling.}
+\newblock \emph{Preprint series}, UCLA Department of Statistics.
+\newblock \urlprefix\url{http://preprints.stat.ucla.edu/493/rate.pdf}.
+
+\bibitem[{{De Leeuw}(2008{\natexlab{b}})}]{deLeeuw:2008}
+{De Leeuw} J (2008{\natexlab{b}}).
+\newblock \enquote{Polynomial Extrapolation to Accelerate Fixed Point
+  Iterations.}
+\newblock \emph{Preprint series}, UCLA Department of Statistics.
+\newblock \urlprefix\url{http://preprints.stat.ucla.edu/542/linear.pdf}.
+
+\bibitem[{{De Leeuw} and Heiser(1977)}]{ling}
+{De Leeuw} J, Heiser WJ (1977).
+\newblock \enquote{{Convergence of Correction Matrix Algorithms for
+  Multidimensional Scaling}.}
+\newblock In J~Lingoes (ed.), \enquote{Geometric representations of relational
+  data,} pp. 735--752. Mathesis Press, Ann Arbor, Michigan.
+
+\bibitem[{{De Leeuw} and Heiser(1980)}]{dlh80}
+{De Leeuw} J, Heiser WJ (1980).
+\newblock \enquote{{Multidimensional Scaling with Restrictions on the
+  Configuration}.}
+\newblock In P~Krishnaiah (ed.), \enquote{Multivariate Analysis, Volume V,} pp.
+  501--522. North Holland Publishing Company, Amsterdam, The Netherlands.
+
+\bibitem[{{De Leeuw} and Mair(2007)}]{deLeeuw+Mair:2007}
+{De Leeuw} J, Mair P (2007).
+\newblock \enquote{Homogeneity Analysis in R: The Package homals.}
+\newblock \emph{Technical report}, UCLA Statistics Preprint Series.
+\newblock
+  \urlprefix\url{http://preprints.stat.ucla.edu/download.php?paper=525}.
+
+\bibitem[{{De Leeuw} and Meulman(1986)}]{mdsjack}
+{De Leeuw} J, Meulman J (1986).
+\newblock \enquote{{A Special Jackknife for Multidimensional Scaling}.}
+\newblock \emph{Journal of Classification}, \textbf{3}, 97--112.
+
+\bibitem[{Dempster \emph{et~al.}(1977)Dempster, Laird, and Rubin}]{delaru}
+Dempster AP, Laird NM, Rubin DB (1977).
+\newblock \enquote{{Maximum Likelihood for Incomplete Data via the EM
+  Algorithm}.}
+\newblock \emph{Journal of the Royal Statistical Society}, \textbf{B39}, 1--38.
+
+\bibitem[{Dinkelbach(1967)}]{dinkelbach}
+Dinkelbach W (1967).
+\newblock \enquote{{On Nonlinear Fractional Programming}.}
+\newblock \emph{Management Science}, \textbf{13}, 492--498.
+
+\bibitem[{Ekman(1954)}]{ekman}
+Ekman G (1954).
+\newblock \enquote{{Dimensions of Color Vision}.}
+\newblock \emph{Journal of Psychology}, \textbf{38}, 467--474.
+
+\bibitem[{Elad \emph{et~al.}(2005)Elad, Keller, and Kimmel}]{elad}
+Elad A, Keller Y, Kimmel R (2005).
+\newblock \enquote{{Texture Mapping via Spherical Multi-dimensional Scaling}.}
+\newblock In R~Kimmel, N~Sochen, J~Weikert (eds.), \enquote{Scale-Space 2005,
+  LNCS 3459,} pp. 443--455. Springer-Verlag, Berlin, Heidelberg, New York.
+
+\bibitem[{Fairchild(2005)}]{Fairchild:2005}
+Fairchild MD (2005).
+\newblock \emph{Color Appearance Models}.
+\newblock Wiley, Chichester, 2nd edition.
+
+\bibitem[{Fillenbaum and Rapaport(1971)}]{filrap}
+Fillenbaum S, Rapaport A (1971).
+\newblock \emph{{Structure in the Subjective Lexicon}}.
+\newblock Academic Press, New York, New York.
+
+\bibitem[{Forsythe and Golub(1965)}]{forsythegolub}
+Forsythe G, Golub G (1965).
+\newblock \enquote{{On the Stationary Values of a Second Degree Polynomial on
+  the Unit Sphere}.}
+\newblock \emph{Journal of the Society for Industrial and Applied Mathematics},
+  \textbf{13}, 1050--1068.
+
+\bibitem[{Gifi(1990)}]{Gifi:1990}
+Gifi A (1990).
+\newblock \emph{{Nonlinear Multivariate Analysis}}.
+\newblock Wiley, Chichester, England.
+
+\bibitem[{Goslee and Urban(2007)}]{ecodist:2007}
+Goslee S, Urban D (2007).
+\newblock \emph{ecodist: Dissimilarity-based functions for ecological
+  analysis}.
+\newblock R package version 1.1.3.
+
+\bibitem[{Green and Rao(1972)}]{grerao}
+Green P, Rao V (1972).
+\newblock \emph{{Applied Multidimensional Scaling}}.
+\newblock Holt, Rinehart \& Winston.
+
+\bibitem[{Groenen(1993)}]{groendiss}
+Groenen PJF (1993).
+\newblock \emph{{The Majorization Approach to Multidimensional Scaling: Some
+  Problems and Extensions}}.
+\newblock Ph.D. thesis, University of Leiden.
+
+\bibitem[{Groenen and Heiser(1996)}]{Groenen+Heiser:1996}
+Groenen PJF, Heiser WJ (1996).
+\newblock \enquote{The Tunneling Method for Global Optimization in
+  Multidimensional Scaling.}
+\newblock \emph{Psychometrika}, \textbf{61}, 529--550.
+
+\bibitem[{Guttman(1968)}]{gu}
+Guttman L (1968).
+\newblock \enquote{{A General Nonmetric Technique for Fitting the Smallest
+  Coordinate Space for a Configuration of Points}.}
+\newblock \emph{Psychometrika}, \textbf{33}, 469--506.
+
+\bibitem[{Husson and Le(2007)}]{sensominer:2007}
+Husson F, Le S (2007).
+\newblock \emph{SensoMineR: Sensory Data Analysis with R}.
+\newblock R package version 1.07, \urlprefix\url{http://sensominer.free.fr}.
+
+\bibitem[{Kn\"orrer(1980)}]{knoerrer}
+Kn\"orrer H (1980).
+\newblock \enquote{{Geodesics on the Ellipsoid}.}
+\newblock \emph{Inventiones Mathematicae}, \textbf{59}, 119--143.
+
+\bibitem[{Kruskal and Wish(1978)}]{Kruskal+Wish:1978}
+Kruskal JB, Wish M (1978).
+\newblock \emph{Multidimensional Scaling (Sage University Paper Series on
+  Quantitative Applications in the Social Sciences, 07-011)}.
+\newblock Sage Publications, Newbury Park, CA.
+
+\bibitem[{Lange(2004)}]{lange04}
+Lange K (2004).
+\newblock \emph{Optimization}.
+\newblock Springer.
+
+\bibitem[{Levelt \emph{et~al.}(1966)Levelt, {Van De Geer}, and
+  Plomp}]{levelt_geer_plomp}
+Levelt WJM, {Van De Geer} JP, Plomp R (1966).
+\newblock \enquote{{Triadic Comparions of Musical Intervals}.}
+\newblock \emph{British Journal of Mathematical and Statistical Psychology},
+  \textbf{19}, 163--179.
+
+\bibitem[{Maechler(2005)}]{xgobi:2005}
+Maechler M (2005).
+\newblock \emph{xgobi: Interface to the XGobi and XGvis Programs for Graphical
+  Data Analysis}.
+\newblock R package version 1.2-13.
+
+\bibitem[{Mardia \emph{et~al.}(1979)Mardia, Kent, and
+  Bibby}]{Mardia+Kent+Bibby:1979}
+Mardia KV, Kent JT, Bibby JM (1979).
+\newblock \emph{Multivariate Analysis}.
+\newblock Academic Press, New York.
+
+\bibitem[{Meulman(1992)}]{meulpsy}
+Meulman JJ (1992).
+\newblock \enquote{{The integration of multidimensional scaling and
+  multivariate analysis with optimal transformations}.}
+\newblock \emph{Psychometrika}, \textbf{57}, 539--565.
+
+\bibitem[{Meyer and Buchta(2007)}]{Meyer+Buchta:2007}
+Meyer D, Buchta C (2007).
+\newblock \emph{proxy: Distance and Similarity Measures}.
+\newblock R package version 0.3.
+
+\bibitem[{Oksanen \emph{et~al.}(2007)Oksanen, Kindt, Legendre, {O'Hara}, Henry,
+  and Stevens}]{vegan:2007}
+Oksanen J, Kindt R, Legendre P, {O'Hara} B, Henry M, Stevens H (2007).
+\newblock \emph{vegan: Community Ecology Package}.
+\newblock R package version 1.8-8,
+  \urlprefix\url{http://r-forge.r-project.org/projects/vegan/}.
+
+\bibitem[{Perelomov(2000)}]{perelomov}
+Perelomov AM (2000).
+\newblock \enquote{{A Note on Geodesics on an Ellipsoid}.}
+\newblock \emph{Regular and Chaotic Dynamics}, \textbf{5}, 89--94.
+
+\bibitem[{Ramsay(1982)}]{Ramsay:1982}
+Ramsay JO (1982).
+\newblock \enquote{Some Statistical Approaches to Multidimensional Scaling
+  Data.}
+\newblock \emph{Journal of the Royal Statistical Society, Series A},
+  \textbf{145}, 285--312.
+
+\bibitem[{Roberts(2006)}]{labdsv:2006}
+Roberts DW (2006).
+\newblock \emph{labdsv: Laboratory for Dynamic Synthetic Vegephenomenology}.
+\newblock R package version 1.2-2,
+  \urlprefix\url{http://ecology.msu.montana.edu/labdsv/R}.
+
+\bibitem[{Rosenberg and Kim(1975)}]{Rosenberg+Kim:1975}
+Rosenberg S, Kim MP (1975).
+\newblock \enquote{The method of sorting as a data gathering procedure in
+  multivariate research.}
+\newblock \emph{Multivariate Behavioral Research}, \textbf{10}, 489--502.
+
+\bibitem[{Rosman \emph{et~al.}(2008)Rosman, Bronstein, Bronstein, Sidi, and
+  Kimmel}]{Rosman:2008}
+Rosman G, Bronstein AM, Bronstein MM, Sidi A, Kimmel R (2008).
+\newblock \enquote{Fast Multidimensional Scaling using Vector Extrapolation.}
+\newblock \emph{Technical report \uppercase{CIS}-2008-01}, Computer Science
+  Department, Technion, Haifa.
+\newblock
+  \urlprefix\url{http://www.cs.technion.ac.il/users/wwwb/cgi-bin/tr-info.cgi/2%
+008/CIS/CIS-2008-01}.
+
+\bibitem[{Roweis and Saul(2000)}]{Roweis+Saul:2000}
+Roweis S, Saul LK (2000).
+\newblock \enquote{Nonlinear Dimensionality Reduction by Locally Linear
+  Embedding.}
+\newblock \emph{Science}, \textbf{290}, 2323--2326.
+
+\bibitem[{Sch\"onemann(1972)}]{Schoenemann:1972}
+Sch\"onemann PH (1972).
+\newblock \enquote{An Algebraic Solution for a Class of Subjective Metrics
+  Models.}
+\newblock \emph{Psychometrika}, \textbf{37}, 441--451.
+
+\bibitem[{Shepard(1962{\natexlab{a}})}]{shep1}
+Shepard R (1962{\natexlab{a}}).
+\newblock \enquote{{The Analysis of Proximities: Multidimensional Scaling with
+  an Unknown Distance Function (Part I)}.}
+\newblock \emph{Psychometrika}, \textbf{27}, 125--140.
+
+\bibitem[{Shepard(1962{\natexlab{b}})}]{shep2}
+Shepard R (1962{\natexlab{b}}).
+\newblock \enquote{{The Analysis of Proximities: Multidimensional Scaling with
+  an Unknown Distance Function (Part II)}.}
+\newblock \emph{Psychometrika}, \textbf{27}, 219--246.
+
+\bibitem[{Shepard(1974)}]{shepprez}
+Shepard RN (1974).
+\newblock \enquote{{Representation of Structure in Similarity Data: Problems
+  and Prospects}.}
+\newblock \emph{Psychometrika}, \textbf{39}, 373--421.
+
+\bibitem[{Shepard(1980)}]{Shepard:1980}
+Shepard RN (1980).
+\newblock \enquote{Multidimensional Scaling, Tree-Titting, and Clustering.}
+\newblock \emph{Science}, \textbf{210}, 390--398.
+
+\bibitem[{Spj{\o}tvoll(1972)}]{spjotvoll}
+Spj{\o}tvoll E (1972).
+\newblock \enquote{{A Note on a Theorem of Forsythe and Golub}.}
+\newblock \emph{{SIAM} Journal on Applied Mathematics}, \textbf{23}, 307--311.
+
+\bibitem[{Tabanov(1996)}]{tabanov}
+Tabanov MB (1996).
+\newblock \enquote{{New Ellipsoidal Confocal Coordinates and Geodesics on an
+  Eliipsoid}.}
+\newblock \emph{Journal of Mathematical Sciences}, \textbf{82}, 3851--3858.
+
+\bibitem[{Takane \emph{et~al.}(1977)Takane, Young, and {De
+  Leeuw}}]{tyd_sstress}
+Takane Y, Young FW, {De Leeuw} J (1977).
+\newblock \enquote{{Nonmetric Individual Differences in Multidimensional
+  Scaling: An Alternating Least Squares Method with Optimal Scaling Features}.}
+\newblock \emph{Psychometrika}, \textbf{42}, 7--67.
+
+\bibitem[{Tao and An(1995)}]{taoan}
+Tao PD, An LTH (1995).
+\newblock \enquote{{Lagrangian Stability and Global Optimality in Nonconvex
+  Quadratic Minimization Over Euclidean Balls and Spheres}.}
+\newblock \emph{Journal of Convex Analysis}, \textbf{2}, 263--276.
+
+\bibitem[{Tenenbaum \emph{et~al.}(2000)Tenenbaum, {De Silva}, and
+  Langford}]{Tenenbaum+deSilva+Langford:2000}
+Tenenbaum JB, {De Silva} V, Langford JC (2000).
+\newblock \enquote{A Global Geometric Framework for Nonlinear Dimensionality
+  Reduction.}
+\newblock \emph{Science}, \textbf{290}, 2319--2323.
+
+\bibitem[{Torgerson(1958)}]{torgerson}
+Torgerson W (1958).
+\newblock \emph{{Theory and Methods of Scaling}}.
+\newblock Wiley, New York.
+
+\end{thebibliography}
