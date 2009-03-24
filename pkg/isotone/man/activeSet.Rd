@@ -87,9 +87,6 @@ fit.qua <- activeSet(z, Atot, pSolver, y = y, weights = wvec, aw = 0.3, bw = 0.7
 ## Mean absolute value norm
 fit.abs <- activeSet(z, Atot, dSolver, y = y, weights = w1)
 
-## Approximation of mean absolute value norm
-fit.eps <- activeSet(z, Atot, eSolver, y = y, weights = w1, eps = 1e-4)
-
 ## Lp norm
 fit.pow <- activeSet(z, Atot, oSolver, y = y, weights = w1, p = 1.2)
 
