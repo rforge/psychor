@@ -120,10 +120,6 @@
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Homogeneity Analysis">
-<param name="Local" value="homals.html">
-</OBJECT>
-<LI> <OBJECT type="text/sitemap">
-<param name="Name" value="Homogeneity Analysis ">
 <param name="Local" value="homals-package.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
