@@ -288,7 +288,7 @@ if (plot.type == "spanplot") {
   		  sapply(jnd, function(r) lines(rbind(x$objscores[ind[j],c(pd1,pd2)], x$objscores[ind[r],c(pd1,pd2)]),
         col = rb[which(lev==k)]))
   		}
-  	 legend(leg.pos,paste("Category",lev), col = rb, lty = 1, ...)
+  	 legend(leg.pos,paste("Category",lev), col = rb, lty = 1)
     } 
   }
 }
