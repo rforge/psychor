@@ -96,7 +96,7 @@ if (plot.type == "transplot") {
 	axis(1, at = 1:(dim(x$tab)[1]), labels = rownames(x$tab))
 	abline(v = 1:n, col = "lightgray", lty = 2)
 	legend(legpos, legend = paste("Dimension ",plot.dim), lty = 1:length(plot.dim), 
-  col = 1:length(plot.dim), bg = "white")
+  col = 1:length(plot.dim), bg = "white", cex = 0.8)
   
   dev.new()
   matplot(1:m, ya, type = type, xlab = "column categories", ylab = "column scores", 
@@ -104,7 +104,7 @@ if (plot.type == "transplot") {
   axis(1, at = 1:(dim(x$tab)[2]), labels = colnames(x$tab))
   abline(v = 1:m, col = "lightgray", lty = 2)
   legend(legpos, legend = paste("Dimension ",plot.dim), lty = 1:length(plot.dim),
-  col = 1:length(plot.dim), bg = "white")
+  col = 1:length(plot.dim), bg = "white", cex = 0.8)
 }
 
 #--------------------------------- end transplot -------------------------------
