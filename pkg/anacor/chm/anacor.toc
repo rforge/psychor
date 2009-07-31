@@ -96,7 +96,7 @@
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Converts Table to Indicator Matrix">
-<param name="Local" value="mkIndiList.html">
+<param name="Local" value="expandFrame.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Creates Burt Matrix">
@@ -120,10 +120,6 @@
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">
 <param name="Name" value="Simple and Canonical Correspondence Analysis">
-<param name="Local" value="anacor.html">
-</OBJECT>
-<LI> <OBJECT type="text/sitemap">
-<param name="Name" value="Simple and Canonical Correspondence Analysis ">
 <param name="Local" value="anacor-package.html">
 </OBJECT>
 <LI> <OBJECT type="text/sitemap">

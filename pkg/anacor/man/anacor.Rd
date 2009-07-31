@@ -58,8 +58,9 @@ anacor(tab, ndim = 2, row.covariates, col.covariates, scaling = c("Benzecri","Be
   \item{sitescores}{List containing the site scores (CCA only).}
   \item{isetcor}{List containing the intraset correlations (CCA only).}
 }
-\references{de Leeuw, J., \& Mair, P. (2007). Simple and canonical correspondence 
-analysis using the R package anacor. Preprint available at \url{http://gifi.stat.ucla.edu/anacor.pdf}}
+\references{de Leeuw, J. and Mair, P. (2009). Simple and Canonical Correspondence Analysis Using the R Package anacor. 
+Journal of Statistical Software, 31(5), 1-18. \url{http://www.jstatsoft.org/v31/i05/}
+}
 \author{Jan de Leeuw, Patrick Mair}
 
 \seealso{\code{\link{plot.anacor}}}
