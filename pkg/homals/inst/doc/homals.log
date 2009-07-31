@@ -1,0 +1,717 @@
+This is pdfTeX, Version 3.141592-1.40.4 (MiKTeX 2.7) (preloaded format=pdflatex 2008.6.19)  31 JUL 2009 08:44
+entering extended mode
+**c:/Dokumente*und*Einstellungen/admin/Desktop/SVN*R-forge*psychoR/pkg/homals/i
+nst/doc/homals.tex
+
+("c:/Dokumente und Einstellungen/admin/Desktop/SVN R-forge psychoR/pkg/homals/i
+nst/doc/homals.tex"
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman, ngerman, french, loaded.
+("C:\Programme\MiKTeX 2.7\tex\latex\jss\jss.cls"
+Document Class: jss 2005/12/09 1.5 jss class by Achim Zeileis
+("C:\Programme\MiKTeX 2.7\tex\latex\base\article.cls"
+Document Class: article 2005/09/16 v1.4f Standard LaTeX document class
+("C:\Programme\MiKTeX 2.7\tex\latex\base\size11.clo"
+File: size11.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) ("C:\Programme\MiKTeX 2.7\tex\latex\graphics\graphicx.sty"
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+("C:\Programme\MiKTeX 2.7\tex\latex\graphics\keyval.sty"
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+) ("C:\Programme\MiKTeX 2.7\tex\latex\graphics\graphics.sty"
+Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+("C:\Programme\MiKTeX 2.7\tex\latex\graphics\trig.sty"
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+) ("C:\Programme\MiKTeX 2.7\tex\latex\00miktex\graphics.cfg"
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 90.
+("C:\Programme\MiKTeX 2.7\tex\latex\graphics\pdftex.def"
+File: pdftex.def 2007/06/12 v0.04h Graphics/color for pdfTeX
+\Gread@gobject=\count87
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+) ("C:\Programme\MiKTeX 2.7\tex\latex\ltxmisc\a4wide.sty"
+Package: a4wide 1994/08/30
+("C:\Programme\MiKTeX 2.7\tex\latex\ntgclass\a4.sty"
+Package: a4 2004/04/15 v1.2g A4 based page layout
+)) ("C:\Programme\MiKTeX 2.7\tex\latex\graphics\color.sty"
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+("C:\Programme\MiKTeX 2.7\tex\latex\00miktex\color.cfg"
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+) ("C:\Programme\MiKTeX 2.7\tex\latex\hyperref\hyperref.sty"
+Package: hyperref 2008/01/09 v6.77i Hypertext links for LaTeX
+("C:\Programme\MiKTeX 2.7\tex\latex\oberdiek\hycolor.sty"
+Package: hycolor 2007/04/11 v1.1 Code for color options of hyperref/bookmark (H
+O)
+)
+\@linkdim=\dimen105
+\Hy@linkcounter=\count88
+\Hy@pagecounter=\count89
+("C:\Programme\MiKTeX 2.7\tex\latex\hyperref\pd1enc.def"
+File: pd1enc.def 2008/01/09 v6.77i Hyperref: PDFDocEncoding definition (HO)
+) ("C:\Programme\MiKTeX 2.7\tex\generic\oberdiek\etexcmds.sty"
+Package: etexcmds 2007/12/12 v1.2 Prefix for e-TeX command names (HO)
+("C:\Programme\MiKTeX 2.7\tex\generic\oberdiek\infwarerr.sty"
+Package: infwarerr 2007/09/09 v1.2 Providing info/warning/message (HO)
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+) ("C:\Programme\MiKTeX 2.7\tex\latex\00miktex\hyperref.cfg"
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+) ("C:\Programme\MiKTeX 2.7\tex\latex\oberdiek\kvoptions.sty"
+Package: kvoptions 2007/10/18 v3.0 Keyval support for LaTeX options (HO)
+)
+Package hyperref Info: Hyper figures OFF on input line 2722.
+Package hyperref Info: Link nesting OFF on input line 2727.
+Package hyperref Info: Hyper index ON on input line 2730.
+Package hyperref Info: Plain pages OFF on input line 2737.
+Package hyperref Info: Backreferencing OFF on input line 2742.
+Implicit mode ON; LaTeX internals redefined
+Package hyperref Info: Bookmarks ON on input line 2898.
+("C:\Programme\MiKTeX 2.7\tex\latex\ltxmisc\url.sty"
+\Urlmuskip=\muskip10
+Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 3068.
+("C:\Programme\MiKTeX 2.7\tex\generic\oberdiek\bitset.sty"
+Package: bitset 2007/09/28 v1.0 Data type bit set (HO)
+("C:\Programme\MiKTeX 2.7\tex\generic\oberdiek\intcalc.sty"
+Package: intcalc 2007/09/27 v1.1 Expandable integer calculations (HO)
+) ("C:\Programme\MiKTeX 2.7\tex\generic\oberdiek\bigintcalc.sty"
+Package: bigintcalc 2007/11/11 v1.1 Expandable big integer calculations (HO)
+("C:\Programme\MiKTeX 2.7\tex\generic\oberdiek\pdftexcmds.sty"
+Package: pdftexcmds 2007/12/12 v0.3 LuaTeX support for pdfTeX utility functions
+ (HO)
+Package pdftexcmds Info: LuaTeX not detected on input line 139.
+))) ("C:\Programme\MiKTeX 2.7\tex\generic\oberdiek\kvsetkeys.sty"
+Package: kvsetkeys 2007/09/29 v1.3 Key value parser with default handler suppor
+t (HO)
+)
+\Fld@menulength=\count90
+\Field@Width=\dimen106
+\Fld@charsize=\dimen107
+\Field@toks=\toks15
+Package hyperref Info: Hyper figures OFF on input line 3949.
+Package hyperref Info: Link nesting OFF on input line 3954.
+Package hyperref Info: Hyper index ON on input line 3957.
+Package hyperref Info: backreferencing OFF on input line 3964.
+Package hyperref Info: Link coloring OFF on input line 3969.
+("C:\Programme\MiKTeX 2.7\tex\generic\oberdiek\atbegshi.sty"
+Package: atbegshi 2007/09/09 v1.6 At begin shipout hook (HO)
+("C:\Programme\MiKTeX 2.7\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2007/12/12 v1.6 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in pdf mode detected.
+))
+\Hy@abspage=\count91
+\c@Item=\count92
+\c@Hfootnote=\count93
+)
+*hyperref using default driver hpdftex*
+("C:\Programme\MiKTeX 2.7\tex\latex\hyperref\hpdftex.def"
+File: hpdftex.def 2008/01/09 v6.77i Hyperref driver for pdfTeX
+\Fld@listcount=\count94
+) ("C:\Programme\MiKTeX 2.7\tex\latex\ae\ae.sty"
+Package: ae 2001/02/12 1.3 Almost European Computer Modern
+("C:\Programme\MiKTeX 2.7\tex\latex\base\fontenc.sty"
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+("C:\Programme\MiKTeX 2.7\tex\latex\base\t1enc.def"
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+)
+LaTeX Font Info:    Try loading font information for T1+aer on input line 100.
+("C:\Programme\MiKTeX 2.7\tex\latex\ae\t1aer.fd"
+File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
+))) ("C:\Programme\MiKTeX 2.7\tex\latex\fancyvrb\fancyvrb.sty"
+Package: fancyvrb 2008/02/07
+
+Style option: `fancyvrb' v2.7a, with DG/SPQR fixes, and firstline=lastline fix 
+<2008/02/07> (tvz)
+\FV@CodeLineNo=\count95
+\FV@InFile=\read1
+\FV@TabBox=\box26
+\c@FancyVerbLine=\count96
+\FV@StepNumber=\count97
+\FV@OutFile=\write3
+) ("C:\Programme\MiKTeX 2.7\tex\latex\base\fontenc.sty"
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+("C:\Programme\MiKTeX 2.7\tex\latex\base\t1enc.def"
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+)) ("C:\Programme\MiKTeX 2.7\tex\latex\natbib\natbib.sty"
+Package: natbib 2007/10/30 8.1 (PWD)
+\bibhang=\skip43
+\bibsep=\skip44
+LaTeX Info: Redefining \cite on input line 602.
+\c@NAT@ctr=\count98
+)
+\preXLskip=\skip45
+\preLskip=\skip46
+\preMskip=\skip47
+\preSskip=\skip48
+\postMskip=\skip49
+\postSskip=\skip50
+\footerskip=\skip51
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 398.
+
+Package hyperref Info: Option `colorlinks' set `true' on input line 398.
+Package hyperref Info: Option `linktocpage' set `true' on input line 398.
+Package hyperref Info: Option `plainpages' set `false' on input line 398.
+) ("C:\Programme\MiKTeX 2.7\tex\latex\amsmath\amsmath.sty"
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip52
+For additional information on amsmath, use the `?' option.
+("C:\Programme\MiKTeX 2.7\tex\latex\amsmath\amstext.sty"
+Package: amstext 2000/06/29 v2.01
+("C:\Programme\MiKTeX 2.7\tex\latex\amsmath\amsgen.sty"
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks16
+\ex@=\dimen108
+)) ("C:\Programme\MiKTeX 2.7\tex\latex\amsmath\amsbsy.sty"
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen109
+) ("C:\Programme\MiKTeX 2.7\tex\latex\amsmath\amsopn.sty"
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count99
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count100
+\leftroot@=\count101
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count102
+\DOTSCASE@=\count103
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box27
+\strutbox@=\box28
+\big@size=\dimen110
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count104
+\c@MaxMatrixCols=\count105
+\dotsspace@=\muskip11
+\c@parentequation=\count106
+\dspbrk@lvl=\count107
+\tag@help=\toks17
+\row@=\count108
+\column@=\count109
+\maxfields@=\count110
+\andhelp@=\toks18
+\eqnshift@=\dimen111
+\alignsep@=\dimen112
+\tagshift@=\dimen113
+\tagwidth@=\dimen114
+\totwidth@=\dimen115
+\lineht@=\dimen116
+\@envbody=\toks19
+\multlinegap=\skip53
+\multlinetaggap=\skip54
+\mathdisplay@stack=\toks20
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+) ("C:\Programme\MiKTeX 2.7\tex\latex\amsfonts\amsfonts.sty"
+Package: amsfonts 2001/10/25 v2.2f
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 132.
+) ("C:\Programme\MiKTeX 2.7\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count111
+\float@exts=\toks21
+\float@box=\box29
+\@float@everytoks=\toks22
+\@floatcapt=\box30
+) ("C:\Programme\MiKTeX 2.7\tex\latex\amsfonts\amssymb.sty"
+Package: amssymb 2002/01/22 v2.2d
+)
+
+LaTeX Warning: Unused global option(s):
+    [nojss].
+
+(homals.aux)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+("C:\Programme\MiKTeX 2.7\tex\context\base\supp-pdf.tex"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count112
+\scratchdimen=\dimen117
+\scratchbox=\box31
+\nofMPsegments=\count113
+\nofMParguments=\count114
+\MPscratchCnt=\count115
+\MPscratchDim=\dimen118
+\MPnumerator=\count116
+\everyMPtoPDFconversion=\toks23
+)
+Package hyperref Info: Link coloring ON on input line 62.
+("C:\Programme\MiKTeX 2.7\tex\latex\hyperref\nameref.sty"
+Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
+("C:\Programme\MiKTeX 2.7\tex\latex\oberdiek\refcount.sty"
+Package: refcount 2006/02/20 v3.0 Data extraction from references (HO)
+)
+\c@section@level=\count117
+)
+LaTeX Info: Redefining \ref on input line 62.
+LaTeX Info: Redefining \pageref on input line 62.
+(homals.out) (homals.out)
+\@outlinefile=\write4
+\AtBeginShipoutBox=\box32
+<jsslogo.jpg, id=71, 540.0175pt x 393.47pt>
+File: jsslogo.jpg Graphic file (type jpg)
+<use jsslogo.jpg>
+LaTeX Font Info:    Try loading font information for T1+pzc on input line 62.
+("C:\Programme\MiKTeX 2.7\tex\latex\psnfss\t1pzc.fd"
+File: t1pzc.fd 2001/06/04 font definitions for T1/pzc.
+)
+LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <28> not available
+(Font)              Font shape `T1/pzc/mb/it' tried instead on input line 62.
+LaTeX Font Info:    Try loading font information for T1+aess on input line 62.
+("C:\Programme\MiKTeX 2.7\tex\latex\ae\t1aess.fd"
+File: t1aess.fd 1997/11/16 Font definitions for T1/aess.
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 62.
+("C:\Programme\MiKTeX 2.7\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2002/01/19 v2.2g AMS font definitions
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 62.
+("C:\Programme\MiKTeX 2.7\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2002/01/19 v2.2g AMS font definitions
+)
+
+Package natbib Warning: Citation `Benzecri:73' on page 1 undefined on input lin
+e 65.
+
+
+Package natbib Warning: Citation `Greenacre:84' on page 1 undefined on input li
+ne 65.
+
+
+Package natbib Warning: Citation `Gifi:90' on page 1 undefined on input line 65
+.
+
+
+Package natbib Warning: Citation `Greenacre+Blasius:06' on page 1 undefined on 
+input line 65.
+
+
+Package natbib Warning: Citation `R:07' on page 1 undefined on input line 67.
+
+
+Package natbib Warning: Citation `Mair+Hatzinger:07' on page 1 undefined on inp
+ut line 67.
+
+
+Package natbib Warning: Citation `Nenadic+Greenacre:06' on page 1 undefined on 
+input line 67.
+
+
+Package natbib Warning: Citation `Gifi:90' on page 1 undefined on input line 69
+.
+
+
+Package natbib Warning: Citation `Gifi:90' on page 1 undefined on input line 69
+.
+
+
+Package natbib Warning: Citation `Gifi:90' on page 1 undefined on input line 70
+.
+
+
+Package natbib Warning: Citation `Michailidis+deLeeuw:98' on page 1 undefined o
+n input line 70.
+
+[1
+
+{C:/Dokumente und Einstellungen/All Users/Anwendungsdaten/MiKTeX/2.7/pdftex/con
+fig/pdftex.map} <C:/Programme/MiKTeX 2.7/tex/latex/jss/jsslogo.jpg>]
+
+Package natbib Warning: Citation `Mair+deLeeuw:2008' on page 2 undefined on inp
+ut line 74.
+
+
+Package natbib Warning: Citation `Michailidis+deLeeuw:98' on page 2 undefined o
+n input line 81.
+
+
+Package natbib Warning: Citation `Gifi:90' on page 2 undefined on input line 81
+.
+
+
+Overfull \hbox (5.47499pt too wide) has occurred while \output is active
+\T1/aer/m/n/10.95 2 []
+ []
+
+[2]
+Overfull \hbox (5.47499pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 3
+ []
+
+[3]
+
+Package natbib Warning: Citation `Greenacre:84' on page 4 undefined on input li
+ne 126.
+
+
+Package natbib Warning: Citation `Greenacre+Blasius:06' on page 4 undefined on 
+input line 126.
+
+
+Package natbib Warning: Citation `deLeeuw+Michailides+Wang:99' on page 4 undefi
+ned on input line 127.
+
+
+Package natbib Warning: Citation `Michailidis+deLeeuw:98' on page 4 undefined o
+n input line 138.
+
+
+Package natbib Warning: Citation `Meulman:1996' on page 4 undefined on input li
+ne 142.
+
+
+Package natbib Warning: Citation `Gifi:90' on page 4 undefined on input line 14
+5.
+
+
+Overfull \hbox (5.47499pt too wide) has occurred while \output is active
+\T1/aer/m/n/10.95 4 []
+ []
+
+[4]
+
+Package natbib Warning: Citation `deLeeuw:06' on page 5 undefined on input line
+ 150.
+
+
+Overfull \hbox (5.47499pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 5
+ []
+
+[5]
+
+Package natbib Warning: Citation `Takane:2005' on page 6 undefined on input lin
+e 195.
+
+
+Overfull \hbox (5.47499pt too wide) has occurred while \output is active
+\T1/aer/m/n/10.95 6 []
+ []
+
+[6]
+
+Package natbib Warning: Citation `Gifi:90' on page 7 undefined on input line 23
+5.
+
+
+Package natbib Warning: Citation `Michailidis+deLeeuw:98' on page 7 undefined o
+n input line 235.
+
+
+Package natbib Warning: Citation `vanderBurg+deLeeuw+Verdegaal:88' on page 7 un
+defined on input line 238.
+
+
+Package natbib Warning: Citation `vanderBurg+deLeeuw+Dijksterhuis:94' on page 7
+ undefined on input line 238.
+
+
+Overfull \hbox (5.47499pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 7
+ []
+
+[7]
+
+Package natbib Warning: Citation `R:07' on page 8 undefined on input line 297.
+
+
+Overfull \hbox (5.47499pt too wide) has occurred while \output is active
+\T1/aer/m/n/10.95 8 []
+ []
+
+[8]
+LaTeX Font Info:    Try loading font information for T1+aett on input line 299.
+
+("C:\Programme\MiKTeX 2.7\tex\latex\ae\t1aett.fd"
+File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
+)
+
+Package natbib Warning: Citation `Michailidis+deLeeuw:98' on page 9 undefined o
+n input line 303.
+
+
+Package natbib Warning: Citation `Michailidis+deLeeuw:01' on page 9 undefined o
+n input line 303.
+
+LaTeX Font Info:    Try loading font information for OMS+aer on input line 305.
+
+(C:/Programme/R/R-2.9.1/share/texmf\omsaer.fd
+File: omsaer.fd 1999/12/27
+)
+LaTeX Font Info:    Font shape `OMS/aer/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 305.
+
+Overfull \hbox (5.47499pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 9
+ []
+
+[9]
+
+Package natbib Warning: Citation `Ada:02' on page 10 undefined on input line 32
+7.
+
+<senate.png, id=192, 531.9875pt x 503.8825pt>
+File: senate.png Graphic file (type png)
+<use senate.png> <senatespan12.pdf, id=193, 360.34625pt x 360.34625pt>
+File: senatespan12.pdf Graphic file (type pdf)
+<use senatespan12.pdf> <senatespan13.pdf, id=194, 360.34625pt x 360.34625pt>
+File: senatespan13.pdf Graphic file (type pdf)
+<use senatespan13.pdf> <senatespan23.pdf, id=195, 360.34625pt x 360.34625pt>
+File: senatespan23.pdf Graphic file (type pdf)
+<use senatespan23.pdf>
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+\T1/aer/m/n/10.95 10 []
+ []
+
+[10]
+Underfull \vbox (badness 7379) has occurred while \output is active []
+
+
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 11
+ []
+
+[11pdfTeX warning (ext4): destination with the same identifier (name{figure.1})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.370 
+       <senate.png (PNG copy)> <senatespan12.pdf> <senatespan13.pdf> <senatespa
+n23.pdf>] <senateload.pdf, id=228, 490.83376pt x 490.83376pt>
+File: senateload.pdf Graphic file (type pdf)
+<use senateload.pdf>
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+\T1/aer/m/n/10.95 12 []
+ []
+
+[12pdfTeX warning (ext4): destination with the same identifier (name{figure.2})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.400 
+       <senateload.pdf>] <galoVor.pdf, id=240, 360.34625pt x 360.34625pt>
+File: galoVor.pdf Graphic file (type pdf)
+<use galoVor.pdf> <galoLab.pdf, id=241, 360.34625pt x 360.34625pt>
+File: galoLab.pdf Graphic file (type pdf)
+<use galoLab.pdf>
+
+Package natbib Warning: Citation `Peschar:75' on page 13 undefined on input lin
+e 409.
+
+
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 13
+ []
+
+[13pdfTeX warning (ext4): destination with the same identifier (name{figure.3})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.437 
+       <galoVor.pdf> <galoLab.pdf>] <irisHull.pdf, id=259, 360.34625pt x 360.34
+625pt>
+File: irisHull.pdf Graphic file (type pdf)
+<use irisHull.pdf> <irisLab.pdf, id=260, 360.34625pt x 360.34625pt>
+File: irisLab.pdf Graphic file (type pdf)
+<use irisLab.pdf>
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+\T1/aer/m/n/10.95 14 []
+ []
+
+[14pdfTeX warning (ext4): destination with the same identifier (name{figure.4})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.468 \end{Sinput}
+                   <irisHull.pdf> <irisLab.pdf>] <irisLoss1.pdf, id=279, 360.34
+625pt x 360.34625pt>
+File: irisLoss1.pdf Graphic file (type pdf)
+<use irisLoss1.pdf> <irisLoss2.pdf, id=280, 360.34625pt x 360.34625pt>
+File: irisLoss2.pdf Graphic file (type pdf)
+<use irisLoss2.pdf> <irisLoss3.pdf, id=281, 360.34625pt x 360.34625pt>
+File: irisLoss3.pdf Graphic file (type pdf)
+<use irisLoss3.pdf> <irisLoss4.pdf, id=282, 360.34625pt x 360.34625pt>
+File: irisLoss4.pdf Graphic file (type pdf)
+<use irisLoss4.pdf>
+
+Package natbib Warning: Citation `Wilson:26' on page 15 undefined on input line
+ 481.
+
+
+Package natbib Warning: Citation `Gifi:90' on page 15 undefined on input line 4
+82.
+
+
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 15
+ []
+
+[15pdfTeX warning (ext4): destination with the same identifier (name{figure.5})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.490 +     rank = 1)
+                      <irisLoss1.pdf> <irisLoss2.pdf> <irisLoss3.pdf> <irisLoss
+4.pdf>] <neuloadlin.pdf, id=312, 360.34625pt x 360.34625pt>
+File: neuloadlin.pdf Graphic file (type pdf)
+<use neuloadlin.pdf> <neuloadmon.pdf, id=313, 360.34625pt x 360.34625pt>
+File: neuloadmon.pdf Graphic file (type pdf)
+<use neuloadmon.pdf> <neutrftemp.pdf, id=315, 360.34625pt x 360.34625pt>
+File: neutrftemp.pdf Graphic file (type pdf)
+<use neutrftemp.pdf> <neutrfpres.pdf, id=316, 360.34625pt x 360.34625pt>
+File: neutrfpres.pdf Graphic file (type pdf)
+<use neutrfpres.pdf> <neutrfdens.pdf, id=317, 360.34625pt x 360.34625pt>
+File: neutrfdens.pdf Graphic file (type pdf)
+<use neutrfdens.pdf>
+
+Package natbib Warning: Citation `Roskam:68' on page 16 undefined on input line
+ 521.
+
+<roskamobj.pdf, id=319, 360.34625pt x 360.34625pt>
+File: roskamobj.pdf Graphic file (type pdf)
+<use roskamobj.pdf> <roskamvec.pdf, id=320, 360.34625pt x 360.34625pt>
+File: roskamvec.pdf Graphic file (type pdf)
+<use roskamvec.pdf>
+
+Package natbib Warning: Citation `deLeeuw:06' on page 16 undefined on input lin
+e 563.
+
+
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+\T1/aer/m/n/10.95 16 []
+ []
+
+[16pdfTeX warning (ext4): destination with the same identifier (name{figure.6})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.564 
+       <neuloadlin.pdf> <neuloadmon.pdf>]
+
+Package natbib Warning: Citation `Gifi:90' on page 17 undefined on input line 5
+66.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 17
+ []
+
+[17pdfTeX warning (ext4): destination with the same identifier (name{figure.7})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.567 
+       <neutrftemp.pdf> <neutrfpres.pdf> <neutrfdens.pdf>] (homals.bbl)
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+\T1/aer/m/n/10.95 18 []
+ []
+
+[18pdfTeX warning (ext4): destination with the same identifier (name{table.1}) 
+has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.570 \end{document}
+                    pdfTeX warning (ext4): destination with the same identifier
+ (name{figure.8}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.570 \end{document}
+                     <roskamobj.pdf> <roskamvec.pdf>]
+
+Package natbib Warning: There were undefined citations.
+
+LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <13> not available
+(Font)              Font shape `T1/pzc/mb/it' tried instead on input line 570.
+
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+[] \T1/aer/m/n/10.95 19
+ []
+
+[19
+
+] (homals.aux) ) 
+Here is how much of TeX's memory you used:
+ 6263 strings out of 95340
+ 84088 string characters out of 1184279
+ 151415 words of memory out of 1500000
+ 9181 multiletter control sequences out of 110000
+ 61513 words of font info for 108 fonts, out of 1200000 for 2000
+ 14 hyphenation exceptions out of 8191
+ 43i,8n,34p,1196b,427s stack positions out of 5000i,500n,10000p,200000b,5000s
+{C:/Programme/MiKTeX 2.7/fonts/enc/dvips/fontname/8r.enc}<C:/Pr
+ogramme/MiKTeX 2.7/fonts/type1/bluesky/cm/cmb10.pfb><C:/Programme/MiKTeX 2.7/fo
+nts/type1/bluesky/cm/cmbx10.pfb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/cm
+/cmbx12.pfb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/cm/cmex10.pfb><C:/Prog
+ramme/MiKTeX 2.7/fonts/type1/bluesky/cm/cmmi10.pfb><C:/Programme/MiKTeX 2.7/fon
+ts/type1/bluesky/cm/cmmi6.pfb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/cm/c
+mmi8.pfb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr10.pfb><C:/Programm
+e/MiKTeX 2.7/fonts/type1/bluesky/cm/cmr6.pfb><C:/Programme/MiKTeX 2.7/fonts/typ
+e1/bluesky/cm/cmr8.pfb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsl10.p
+fb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsltt10.pfb><C:/Programme/M
+iKTeX 2.7/fonts/type1/bluesky/cm/cmss10.pfb><C:/Programme/MiKTeX 2.7/fonts/type
+1/bluesky/cm/cmssbx10.pfb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/cm/cmssi
+10.pfb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy10.pfb><C:/Programme
+/MiKTeX 2.7/fonts/type1/bluesky/cm/cmsy8.pfb><C:/Programme/MiKTeX 2.7/fonts/typ
+e1/bluesky/cm/cmti10.pfb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/cm/cmtt10
+.pfb><C:/Programme/MiKTeX 2.7/fonts/type1/bluesky/ams/msbm10.pfb><C:/Programme/
+MiKTeX 2.7/fonts/type1/urw/zapfchan/uzcmi8a.pfb>
+Output written on homals.pdf (19 pages, 597979 bytes).
+PDF statistics:
+ 475 PDF objects out of 1000 (max. 8388607)
+ 92 named destinations out of 1000 (max. 131072)
+ 250 words of extra memory for PDF output out of 10000 (max. 10000000)
+

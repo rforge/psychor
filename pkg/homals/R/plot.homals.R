@@ -360,7 +360,7 @@ if (plot.type == "vecplot") {
 
 if (plot.type == "trfplot") {
 
-   if (missing(type)) type <- "b"
+   if (missing(type)) type <- "l"
    if (missing(xlab)) xlab <- "original scale"
    if (missing(ylab)) ylab <- "transformed scale"
 
@@ -374,7 +374,7 @@ if (plot.type == "trfplot") {
        
      par("ask" = TRUE)                     #first dimensions
      matplot(x$low.rank[[i]], type = type, main = main1, ylim = ylim1, xlab = xlab, 
-            ylab = ylab, xaxt = "n", pch = 20, col = 1:p, lty = 1:p,...)
+            ylab = ylab, xaxt = "n", pch = 20, ...)
      if (p != 1) legend(leg.pos,paste("Solution",1:p),col = 1:p, lty = 1:p)
      axis(1, at = 1:dim(x$low.rank[[i]])[1], labels = rownames(x$low.rank[[i]]))
      
