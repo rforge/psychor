@@ -1,10 +1,9 @@
-%\VignetteIndexEntry{anacor} 
+%\VignetteIndexEntry{Simple and Canonical Correspondence Analysis Using the R Package anacor}
 
-\documentclass[article]{jss1}
-\usepackage{amsmath, amsfonts, thumbpdf}
+\documentclass[article, nojss]{jss}
+\usepackage{amsmath, amsfonts}
 \usepackage{float, amssymb}
 \usepackage{amsbsy}
-%\usepackage{Sweave}
 %\usepackage{arydshln}
 
 \newcommand{\defi}{\mathop{=}\limits^{\Delta}}  
@@ -14,8 +13,8 @@
 
 %% almost as usual
 \author{Jan de Leeuw\\University of California, Los Angeles \And 
-        Patrick Mair \\Wirtschaftsuniversit\"at Wien}
-\title{Simple and Canonical Correspondence Analysis Using the R Package \pkg{anacor}}
+        Patrick Mair \\WU Wirtschaftsuniversit\"at Wien}
+\title{Simple and Canonical Correspondence Analysis Using the \proglang{R} Package \pkg{anacor}}
 
 %%% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Jan de Leeuw, Patrick Mair} %% comma-separated
@@ -24,11 +23,11 @@
 
 %% an abstract and keywords
 \Abstract{
-This paper presents the \proglang{R} package \texttt{anacor} for the computation of simple and canonical correspondence analysis with missing values. The canonical correspondence analysis is specified in a rather general way by imposing covariates on the rows and/or the columns of the two-dimensional frequency table. The package allows for scaling methods such as standard, Benz\'ecri, centroid, and Goodman scaling. In addition, along with well-known two- and three-dimensional joint plots including confidence ellipsoids, it offers alternative plotting possibilities in terms of transformation plots, Benz\'ecri plots, and regression plots.
+This paper presents the \proglang{R} package \pkg{anacor} for the computation of simple and canonical correspondence analysis with missing values. The canonical correspondence analysis is specified in a rather general way by imposing covariates on the rows and/or the columns of the two-dimensional frequency table. The package allows for scaling methods such as standard, Benz\'ecri, centroid, and Goodman scaling. In addition, along with well-known two- and three-dimensional joint plots including confidence ellipsoids, it offers alternative plotting possibilities in terms of transformation plots, Benz\'ecri plots, and regression plots.
 }
 
-\Keywords{anacor, simple correspondence analysis, canonical correspondence analysis, \proglang{R}}
-\Plainkeywords{anacor, simple correspondence analysis, canonical correspondence analysis, R} %% without formatting
+\Keywords{\pkg{anacor}, correspondence analysis, canonical correspondence analysis, \proglang{R}}
+\Plainkeywords{anacor, correspondence analysis, canonical correspondence analysis, R} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -63,7 +62,7 @@ This paper presents the \proglang{R} package \texttt{anacor} for the computation
 
 \begin{document}
 \section{Introduction}
-Correspondence Analysis \citep[CA;][]{Benzecri:73} is a multivariate descriptive method based on a data matrix with non-negative elements and related to principal component analysis (PCA). Basically, CA can be computed for any kind of data but typically it is applied to frequencies formed by categorical data. Being an exploratoy tool for data analysis, CA emphasizes two- and three-dimensional graphical representations of the results. 
+Correspondence Analysis \citep[CA;][]{Benzecri:73} is a multivariate descriptive method based on a data matrix with non-negative elements and related to principal component analysis (PCA). Basically, CA can be computed for any kind of data but typically it is applied to frequencies formed by categorical data. Being an exploratory tool for data analysis, CA emphasizes two- and three-dimensional graphical representations of the results. 
 
 In this paper we briefly review the mathematical foundations of simple CA and canonical CA in terms of the singular value decomposition (SVD). The main focus is on the computational implementation in \proglang{R} \citep{R:07}, on scaling methods based on Benz\'ecri distances, centroid principles, and Fischer-Maung decomposition and on the elaboration of corresponding graphical representations. More details about CA, various extensions and related methods can be found in \citet{Greenacre:84}, \citet{Gifi:90} and \citet{Greenacre+Blasius:06} and numerous practical issues are discussed in \citet{Greenacre:07}.
 
@@ -71,12 +70,12 @@ Recently, several related \proglang{R} packages have been implemented and update
 
 The \pkg{ade4} package \citep{Chessel+Dufour+Thioulouse:04, Dray+Dufour+Chessel:07} which has been developed in an ecological context, allows for  multiple CA, canonical CA, discriminant CA, fuzzy CA and other extensions. Another related package is \pkg{vegan} \citep{dixon:03}, also developed in the field of ecology, which allows for constrained and partially constrained CA as well. Another related package is \pkg{homals} \citep{deLeeuw+Mair:08} which fits models of the Gifi-family (homogeneity analysis aka multiple CA, nonlinear PCA, nonlinear canonical correlation analysis). Additional CA-related packages and functions in \proglang{R} can be found in \citet{Mair+Hatzinger:07}.
 
-The \pkg{anacor} package we present offers, compared to the packages above, additional possibilites for scaling the scores in
+The \pkg{anacor} package we present offers, compared to the packages above, additional possibilities for scaling the scores in
 simple CA and canonical CA, additional graphical features including confidence ellipsoids. It also allows for missing values which are imputed using Nora's algorithm \citep{Nora:75}.
 
-\section{Simple Correspondence Analysis}
+\section{Simple correspondence analysis}
 \label{sec:sca}
-\subsection{Basic Principles of Simple CA}
+\subsection{Basic principles of simple CA}
 \label{sec:basicca}
 The input unit of analysis is a bivariate frequency table $F$ having $n$ rows $(i=1,\ldots,n)$ and $m$ columns $(j=1,\ldots,m)$. Thus the \(f_{ij}\) are non-negative integers. Without loss of generality we suppose that $n\geq m$. The row marginals $f_{i\bullet}$ are collected in a $n \times n$ diagonal matrix $D$ and the column marginals $f_{\bullet j}$ in a $m \times m$ diagonal matrix $E$. Suppose \(u_n\) and \(u_m\) are vectors of lengths \(n\) and \(m\) with all elements equal to 1. It follows that the grand total can be written as $\mathfrak{n}=u_n'Fu_m$.
 
@@ -94,7 +93,7 @@ y'Ey&=\mathfrak{n}.
 \end{subequations}
 Such vectors, i.e. both centered and normalized, are called \emph{standardized}. 
 
-I order to solve the constrained optimization of $\lambda(x,y)$ over the vectors $(x,y)$ satisfying the conditions above we form the Lagrangian using
+In order to solve the constrained optimization of $\lambda(x,y)$ over the vectors $(x,y)$ satisfying the conditions above we form the Lagrangian using
 undetermined multipliers $(\xi_x,\xi_y,\mu_x,\mu_y)$ and set the derivatives equal to zero. 
 Thus, the optimal \(x\) and \(y\) must satisfy the centering and normalization conditions in (\ref{E:cond}), as well as the stationary equations
 \begin{subequations}\label{E:lagr}
@@ -138,7 +137,7 @@ The squared singular values $\sigma^2$ correspond to the eigenvalues $\lambda$ o
 \end{equation}
 $\chi^2(F)$ is called \emph{total inertia} and corresponds to the Pearson chi-square statistic for independence of the table $F$ with $df = (n-1)(m-1)$. The single composites are the contributions of each dimension to the total inertia. Correspondingly, for each dimension a percentage reflecting the contribution of dimension $s$ to the total intertia can be computed. The larger the eigenvalue, the larger the contribution. In practical applications, a ``good'' CA solution is characterized by large eigenvalues for the first few dimensions. 
 
-\subsection{Methods of Scaling in Simple CA}
+\subsection{Methods of scaling in simple CA}
 \label{sec:scaling}
 The basic plot in CA is the \emph{joint plot} which draws parts of $X$ and $Y$ jointly in a low-dimensional Euclidean space. Note that instead of joint plot sometimes the term \emph{CA map} is used. Both symmetric and asymmetric CA maps can be drawn with the \pkg{ca} package and corresponding descriptions are given in \citet{Nenadic+Greenacre:06}.
 
@@ -195,9 +194,9 @@ plots will be similar. Generally, plots based on the symmetric Benz\'ecri and Go
 
 %----------------------- end simple CA ----------------------
 
-\section{Canonical Correspondence Analysis}
+\section{Canonical correspondence analysis}
 \label{sec:cca}
-\subsection{Basic Principles of Canonical CA}
+\subsection{Basic principles of canonical CA}
 \citet{TerBraak:86} presented canonical CA within an ecological context having the situation where the whole dataset consists of two sets: data on the occurrence or abundance of a number of species, and data on a number of environmental variables measured which may help to explain the interpretation of the scaled solution. In other words, they are incorporated as effects in the CA computation in order to examine their influence on the scores. 
 
 To give a few examples outside ecology, in behavioral sciences such environmental variables could be various types schools, in medical sciences different hospitals etc. Thus, from this particular point of view canonical CA reflects multilevel situations in some sense; from a general point of view it reflects any type of effects on the rows and/or columns of the table.
@@ -253,7 +252,7 @@ of \(Z\) are, under the hypothesis of independence, asymptotically independent $
 \end{equation}
 which is asymptotically a chi-square with $df=(a-1)(b-1)$. Hence, in canonical CA we compute a canonical partition of the components of chi-square corresponding with orthogonal contrasts \(A\) and \(B\). 
 
-\subsection{Methods of Scaling in Canonical CA}
+\subsection{Methods of scaling in canonical CA}
 \label{sec:scalecca}
 In this section the same methods of rescaling of row and column scores used for simple CA, are applied to canonical CA. 
 Again, we start with Benz\'ecri distances $\delta_{ik}^2\left(F_{AB}\right)$ between two rows $i$ and $k$ and using unit vectors $e_i$ and $e_k$ of length $n$: 
@@ -313,8 +312,8 @@ Note that the joint plots pertaining to the different scaling methods are again 
 
 %------------------------------ additional topics -------------------------------
 
-\section{Additional Topics}
-\subsection{Confidence Ellipsoids Using the Delta Method}
+\section{Additional topics}
+\subsection{Confidence ellipsoids using the Delta Method}
 The core computation in the \pkg{anacor} package is the SVD on $Z=P\Sigma Q'$. As a result we get the $n \times m$ matrix $P$ of left singular vectors, the $m \times m$ matrix $Q$ of the right singular vectors, the diagonal matrix $\Sigma$ of order $m$ containing the singular values, and, correspondingly, the eigenvalue matrix $\Lambda$. Based on these results the $n \times p$ row score matrix $X_p$ and the $m \times p$ column score matrix are computed (standard scores). At this point an important issue is the replication stability of the results in terms of confidence ellipsoids around the standard scores in the joint plot.
 
 A general formal framework to examine stability in multivariate methods is given in \citet[][Chapter 12]{Gifi:90}. The starting point of the replication stability is the well-known \emph{delta method}. Let us assume that we have a sequence of asymptotically normal random vectors $\mathbf{x}_\mathfrak{n}$. Thus $\sqrt{\mathfrak{n}}(\mathbf{x}_\mathfrak{n}-\mu)\stackrel{D}{\rightarrow}N(\mathbf{0},\Sigma)$. If we apply a transformation $\phi(\mathbf{x}_n)$ the delta method states that $\sqrt{\mathfrak{n}}(\phi(\mathbf{x}_\mathfrak{n})-\phi(\mu))\approx\sqrt{\mathfrak{n}}\nabla\phi(\mu)(\mathbf{x}_\mathfrak{n}-\mu) \stackrel{D}{\rightarrow}N(\mathbf{0},\nabla \phi(\mu)'\Sigma \nabla \phi(\mu))$. In simple words: The delta method provides the transformed variance-covariance (VC) matrix which is based on the gradient of $\phi$ evaluated at $\mu$.
@@ -324,7 +323,7 @@ To apply this method for CA we have to embed our observations $p_{ij} = f_{ij}/\
 The transformation of the proportions to the singular values and vectors are given by the equations in (\ref{E:svd}). Expressions for the partial derivatives $\frac{\partial\phi}{\partial p_{ij}}$ are long and complicated, and not very informative. They are special cases of the partials for the generalized singular value decompositions given in \citep[][Section 2.2.1]{deLeeuw:2007}. For CA they were given earlier by \citet{ONeill:1978a, ONeill:1978b} and \citet{Kuriki:2005}. 
 
 
-\subsection{Reconstitution Algorithm for Incomplete Tables}
+\subsection{Reconstitution algorithm for incomplete tables}
 As an additional feature of the \pkg{anacor} package, incomplete tables are allowed. The algorithm we use was proposed by \citet{Nora:75} and revised by \citet{deLeeuw+vanderHeiden:88}. 
 
 This algorithm should not be mistaken for the CA reconstitution formula which allows for the reconstruction of the data matrix from the scores. Nora's algorithm is rather based on the complementary use of CA and log-linear models \citep[see][]{vanderHeiden+deLeeuw:85} and provides a decomposition of the residuals from independence. It is related, however, to Greenacre's \emph{joint correspondence analysis} (JCA) for multivariate data \citep{Greenacre:1988}. We will describe briefly the \emph{reconstitution of order 0} which is implemented in \pkg{anacor}. 
@@ -336,9 +335,9 @@ f_{ij}^{(l+1)}=\frac{f_{i\bullet}^{(l)}f_{\bullet j}^{(l)}}{f_{\bullet \bullet}^
 Within each iteration a measure for the change in the frequencies is computed, i.e. $H^{(l)}=\sum_{i=1}^n \sum_{j=1}^m f_{ij}^{(0)}\log{f_{ij}^{(l)}}$. The iteration stops if $|H^{(l)}-H^{(l-1)}| < \epsilon$. After reaching convergence, we set $F:=F^{(l)}$ and we proceed with the computations from Section \ref{sec:sca} and Section \ref{sec:cca}, respectively.
 
 
-\section{Applications of Simple and Canonical CA}
+\section{Applications of simple and canonical CA}
 \label{sec:app}
-\subsection{Plotting options in anacor}
+\subsection[Plotting options in anacor]{Plotting options in \pkg{anacor}}
 \label{sec:plots}
 The basic function in the package is \code{anacor} which performs simple or canonical CA with different scaling options. The \code{NA} cells in the table will be imputed using the reconstitution algorithm. The results are stored in an object of class \texttt{"anacor"}. For objects of this class a \code{print.anacor} and a \code{summary.anacor} method is provided. Two-dimensional plots can be produced with \code{plot.anacor}, static 3-D plots with \code{plot3dstatic.anacor} and dynamic \code{rgl}-plots with \code{plot3d.anacor}. The type of the plot can be specified by the argument \texttt{plot.type}:
 \begin{itemize}
@@ -352,16 +351,18 @@ The basic function in the package is \code{anacor} which performs simple or cano
 \end{itemize}
 In addition, \pkg{anacor} offers various CA utility functions: \code{expandFrame()} expands a data frame into a indicator supermatrix, \code{burtTable()} establishes the Burt matrix, and \code{mkIndiList()} returns a list of codings with options for crisp indicators, numerical versions, and fuzzy coding.
 
-\subsection{Applications of Simple CA}
+\subsection{Applications of simple CA}
 We start with an application of simple CA on Tocher's eye color data \citep{Maung:41} collected on 5387 Scottish school children. This frequency table consists of the eye color in the rows (blue, light, medium, dark) and the hair color in the columns (fair, red, medium, dark, black).  
 
 <<>>=
 library("anacor")
-data(tocher)
+data("tocher")
 res <- anacor(tocher, scaling = c("standard", "centroid"))
 res
-plot(res, plot.type = "jointplot", xlim = c(-2,1.5), ylim = c(-2, 1.5))
-plot(res, plot.type = "graphplot", wlines = 5)
+@
+<<eval = FALSE>>=
+plot(res, plot.type = "jointplot", xlim = c(-2,1.5), ylim = c(-2, 1.5), asp = 1)
+plot(res, plot.type = "graphplot", xlim = c(-2,1.5), ylim = c(-2, 1.5), wlines = 5, asp = 1)
 @
 
 For this two-dimensional solution we use asymmetric scaling by having standard coordinates for the rows and principal coordinates for the columns. As graphical representation methods the joint plot including 95\% confidence ellipsoids and the graph plot are chosen (see Figure \ref{fig:tocher}).
@@ -391,6 +392,8 @@ data(bitterling)
 res1 <- anacor(bitterling, ndim = 2, scaling = c("Benzecri", "Benzecri"))
 res2 <- anacor(bitterling, ndim = 5, scaling = c("Benzecri", "Benzecri"))
 res2
+@
+<<eval = FALSE>>=
 plot(res1, plot.type = "benzplot", main = "Benzecri Distances (2D)")
 plot(res2, plot.type = "benzplot", main = "Benzecri Distances (5D)")
 @ 
@@ -410,10 +413,10 @@ This plot can be used as an overall goodness-of-fit plot or, alternatively, sing
 
 The data for the next example were collected by \citet{Glass:54}. In this $7 \times 7$ table the occupational status of fathers (rows) and sons (columns) of 3497 British families were cross-classified. The categories are professional and high administrative (PROF), managerial and executive (EXEC), higher supervisory (HSUP), lower supervisory (LSUP), skilled manual and routine non-manual (SKIL), semi-skilled manual (SEMI), and unskilled manual (UNSK). 
 
-<<>>=
+<<eval = FALSE>>=
 data(glass)
 res <- anacor(glass)
-plot(res, plot.type = "regplot", xlab = "fathers occupation", ylab = "sons occupation")
+plot(res, plot.type = "regplot", xlab = "fathers occupation", ylab = "sons occupation", asp = 1)
 @
 
 \begin{figure}[ht]
@@ -440,7 +443,7 @@ We fit a symmetric (Goodman scaled) two-dimensional solution and get an amount o
 data(maxwell)
 res <- anacor(maxwell$table, row.covariates = maxwell$row.covariates, scaling = c("Goodman", "Goodman"))
 res
-plot(res, plot.type = "orddiag")
+plot(res, plot.type = "orddiag", asp = 1)
 plot(res, plot.type = "transplot", legpos = "topright")
 @
 
@@ -462,5 +465,4 @@ The second dimension shows an alternating behavior. Referring to the pair notati
 The \pkg{anacor} package provides additional features which are not offered by other CA packages on CRAN. These features are additional scaling methods for simple and canonical CA, missing data, and graphical representations such as regression plots, Benz\'ecri plots, transformation plots, and graphplots. The included utilities make it possible to switch from the data format used in \pkg{anacor} to the data format used in \pkg{homals}, and this gives the user a great deal of flexibility. The confidence ellipsoids from CA are a powerful tool to visualize the dispersions of the row and column projections in the plane. 
 
 \bibliography{anacor}
-
 \end{document}
