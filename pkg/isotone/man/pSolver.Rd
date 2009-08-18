@@ -35,11 +35,10 @@ that if \code{aw} = \code{bw}, we get the weighted median and therefore we solve
 
 ##Fitting quantile regression
 set.seed(12345)
-z <- 9:1                   ##predictor values
 y <- rnorm(9)              ##response values
 w <- rep(1,9)              ##unit weights
 btota <- cbind(1:8, 2:9)   ##Matrix defining isotonicity (total order)
-#fit.p <- activeSet(z, btota, pSolver, weights = w, y = y, aw = 0.3, bw = 0.7)
+fit.p <- activeSet(btota, pSolver, weights = w, y = y, aw = 0.3, bw = 0.7)
 
 }
 \keyword{models}

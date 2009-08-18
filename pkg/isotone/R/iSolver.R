@@ -4,6 +4,8 @@
 
 iSolver<-function(z, a, extra) {
   x <- z
+    if ((is.null(extra$weights)) || (is.null(extra$y)) || (is.null(extra$eps)) || (is.null(extra$beta))) stop("iSolver needs the additional arguments y, weights, eps, and beta!")
+ 
   w <- extra$weights
   z <- extra$y
   eps <- extra$eps

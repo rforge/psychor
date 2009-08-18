@@ -4,8 +4,7 @@
 
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{Lp norm}
-\description{Solver for Lp-norm.
-}
+\description{Solver for Lp-norm.}
 \usage{
 oSolver(z, a, extra)
 }
@@ -31,12 +30,10 @@ oSolver(z, a, extra)
 
 ##Fitting isotone regression 
 set.seed(12345)
-z <- 9:1                   ##predictor values
-y <- rnorm(9)              ##response values
-w <- diag(rep(1,9))        ##unit weight matrix
-p <- 3
-btota <- cbind(1:8, 2:9)   ##Matrix defining isotonicity (total order)
-#fit.pnorm <- activeSet(z, btota, oSolver, weights = w, y = y, p = p)
+y <- rnorm(9)               ##normal distributed response values
+w1 <- rep(1,9)              ##unit weights
+Atot <- cbind(1:8, 2:9)     ##Matrix defining isotonicity (total order)
+fit.pow <- activeSet(Atot, oSolver, y = y, weights = w1, p = 1.2)
 
 }
 \keyword{models}

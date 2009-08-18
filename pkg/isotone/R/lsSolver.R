@@ -3,13 +3,12 @@
 
 lsSolver <- function(z, a, extra) 
 {
-#x ... function values
-#a ... active constraints
     x <- z
+    if ((is.null(extra$weights)) || (is.null(extra$y))) stop("lsSolver needs the additional arguments y and weights!")
     w <- extra$weights                           #weights
     z <- extra$y                                 #response
     n <- length(z)
-    if (length(a)==0) return(list(x = z, l = 0, f = 0))  #no active set, break
+    if (length(a)==0) return(list(x=z,lbd=NULL,f=0,gx=rep(0,n))) #no active set, break
     if (is.vector(a)) a <- matrix(a,1,length(a)) #only 1 active set (as matrix)
     
     indi <- mkIndi(a,n)                          #compute indicators

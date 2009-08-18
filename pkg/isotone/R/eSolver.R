@@ -2,6 +2,7 @@
 
 eSolver<-function(z, a, extra) {
     x <- z
+   if ((is.null(extra$weights)) || (is.null(extra$y)) || (is.null(extra$eps))) stop("eSolver needs the additional arguments y, weights, and eps!")
     w <- extra$weights
     z <- extra$y
     eps <- extra$eps

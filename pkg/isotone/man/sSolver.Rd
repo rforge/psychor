@@ -29,10 +29,10 @@ sSolver(z, a, extra)
 \examples{
 
 ##Minimizing Poisson log-liklihood
-set.seed(123)
-z <- 9:1                   ##predictor values
-y <- sample(1:100, 9)      ##response values
-btota <- cbind(1:8, 2:9)   ##Matrix defining isotonicity (total order)
-fit.poiss <- activeSet(z, btota, sSolver, y = y)
+set.seed(12345)
+yp <- rpois(9,5)
+Atot <- cbind(1:8, 2:9)     ##Matrix defining isotonicity (total order)
+x0 <- 9:1                   ##starting values
+fit.poi <- activeSet(Atot, sSolver, x0 = x0, y = yp)
 }
 \keyword{models}

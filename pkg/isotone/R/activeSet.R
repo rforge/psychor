@@ -1,14 +1,31 @@
 #active set methods for different solver
 
 
-activeSet <- function(z, isomat, mySolver = lsSolver, ups = 1e-12, check = TRUE, ...) 
+activeSet <- function(isomat, mySolver = lsSolver, x0 = NA, ups = 1e-12, check = TRUE, maxiter = 100, ...) 
 {
-  x <- z
   a <- isomat                      #matrix with order restrictions
+  if (ncol(isomat) != 2) stop("isomat must have 2 columns!")
+  
   extra <- list(...)
-  n <- length(x)
-  xold <- x                        #predictor values
+
+  if (any(is.na(x0))) {
+    if(!is.null(extra$y)) {
+      x0 <- rep(0, length(extra$y))  #default starting values
+    } else {                        #in case fSolver is called and no y argument provided
+      stop("Starting values x0 must be provided!")
+    }
+  }  
+    
+  n <- length(x0)
+  xold <- x0                       #starting values
   ax <- aTx(a, xold)               #difference between order restrictions
+  
+  if (any(ax < 0)) stop("Starting solution not feasible. A'x must be >= 0!")
+
+  xold <- rev(xold)                #reverse starting values and A to get isotonic result
+  a <- isomat[,c(2,1)]
+  ax <- aTx(a, xold) 
+
   ia <- is.active(ax, ups = ups)   #which constraints are active 
   iter <- 0
 
@@ -52,9 +69,14 @@ activeSet <- function(z, isomat, mySolver = lsSolver, ups = 1e-12, check = TRUE,
       ia <- sort(c(ia,k[ir]))      #collect active sets
     }
     xold <- xnew                   #end iteration, start new one
+    if (iter == maxiter) {
+      warning("Maximum number of iterations reached!")
+      break()
+    }
+    
   }
   #---------------------- end active set iterations --------------------
-  
+  options(warn = 0)
 
   lup <- rep(0, length(ay)) 
   lup[ia] <- lbd                   #final vector of lambdas (0 where there was no active set)
@@ -67,7 +89,7 @@ activeSet <- function(z, isomat, mySolver = lsSolver, ups = 1e-12, check = TRUE,
     ck <- NULL
   }
 
-  result <- list(x = y, z = x, lambda = lup, fval = fy, constr.val = ay, Alambda = hl, 
+  result <- list(x = y, y = extra$y, lambda = lup, fval = fy, constr.val = ay, Alambda = hl, 
   gradient = gy, isocheck = ck, niter = iter, call = match.call())
   class(result) <- "activeset"
   result

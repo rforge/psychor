@@ -31,11 +31,10 @@ dSolver(z, a, extra)
 
 ##Fitting weighted absolute norm problem
 set.seed(12345)
-z <- 9:1                   ##predictor values
 y <- rnorm(9)              ##response values
 w <- rep(1,9)              ##unit weights
 btota <- cbind(1:8, 2:9)   ##Matrix defining isotonicity (total order)
-#fit.abs <- activeSet(z, btota, dSolver, weights = w, y = y)
+fit.abs <- activeSet(btota, dSolver, weights = w, y = y)
 
 }
 \keyword{models}

@@ -2,6 +2,7 @@
 
 fSolver<-function(z, a, extra) {
     x <- z
+    if ((is.null(extra$fobj)) || (is.null(extra$gobj))) stop("fSolver needs the additional arguments fobj and gobj!")
     fobj <- extra$fobj
     gobj <- extra$gobj
     n <- length(x)

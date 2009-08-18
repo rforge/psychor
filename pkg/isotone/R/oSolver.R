@@ -2,6 +2,7 @@
 
 oSolver<-function(z, a, extra) {
     x <- z
+      if ((is.null(extra$weights)) || (is.null(extra$y)) || (is.null(extra$p))) stop("oSolver needs the additional arguments y, weights and p!")
     w <- extra$weights
     z <- extra$y
     pow <- extra$p

@@ -2,6 +2,7 @@
 
 aSolver<-function(z, a, extra) {
     x <- z
+    if ((is.null(extra$weights)) || (is.null(extra$y)) || (is.null(extra$aw)) || (is.null(extra$bw))) stop("aSolver needs the additional arguments y, weights, aw, bw!")
     w <- extra$weights 
     z <- extra$y
     aw <- extra$aw

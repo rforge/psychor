@@ -32,10 +32,9 @@ fSolver(z, a, extra)
 
 ##Fitting isotone regression using active set (L2-norm user-specified)
 set.seed(12345)
-z <- 9:1                   ##predictor values
 y <- rnorm(9)              ##response values
 w <- rep(1,9)              ##unit weights
 btota <- cbind(1:8, 2:9)   ##Matrix defining isotonicity (total order)
-fit.convex <- activeSet(z, btota, fSolver, fobj = function(x) sum(w*(x-y)^2), gobj = function(x) 2*drop(w*(x-y)))
+fit.convex <- activeSet(btota, fSolver, fobj = function(x) sum(w*(x-y)^2), gobj = function(x) 2*drop(w*(x-y)), y = y, weights = w)
 }
 \keyword{models}

@@ -2,12 +2,13 @@
 
 pSolver<-function(z, a, extra) {
     x <- z
+     if ((is.null(extra$weights)) || (is.null(extra$y)) || (is.null(extra$aw)) || (is.null(extra$bw))) stop("pSolver needs the additional arguments y, weights, aw, bw!")
     w<-extra$weights
     z<-extra$y
     aw <- extra$aw
     bw <- extra$bw
     n<-length(z)
-    if (length(a)==0) return(list(x=z,l=0,f=0))
+    if (length(a)==0) return(list(x=z,lbd=NULL,f=0,gx=rep(0,n))) 
     if (is.vector(a)) a<-matrix(a,1,2)
     indi<-mkIndi(a,n)
     m<-ncol(indi); h<-rep(0,m)

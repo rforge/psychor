@@ -13,8 +13,8 @@ gpava(z, y, weights = NULL, solver = weighted.mean, ties = "primary", a = NA, b 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{z}{Vector of list of vectors of predictors}
-  \item{y}{Vector of list of vectors of responses}
+  \item{z}{Vector of abscissae values}
+  \item{y}{Vector or list of vectors of responses}
   \item{weights}{Vector of list of vectors of observation weights}
   \item{solver}{Either \code{weighted.mean}, \code{weighted.median}, \code{weighted.fractile}, or 
   a user-specified function (see below)}

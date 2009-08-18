@@ -35,12 +35,11 @@ Huber, P. (1982). Robust Statistics. Chichester: Wiley.
 
 ##Fitting isotone regression using active set
 set.seed(12345)
-z <- 9:1                   ##predictor values
 y <- rnorm(9)              ##response values
 w <- rep(1,9)              ##unit weights
-eps = 0.01
+eps <- 0.01
 btota <- cbind(1:8, 2:9)   ##Matrix defining isotonicity (total order)
-fit.huber <- activeSet(z, btota, hSolver, weights = w, y = y, eps = eps)
+fit.huber <- activeSet(btota, hSolver, weights = w, y = y, eps = eps)
 
 }
 \keyword{models}

@@ -32,11 +32,10 @@ lfSolver(z, a, extra)
 
 ##Fitting isotone regression 
 set.seed(12345)
-z <- 9:1                   ##predictor values
 y <- rnorm(9)              ##response values
 w <- diag(rep(1,9))        ##unit weight matrix
 btota <- cbind(1:8, 2:9)   ##Matrix defining isotonicity (total order)
-#fit.lf <- activeSet(z, btota, lfSolver, weights = w, y = y)
+#fit.lf <- activeSet(btota, lfSolver, weights = w, y = y)
 
 }
 \keyword{models}

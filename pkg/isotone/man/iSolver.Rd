@@ -33,14 +33,13 @@ iSolver(z, a, extra)
 
 ##Fitting isotone regression using active set
 set.seed(12345)
-z <- 9:1                   ##predictor values
 y <- rnorm(9)              ##response values
 w <- rep(1,9)              ##unit weights
 eps <- 2
 beta <- 0.4
 
 btota <- cbind(1:8, 2:9)   ##Matrix defining isotonicity (total order)
-fit.silf <- activeSet(z, btota, iSolver, weights = w, y = y, beta = beta, eps = eps)
+fit.silf <- activeSet(btota, iSolver, weights = w, y = y, beta = beta, eps = eps)
 
 }
 \keyword{models}
