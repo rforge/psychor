@@ -1,7 +1,9 @@
 `weighted.fractile` <-
-function(y, w, a, b)
+function(y, w, p)
 {
 # fractiles a/(a+b), b/(a+b) 
+  a <- 1-p
+  b <- p
   ox <- order(y)
   y <- y[ox]
   w <- w[ox]

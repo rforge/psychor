@@ -1,5 +1,5 @@
 `gpava` <-
-function(z = NULL, y, weights = NULL, solver = weighted.mean, ties = "primary", a = NA, b = NA)
+function(z = NULL, y, weights = NULL, solver = weighted.mean, ties = "primary", p = NA)
 {
 # y ... response; either a single vector or a list of vectors (blocks)
 # z ... predictor (1 predictor only so far, maybe extension to >1, i.e. generalized pava)
@@ -14,10 +14,10 @@ function(z = NULL, y, weights = NULL, solver = weighted.mean, ties = "primary", 
     if ((is.matrix(y)) || (is.data.frame(y))) y <- c(as.data.frame(t(y))) #generate list
     if ((is.matrix(w)) || (is.data.frame(w))) w <- c(as.data.frame(t(w))) #generate list
     
-    if (any(is.na(c(a,b)))) {               #additional arguments a,b
+    if (any(is.na(p))) {               #additional arguments a,b
       moreargs <- NULL
     } else {
-      moreargs <- list(a=a,b=b)
+      moreargs <- list(p = p)
     }
     
     n <- length(y)
@@ -78,7 +78,7 @@ function(z = NULL, y, weights = NULL, solver = weighted.mean, ties = "primary", 
             if (is.null(moreargs)) {
               vals[i] <<- solver(y[[i]], w[[i]])       #z_i; apply function for element[[i]]
             } else {
-               vals[i] <<- solver(y[[i]], w[[i]], a = a, b = b)       #weighted fractile
+               vals[i] <<- solver(y[[i]], w[[i]], p=p)       #weighted fractile
             }
             
             inds[[i]] <<- c(inds[[i]], inds[[j]])
@@ -96,7 +96,7 @@ function(z = NULL, y, weights = NULL, solver = weighted.mean, ties = "primary", 
              if (is.null(moreargs)) {
                vals[i] <<- solver(y[inds[[i]]], w[inds[[i]]]) #compute target function (i, i+1)
             } else {
-               vals[i] <<- solver(y[inds[[i]]], w[inds[[i]]], a = a, b = b) #fractile
+               vals[i] <<- solver(y[inds[[i]]], w[inds[[i]]], p=p) #fractile
             }
             
             keep <- seq_len(n)[-j]
