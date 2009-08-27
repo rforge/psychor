@@ -1,33 +1,47 @@
 #active set methods for different solver
 
 
-activeSet <- function(isomat, mySolver = lsSolver, x0 = NA, ups = 1e-12, check = TRUE, maxiter = 100, ...) 
+activeSet <- function(isomat, mySolver = "LS", x0 = NULL, ups = 1e-12, check = TRUE, maxiter = 100, ...) 
 {
   a <- isomat                      #matrix with order restrictions
   if (ncol(isomat) != 2) stop("isomat must have 2 columns!")
   
   extra <- list(...)
-
-  if (any(is.na(x0))) {
-    if(!is.null(extra$y)) {
-      x0 <- rep(0, length(extra$y))  #default starting values
-    } else {                        #in case fSolver is called and no y argument provided
-      stop("Starting values x0 must be provided!")
-    }
-  }  
-    
+  if (length(x0) == 0) x0 <- rep(0,max(isomat))
+   
   n <- length(x0)
   xold <- x0                       #starting values
-  ax <- aTx(a, xold)               #difference between order restrictions
-  
-  if (any(ax < 0)) stop("Starting solution not feasible. A'x must be >= 0!")
-
-  xold <- rev(xold)                #reverse starting values and A to get isotonic result
   a <- isomat[,c(2,1)]
-  ax <- aTx(a, xold) 
+  ax <- aTx(a, xold)               #difference between order restrictions
+
+  if (any(ax < 0)) stop("Starting solution not feasible. Ax must be >= 0!")
 
   ia <- is.active(ax, ups = ups)   #which constraints are active 
   iter <- 0
+
+  #--------------- solver specification --------------------
+  mySolverDB <- list()
+  mySolverDB$chebyshev <- mSolver
+  mySolverDB$LS <- lsSolver
+  mySolverDB$L1 <- dSolver
+  mySolverDB$quantile <- pSolver
+  mySolverDB$GLS <- lfSolver
+  mySolverDB$poisson <- sSolver
+  mySolverDB$Lp <- oSolver
+  mySolverDB$asyLS <- aSolver
+  mySolverDB$L1eps <- eSolver
+  mySolverDB$huber <- hSolver
+  mySolverDB$SILF <- iSolver
+
+  if(is.character(mySolver)) {
+      pos <- pmatch(tolower(mySolver),
+                    tolower(names(mySolverDB)))
+      if(is.na(pos))
+          stop(gettextf("Invalid skmeans method '%s'.", mySolver))
+      mySolver <- mySolverDB[[pos]]
+   }
+  #------------ end solver specification -----------------
+
 
   #-------------- start active set iterations ------------------------
   repeat {

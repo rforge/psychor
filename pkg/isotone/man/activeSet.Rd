@@ -11,14 +11,14 @@ This functions offers active set strategies for a collection of isotone optimiza
 package. 
 }
 \usage{
-activeSet(isomat, mySolver = lsSolver, x0 = NA, ups = 1e-12, check = TRUE, maxiter = 100, ...)
+activeSet(isomat, mySolver = "LS", x0 = NULL, ups = 1e-12, check = TRUE, maxiter = 100, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{isomat}{Matrix with 2 columns that contains isotonicity conditions, i.e. for row i it holds that fitted value i column 1 <= fitted value i column 2 (see examples)}
-  \item{mySolver}{Various functions are pre-defined (see details). For user-specified functions \code{fSolver} with additional 
+  \item{mySolver}{Various functions are pre-defined (see details). Either to funtction name or the corresponding string equivalent can be used. For user-specified functions \code{fSolver} with additional 
   arguments can be used (see details as well).}
-  \item{x0}{Feasible starting solution. If \code{NA} the null-vector is used internally.}
+  \item{x0}{Feasible starting solution. If \code{NULL} the null-vector is used internally.}
   \item{ups}{Upper boundary}
   \item{check}{If TRUE, KKT feasibility checks for isotonicity of the solution are performed}
   \item{maxiter}{Iteration limit}
@@ -26,9 +26,10 @@ activeSet(isomat, mySolver = lsSolver, x0 = NA, ups = 1e-12, check = TRUE, maxit
 }
 \details{The following solvers are specified. Note that \code{y} as the vector of observed values and \code{weights} as the vector of weights need to provided through \code{...} for each solver (except for \code{fSolver()} and \code{sSolver()}). Some solvers need additional arguments as described in the corresponding solver help files. More technical details can be found in the package vignette.    
 
-The solvers are \code{aSolver()} for asymmetric least squares, \code{dSolver()} for the least absolute value, \code{eSolver()} minimizes l1-approximation. 
-\code{fSolver()} for arbitrary differentiable functions. The arguments \code{fobj} (target function ) and \code{gobj} (first derivative) must be provided plus any additional arguments used in the definition of \code{fobj}. \code{hSolver()} for Huber loss function, \code{iSolver()} for SILF loss (support vector regression), \code{lfSolver()} for least squares with non-diagonal weights, \code{lsSolver()} for least 
-squares with diagonal weights, \code{mSolver()} for Chebyshev norm, \code{oSolver()} for power norm, \code{pSolver()} for quantile loss function, and finally \code{sSolver()} for Poisson likelihood. 
+The pre-specified solvers are the following (we always give the corresponding string equivalent in brackets): 
+\code{lsSolver()} (\code{"LS"}) for least squares with diagonal weights, \code{aSolver()} (\code{"asyLS"}) for asymmetric least squares, \code{dSolver()} (\code{"L1"}) for the least absolute value, \code{eSolver()} (\code{"L1eps"}) minimizes l1-approximation. \code{hSolver()} (\code{"huber"}) for Huber loss function, \code{iSolver()} (\code{"SILF"}) for SILF loss (support vector regression), \code{lfSolver()} (\code{"GLS"}) for general least squares with non-diagonal weights, \code{mSolver()} (\code{"chebyshev"}) for Chebyshev L-inf norm, \code{oSolver()} (\code{"Lp"}) for L-p power norm, \code{pSolver()} (\code{"quantile"}) for quantile loss function, and finally \code{sSolver()} (\code{"poisson"}) for Poisson likelihood. 
+
+\code{fSolver()} for user-specified arbitrary differentiable functions. The arguments \code{fobj} (target function ) and \code{gobj} (first derivative) must be provided plus any additional arguments used in the definition of \code{fobj}. 
 
 }
 
@@ -66,7 +67,7 @@ Atot
 
 
 ## Least squares solver (pre-specified and user-specified)
-fit.ls1 <- activeSet(Atot, lsSolver, y = y, weights = w1)
+fit.ls1 <- activeSet(Atot, "LS", y = y, weights = w1)
 fit.ls1
 summary(fit.ls1)
 fit.ls2 <- activeSet(Atot, fSolver, fobj = function(x) sum(w1*(x-y)^2), gobj = function(x) 2*drop(w1*(x-y)), y = y, weights = w1)
@@ -75,57 +76,57 @@ fit.ls2 <- activeSet(Atot, fSolver, fobj = function(x) sum(w1*(x-y)^2), gobj = f
 set.seed(12345)
 wvec <- 1:9
 wmat <- crossprod(matrix(rnorm(81),9,9))/9  
-fit.wls <- activeSet(Atot, lsSolver, y = y, weights = wvec)
-fit.gls <- activeSet(Atot, lfSolver, y = y, weights = wmat)
+fit.wls <- activeSet(Atot, "LS", y = y, weights = wvec)
+fit.gls <- activeSet(Atot, "GLS", y = y, weights = wmat)
 
 
 ## Quantile regression
-fit.qua <- activeSet(Atot, pSolver, y = y, weights = wvec, aw = 0.3, bw = 0.7)
+fit.qua <- activeSet(Atot, "quantile", y = y, weights = wvec, aw = 0.3, bw = 0.7)
 
 
 ## Mean absolute value norm
-fit.abs <- activeSet(Atot, dSolver, y = y, weights = w1)
+fit.abs <- activeSet(Atot, "L1", y = y, weights = w1)
 
 ## Lp norm
-fit.pow <- activeSet(Atot, oSolver, y = y, weights = w1, p = 1.2)
+fit.pow <- activeSet(Atot, "Lp", y = y, weights = w1, p = 1.2)
 
 ## Chebyshev norm
-fit.che <- activeSet(Atot, mSolver, y = y, weights = w1)
+fit.che <- activeSet(Atot, "chebyshev", y = y, weights = w1)
 
 ## Efron's asymmetric LS
-fit.asy <- activeSet(Atot, aSolver, y = y, weights = w1, aw = 2, bw = 1)
+fit.asy <- activeSet(Atot, "asyLS", y = y, weights = w1, aw = 2, bw = 1)
 
 ## Huber and SILF loss
-fit.hub <- activeSet(Atot, hSolver, y = y, weights = w1, eps = 1)
-fit.svm <- activeSet(Atot, iSolver, y = y, weights = w1, beta = 0.8, eps = 0.2)
+fit.hub <- activeSet(Atot, "huber", y = y, weights = w1, eps = 1)
+fit.svm <- activeSet(Atot, "SILF", y = y, weights = w1, beta = 0.8, eps = 0.2)
 
 
 ## Negative Poisson log-likelihood
 set.seed(12345)
 yp <- rpois(9,5)
-x0 <- 9:1
-fit.poi <- activeSet(Atot, sSolver, x0 = x0, y = yp)
+x0 <- 1:9
+fit.poi <- activeSet(Atot, "poisson", x0 = x0, y = yp)
 
 ## LS on tree ordering
 Atree <- matrix(c(1,1,2,2,2,3,3,8,2,3,4,5,6,7,8,9),8,2)
 Atree
-fit.tree <- activeSet(Atree, lsSolver, y = y, weights = w1)
+fit.tree <- activeSet(Atree, "LS", y = y, weights = w1)
 
 
 ## LS on loop ordering
 Aloop <- matrix(c(1,2,3,3,4,5,6,6,7,8,3,3,4,5,6,6,7,8,9,9),10,2)
 Aloop
-fit.loop <- activeSet(Aloop, lsSolver, y = y, weights = w1)
+fit.loop <- activeSet(Aloop, "LS", y = y, weights = w1)
 
 
 ## LS on block ordering
 Ablock <- cbind(c(rep(1,3),rep(2,3),rep(3,3),rep(4,3),rep(5,3),rep(6,3)),c(rep(c(4,5,6),3),rep(c(7,8,9),3)))
 Ablock
-fit.block <- activeSet(Ablock, lsSolver, y = y, weights = w1)
+fit.block <- activeSet(Ablock, "LS", y = y, weights = w1)
 
 ## Isotone LS regression using gpava and active set (same results)
 pava.fitted <- gpava(y = y)$x
-aset.fitted <- activeSet(Atot, lsSolver, weights = w1, y = y)$x
+aset.fitted <- activeSet(Atot, "LS", weights = w1, y = y)$x
 mse <- mean((pava.fitted - aset.fitted)^2)
 mse
 }

@@ -15,13 +15,13 @@
 
 %% almost as usual
 \author{Jan de Leeuw\\University of California, Los Angeles \And 
-        Kurt Hornik\\ Wirtschaftsuniversit\"at Wien  \AND 
-        Patrick Mair \\Wirtschaftsuniversit\"at Wien}
+        Kurt Hornik\\WU  Wirtschaftsuniversit\"at Wien  \AND 
+        Patrick Mair \\WU Wirtschaftsuniversit\"at Wien}
 \title{Isotone Optimization in \proglang{R}: Pool-Adjacent-Violators Algorithm (PAVA) and Active Set Methods}
 
 \Plainauthor{Jan de Leeuw, Kurt Hornik, Patrick Mair} %% comma-separated
 \Plaintitle{Isotone Optimization in R: Pool-Adjacent-Violators Algorithm (PAVA) and Active Set Methods} %% without formatting
-\Shorttitle{PAVA and Active Set \proglang{R}} %% a short title (if necessary)
+\Shorttitle{PAVA and Active Set in \proglang{R}} %% a short title (if necessary)
 
 %% an abstract and keywords
 \Abstract{In this paper we give a general framework for isotone optimization. First we discuss a generalized version of the Pool-Adjacent-Violators Algorithm (PAVA) to minimize a separable convex function with simple chain constraints. Besides of general convex functions we extend existing PAVA implementations in terms of observation weights, approaches for tie handling, and responses from repeated measurement designs. Since isotone optimization problems can be formulated as convex programming problems with linear constraints we then develop a primal active set method to solve such problem. This methodology is applied on specific loss functions relevant in statistics. Both approaches are implemented in the \proglang{R} package \pkg{isotone}.
@@ -62,6 +62,12 @@
 \begin{document}
 
 \section{Introduction - History of monotone regression}
+<<preliminaries, echo=FALSE, results=hide>>=
+library("isotone")
+cleanup <- FALSE
+options(prompt = "R> ", continue = "+  ")
+@
+
 In monotone (or isotone) regression we fit an increasing or decreasing function to a set of points in the plane. This generalization of linear regression has a fairly complicated history, which we now discuss.
 
 On June 4, 1958, Constance van Eeden defended her dissertation at the University of Amsterdam. The dissertation \emph{Testing and Estimating Ordered Parameters of Probability Distributions} \citep{vanEeden:1958} summarized and extended four articles published in 1956-1957 in \emph{Indagationes Mathematicae}. Van Eeden's promotor Van Dantzig said in his speech at the promotion  
@@ -71,7 +77,7 @@ As often happens, just before you were able to obtain a final version of your re
 He referred to \citet{Brunk:1955} and \citet{Ayer+Brunk+Ewing+Reid+Silverman:1955}, which both appeared in the \emph{Annals of Mathematical Statistics}. To complicate the situation, there were also the papers by 
 \citet{Miles:1959} and \citet{Bartholomew:1959a,Bartholomew:1959b}, which can be thought of as yet another independent discovery. Some of the interconnectivity, and some of the early history, is reviewed in the excellent book by the four B's~\citep{Barlow+Batholomew+Brenner+Brunk:1972}.
 
-Of the classical treatments of monotone regression, Van Eeden's is the most general one. Moreover she very clearly separates the optimization problem, treated in full detail in Chapter 1 of her dissertation, from the statistical applications. Of course we must realize that this work predates the advent of convex analysis by about 15 years, while it was done at the time that statisticians started showing interest in the Kuhn-Tucker conditions and in quadratic programming. In Van Eeden's setup, the problem is to minimize a strictly unimodal function
+Of the classical treatments of monotone regression, Van Eeden's is the most general one. Moreover she very clearly separates the optimization problem, treated in full detail in Chapter 1 of her dissertation, from the statistical applications. Of course we must realize that this work predates the advent of convex analysis by about 15 years, while it was done at the time that statisticians started showing interest in the (Karush-)Kuhn-Tucker conditions and in quadratic programming. In Van Eeden's setup, the problem is to minimize a strictly unimodal function
 \(f(x_1,\ldots,x_n)\) under the bound constraints \(\alpha_i\leq x_i\leq\beta_i\) and the partial order constraints \(\sigma_{ij}(x_i-x_j)\geq 0\). Here the \(\sigma_{ij}\) are either zero or \(\pm 1\), and we suppose the system of inequalities defined by the bound and order constraints is consistent. By careful classical analysis, Van Eeden derives her algorithms, and shows how they specialize if the objective function is separable and/or a sum of squares, and if the order constraints define a complete order.
 
 The next major contributions were by Robertson and Dykstra, summarized in the book by~\citet{Robertson+Wright+Dykstra:1988}. At the same time, starting with~\citet{Barlow+Brunk:1972} and~\citet{Dykstra:1981}, the isotonic regression problem was embedded more and more in quadratic and convex programming frameworks by, among others,~\citet{Best+Chakravarti:1990} and~\citet{Best+Chakravarti+Ubhaya:2000}. Recent major contributions, relying heavily on mathematical programming results, are~\citet{Stroemberg:1991}, \citet{Ahuja+Orlin:2001}, and~\citet{Hansohm:2007}. Extensions to particular partial orders defined by the variables of a multiple regression are in~\citet{Dykstra:1982} and~\citet{Burdakov+Grimvall+Hussian:2004}.
@@ -80,14 +86,14 @@ The next major contributions were by Robertson and Dykstra, summarized in the bo
 \section{A general isotone optimization framework}
 \subsection{Basics of monotone regression}
 \label{sec:monreg}
-In simple linear regression we assume a linear relationship between a predictor $z = (z_1, \ldots, z_i, \ldots z_n)$ and a response $y = (y_1, \ldots, y_i, \ldots y_n)$. Note that for the predictors we use $z$ instead of the common notation $x$ since later on we embed this algorithm into a convex programming problem where the target variables are typically denoted by $x$. However, the loss function to be minimized is a least squares problem of the form
+In simple regression we assume a linear relationship between a predictor $z = (z_1, \ldots, z_i, \ldots z_n)$ and a response $y = (y_1, \ldots, y_i, \ldots y_n)$. Note that for the predictors we use $z$ instead of the common notation $x$ since later on we embed this algorithm into a convex programming problem where the target variables are typically denoted by $x$. However, the loss function to be minimized is a least squares problem of the form
 \begin{equation}
 \label{eq:ls}
 f(\alpha,\beta)=\sum_{i=1}^n w_i\left(y_i-\alpha-\beta z_i\right)^2 \rightarrow \min!
 \end{equation}
-where $\alpha$ and $\beta$ are the regression parameters and $w_i$ some optional observation weight. Extensions can be formulated in terms of polynomial or other nonlinear parametric regression specifications. In many situations the researcher has no information regarding the mathematical specification of the true regression function. Rather, she can assume a particular shape which can be characterized by certain order restrictions. Typically, this involves that the $y_i$'s increase with the ordered $z_i$'s. Such a situation is called \emph{isotonic regression}; the decreasing case \emph{antitonic regression}. The corresponding umbrella term for both cases is \emph{monotonic regression} \citep[see][for a compact description]{deLeeuw:2005}.
+where $\alpha$ and $\beta$ are the regression parameters and $w_i$ some optional observation weights. Extensions can be formulated in terms of polynomial or other nonlinear parametric regression specifications. In many situations the researcher has no information regarding the mathematical specification of the true regression function. Rather, she can assume a particular shape which can be characterized by certain order restrictions. Typically, this involves that the $y_i$'s increase with the ordered $z_i$'s. Such a situation is called \emph{isotonic regression}; the decreasing case \emph{antitonic regression}. The corresponding umbrella term for both cases is \emph{monotonic regression} \citep[for a compact description, see][]{deLeeuw:2005}.
 
-Suppose that $Z$ is the finite set $\{z_1,z_2,\ldots,z_n\}$ of the ordered predictors with no ties, i.e. $z_1 < z_2 < \cdots <z_n$. Let $y$ be again the observed response vector and $x = (x_1, \ldots, x_i, \ldots x_n)$ the unknown response values to be fitted. The least squares problem in monotonic regression can be stated as 
+Suppose that $Z$ is the finite set $\{z_1,z_2,\ldots,z_n\}$ of the ordered predictors with no ties, i.e., $z_1 < z_2 < \cdots <z_n$. Let $y$ be again the observed response vector and $x = (x_1, \ldots, x_i, \ldots x_n)$ the unknown response values to be fitted. The least squares problem in monotonic regression can be stated as 
 \begin{equation}
 \label{eq:monreg}
 f(x)=\sum_{i=1}^n w_i\left(y_i-x_i\right)^2 \rightarrow \min!
@@ -98,7 +104,7 @@ $X$ is the finite set  $\{x_1, x_2, \ldots, x_n\}$ fitted values which obey the 
 \end{comment}
 These restrictions avoid that we always get perfect fit. The basic theorem the isotonic solution of (\ref{eq:monreg}) is based on, is that if $y_i \geq y_{i+1} $, then the fitted values $\hat x_{i+1}:=\hat x_i$. Correspondingly, the antitonic solution requires $y_i \leq y_{i+1} $. 
 
-For a non-strict partial order of the predictors, i.e. $z_1 \leq z_2 \leq \cdots \leq z_n$, several algorithms for the treatment of ties can be considered \citep{Kruskal:1964, deLeeuw:1977}. The \emph{primary} approach partitions the index set $\{1,2,\ldots,n\}$ into a number of tie blocks $I_1, I_2, \ldots, I_k$ with $k \leq n$. In case of a tie $z_i = z_{i'}$ this approach implies that $x_i$ does not necessarily equal $x_{i'}$. It forces only that the following monotonicity condition holds for the tied observations $i$ and $i'$: If $y_i \leq y_{i'}$ then $x_i \leq x_{i'}$. In practical applications this approach is mostly used. The \emph{secondary} approach is more restrictive and requires $x_i = x_{i'}$ for the tie $i$ and $i'$, regardless which $y$-values were observed. The \emph{tertiary} approach defined in \citet{deLeeuw:1977} abandons the monotonicity condition from the primary approach. For each tie block $I_1, I_2, \ldots, I_k$ the unit of analysis are the weighted means $\overline{x}_{I_1}, \overline{x}_{I_2}, \ldots, \overline{x}_{I_K}$. The tertiary approach requires only that these means are monotonic across tie blocks. 
+For a non-strict partial order of the predictors, i.e., $z_1 \leq z_2 \leq \cdots \leq z_n$, several algorithms for the treatment of ties can be considered \citep{Kruskal:1964, deLeeuw:1977}. The \emph{primary} approach partitions the index set $\{1,2,\ldots,n\}$ into a number of tie blocks $I_1, I_2, \ldots, I_k$ with $k \leq n$. In case of a tie $z_i = z_{i'}$ this approach implies that $x_i$ does not necessarily equal $x_{i'}$. It forces only that the following monotonicity condition holds for the tied observations $i$ and $i'$: If $y_i \leq y_{i'}$ then $x_i \leq x_{i'}$. In practical applications this approach is mostly used. The \emph{secondary} approach is more restrictive and requires $x_i = x_{i'}$ for the tie $i$ and $i'$, regardless which $y$-values were observed. The \emph{tertiary} approach defined in \citet{deLeeuw:1977} abandons the monotonicity condition from the primary approach. For each tie block $I_1, I_2, \ldots, I_k$ the unit of analysis are the weighted means $\overline{x}_{I_1}, \overline{x}_{I_2}, \ldots, \overline{x}_{I_K}$. The tertiary approach requires only that these means are monotonic across tie blocks. 
 
 
 \subsection[Generalization to $l_p$ and multiple measurements]{Generalization to $\ell_p$ and multiple measurements}
@@ -114,7 +120,7 @@ The building blocks of $\mathcal{P}_0$ are a (possibly infinite) open real inter
 f(x)=\sum_{i=1}^n \sum_{j=1}^{m_i} w_{ij} h_i\left(y_{ij},x_i\right) \rightarrow \min! \\
 \textrm{subject to } x_1\leq x_2\leq\cdots\leq x_n.
 \end{eqnarray}
-over all \emph{non-decreasing} $x$, i.e. all $x\in\mathcal{I}^n$. The response vectors of length $m_i$ for each observation $i$ we denote as $\mathbf{y}_i$ which can be caused, e.g., by repeated observations $y_{ij}$. 
+over all \emph{non-decreasing} $x$, i.e., all $x\in\mathcal{I}^n$. The response vectors of length $m_i$ for each observation $i$ we denote as $\mathbf{y}_i$ which can be caused, e.g., by repeated observations $y_{ij}$. 
 
 Common special cases of (\ref{eq:pnorm}) are $p=2$ and $p=1$:
 \begin{subequations}
@@ -123,7 +129,7 @@ h_i(y_{ij},x_i)&=(y_{ij}-x_i)^2,\\
 h_i(y_{ij},x_i)&=|y_{ij}-x_i|.
 \end{align}
 \end{subequations}
-Least-squares estimation for the first problem result in estimates that approximate the conditional mean of the response given predictor value $z_i$. If weights $w_i$ are involved, we get the weighted mean. If we estimate the second equation within a quantile regression framework \citep[see][]{Koenker:2005}, the estimates approximate the (weighted) median. The general quantile regression specification is
+Least-squares estimation for the first problem results in estimates that approximate the conditional mean of the response given predictor value $z_i$. If weights $w_i$ are involved, we get the weighted mean. If we estimate the second equation within a quantile regression framework \citep[see][]{Koenker:2005}, the estimates approximate the (weighted) median. The general quantile regression specification is
 \begin{equation}
 \label{eq:quantile}
 h_i(y_{ij},x_i)=a \max(y_{ij} - x_i, 0) + b \max(x_i - y_{ij}, 0). 
@@ -132,7 +138,7 @@ with $a,b > 0$. The corresponding proportions are $a/(a+b)$ and $b/(a+b)$. Note 
 
 
 \subsection{Isotone optimization as a convex programming problem}
-The whole theory in these sections is based on the fact that isotone optimization can be formulated as convex programming problem with inequality constraints. For instance, the least squares problem in Equation \ref{eq:ls} is one particular example of such a convex program. The isotonicity condition is contained in the side constraints. These inequalities defining isotonicity can be written in matrix form as $Ax \geq 0$ with $x \in \mathbb R^n$ as the target variable to be optimized. $A$ is a $m \times n$ matrix in which each row corresponds with an index pair $i,j$ such that $i\succeq j$. Such a row of length $n$ has element $i$ equal to $+1$, element $j$ equal to $-1$, and the rest of the elements equal to zero. Formally, such isotone optimization problems, written as convex programming problem with linear inequality constraints look as follows:
+The whole theory in this section is based on the fact that isotone optimization can be formulated as convex programming problem with inequality constraints. For instance, the least squares problem in Equation \ref{eq:ls} is one particular example of such a convex program. The isotonicity condition is contained in the side constraints. These inequalities defining isotonicity can be written in matrix form as $Ax \geq 0$ with $x \in \mathbb R^n$ as the target variable to be optimized. $A$ is a $m \times n$ matrix in which each row corresponds with an index pair $i,j$ such that $i\succeq j$. Such a row of length $n$ has element $i$ equal to $+1$, element $j$ equal to $-1$, and the rest of the elements equal to zero. Formally, such isotone optimization problems, written as convex programming problem with linear inequality constraints look as follows:
 \begin{eqnarray}
 \label{eq:convexAx}
  f(x) \rightarrow \min! \nonumber \\ 
@@ -203,20 +209,19 @@ These conditions are referred to as stationarity, primal feasibility, dual feasi
 
 \subsection{Active set method for linearly constrained convex programming problems}
 \label{sec:activestep}
-Basically, there are two classes of algorithms to solve convex optimization problems: The first class are \emph{interior point methods} aim for complementary slackness while maintaining primal and dual feasbility. The second class are active set strategies where we distinguish between two variants:
-\begin{itemize}
- \item \emph{Primal active set methods}: They aim for dual feasibility while maintaining primal feasibility and complementary slackness.
- \item \emph{Dual active set methods}: They aim for primal feasibility while maintaining dual feasibility and complementary slackness.
-\end{itemize}
+Basically, there are two classes of algorithms to solve convex optimization problems: The first class are \emph{interior point methods} aiming for complementary slackness while maintaining primal and dual feasibility. The second class are active set strategies where we distinguish between two variants:
+\begin{description}
+ \item[\emph{Primal active set methods}:] They aim for dual feasibility while maintaining primal feasibility and complementary slackness.
+ \item[\emph{Dual active set methods}:] They aim for primal feasibility while maintaining dual feasibility and complementary slackness.
+\end{description}
 Active set methods in general are approaches for solving linear, quadratic, and convex programming problems with inequality constraints and are the most effective for solving small- to medium-scaled problem. In our implementation, by means of the function \code{activeSet()}, we provide a primal active set strategy which \citet[][Chapter 8]{Zangwill:1969} denotes as \emph{manifold suboptimization}. 
 
 Recall problem $\mathcal{P}$ given in Equation \ref{eq:convexAx} where the aim is to minimize $f(x)$ over $Ax\geq 0$. The minimum is $\hat f(x)$ and the corresponding minimizer is $\hat x$. Write $I$ for subsets of the index set \(\mathcal{I}= 1,2,\cdots,m \) for the constraints. Then $A_I$ is the corresponding $\mathbf{card}(I)\times n$ submatrix of $A$, and $A_{ \overline{I} }$ is the \((m-\mathbf{card}(I))\times n\) complementary submatrix. The \emph{active constraints} at $x$, which we write as $\mathscr{A}$,  are the indices $i$ for which $a_i'x=0$. That is, at a given point $x$ a constraint is called
-\begin{itemize}
-\item \emph{active} if $a_i'x = 0$, $i \in \mathscr{A}$,  and
-\item \emph{inactive} if $a_i'x > 0$, $i \notin \mathscr{A}$.
-\end{itemize}
-
-Each iteration in the active set algorithm attempts to locate the solution to an equality problem in which only the active constraints occur. There are more ways to state the active set optimization problem for our general convex case with linearity restrictions. Let us first elaborate an auxillary problem denoted by $\mathcal{P}_I^+$
+\begin{description}
+ \item[\emph{active}] if $a_i'x = 0$, $i \in \mathscr{A}$,  and
+ \item[\emph{inactive}] if $a_i'x > 0$, $i \notin \mathscr{A}$.
+\end{description}
+Each iteration in the active set algorithm attempts to locate the solution to an equality problem in which only the active constraints occur. There are more ways to state the active set optimization problem for our general convex case with linearity restrictions. Let us first elaborate an auxiliary problem denoted by $\mathcal{P}_I^+$
 \begin{eqnarray}
 \label{eq:asAx}
  f(x) \rightarrow \min! \\ 
@@ -241,7 +246,7 @@ A_I'\hat\lambda_I\in\partial f(\hat x_I),\quad A_I\hat x_I=0.
 \]
 To ensure that $\hat x_I$ is optimal for $\mathcal{P}$ as well we have to check whether the primal feasibility $A_{ \overline{I} }\hat x_I\geq 0$ and, again, the dual feasibility $\hat\lambda_I\geq 0$ holds. Conversely, $\hat x$ with the corresponding active constraints $\mathscr{A}^{\star}$ solves $\mathcal{P}$. Thus, if we knew $\mathscr{A}^{\star}$ we could solve $\mathcal{P}$ by solving $\mathcal{P}_I$. 
 
-In order to achieve this we discuss an equivalent formulation of $\mathcal{P}_I$. Basically, the equality constraints $A_Ix=0$ define a relation $\approx_I$ on $ 1,2,\cdots,n $, with $i \approx_I k$ if there is a row $j$ of $A_I$ in which both $a_{ji}$ and $a_{jk}$ are non-zero. The reflexive and transitive closure \(\overline{\approx}_I\) of \(\approx_I\) is an equivalence relation, which can be coded as an \emph{indicator matrix} $G_I$, i.e. a binary matrix in which all $n$ rows have exactly one element equal to one. 
+In order to achieve this we discuss an equivalent formulation of $\mathcal{P}_I$. Basically, the equality constraints $A_Ix=0$ define a relation $\approx_I$ on $ 1,2,\cdots,n $, with $i \approx_I k$ if there is a row $j$ of $A_I$ in which both $a_{ji}$ and $a_{jk}$ are non-zero. The reflexive and transitive closure \(\overline{\approx}_I\) of \(\approx_I\) is an equivalence relation, which can be coded as an \emph{indicator matrix} $G_I$, i.e., a binary matrix in which all $n$ rows have exactly one element equal to one. 
 
 In the package we compute $G_I$ from $A_I$ in two steps. We first make the adjacency matrix of $\approx_I$ and add the identity to make it reflexive. We then apply Warshall's Algorithm \citep{Warshall:1962} to replace the adjacency matrix by that of the transitive closure $\overline{\approx}_I$, which is an equivalence relation. Thus the transitive adjacency matrix has blocks of ones for the equivalence classes.
 We then select the unique rows of the transitive adjacency matrix (using the \code{unique()} function), and transpose to get $G_I$. 
@@ -255,9 +260,9 @@ f(G_I\xi_I) \rightarrow \min!
 \end{equation}
 with $\xi_I \in\mathbb{R}^r_I$. The vector $\hat\xi_I$ is a solution iff $0\in G_I'\partial f(G_I\hat\xi_I)$. Then $\hat x_I=G_I\hat\xi_I$ solves $\mathcal{P}_I$. If $0\in G_I'\partial f(G_I\hat\xi_I)$ it follows that there is a non-empty intersection of the subgradient $\partial f(G_I\hat\xi_I)$ and the row-space of $A_I$, i.e., there is a KKT vector $A_I'\hat\lambda_I\in\partial f(G_I\hat\xi_I)$.
 
-In \proglang{R} we can simply use the \code{optim()} function (e.g. with BFGS quasi-Newton) to minimize $f(G_I\xi)$ over $\xi$, and then set $\hat x=G_I\hat\xi$. This guarantees (if the optimum is found with sufficient precision) that the gradient at $\hat x$ is orthogonal to the indicator matrix $G_I$, and consequently that Lagrange multipliers can be computed. By making sure that $A_I$ has full row-rank, the Kuhn-Tucker vector is actually unique. Because of the way \code{optim()} is written it is also possible to tackle problems with non-differentiable loss functions, or even non-convex ones. But we are not responsible if this gets you into trouble.
+In \proglang{R} we can simply use the \code{optim()} function (e.g., with BFGS quasi-Newton) to minimize $f(G_I\xi)$ over $\xi$, and then set $\hat x=G_I\hat\xi$. This guarantees (if the optimum is found with sufficient precision) that the gradient at $\hat x$ is orthogonal to the indicator matrix $G_I$, and consequently that Lagrange multipliers can be computed. By making sure that $A_I$ has full row-rank, the Kuhn-Tucker vector is actually unique. 
 
-To conclude, in this section we elaborated auxillary formulations of the active set problem. In the algorithmic implementation described in the next section we tackle optimization of problem $\mathcal{P}$ by defining and solving iteratively subproblems $\mathcal{P}_I$ (including the indicator matrix $G_I$). 
+To conclude, in this section we elaborated auxiliary formulations of the active set problem. In the algorithmic implementation described in the next section we tackle optimization of problem $\mathcal{P}$ by defining and solving iteratively subproblems $\mathcal{P}_I$ (including the indicator matrix $G_I$). 
 
 
 
@@ -268,7 +273,7 @@ To conclude, in this section we elaborated auxillary formulations of the active 
 \label{sec:gpavath}
 \citet{Barlow+Batholomew+Brenner+Brunk:1972} present a graphical interpretation of monotonic regression in terms of the \emph{greatest convex minorant} (GCM) and the method of successive approximation to the GCM can be described algebraically as PAVA \citep[see e.g.][p. 9-10]{Robertson+Wright+Dykstra:1988}. In this paper we focus on the algorithmical description of our PAVA implementation following \citet[][p. 15]{Barlow+Batholomew+Brenner+Brunk:1972}.
 
-PAVA is a very simple iterative algorithm for solving monotonic regression problems. The computation of a non-decreasing sequence of values $x_i$ such that the problem $\mathcal{P}_0$ is optimized. In the simple isotonic regression case we have the measurement pairs $(z_{i}, y_{i})$. Let us assume that these pairs are ordered with respect to the predictors. The initial solution at iteration $l=0$ is $x_i^{(0)}:=y_i$. The index for the blocks is $r = 1,\ldots,B$ where at step 0 $B:=n$, i.e. each observation $x_r^{(0)}$ forms a block.
+PAVA is a very simple iterative algorithm for solving monotonic regression problems. The computation of a non-decreasing sequence of values $x_i$ such that the problem $\mathcal{P}_0$ is optimized. In the simple isotonic regression case we have the measurement pairs $(z_{i}, y_{i})$. Let us assume that these pairs are ordered with respect to the predictors. The initial solution at iteration $l=0$ is $x_i^{(0)}:=y_i$. The index for the blocks is $r = 1,\ldots,B$ where at step 0 $B:=n$, i.e., each observation $x_r^{(0)}$ forms a block.
 
 \begin{enumerate}
  \item Merge $x^{(l)}$-values into blocks if $x_{r+1}^{(l)} < x_r^{(l)}$ (adjacent pooling).
@@ -281,14 +286,14 @@ In the case of repeated measurements as described in Section \ref{sec:general} t
 A final notes considers the relation between the generalized PAVA and the active set strategy. \citet[][Chapter 6]{Robertson+Wright+Dykstra:1988} provide a chapter about duality in monotone regression. For the simple least squares case \citet{Best+Chakravarti:1990} show that PAVA can be considered as a dual active set method. In a subsequent paper, \citet{Best+Chakravarti+Ubhaya:2000} they extend this relation to the general $\ell_p$ case. Therefore it can be concluded that PAVA for general $\ell_p$ cases belong to the family of dual active set methods. 
 
 \subsection{Algorithmic implementation of the active set formulation}
-Active set descriptions for convex (quadratic) programming problems can be found in \citet[][Section 10.3]{Fletcher:1987} and \citet[][Section 16.4]{Nocedal+Wright:1999}. In general, based on a feasbile starting point, the active set strategy works as follows:
+Active set descriptions for convex (quadratic) programming problems can be found in \citet[][Section 10.3]{Fletcher:1987} and \citet[][Section 16.4]{Nocedal+Wright:1999}. In general, based on a feasibile starting point, the active set strategy works as follows:
 \begin{enumerate}
  \item Solve the equality problem defined by the active set $\mathcal{A}$.
  \item Compute the Lagrange multipliers $\lambda$ for $\mathcal{A}$.
  \item Remove a subset of constraints with $\lambda < 0$.
  \item Search for infeasible constraints and return to step 1.
 \end{enumerate}
-These steps are repeated until we find a solution that is ``optimal enough''. In practice (and in our package), the zero-boundaries for the constraints and the dual feasiblity checking are relaxed in favor of a small value $\varepsilon$ which leads to $Ax \geq -\varepsilon$, and $\lambda \geq -\varepsilon$. 
+These steps are repeated until we find a solution that is ``optimal enough''. In practice (and in our package), the zero-boundaries for the constraints and the dual feasibility checking are relaxed in favor of a small value $\varepsilon$ which leads to $Ax \geq -\varepsilon$, and $\lambda \geq -\varepsilon$. 
  
 Again, our goal is to solve problem $\mathcal P$ given in (\ref{eq:asAx}). Based on the elaborations above, in our active set approach we solve a finite sequence of subproblems $\mathcal{P}_I$, that minimize $f(x)$ over $x$ satisfying $A_Ix$. After solving each of the problems we change the active set $\mathscr{A}$, either by adding or by dropping a constraint. The algorithm can be expected be efficient if minimizing $f(x)$ under simple equality constraints, or equivalently minimizing $f(G_I\xi_I)$ over $\xi_I$, can be done quickly and reliably. Starting with a feasible point $x^{(0)}$ which defines the index sets $I^{(0)}=\mathscr{A}^{(0)}$ and $\overline{I}^{(0)}=\mathcal{I}-I^{(0)}$. For each iteration $l$
 
@@ -331,7 +336,7 @@ where we choose the order within the pair $(i_j,k_j)$ such that $y_{i_j}\leq\hat
 \end{equation}
 These results also apply if $I_j$ is a singleton $\{i\}$, in which case $\hat\xi_j=y_i$ and $f_j(\hat\xi_j)=0$. Set $\hat x=G\hat\xi$.
 
-Next we must compute a subgradient in $\partial f(\hat x)$ orthogonal to $G$. Suppose that $e_i$ is a unit weight vectors, i.e. a  vector with all elements equal to zero, except element $i$ which is equal to either plus or minus $w_i$. Consider the set $\mathcal{E}$ of the $2n$ unit weight vectors. Then $f(\xi)=\max_{e_i\in\mathcal{E}} e_i'h(\xi)$. Let $\mathcal{E}(\xi)=\{e_i\mid e_i'h(\xi)=f(\xi)\}$. Then, by the formula for the subdifferential of the pointwise maximum of a finite number of convex functions \citep[also known as Danskin's Theorem; see][]{Danskin:1966}, we have
+Next we must compute a subgradient in $\partial f(\hat x)$ orthogonal to $G$. Suppose that $e_i$ is a unit weight vectors, i.e., a  vector with all elements equal to zero, except element $i$ which is equal to either plus or minus $w_i$. Consider the set $\mathcal{E}$ of the $2n$ unit weight vectors. Then $f(\xi)=\max_{e_i\in\mathcal{E}} e_i'h(\xi)$. Let $\mathcal{E}(\xi)=\{e_i\mid e_i'h(\xi)=f(\xi)\}$. Then, by the formula for the subdifferential of the pointwise maximum of a finite number of convex functions \citep[also known as Danskin's Theorem; see][]{Danskin:1966}, we have
 $\partial f(\xi)=\mathbf{conv}(\mathcal{E}(\xi))$ with $\mathbf{conv}()$ as the convex hull.
 
 Choose any $j$ for which $f_j(\hat\xi_j)$ is maximal. Such a $j$ may not be unique in general. The index pair $(i_j,k_j)$ corresponds with the two unit weight vectors with non-zero elements $-w_{i(j)}$ and $+w_{k(j)}$. The subgradient we choose is the convex combination which has element $-1$ at position $i_j$ and element $+1$ at position $k(j)$. It is orthogonal to $G$, and thus we can find a corresponding Kuhn-Tucker vector. 
@@ -344,35 +349,35 @@ For the $\ell_1$ or weighted absolute value norm
 \label{eq:wabsval}
 f(\xi)=\|h(\xi)\|=\sum_{i=1}^n |w_ih_i(\xi)|
 \end{equation}
-we find the optimum $\hat\xi$ by computing \emph{weighted medians} instead of weighted mid-ranges. Uniqueness problems, and the subdifferentials, will generally be much less smaller than in the case of $\ell_\infty$. 
+we find the optimum $\hat\xi$ by computing \emph{weighted medians} instead of weighted mid-ranges. Uniqueness problems, and the subdifferentials, will generally be smaller than in the case of $\ell_\infty$. 
 
 For $\ell_1$ we define $\mathcal{E}$ to be the set of $2^n$ vectors $(\pm w_1,\pm w_2,\cdots,\pm w_n)$. The subdifferential is the convex hull of the vectors $e\in\mathcal{E}$ for which $e_i'h(\xi)=\min_\xi f(\xi)$. If $h_i(\xi)\not=0$ then $e_i=\mathbf{sign}(h_i(\xi))w_i$, but if $h_i(\xi)=0$ element $e_i$ can be any number in $[-w_i,+w_i]$. Thus the subdifferential is a multidimensional rectangle. If the medians are not equal to the observations the loss function is differentiable. If $h_i(\xi)=0$ for some $i$ in $I_j$ then we select the corresponding element in the subgradient in such a way that they add up to zero over all $i\in I_j$. 
 
 In the package the \code{dSolver()} function implements the weighted absolute value norm.
-
+\newpage
 \subsection{Some additional solvers}
 \label{sec:addsolvers}
-The \pkg{isotone} package provides some pre-specified loss functions but allows also the user to define his own functions. The corresponding argument in the function \code{activeSet()} is \code{mySolver}. Each solver has extra arguments which we describe in this section. 
+The \pkg{isotone} package provides some pre-specified loss functions but allows also the user to define his own functions. The corresponding argument in the function \code{activeSet()} is \code{mySolver}. This can be either the function name or the equivalent string expression given in brackets below. Each solver has extra arguments which we describe in this section. 
 
-A user-defined specification of a convex differentiable function can be achieved by setting \code{mySolver = fSolver}. The target function itself is passed to the function by means of the \code{fobj} argument and the corresponding gradient using \code{gobj}. Note that it is not at all necessary that the problems are of the regression or projection type, i.e. minimize some norm $\|y-x\|$. In fact, the driver can be easily modified to deal with general convex optimization problems with linear inequality constraints which are not necessarily of the isotone type. We give examples in the next section. 
+A user-defined specification of a convex differentiable function can be achieved by setting \code{mySolver = fSolver}. The target function itself is passed to the function by means of the \code{fobj} argument and the corresponding gradient using \code{gobj}. Note that it is not at all necessary that the problems are of the regression or projection type, i.e., minimize some norm $\|y-x\|$. In fact, the driver can be easily modified to deal with general convex optimization problems with linear inequality constraints which are not necessarily of the isotone type. We give examples in the next section. 
 
 Now let us describe some functions pre-specified in the package. We start with the cases which solve the equivalent formulation of problem $\mathcal P_I$ given in (\ref{eq:gxi}), that is, the one which minimizes over $\xi$. Because of the structure of these problems it is more efficient to use this formulation. The solvers passed to the \code{mySolver} argument are 
-\begin{itemize}
-\item \code{lsSolver}: Solves the least squares $\ell_2$ norm given in Equation \ref{eq:monreg}. 
-\item \code{dSolver}: Minimizes the weighted absolute value $\ell_1$ norm as given in (\ref{eq:wabsval}).
-\item \code{mSolver}: Solves the Chebyshev $\ell_\infty$ norm given in (\ref{eq:cheby}).
-\item \code{pSolver}: Solves the quantile regression problem as given in (\ref{eq:quantile}).
-\item \code{lfSolver}: Tackles a general least squares problem of the form $f(x)=(y-x)'W(y-x)$ where $W$ is a not necessarily positive semi-definite matrix of order $n$.   
-\end{itemize}
+\begin{description}
+ \item[\code{lsSolver} (\code{"LS"}):] Solves the least squares $\ell_2$ norm given in Equation \ref{eq:monreg}. 
+ \item[\code{dSolver} (\code{"L1"}):] Minimizes the weighted absolute value $\ell_1$ norm as given in (\ref{eq:wabsval}).
+ \item[\code{mSolver} (\code{"chebyshev"}):] Solves the Chebyshev $\ell_\infty$ norm given in (\ref{eq:cheby}).
+ \item[\code{pSolver} (\code{"quantile"}):] Solves the quantile regression problem as given in (\ref{eq:quantile}).
+ \item[\code{lfSolver} (\code{"GLS"}):] Tackles a general least squares problem of the form $f(x)=(y-x)'W(y-x)$ where $W$ is a not necessarily positive definite matrix of order $n$.   
+\end{description}
 The extra arguments for all these solvers are \code{y} for the observed response vector and \code{weights} for optional observation weights. The functions return a list containing \code{x} as the fitted values, \code{lbd} as the Lagrange vector, \code{f} as the value of the target function, and \code{gx} as the gradient at point $x$. 
 
 Furthermore, we provide some hybrids which are just wrapper functions and call \code{fSolver()} internally. It is not needed that \code{fobj} and \code{gobj} are provided by the user. 
-\begin{itemize}
-\item \code{sSolver}: Solves the negative Poisson log-likelihood with loss function $f(x)=\sum_{i=1}^n x_i-y_i\log(x_i)$.
-\item \code{oSolver}: Minimizes the $\ell_p$ norm as given in (\ref{eq:loss}) with $m_i = 1\ \ \forall i$.
-\item \code{aSolver}: \citet{Efron:1991} gives an asymmetric least squares formulation based on (\ref{eq:monreg}). The weights $b_w$ for $(y_i-x_i) \leq 0$ (extra argument \code{bw}) and $a_w$ for $(y_i-x_i) > 0$ (extra argument \code{aw}) are introduced. Consequently, $h_i(y_i,x_i) = (y_i-x_i)^2b_w$ for $(y_i-x_i)\leq 0$ and $h_i(x_i,y_i) = (y_i-x_i)^2a_w$ for $(y_i-x_i) > 0$. 
-\item \code{eSolver}: Minimizes the $\ell_1$ approximation for $f(x)=\sum_{i=1}^n w_i\sqrt{(y_i-x_i)^2+\varepsilon}$. Correspondingly, the additional extra argument is \code{eps}. 
-\item \code{hSolver}: Solves the Huber loss-function \citep{Huber:1981} with extra argument \code{eps}. 
+\begin{description}
+ \item[\code{sSolver} (\code{"poisson"}):] Solves the negative Poisson log-likelihood with loss function $f(x)=\sum_{i=1}^n x_i-y_i\log(x_i)$.
+ \item[\code{oSolver} (\code{"Lp"}):] Minimizes the $\ell_p$ norm as given in (\ref{eq:loss}) with $m_i = 1\ \ \forall i$.
+ \item[\code{aSolver} (\code{"asyLS"}):] \citet{Efron:1991} gives an asymmetric least squares formulation based on (\ref{eq:monreg}). The weights $b_w$ for $(y_i-x_i) \leq 0$ (extra argument \code{bw}) and $a_w$ for $(y_i-x_i) > 0$ (extra argument \code{aw}) are introduced. Consequently, $h_i(y_i,x_i) = (y_i-x_i)^2b_w$ for $(y_i-x_i)\leq 0$ and $h_i(x_i,y_i) = (y_i-x_i)^2a_w$ for $(y_i-x_i) > 0$. 
+ \item[\code{eSolver} (\code{"L1eps"}):] Minimizes the $\ell_1$ approximation for $f(x)=\sum_{i=1}^n w_i\sqrt{(y_i-x_i)^2+\varepsilon}$. Correspondingly, the additional extra argument is \code{eps}. 
+ \item[\code{hSolver} (\code{"huber"}):] Solves the Huber loss-function \citep{Huber:1981} with extra argument \code{eps}. 
 \[
 h_i(y_i,x_i)= \left\{
 \begin{array}{ll}
@@ -381,7 +386,7 @@ h_i(y_i,x_i)= \left\{
 \end{array}
 \right.
 \]
-\item \code{iSolver}: Minimizes the soft insensitive loss function (SILF) defined in \citet{Chu+Keerthi+Ong:2004} with the two extra parameters $\varepsilon$ (argument \code{eps}) and $\beta$ (argument \code{beta}). We have to distinguish as follows:
+\item[\code{iSolver} (\code{"SILF"}):] Minimizes the soft insensitive loss function (SILF) defined in \citet{Chu+Keerthi+Ong:2004} with the two extra parameters $\varepsilon$ (argument \code{eps}) and $\beta$ (argument \code{beta}). We have to distinguish as follows:
 \[
 h_i(y_i,x_i)= \left\{
 \begin{array}{ll}
@@ -393,7 +398,7 @@ h_i(y_i,x_i)= \left\{
 \end{array}
 \right.
 \]
-\end{itemize}
+\end{description}
 With a little extra effort various other fashionable SVM and lasso isotone regressions could be added. 
 
 %------------------------- end algorithms --------------------------
@@ -402,30 +407,30 @@ With a little extra effort various other fashionable SVM and lasso isotone regre
 
 
 %-------------------------- END THEORY ----------------------------------
-
+\newpage
 \section{Package description and examples}
 The \pkg{isotone} package consists of two main components: The PAVA component with its main function \code{gpava()} and the active set component with its main function \code{activeSet()}. In the following sections we describe their basic functionalities and give corresponding examples. 
 
 \subsection{The PAVA component}
 \label{sec:packpava}
-Table \ref{tab:pava} gives an overview of available PAVA implementations in \proglang{R}. It quotes the package name, the corresponding function, whether this function is externally accessible, a brief description, and in which language the core computations are implemented. 
+Table \ref{tab:pava} gives an overview of available PAVA implementations in \proglang{R}. It quotes the package name, the corresponding function, whether this function is externally accessible, a brief description, and in which programming language the core computations are implemented. The functions that use \proglang{C} or \proglang{FORTRAN} can be expected to be faster for large observation vectors.   
 \begin{table}
 \begin{center}
 \begin{tabular}{|l|l|l|l|l|}
 \hline
 \textbf{Package} & \textbf{Function} & \textbf{Int/Ext} & \textbf{Description} & \textbf{Language} \\
 \hline
-\pkg{stats} & \code{isoreg()} & external & isotonic regression &  C \\
-\pkg{monreg} & \code{monreg()} & external & monotonic regression & C \\
-\pkg{fdrtool} & \code{monoreg()} & external & monotonic regression, weights & C \\
-\pkg{Cir} & \code{pava()}, \code{cir.pava()} & external & isotonic regression, weights & R \\
-\pkg{Iso} & \code{pava()} & external & isotonic regression, weights & FORTRAN \\
-\pkg{clue} & \code{pava()} & internal & isotonic regression (mean/median) & R \\
-\pkg{logcondens} & \code{isoMean()} & external & isotonic regression, weights & R \\ 
-\pkg{sandwich} & \code{pava.blocks()} & internal & isotonic regression, weights & R\\
-\pkg{intcox} & \code{intcox.pavaC()} & internal & isotonic regression, weights & C \\
-\pkg{SAGx} & \code{pava.fdr()} & external & FDR using isotonic regression & R \\
-\pkg{smacof} & \code{pavasmacof()} & internal & nonmetric MDS, ties & R\\
+\pkg{stats} & \code{isoreg()} & external & isotonic regression &  \proglang{C} \\
+\pkg{monreg} & \code{monreg()} & external & monotonic regression & \proglang{C} \\
+\pkg{fdrtool} & \code{monoreg()} & external & monotonic regression, weights & \proglang{C} \\
+\pkg{Cir} & \code{pava()}, \code{cir.pava()} & external & isotonic regression, weights & \proglang{R} \\
+\pkg{Iso} & \code{pava()} & external & isotonic regression, weights & \proglang{FORTRAN} \\
+\pkg{clue} & \code{pava()} & internal & isotonic regression (mean/median) & \proglang{R} \\
+\pkg{logcondens} & \code{isoMean()} & external & isotonic regression, weights & \proglang{R} \\ 
+\pkg{sandwich} & \code{pava.blocks()} & internal & isotonic regression, weights & \proglang{R}\\
+\pkg{intcox} & \code{intcox.pavaC()} & internal & isotonic regression, weights & \proglang{C} \\
+\pkg{SAGx} & \code{pava.fdr()} & external & FDR using isotonic regression & \proglang{R} \\
+\pkg{smacof} & \code{pavasmacof()} & internal & nonmetric MDS, ties & \proglang{R}\\
 \hline 
 \end{tabular}
 \caption{Existing PAVA implementations in \proglang{R}}
@@ -442,92 +447,83 @@ The main function for this generalized PAVA computation is \code{gpava()}. \code
 \subsection{Monotone regression with ties for pituitary data}
 The first example is based on a dataset from \citet{Pothoff+Roy:1964} which is also analyzed in \citet{Robertson+Wright+Dykstra:1988}. The Dental School at the University of North Carolina measured the size of the pituitary fissue (in millimeters) on 11 subjects from 8 to 14 years. The predictor is age and it can be expected that the size of the fissure increases with age. The data are of the following structure:
 
-\begin{Schunk}
-\begin{Sinput}
-> data(pituitary)
-> head(pituitary)
-\end{Sinput}
-\begin{Soutput}
-  age size
-1   8 21.0
-2   8 23.5
-3   8 23.0
-4  10 24.0
-5  10 21.0
-6  10 25.0
-\end{Soutput}
-\end{Schunk}
-As we see we have a several ties on the predictors. By means of this example we present different results caused by different approaches for handling ties (i.e. primary, secondary, tertiary). We compute the isotonic regression using the function \code{gpava()}: 
+<<>>=
+require("isotone")
+data(pituitary)
+head(pituitary)
+@
 
-\begin{Schunk}
-\begin{Sinput}
-> res1 <- with(pituitary, gpava(age, size, ties = "primary"))
-> res2 <- with(pituitary, gpava(age, size, ties = "secondary"))
-> res3 <- with(pituitary, gpava(age, size, ties = "tertiary"))
-\end{Sinput}
-\end{Schunk}
+As we see we have a several ties on the predictors. By means of this example we present different results caused by different approaches for handling ties (i.e., primary, secondary, tertiary). We compute the isotonic regression using the function \code{gpava()}: 
 
-\setkeys{Gin}{width=.9\textwidth} 
-\begin{figure}[tbh]
+<<>>=
+res1 <- with(pituitary, gpava(age, size, ties = "primary"))
+res2 <- with(pituitary, gpava(age, size, ties = "secondary"))
+res3 <- with(pituitary, gpava(age, size, ties = "tertiary"))
+@
+
+<<pit-plot, echo=TRUE, eval = FALSE>>=
+nf <- layout(matrix(c(1,2,3,3), 2, 2, byrow = TRUE), respect = TRUE)
+plot(res1, main = "PAVA plot (primary)")
+plot(res2, main = "PAVA plot (secondary)")
+par(mar=c(5,16.5,4,16.5))
+plot(res3,  main = "PAVA plot (tertiary)")
+@
+
+<<echo=FALSE>>=
+par(mar=c(5,4,4,2))
+@
+
+\setkeys{Gin}{width=\textwidth}
+\begin{figure}
 \begin{center}
-\includegraphics{isotone-004}
-\caption{\label{fig:pitties} Different tie approaches for pituitary data}
+<<pit-plot1, fig=TRUE, echo=FALSE, height=9.6, width=9.6>>=
+<<pit-plot>>
+@
+\caption{\label{fig:pitties} Different tie approaches for pituitary data.}
 \end{center}
 \end{figure}
 
 For the primary method we can have different (monotonic) fitted values within tied observations, for the secondary the fitted values are the same within ties, and the tertiary approach only requires monotonicity on the means. This can be examined by doing
 
-\begin{Schunk}
-\begin{Sinput}
-> tapply(res3$x, res3$z, mean)
-\end{Sinput}
-\begin{Soutput}
-       8       10       12       14 
-22.22222 22.22222 22.22222 24.25000 
-\end{Soutput}
-\end{Schunk}
+<<>>=
+tapply(res3$x, res3$z, mean)
+@
 
 Using the tertiary approach the fitted values within ties can even decrease (see, e.g., within 10 year old children). The plots in Figure \ref{fig:pitties} show the fitted step functions for each of the approaches. 
 
 
 \subsection{Repeated measures using posturographic data}
 To demonstrate PAVA on longitudinal data we use a subset of the data collected in \citet{Leitner+Mair:2008}. The sample consists of 50 subjects (healthy controls and patients chronical low back pain). The subjects' task on a sensory organization test (SOT) was to keep the balance on a dynamic $18 \times 18$ inches dual force plate. Measurements on various testing conditions were collected and the SOT equilibrium scores computed. They were based on the maximum anterior posterior sway angle during the SOT trials and reflected the overall
-coordination of visual, proprioceptive and vestibular components of balance to maintain standing posture. These equilibrium scores represent the angular difference between the subject's calculated anterior/posterior centre of gravity displacements and the theoretical maximum of $12.5^{\circ}$. A score of 100 theoretically indicates no anterior/posterior excursion. A score of 0 indicates a fall of the subject. Thus, the higher the score, the more able a person is to maintain the balance. 
+coordination of visual, proprioceptive and vestibular components of balance to maintain standing posture. These equilibrium scores represent the angular difference between the subject's calculated anterior/posterior center of gravity displacements and the theoretical maximum of $12.5^{\circ}$. A score of 100 theoretically indicates no anterior/posterior excursion. A score of 0 indicates a fall of the subject. Thus, the higher the score, the more able a person is to maintain the balance. 
 
 The subset we select for this example is based on the condition where both proprioceptive and visual stimuli are altered by moving a surrounding visual screen and the platform with the subject's anterior/posterior body sway. We examine the relationship between body height and three repeated SOT scores.
 
-\begin{Schunk}
-\begin{Sinput}
-> data("posturo")
-> head(posturo)
-\end{Sinput}
-\begin{Soutput}
-   height SOT.1 SOT.2 SOT.3
-1    1.64    91    95    91
-2    1.80    84    90    90
-3    1.63    64    80    82
-6    1.59    65    83    83
-10   1.75    87    90    86
-11   1.69    77    88    84
-\end{Soutput}
-\end{Schunk}
+<<>>=
+data("posturo")
+head(posturo)
+@
 
 PAVA is performed on the weighted median target function and using the secondary approach for ties. 
 
-\begin{Schunk}
-\begin{Sinput}
-> res.mean <- with(posturo, gpava(height, cbind(SOT.1, SOT.2, SOT.3), 
-+     solver = weighted.mean, ties = "secondary"))
-> res.median <- with(posturo, gpava(height, cbind(SOT.1, SOT.2, SOT.3), 
-+     solver = weighted.median, ties = "secondary"))
-\end{Sinput}
-\end{Schunk}
+<<>>=
+res.mean <- with(posturo, gpava(height, cbind(SOT.1, SOT.2, SOT.3), solver = weighted.mean, ties = "secondary"))
+res.median <- with(posturo, gpava(height, cbind(SOT.1, SOT.2, SOT.3), solver = weighted.median, ties = "secondary"))
+@
 
-\setkeys{Gin}{width=.9\textwidth} 
-\begin{figure}[tbh]
+<<post-plot, echo=TRUE, eval=FALSE>>=
+plot(res.mean)
+plot(res.median)
+@
+
+\setkeys{Gin}{width=\textwidth}
+\begin{figure}
 \begin{center}
-\includegraphics{isotone-008}
-\caption{\label{fig:post} Step function for posturographic data}
+<<post-plot1, fig=TRUE, echo=FALSE, height=5.3, width=9.6>>=
+par(mar = c(5,4,4,2))
+par(mfrow = c(1, 2))
+<<post-plot>>
+@
+\caption{\label{fig:post} Step function for posturographic data.}
 \end{center}
 \end{figure}
 
@@ -537,227 +533,137 @@ The fitted step functions for the two different target functions are given in Fi
 
 \subsection{The active set component}
 As mentioned above a primal active set implementation according to the elaborations in Section \ref{sec:activestep} is provided by the function \code{activeSet()} which has the following arguments:
-\begin{itemize}
-  \item \code{z}: Vector containing observed predictor values $z$. The response values $y$ are passed to the solver function (see below).
-  \item \code{isomat}: Matrix with 2 columns that contains isotonicity conditions (see examples).
-  \item \code{mySolver}: Either a user-specified solver function or one of the pre-specified solvers as described in Section \ref{sec:addsolvers}.
-  \item \code{ups}: Upper boundary $\varepsilon$ for KKT feasibility checking. 
-  \item \code{check}: If TRUE, a final KKT feasibility check is performed. 
-\end{itemize}
+\begin{description}
+ \item[\code{isomat}:] Matrix with 2 columns that contains isotonicity conditions (see examples).
+ \item[\code{mySolver}:] Either a user-specified solver function or one of the pre-specified solvers as described in Section \ref{sec:addsolvers}.
+ \item[\code{x0}:] Optional vector containing starting values. The response values $y$ are passed to the solver function (see below).
+ \item[\code{ups}:] Upper boundary $\varepsilon$ for KKT feasibility checking. 
+ \item[\code{check}:] If TRUE, a final KKT feasibility check is performed. 
+\end{description}
 For the solvers described in Section \ref{sec:addsolvers}, each one requires various extra arguments (see corresponding package help files for detailed description). Each of the solvers needs to have the response vector $y$ as argument.  
 
 Now we use some small artificial examples to show the application of different solver routines. The data are
-\begin{Schunk}
-\begin{Sinput}
-> z <- 9:1
-> set.seed(12345)
-> y <- rnorm(9)
-> w1 <- rep(1, 9)
-> Atot <- cbind(1:8, 2:9)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+set.seed(12345)
+y <- rnorm(9)
+w1 <- rep(1, 9)
+Atot <- cbind(1:8, 2:9)
+@
 
-The predictor values $z$ define the order for the response $y$. The variable \code{btota} defines the pairwise isotonicity matrix which needs to have 2 columns and as many rows as unique isotonicity constraints.
-\begin{Schunk}
-\begin{Sinput}
-> Atot
-\end{Sinput}
-\begin{Soutput}
-     [,1] [,2]
-[1,]    1    2
-[2,]    2    3
-[3,]    3    4
-[4,]    4    5
-[5,]    5    6
-[6,]    6    7
-[7,]    7    8
-[8,]    8    9
-\end{Soutput}
-\end{Schunk}
+The variable \code{Atot} defines the pairwise isotonicity matrix which needs to have 2 columns and as many rows as unique isotonicity constraints.
+
+<<>>=
+Atot
+@
+
 We see that this matrix defines a total order. The specification is always as follows: element column 2 $\succeq$ element column 1, e.g., the first row states $x_2 \geq x_1$. 
 
 Let us start with a simple least squares model using the \code{lsSolver} and the equivalent user-specification of the $\ell_2$ norm using \code{fSolver} with corresponding target function \code{fobj} and its gradient \code{gobj}. 
 
-\begin{Schunk}
-\begin{Sinput}
-> fit.ls1 <- activeSet(z, Atot, lsSolver, y = y, weights = w1)
-> fit.ls2 <- activeSet(z, Atot, fSolver, fobj = function(x) sum(w1*(x-y)^2), 
-+     gobj = function(x) 2*drop(w1*(x - y)))
-\end{Sinput}
-\end{Schunk}
+<<>>=
+fit.ls1 <- activeSet(Atot, "LS", y = y, weights = w1)
+fit.ls2 <- activeSet(Atot, fSolver, fobj = function(x) sum(w1*(x-y)^2), gobj = function(x) 2*drop(w1*(x - y)), y = y, weights = w1)
+@
 
 This model has unit weights. We will refit this model with a different weight vector and, subsequently, its generalization using a non-diagonal weight matrix by means of the \code{lfsolver}. 
 
-\begin{Schunk}
-\begin{Sinput}
-> set.seed(12345)
-> wvec <- 1:9
-> wmat <- crossprod(matrix(rnorm(81), 9, 9))/9
-> fit.wls <- activeSet(z, Atot, lsSolver, y = y, weights = wvec)
-> fit.gls <- activeSet(z, Atot, lfSolver, y = y, weights = wmat)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+set.seed(12345)
+wvec <- 1:9
+wmat <- crossprod(matrix(rnorm(81), 9, 9))/9
+fit.wls <- activeSet(Atot, "LS", y = y, weights = wvec)
+fit.gls <- activeSet(Atot, "GLS", y = y, weights = wmat)
+@
 
 Quantile regression can be performed by means of the \code{pSolver}:
-\begin{Schunk}
-\begin{Sinput}
-> fit.qua <- activeSet(z, Atot, pSolver, y = y, weights = wvec, aw = 0.3, 
-+     bw = 0.7)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+fit.qua <- activeSet(Atot, "quantile", y = y, weights = wvec, aw = 0.3, bw = 0.7)
+@
 
 Now let us generalize the LS problems in terms of other norms using again unit weights. Let us start with the $\ell_1$ provided by \code{dSolver}.
 
-\begin{Schunk}
-\begin{Sinput}
-> fit.abs <- activeSet(z, Atot, dSolver, y = y, weights = w1)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+fit.abs <- activeSet(Atot, "L1", y = y, weights = w1)
+@
 
 This exact absolute value norm can be approximated with either \code{eSolver} which requires $\varepsilon$ or \code{oSolver} which requires the power $p$. 
 
-\begin{Schunk}
-\begin{Sinput}
-> fit.eps <- activeSet(z, Atot, eSolver, y = y, weights = w1, eps = 1e-04)
-> fit.pow <- activeSet(z, Atot, oSolver, y = y, weights = w1, p = 1.2)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+fit.eps <- activeSet(Atot, "L1eps", y = y, weights = w1, eps = 1e-04)
+fit.pow <- activeSet(Atot, "Lp", y = y, weights = w1, p = 1.2)
+@
 
 Furthermore, the Chebyshev $\ell_{\infty}$ norm can be calculated using \code{mSolver}. 
    
-\begin{Schunk}
-\begin{Sinput}
-> fit.che <- activeSet(z, Atot, mSolver, y = y, weights = w1)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+fit.che <- activeSet(Atot, "chebyshev", y = y, weights = w1)
+@
    
 Efron's asymmetric LS problem can be solved by means of \code{aSolver} with the extra arguments \code{aw} for the $y_i > x_i$ case and \code{bw} for the $y_i \leq x_i$ case:
 
-\begin{Schunk}
-\begin{Sinput}
-> fit.asy <- activeSet(z, Atot, aSolver, y = y, weights = w1, aw = 2, bw = 1)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+fit.asy <- activeSet(Atot, "asyLS", y = y, weights = w1, aw = 2, bw = 1)
+@
 
 The Huber loss function with the $\varepsilon$ parameter and the SILF SVM extension with additionally $\beta$ as parameter can be computed as follows:
 
-\begin{Schunk}
-\begin{Sinput}
-> fit.hub <- activeSet(z, Atot, hSolver, y = y, weights = w1, eps = 1)
-> fit.svm <- activeSet(z, Atot, iSolver, y = y, weights = w1, beta = 0.8, 
-+     eps = 0.2)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+fit.hub <- activeSet(Atot, "huber", y = y, weights = w1, eps = 1)
+fit.svm <- activeSet(Atot, "SILF", y = y, weights = w1, beta = 0.8, eps = 0.2)
+@
     
 As a final norm let us consider the negative Poisson log-likelihood specified in \code{sSolver} using Poisson distribution random numbers with parameter $\lambda = 5$.
 
-\begin{Schunk}
-\begin{Sinput}
-> set.seed(12345)
-> yp <- rpois(9, 5)
-> fit.poi <- activeSet(z, Atot, sSolver, y = yp)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+set.seed(12345)
+yp <- rpois(9, 5)
+x0 <- 1:9
+fit.poi <- activeSet(Atot, "poisson", x0 = x0, y = yp)
+@
    
 So far we focused on total orders only. Now we back to the LS case and specify different types or orders according to the Hasse diagrams in Figure \ref{fig:hasse}. The tree order in Subfigure \ref{F:tree} can be defined as follows:
 
-\begin{Schunk}
-\begin{Sinput}
-> Atree <- matrix(c(1, 1, 2, 2, 2, 3, 3, 8, 2, 3, 4, 5, 6, 7, 8, 9), 8, 2)
-> Atree
-\end{Sinput}
-\begin{Soutput}
-     [,1] [,2]
-[1,]    1    2
-[2,]    1    3
-[3,]    2    4
-[4,]    2    5
-[5,]    2    6
-[6,]    3    7
-[7,]    3    8
-[8,]    8    9
-\end{Soutput}
-\begin{Sinput}
-> fit.tree <- activeSet(z, Atree, lsSolver, y = y, weights = w1)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+Atree <- matrix(c(1, 1, 2, 2, 2, 3, 3, 8, 2, 3, 4, 5, 6, 7, 8, 9), 8, 2)
+Atree
+@
+<<>>=
+fit.tree <- activeSet(Atree, "LS", y = y, weights = w1)
+@
 
 The loop order given in Subfigure \ref{F:loop} and the corresponding LS-fit are
 
-\begin{Schunk}
-\begin{Sinput}
-> Aloop <- matrix(c(1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 3, 3, 4, 5, 6, 6, 7, 8, 9, 9), 
-+     10, 2)
-> Aloop
-\end{Sinput}
-\begin{Soutput}
-      [,1] [,2]
- [1,]    1    3
- [2,]    2    3
- [3,]    3    4
- [4,]    3    5
- [5,]    4    6
- [6,]    5    6
- [7,]    6    7
- [8,]    6    8
- [9,]    7    9
-[10,]    8    9
-\end{Soutput}
-\begin{Sinput}
-> fit.loop <- activeSet(z, Aloop, lsSolver, y = y, weights = w1)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+Aloop <- matrix(c(1, 2, 3, 3, 4, 5, 6, 6, 7, 8, 3, 3, 4, 5, 6, 6, 7, 8, 9, 9), 10, 2)
+Aloop
+@
+
+<<>>=
+fit.loop <- activeSet(Aloop, "LS", y = y, weights = w1)
+@
 
 Finally, using the same data we fit the block order given in subfigure \ref{F:block}.
 
-\begin{Schunk}
-\begin{Sinput}
-> Ablock <- cbind(c(rep(1, 3), rep(2, 3), rep(3, 3), rep(4, 3), rep(5, 3), 
-+     rep(6, 3)), c(rep(c(4, 5, 6), 3), rep(c(7, 8, 9), 3)))
-> Ablock
-\end{Sinput}
-\begin{Soutput}
-      [,1] [,2]
- [1,]    1    4
- [2,]    1    5
- [3,]    1    6
- [4,]    2    4
- [5,]    2    5
- [6,]    2    6
- [7,]    3    4
- [8,]    3    5
- [9,]    3    6
-[10,]    4    7
-[11,]    4    8
-[12,]    4    9
-[13,]    5    7
-[14,]    5    8
-[15,]    5    9
-[16,]    6    7
-[17,]    6    8
-[18,]    6    9
-\end{Soutput}
-\begin{Sinput}
-> fit.block <- activeSet(z, Ablock, lsSolver, y = y, weights = w1)
-\end{Sinput}
-\end{Schunk}
+<<>>=
+Ablock <- cbind(c(rep(1, 3), rep(2, 3), rep(3, 3), rep(4, 3), rep(5, 3), rep(6, 3)), c(rep(c(4, 5, 6), 3), rep(c(7, 8, 9), 3)))
+Ablock
+@
+
+<<>>=
+fit.block <- activeSet(Ablock, "LS", y = y, weights = w1)
+@
 
 Other types of orders can be defined easily by a proper specification of the constraints matrix.
 
 \subsection{PAVA computation using active set}
-In Section \ref{sec:gpavath} we mentioned that PAVA can be considered as a dual active set method. Using the simulated data again, we show that LS PAVA and LS active set lead to the same results. Consequently, the mean squared error becomes 0. 
+In Section \ref{sec:gpavath} we mentioned that PAVA can be considered as a dual active set method. Using the simulated data again, we show that LS PAVA and LS active set lead to the same results. Consequently, the mean squared error becomes almost 0. 
 
-\begin{Schunk}
-\begin{Sinput}
-> pava.fitted <- gpava(z, y)$x
-> aset.fitted <- activeSet(z, Atot, lsSolver, weights = w1, y = y)$x
-> mse <- mean((pava.fitted - aset.fitted)^2)
-> mse
-\end{Sinput}
-\begin{Soutput}
-[1] 0
-\end{Soutput}
-\end{Schunk}
+<<>>=
+pava.fitted <- gpava(1:9, y)$x
+aset.fitted <- activeSet(Atot, "LS", weights = w1, y = y)$x
+mse <- mean((pava.fitted - aset.fitted)^2)
+mse
+@
 
 Obviously, the active set approach is somewhat more general than PAVA in terms of loss functions and different types of orders. But, pertaining to the way we have implemented both functions, in cases in which it applies \code{gpava()} is more convenient and efficient than \code{activeSet()}. In the \code{gpava()} function we provide an easy way to handle multiple measurements. Basically, users can do this in \code{activeSet()} as well by a corresponding solver specification. Furthermore, \code{gpava()} offers different approaches to handle ties whereas \code{activeSet()} does not. Finally, for large data problems, PAVA is computationally more efficient than active set. 
 

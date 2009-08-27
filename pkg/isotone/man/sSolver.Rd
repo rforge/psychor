@@ -32,7 +32,7 @@ sSolver(z, a, extra)
 set.seed(12345)
 yp <- rpois(9,5)
 Atot <- cbind(1:8, 2:9)     ##Matrix defining isotonicity (total order)
-x0 <- 9:1                   ##starting values
+x0 <- 1:9                   ##starting values
 fit.poi <- activeSet(Atot, sSolver, x0 = x0, y = yp)
 }
 \keyword{models}
