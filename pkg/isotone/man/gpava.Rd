@@ -44,6 +44,7 @@ should return a single numerical value.
   \item{w}{Weights}
   \item{solver}{Convex function}
   \item{call}{Matched call}
+  \item{p}{Fractile value}
 }
 \references{
 de Leeuw, J., Hornik, K., Mair, P. (2008). Isotone Optimization in R: Pool-Adjacent-Violators 

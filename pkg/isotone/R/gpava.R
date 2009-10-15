@@ -138,7 +138,7 @@ function(z = NULL, y, weights = NULL, solver = weighted.mean, ties = "primary", 
      yfit <- as.vector((mapply(solver, y1, w1, MoreArgs = moreargs)) + ifelse(outer(x,xag,"=="),1,0)%*%(yfit.notie[r]-(mapply(solver, yag[o], wag[o], MoreArgs = moreargs))))
    }
  
- result <- list(x = yfit, z = x, y = y1, w = w1, solver = solver, call = match.call())  
+ result <- list(x = yfit, z = x, y = y1, w = w1, solver = solver, call = match.call(), p = p)  
  class(result) <- "gpava"
  result
 }

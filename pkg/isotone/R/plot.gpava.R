@@ -11,7 +11,11 @@ col = "lightblue",...)
   jumps <- c(1, jumps, length(xval))
   
   if (is.list(x$y)) {
-    plot(xcum, c(NA, (mapply(x$solver, x$y, x$w)[o])), xlab = xlab, ylab = ylab, main = main) 
+    if (is.na(x$p)) {
+      plot(xcum, c(NA, (mapply(x$solver, x$y, x$w)[o])), xlab = xlab, ylab = ylab, main = main)
+    } else {
+      plot(xcum, c(NA, (mapply(x$solver, x$y, x$w, x$p)[o])), xlab = xlab, ylab = ylab, main = main)
+    }
   } else {
     plot(xcum, c(NA, x$y[o]), xlab = xlab, ylab = ylab, main = main)   
   }  
