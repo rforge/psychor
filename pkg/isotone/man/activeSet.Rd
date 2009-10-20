@@ -47,8 +47,8 @@ The pre-specified solvers are the following (we always give the corresponding st
   \item{call}{Matched call}
 }
 \references{
-de Leeuw, J., Hornik, K., Mair, P. (2008). Isotone optimization in R: Active Set methods and pool-adjacent-violators algorithm. 
-Journal of Statistical Software, forthcoming.
+de Leeuw, J., Hornik, K., Mair, P. (2009). Isotone optimization in R: Active Set methods and pool-adjacent-violators algorithm. 
+Journal of Statistical Software, 32(5), 1-24.
 }
 \author{Jan de Leeuw, Kurt Hornik, Patrick Mair}
 

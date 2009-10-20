@@ -47,8 +47,8 @@ should return a single numerical value.
   \item{p}{Fractile value}
 }
 \references{
-de Leeuw, J., Hornik, K., Mair, P. (2008). Isotone Optimization in R: Pool-Adjacent-Violators 
-Algorithm (PAVA) and Active Set Methods. Journal of Statistical Software, forthcoming. 
+de Leeuw, J., Hornik, K., Mair, P. (2009). Isotone Optimization in R: Pool-Adjacent-Violators 
+Algorithm (PAVA) and Active Set Methods. Journal of Statistical Software,  32(5), 1-24. 
 }
 \author{Kurt Hornik, Jan de Leeuw, Patrick Mair}
 
