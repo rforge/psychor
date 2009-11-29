@@ -6,6 +6,11 @@
 
 \newcommand{\sgn}{\operatorname{sgn}}
 
+\SweaveOpts{engine=R, eps=FALSE}
+%\VignetteIndexEntry{A general framework for multivariate analysis with optimal scaling: The R package aspect}
+%\VignetteDepends{aspect}
+%\VignetteKeywords{aspect, lineals, optimal scaling, bilinearizability, R}
+%\VignettePackage{aspect}
 
 \author{Patrick Mair \\WU Wirtschaftsuniversit\"at Wien \And 
         Jan de Leeuw\\University of California, Los Angeles
