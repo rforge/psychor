@@ -1,7 +1,7 @@
 \name{expandFrame}
 \alias{expandFrame}
 
-\title{Converts Table to Indicator Matrix}
+\title{Expand Matrix}
 \description{This utility function expands a matrix or data frame to an indicator supermatrix and
 optionally converts this to a data frame again. By default \code{NA} becomes zero and constant rows and columns are eliminated.
 }

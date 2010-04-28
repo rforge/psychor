@@ -28,7 +28,7 @@ Journal of Statistical Software, 31(5), 1-18.
 }
 
 \keyword{ package }
-\seealso{\code{\link{anacor}}, \code{\link[<pkg>:<pkg>-homals]{<pkg>}}, \code{\link[<pkg>:<pkg>-ca]{<pkg>}}, \code{\link[<pkg>:<pkg>-ade4]{<pkg>}}
+\seealso{\code{\link{anacor}}
 }
 \examples{
 data(tocher)

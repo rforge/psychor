@@ -1,7 +1,7 @@
 \name{mkIndiList}
 \alias{mkIndiList}
 
-\title{Converts Table to Indicator Matrix}
+\title{Converts Data Frame to Indicator Matrix}
 \description{This function takes a data frame, a vector of types, a list of knot vectors, and a vector
 of orders. It returns a list of codings for the variables, i.e., crisp indicator, numerical version,
 or fuzzy indicator. 
