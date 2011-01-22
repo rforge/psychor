@@ -22,6 +22,8 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
   }
   p <- ndim                                     
   n <- attr(diss,"Size")
+  if (p > (n - 1)) stop("Maximum number of dimensions is n-1!")
+  
   nn <- n*(n-1)/2
   m <- length(diss)
   
@@ -59,7 +61,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
   
   if (is.null(weightmat)) {
     wgths <- initWeights(diss)
-  }  else  wgths <- weightmat
+  }  else  wgths <- as.dist(weightmat)
   
  
   dhat <- normDissN(diss,wgths,1)                  #normalize dissimilarities
@@ -130,8 +132,8 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
 	}
 	snon <- sum(wgths*(dhat-e)^2)                  #nonmetric stress
         
-	if (verbose) cat("Iteration: ",formatC(itel,width=3, format="d")," Stress: ",
-		formatC(c(sold,ssma,snon),digits=8,width=12,format="f"),"\n")
+	if (verbose) cat("Iteration: ",formatC(itel,width=3, format="d")," Stress (not normalized): ",
+		formatC(c(snon),digits=8,width=12,format="f"),"\n")
 
 	if (((sold-snon)<eps) || (itel == itmax)) break()   #convergence 
 

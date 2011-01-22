@@ -6,7 +6,7 @@
 Basic smacof on symmetric dissimilarity matrix 
 }
 \usage{
-smacofSym(delta, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE, ties = "primary", verbose = FALSE, relax = 1, modulus = 1, itmax = 1000, eps = 1e-06)
+smacofSym(delta, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE, ties = "primary", verbose = FALSE, relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-06)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -18,7 +18,7 @@ smacofSym(delta, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE, ties = 
   \item{metric}{If \code{FALSE} non-metric MDS is performed}
   \item{ties}{Tie specification for non-metric MDS only: \code{"primary"}, \code{"secondary"}, or \code{"tertiary"}}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
-  \item{relax}{Relaxed smacof update}
+  \item{relax}{If \code{TRUE}, block relaxation is used for majorization}
    \item{modulus}{Number of smacof iterations per monotone regression call}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}

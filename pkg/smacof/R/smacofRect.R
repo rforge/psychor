@@ -64,8 +64,7 @@ smacofRect <- function(delta, ndim = 2, weightmat = NULL, init = NULL, verbose =
 
         if (verbose) {
 		cat("Iteration: ",formatC(itel,digits=6,width=6),
-	    	"   Stress:   ",formatC(lold,digits=6,width=12,format="f"),
-	    	" ==>",formatC(lnew,digits=6,width=12,format="f"),"\n")
+	    	"   Stress (not normalized):",formatC(lnew,digits=6,width=12,format="f"),"\n")
 	}
 
         if (((lold-lnew) < eps) || (itel==itmax)) break() 

@@ -13,16 +13,17 @@ smacofIndDiff <- function(delta, ndim = 2, weightmat = NULL, init = NULL, metric
 { 
   diss <- delta
   p <- ndim
-  wgths <- weightmat
   constr <- constraint
  
   if (!is.list(diss)) diss <- list(diss)
   if ((is.matrix(diss[[1]])) || (is.data.frame(diss[[1]]))) diss <- lapply(diss, strucprep)
 
-  if (is.null(weightmat)) wgths <- initWeights(diss)
+  if (is.null(weightmat)) wgths <- initWeights(diss) else  wgths <- as.dist(weightmat)
   if (!is.list(wgths)) wgths <- list(wgths)
   
   n <- attr(diss[[1]],"Size")
+  if (p > (n - 1)) stop("Maximum number of dimensions is n-1!")
+  
   nn <- n*(n-1)/2
   m <- length(diss)
   itel <- 1
@@ -162,8 +163,8 @@ smacofIndDiff <- function(delta, ndim = 2, weightmat = NULL, init = NULL, metric
     }
     #--------- end nonmetric MDS ----
     
-    if (verbose) cat("Iteration: ",formatC(itel,width=3, format="d")," Stress: ",
-	formatC(c(sold,sunc,scon,snon),digits=8,width=12,format="f"),"\n")
+    if (verbose) cat("Iteration: ",formatC(itel,width=3, format="d")," Stress (not normalized): ",
+	formatC(c(snon),digits=8,width=12,format="f"),"\n")
 
     if (((sold-snon)<eps) || (itel == itmax)) break()         #convergence
     
