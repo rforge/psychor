@@ -97,8 +97,12 @@ e.temp <- as.dist(as.matrix(e)[,-1][-1,])      #remove dummy vector
 dummyvec <- as.matrix(e)[,1][-1]
 confdiss <- normDissN(e.temp, wgths, 1)        #final normalization to n(n-1)/2
 
+# point stress 
+resmat <- as.matrix(dhat1 - confdiss)^2    #point stress
+spp <- colMeans(resmat)
+  
  
-result <- list(obsdiss1 = dhat1, obsdiss2 = dhat2, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon,
+result <- list(delta = diss, obsdiss1 = dhat1, obsdiss2 = dhat2, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon, spp = spp,
                ndim = p, dummyvec = dummyvec, model = "Spherical SMACOF (dual)", niter = itel, nobj = n, metric = metric, call = match.call())
 class(result) <- c("smacofSP", "smacof")
 result

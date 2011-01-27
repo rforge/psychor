@@ -1,6 +1,6 @@
 #smacof with linear constraints on the configuration (de Leeuw & Heiser, 1980; Borg & Groenen, p. 236)
 
-smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, weightmat = NULL, startconf = NULL, metric = TRUE,
+smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE,
                              ties = "primary", verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
 {
 # diss ... dissimilarity matrix
@@ -8,7 +8,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
 # external ... external data for X-decomposition (Z in paper), or list with "simplex", or "circumplex"
 # weightmat ... weight structure. if not specified, weights is 1-structure
 # ndim ... number of dimensions
-# startconf ... starting configuration
+# init ... starting configuration
 # metric ... if TRUE, metric MDS, if FALSE, non-metric
 # ties ... ties for pava (primary, secondary, tertiary)
 # modulus ... modulus for nonmetric update
@@ -68,6 +68,9 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
   w <- vmat(wgths)                              #matrix V
   v <- myGenInv(w)                              #Moore-Penrose inverse
   itel <- 1
+
+  startconf <- init
+  if (!is.null(startconf)) startconf <- as.matrix(init)   # x as matrix with starting values   
   xstart <- startconf
 
   #----------- pre-specified functions for constraints -----------
@@ -162,10 +165,12 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
   attr(dhat, "Labels") <- labels(diss)
   attr(e, "Labels") <- labels(diss)
   
-   confdiss <- normDissN(e, wgths, 1)        #final normalization to n(n-1)/2
+  confdiss <- normDissN(e, wgths, 1)        #final normalization to n(n-1)/2
 
-#return configurations, configuration distances, normalized observed distances 
-  result <- list(obsdiss = dhat, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon,
+  resmat <- as.matrix(dhat - confdiss)^2    #point stress
+  spp <- colMeans(resmat)
+
+  result <- list(delta = diss, obsdiss = dhat, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon, spp = spp,
                ndim = p, model = "SMACOF constraint", niter = itel, nobj = n, metric = metric, call = match.call()) 
   class(result) <- c("smacofB","smacof")
   result 

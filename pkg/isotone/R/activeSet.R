@@ -74,7 +74,8 @@ activeSet <- function(isomat, mySolver = "LS", x0 = NULL, ups = 1e-12, check = T
       ax <- ay
       ia <- ia[-il]                #add constraint to active set with worst lambda
     } else {                       #still constraint violations (infeasible)
-      k <- which((ax>0) & (ay<0))  #index where we have violations
+      k <- which((ax>-ups) & (ay<ups))  #index where we have violations
+      #k <- which((ax>0) & (ay<0))  #index where we have violations
       rat <- -ay[k]/(ax[k]-ay[k])  #line search starts
       ir <- which.max(rat)
       alw <- rat[ir]               #alpha

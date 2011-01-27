@@ -41,10 +41,10 @@ smacofSphere.primal <- function(delta, ndim = 2, weightmat = NULL, init = NULL,
  #------------------------- begin majorization ---------------------------------
  repeat {
  	 b <- bmat(dhat,wgths,d)
-   y <- v%*%b%*%x                       #Guttman transform
+         y <- v%*%b%*%x                       #Guttman transform
 	 y <- sphereProj(y,w)                 #projection on the sphere
-	 #FIXME!!!
-   e <- dist(y)                         #distances for Y (to be enhanced with geodesics
+	
+         e <- dist(y)                         #extension: distances for Y to be enhanced with geodesics)
 	 ssma <- sum(wgths*(dhat-e)^2)        #metric stress
 
    if (!metric) {                       #nonmetric versions
@@ -81,8 +81,11 @@ if (!metric) ssma <- NULL
 
 confdiss <- normDissN(e, wgths, 1)        #final normalization to n(n-1)/2
 
+# point stress 
+resmat <- as.matrix(dhat - confdiss)^2    #point stress
+spp <- colMeans(resmat) 
 
-result <- list(obsdiss = dhat, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon,
+result <- list(delta = diss, obsdiss = dhat, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon, spp = spp,
                ndim = p, model = "Spherical SMACOF (primal)", niter = itel, nobj = n, metric = metric, call = match.call())
 class(result) <- c("smacofSP", "smacof")
 result

@@ -77,9 +77,14 @@ smacofRect <- function(delta, ndim = 2, weightmat = NULL, init = NULL, verbose =
 colnames(y) <- colnames(x) <- paste("D",1:(dim(y)[2]),sep="")
 rownames(x) <- rownames(diss) <- rownames(d) <- rnames
 
- 
+# point stress 
+resmat <- as.matrix(d - diss)^2    #point stress
+spp.col <- colMeans(resmat)
+spp.row <- rowMeans(resmat)
+  
+
 #return configuration distances, row and column configurations, stress 
-result <- list(obsdiss = diss, confdiss = d, conf.row = x, conf.col = y, stress = lnew, 
+result <- list(obsdiss = diss, confdiss = d, conf.row = x, conf.col = y, stress = lnew, spp.row = spp.row, spp.col = spp.col,
                ndim = p, model = "Rectangular smacof", niter = itel, nind = n, nobj = m, metric = TRUE, call = match.call()) 
 class(result) <- "smacofR"
 result 

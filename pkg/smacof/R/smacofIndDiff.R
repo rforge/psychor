@@ -203,10 +203,15 @@ smacofIndDiff <- function(delta, ndim = 2, weightmat = NULL, init = NULL, metric
   for (j in 1:m) {                              #initialize weights, V, norm d as lists
 	 confdiss[[j]] <- normDissN(er[[j]], wgths[[j]], 1)
   }
+
+  #resmat <- as.matrix(dhat - confdiss)^2    #point stress
+  #spp <- colMeans(resmat)
+  resmat <- as.matrix(sumList(dh) - sumList(confdiss))^2
+  spp <- colMeans(resmat)
   
   #return configurations, configuration distances, normalized observed distances 
-  result <- list(obsdiss = dh, confdiss = confdiss, conf = yr, gspace = aconf, cweights = bconf,
-                 stress.m = ssma, stress.nm = snon, stress.uc = sunc, ndim = p, model = "Three-way SMACOF", niter = itel, nobj = n, metric = metric, call = match.call()) 
+  result <- list(delta = diss, obsdiss = dh, confdiss = confdiss, conf = yr, gspace = aconf, cweights = bconf,
+                 stress.m = ssma, stress.nm = snon, stress.uc = sunc, spp = spp, ndim = p, model = "Three-way SMACOF", niter = itel, nobj = n, metric = metric, call = match.call()) 
   class(result) <- "smacofID"
   result 
 }

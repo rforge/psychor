@@ -94,17 +94,13 @@ function(delta, ndim = 2, weightmat = NULL, init = NULL,
 
  confdiss <- normDissN(e, wgths, 1)        #final normalization to n(n-1)/2
 
-#-- stress decomposition --
-# wgthsmat <- as.matrix(wgths)
-# rownames(wgthsmat) <- colnames(wgthsmat) <- rownames(as.matrix(dhat))
-# stress.ri <- (wgthsmat*(as.matrix(dhat) - as.matrix(e))^2)   #chen & chen, 2000, p. 667
-# stress.r <- rowSums(stress.ri)
-# decomp.stress <- stress.r/(sum(stress.r))*100
-
-
+ # point stress 
+ resmat <- as.matrix(dhat - confdiss)^2    #point stress
+ spp <- colMeans(resmat)
+ 
   
 #return configurations, configuration distances, normalized observed distances 
-result <- list(obsdiss = dhat, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon,
+result <- list(delta = diss, obsdiss = dhat, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon, spp = spp,
                ndim = p, model = "Symmetric SMACOF", niter = itel, nobj = n, metric = metric, call = match.call()) 
 class(result) <- c("smacofB","smacof")
 result 
