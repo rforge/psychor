@@ -23,7 +23,7 @@
  
   \item{x}{Object of class \code{"smacofJK"}}
   \item{plot.dim}{Vector with dimensions to be plotted.}
-  \item{hclpar}{Parameters to be used for HCL colors (further details see \code{link{rainbow_hcl}})}
+  \item{hclpar}{Parameters to be used for HCL colors (further details see \code{\link{rainbow_hcl}})}
   \item{plot.lines}{If \code{TRUE}, the Jackknife configurations are plotted are connected with their centroid}
   \item{main}{Plot title.}
   \item{xlab}{Label of x-axis.}
