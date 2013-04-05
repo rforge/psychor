@@ -47,7 +47,7 @@ function(data, level = "nominal", itmax = 100, eps = 1e-6)
         indl <- (ccat[l]+1):ccat[l+1]
         dl <- d[indl]
         yl <- y[[l]]    
- 	      r[j,l] <- sum(burt[indj,indl]*outer(yj,yl))    #correlation matrix
+ 	      r[j,l] <- sum(burt[indj,indl]*outer(yj,yl))    #correlation matrix FIXME!!! for ordinal
         c <- burt[indj,indl]%*%diag(1/pmax(1,dl))%*%burt[indl,indj]
         t[j,l] <- sum(c*outer(yj,yj))			             #correlation ratios
 	      f <- f+(t[j,l]-r[j,l]^2)                       #loss update (cf. p. 448, de Leeuw 1988)

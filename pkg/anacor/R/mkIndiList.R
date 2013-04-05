@@ -13,7 +13,7 @@ for (j in 1:m)
    if (type[j]=="C") 
 	fz<-c(fz,list(mkCrisp(data[[j]])))
    if (type[j]=="A") 
-	fz<-c(fz,list(as.real(data[[j]])))
+	fz<-c(fz,list(as.double(data[[j]])))
    if (type[j]=="F")
 	fz<-c(fz,list(bsplineS(data[[j]],knots[[j]],ord[j])))
    }
