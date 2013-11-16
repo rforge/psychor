@@ -11,6 +11,7 @@ eps = 1e-6)
 
 #----------- sanity checks ---------------
 tab <- as.matrix(tab)
+if (length(scaling) == 1) scaling <- rep(scaling, 2) 
 scaling[1] <- match.arg(scaling[1],c("standard", "centroid", "Benzecri", "Goodman"))
 scaling[2] <- match.arg(scaling[2],c("standard", "centroid", "Benzecri", "Goodman"))
 if (missing(row.covariates)) {
