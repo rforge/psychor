@@ -28,7 +28,7 @@ smacofRect(delta, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
   \item{confdiss}{Configuration dissimilarities}
   \item{conf.row}{Matrix of final row configurations}
   \item{conf.col}{Matrix of final column configurations}
-  \item{stress}{Final stress value}
+  \item{stress}{Final, normalized stress value}
   \item{spp.row}{Stress per point, rows}
   \item{spp.col}{Stress per point, columns}
   \item{ndim}{Number of dimensions}
