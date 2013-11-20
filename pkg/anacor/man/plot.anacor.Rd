@@ -11,11 +11,11 @@
 \method{plot}{anacor}(x, plot.type, plot.dim = c(1,2), legpos = "top", arrows = FALSE, conf = 0.95, 
 wlines = 0, xlab, ylab, main, type, xlim, ylim, cex.axis2, ...)
 
-\method{plot3d}{anacor}(x, plot.type, plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", arrows = TRUE, xlab, ylab, zlab, 
-main, ...)
+\method{plot3d}{anacor}(x, plot.type, plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", 
+arrows = TRUE, xlab, ylab, zlab, main, ...)
 
-\method{plot3dstatic}{anacor}(x, plot.type, plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", arrows = TRUE, main, xlab, ylab, zlab, 
-xlim, ylim, zlim, ...)
+\method{plot3dstatic}{anacor}(x, plot.type, plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", 
+arrows = TRUE, main, xlab, ylab, zlab, xlim, ylim, zlim, ...)
 
 }
 
@@ -80,7 +80,8 @@ plot(res2, plot.type = "benzplot", main = "Benzecri Distances (5D)")
 
 ## Column score plot,transformation plot, and ordination diagram for canonical CA
 data(maxwell)
-res <- anacor(maxwell$table, row.covariates = maxwell$row.covariates, scaling = c("Goodman", "Goodman"))
+res <- anacor(maxwell$table, row.covariates = maxwell$row.covariates, 
+scaling = c("Goodman", "Goodman"))
 res
 plot(res, plot.type = "colplot", xlim = c(-1.5,1), conf = NULL)
 plot(res, plot.type = "transplot", legpos = "topright")

@@ -8,7 +8,8 @@
 Different scaling methods for row and column scores are provided. 
 }
 \usage{
-anacor(tab, ndim = 2, row.covariates, col.covariates, scaling = c("Benzecri","Benzecri"), eps = 1e-06)
+anacor(tab, ndim = 2, row.covariates, col.covariates, 
+scaling = c("Benzecri","Benzecri"), eps = 1e-06)
 
 \method{print}{anacor}(x,...)
 \method{summary}{anacor}(object,...)
@@ -81,7 +82,8 @@ res2
 
 ## Canonical CA on Maxwell data, Goodman scaling
 data(maxwell)
-res <- anacor(maxwell$table, row.covariates = maxwell$row.covariates, scaling = c("Goodman", "Goodman"))
+res <- anacor(maxwell$table, row.covariates = maxwell$row.covariates, 
+scaling = c("Goodman", "Goodman"))
 res
 summary(res)
 

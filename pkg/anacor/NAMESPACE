@@ -1,4 +1,4 @@
-import("stats", "graphics", "rgl", "scatterplot3d", "car", "colorspace", "fda")
+import("stats", "graphics", "rgl", "scatterplot3d", "colorspace")
 export(anacor)
 export(plot3dstatic)
 export(burtTable)
