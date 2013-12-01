@@ -1,9 +1,9 @@
 Package: anacor
 Type: Package
 Title: Simple and Canonical Correspondence Analysis.
-Version: 1.0-3
-Date: 2013-11-16
-Author: Jan de Leeuw, Patrick Mair 
+Version: 1.0-4
+Date: 2013-11-30
+Author: Jan de Leeuw, Patrick Mair
 Maintainer: Jan de Leeuw <deleeuw@stat.ucla.edu>
 Description: This package performs simple and canonical CA (covariates on rows/columns) on a two-way frequency table (with missings) by means of SVD. Different scaling methods (standard, centroid, Benzecri, Goodman) as well as various plots including confidence ellipsoids are provided. 
 Imports: graphics, stats
