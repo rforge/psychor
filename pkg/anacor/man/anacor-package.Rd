@@ -9,8 +9,8 @@ This package performs simple and canonical CA on a two-way frequency table (with
 \tabular{ll}{
 Package: \tab anacor\cr
 Type: \tab Package\cr
-Version: \tab 1.0-1\cr
-Date: \tab 2010-04-28\cr
+Version: \tab 1.0-4\cr
+Date: \tab 2013-11-30\cr
 License: \tab GPL\cr
 }
 The main function of the package is \code{anacor()} which performs simple CA. The input dataset \code{tab} is a (incomplete) frequency table. 
