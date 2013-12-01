@@ -1,4 +1,6 @@
 import("stats", "graphics", "rgl", "scatterplot3d", "colorspace")
+importFrom("car", ellipse)
+importFrom("fda", bsplineS)
 export(anacor)
 export(plot3dstatic)
 export(burtTable)
