@@ -21,6 +21,17 @@ if (clean) {
 	g<-g[,which(colSums(g)<n)]
 	}
 if (!returnFrame) return(g)
+
+vnames <- colnames(tab)
+namevec <- list()
+for (k in 1:m) {
+  namevec[[k]] <- paste(vnames[k], levels(tab[,k]), sep=".")
+}
+rcnames <- unlist(namevec)
+colnames(g) <- rcnames
+
+if (!is.null(rownames(tab))) rownames(g) <- rownames(tab)
+apply(tab, 2, is.factor)
 g<-as.data.frame(g,row.names=lab1)
 names(g)<-l
 return(g)
