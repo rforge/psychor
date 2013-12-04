@@ -1,12 +1,13 @@
 ## MDS permutation test
-permtest.smacofB <- function(object, nrep = 100, verbose = FALSE)
+permtest.smacofB <- function(object, nrep = 100, verbose = TRUE, ...)
 {
 ## val ... stress value  
 ## n... number of objects
 ## p... number of dimensions
     
-    if (class(object)[1] != "smacofB") stop("Permutation test is currenlty implemented for objects of class smacofB from smacofSym() only! \n")
+    #if (class(object)[1] != "smacofB") stop("Permutation test is currenlty implemented for objects of class smacofB from smacofSym() only! \n")
     if (object$model == "SMACOF constraint") stop("Permutation test is currenlty implemented for smacofSym() objects only! \n")
+    ##!!!FIXME
     if (object$metric) stop("Permutation test implemented for nonmetric SMACOF only! \n")
    
     n <- object$nobj          ## number of objects
@@ -22,10 +23,12 @@ permtest.smacofB <- function(object, nrep = 100, verbose = FALSE)
         delta <- matrix (0, n, n)
         delta[outer(1:n, 1:n, ">")] <- sample (1:m,m)              ## sample dissimilarity matrix
         delta <- delta + t(delta)                                  
-        smRes <- smacofSym(delta, ndim = p, metric = FALSE)        ## non-metric smacof
-        str[irep] <- smRes$stress.nm                               ## store stress of no-structure matrix 
+        smRes <- smacofSym(delta, ndim = p, ...)        ## FIXME: non-metric smacof
         
-        if (verbose) cat("Replication: ", formatC (irep, digits=3, width=3), "Stress: ", formatC (str[irep], digits=10, width=15, format="f"), "\n")
+        ##FIXME!!!
+        str[irep] <- smRes$stress.m                               ## store stress of no-structure matrix 
+        
+        if (verbose) cat("Permutation: ", formatC (irep, digits=3, width=3), "Stress: ", formatC (str[irep], digits=10, width=15, format="f"), "\n")
 		
         if (irep == nrep) break()
   
@@ -34,7 +37,7 @@ permtest.smacofB <- function(object, nrep = 100, verbose = FALSE)
     
     pval <- length(which(str < val))/nrep
       
-    result <- list(stressvec = str, stress.nm = val, pval = pval, nobj = n, nrep = nrep, call = match.call())
+    result <- list(stressvec = str, stress.obs = val, pval = pval, nobj = n, nrep = nrep, call = match.call())
     class(result) <- "smacofPerm"
     result
 }

@@ -34,6 +34,7 @@ S3method(print, smacofJK)
 S3method(plot, smacofJK)
 S3method(jackknife, smacofB)
 S3method(permtest, smacofB)
+S3method(permtest, smacofR)
 S3method(print, smacofPerm)
 S3method(plot, smacofPerm)
 

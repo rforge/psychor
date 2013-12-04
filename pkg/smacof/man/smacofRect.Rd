@@ -31,6 +31,7 @@ smacofRect(delta, ndim = 2, weightmat = NULL, init = NULL, verbose = FALSE,
   \item{stress}{Final, normalized stress value}
   \item{spp.row}{Stress per point, rows}
   \item{spp.col}{Stress per point, columns}
+  \item{congvec}{Vector of congruency coefficients}
   \item{ndim}{Number of dimensions}
   \item{model}{Type of smacof model}
   \item{niter}{Number of iterations}
