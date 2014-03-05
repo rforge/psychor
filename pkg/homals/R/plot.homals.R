@@ -1,6 +1,6 @@
 `plot.homals` <-
-function(x, plot.dim = c(1,2), plot.type = "jointplot", var.subset, main, type, xlab, ylab, 
-         xlim, ylim, leg.pos = "topright", identify = TRUE, ...)
+function(x, plot.dim = c(1,2), plot.type = "loadplot", var.subset, main, type, xlab, ylab, 
+         xlim, ylim, leg.pos = "topright", identify = FALSE, ...)
 {
 #S3 plot method for objects of class "homals"
 #Produces various 2D-plots
@@ -54,7 +54,6 @@ if (plot.type == "loadplot") {
     posvec <- apply(xycoor, 1, sign)[2,] + 2      
     text(xycoor, labels = rownames(xycoor), pos = posvec, cex = 0.7)
   }  
-  #
 }
 #-------------------------------- end loadplot ---------------------------------
 
