@@ -1,18 +1,21 @@
 `smacofSym` <-
-function(delta, ndim = 2, weightmat = NULL, init = NULL, 
-                      metric = TRUE, ties = "primary",	verbose = FALSE, 
-                      relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)  
+function(delta, ndim = 2, type = c("ratio", "interval", "ordinal"), weightmat = NULL, 
+         init = NULL, ties = "primary",	verbose = FALSE, 
+         relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)  
 {
 # delta ... dissimilarity matrix 
 # wghts ... weight structure. if not specified, weights is 1-structure
 # p ... number of dimensions
 # init ... matrix with starting values of dimension n \times p
-# metric ... if TRUE, metric MDS, if FALSE, non-metric
+# type ... either "ratio", "interval", "ordinal" (replaces metric)
 # ties ... ties for pava (primary, secondary, tertiary)
 # relax ... relaxation factor
 # modulus ... modulus for nonmetric update
 # itmax ... maximum number of iterations
 # eps ... change in loss function
+  
+  ## --- sanity checks
+  type <- match.arg(type, c("ratio", "interval", "ordinal"), several.ok = FALSE)
   
   diss <- delta
   if ((is.matrix(diss)) || (is.data.frame(diss))) {
@@ -52,12 +55,13 @@ function(delta, ndim = 2, weightmat = NULL, init = NULL,
  #--------------- begin majorization --------------------
  repeat {                                #majorization loop             
 	b <- bmat(dhat,wgths,d)            
-        y <- v%*%b%*%x                    #apply Guttman transform denoted as \bar(Y) in the paper
+  y <- v%*%b%*%x                    #apply Guttman transform denoted as \bar(Y) in the paper
 	y <- x+relax*(y-x)                #n \times p matrix of Guttman transformed distances x's
-        e <- dist(y)                      #new distance matrix for Y
+  e <- dist(y)                      #new distance matrix for Y
 	ssma <- sum(wgths*(dhat-e)^2)     #stress metric
 
-	if (!metric) {                    #for non-metric MDS only (PAVA)
+  ## --- ordinal MDS
+	if (type == "ordinal") {                    #for ordinal MDS only (PAVA)
 	 if ((itel%%modulus) == 0) {   
 		  if (ties=="primary") daux <- monregP(diss,e,wgths)        #PAVA stuff
 		  if (ties=="secondary") daux <- monregS(diss,e,wgths)
@@ -65,6 +69,13 @@ function(delta, ndim = 2, weightmat = NULL, init = NULL,
 		  dhat <- normDissN(daux,wgths,1)
    }
   }
+  
+  ## --- interval MDS
+	if (type == "interval") {
+	  Amat <- cbind(1, as.vector(diss), as.vector(diss)^2) 
+	  daux <- nnlsPred(Amat, as.vector(e), as.vector(wgths))$pred
+	  dhat <- normDissN(daux,wgths,1)
+	}
 
   snon <- sum(wgths*(dhat-e)^2)     #stress non-metric
 
@@ -80,12 +91,8 @@ function(delta, ndim = 2, weightmat = NULL, init = NULL,
  }
  #------------------ end majorization --------------- 
  
- snon <- snon/nn                   #stress normalization
- ssma <- ssma/nn
- 
- if (metric) snon <- NULL          #no non-metric stress
- if (!metric) ssma <- NULL
-
+ stress <- sqrt(snon/nn)                   #stress normalization
+  
  colnames(y) <- paste("D",1:(dim(y)[2]),sep="")
  rownames(y) <- labels(diss)
  dhat <- structure(dhat, Size = n, call = quote(as.dist.default(m=b)), class = "dist", Diag = FALSE, Upper = FALSE) 
@@ -101,8 +108,8 @@ function(delta, ndim = 2, weightmat = NULL, init = NULL,
  if (itel == itmax) warning("Iteration limit reached! Increase itmax argument!") 
   
 #return configurations, configuration distances, normalized observed distances 
-result <- list(delta = diss, obsdiss = dhat, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon, spp = spp,
-               ndim = p, model = "Symmetric SMACOF", niter = itel, nobj = n, metric = metric, call = match.call()) 
+result <- list(delta = diss, obsdiss = dhat, confdiss = confdiss, conf = y, stress = stress, spp = spp,
+               ndim = p, model = "Symmetric SMACOF", niter = itel, nobj = n, type = type, call = match.call()) 
 class(result) <- c("smacofB","smacof")
 result 
 }

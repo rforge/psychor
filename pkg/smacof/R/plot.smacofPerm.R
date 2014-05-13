@@ -1,4 +1,4 @@
-# plot method for Jackknife smacof
+# plot method for Permutation smacof
 
 plot.smacofPerm <- function(x, alpha = 0.05, main, xlab, ylab, ...)
 {
@@ -12,7 +12,7 @@ plot.smacofPerm <- function(x, alpha = 0.05, main, xlab, ylab, ...)
     abline(v = x$stress.obs, col = "gray", lty = 1)
     text(x$stress.obs, y = 1, labels = paste("Stress: ",round(x$stress.obs, 3), sep = ""), col = "gray", pos = 4, cex = 0.7)
     abline(h = x$pval, col = "gray", lty = 1)  
-    text(max(x$stressvec)-0.01*max(x$stressvec), y = x$pval, labels = paste("P-value: ",round(x$pval, 3), sep = ""), col = "gray", pos = 3, cex = 0.7)
+    text(max(x$stressvec)-0.01*max(x$stressvec), y = x$pval, labels = paste("p-value: ",round(x$pval, 3), sep = ""), col = "gray", pos = 3, cex = 0.7)
     abline(h = alpha, col = "gray", lty = 2) 
 }
 

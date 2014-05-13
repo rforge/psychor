@@ -3,12 +3,12 @@
 
 \title{SMACOF Constraint}
 \description{
-SMACOF with constraints on the configurations.
+SMACOF with internal constraints on the configurations.
 }
 \usage{
 smacofConstraint(delta, constraint = "linear", external, ndim = 2, 
-weightmat = NULL, init = NULL, metric = TRUE, ties = "primary", verbose = FALSE, 
-modulus = 1, itmax = 1000, eps = 1e-6)
+                 type = c("ratio", "interval", "ordinal"), weightmat = NULL, init = NULL, 
+                 ties = "primary", verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -17,9 +17,9 @@ modulus = 1, itmax = 1000, eps = 1e-6)
   \item{constraint}{Type of constraint: \code{"linear"}, \code{"unique"}, \code{"diagonal"}, or a user-specified function (see details)}
   \item{external}{Data frame or matrix with external covariates, or list for simplex and circumplex (see details)}
   \item{ndim}{Number of dimensions}
+   \item{type}{MDS type: \code{"interval"}, \code{"ratio"}, or \code{"ordinal"} (nonmetric MDS)}
   \item{weightmat}{Optional matrix with dissimilarity weights}
   \item{init}{Optional matrix with starting values for configurations} 
-  \item{metric}{If \code{FALSE} non-metric MDS is performed}
   \item{ties}{Tie specification for non-metric MDS only: \code{"primary"}, \code{"secondary"}, or \code{"tertiary"}}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
   \item{modulus}{Number of smacof iterations per monotone regression call}
@@ -45,8 +45,8 @@ In addition, the user can specify his own constraint function with the following
   \item{obsdiss}{Observed dissimilarities, normalized}
   \item{confdiss}{Configuration dissimilarities}
   \item{conf}{Matrix of final configurations}
-  \item{stress.m}{stress value for metric MDS}
-  \item{stress.nm}{stress value for non-metric MDS (if computed)}
+  \item{C}{Matrix with restrictions}
+  \item{stress}{Stress-1 value}
   \item{spp}{Stress per point}
   \item{ndim}{Number of dimensions}
   \item{model}{Type of smacof model}
@@ -60,7 +60,7 @@ de Leeuw, J., & Heiser, W. (1980). Multidimensional scaling with restrictions on
 }
 \author{Jan de Leeuw and Patrick Mair}
 
-\seealso{\code{\link{smacofSym}}, \code{\link{smacofRect}}, \code{\link{smacofIndDiff}}, \code{\link{smacofSphere.primal}}, \code{\link{smacofSphere.dual}}}
+\seealso{\code{\link{smacofSym}}, \code{\link{smacofRect}}, \code{\link{smacofIndDiff}}, \code{\link{smacofSphere}}}
 \examples{
 
 ## SMACOF with linear configuration constraints
@@ -69,18 +69,17 @@ data(kinshipscales)
 res.lin1 <- smacofConstraint(kinshipdelta, constraint = "linear", external = kinshipscales)
 
 ## X = ZC decomposition
-Z <- as.matrix(kinshipscales)     ## matrix Z with external constraints
 X <- res.lin1$conf                ## resulting configurations X
-C <- solve(t(Z)\%*\%Z)\%*\%t(Z)\%*\%X   ## compute C out of X = ZC
+Z <- as.matrix(kinshipscales) 
+C <- res.lin1$C
 C
-Z%*%C                             ## check: should be equal to X   
+Z\%*\%C                             ## check: should be equal to X   
 
 ## SMACOF with diagonal constraints
 res.diag <- smacofConstraint(kinshipdelta, constraint = "diagonal", 
 external = kinshipscales, ndim = 3)
 X <- res.diag$conf                ## resulting configurations X
-C <- solve(t(Z)\%*\%Z)\%*\%t(Z)\%*\%X   ## compute C out of X = ZC
-round(C, 3)
+C <- res.diag$C
 Z\%*\%C                             ## check: should be equal to X   
 
 ## SMACOF with unique constraints (Bentler-Weeks model)

@@ -1,5 +1,4 @@
-## MDS permutation test
-permtest.smacofR <- function(object, nrep = 100, verbose = TRUE, ...)
+permtest.smacofR <- function(object, nrep = 100, verbose = TRUE, seed = NULL)
 {
 ## val ... stress value  
 ## n... number of objects
@@ -13,17 +12,22 @@ permtest.smacofR <- function(object, nrep = 100, verbose = TRUE, ...)
     n <- object$nind          ## number of observations (rows)
     p <- object$ndim          ## number of dimensions
     val <- object$stress      ## metric stress (normalized)
+    smacall <- object$call
     
     stressvec <- rep (0, nrep)      ## vector for stress values
     congmat <- matrix(0, nrep, n)
     #perms <- shuffleSet(m, nset = nper)
     
     for (irep in 1:nrep) {
+      if (!is.null(seed)) set.seed(seed + irep)
       permmat <- t(apply(data, 1, function(pp) {     ## computes permuted matrix
         ind <- sample(1:m, m)
         pp[ind]
       }))
-      resperm <- smacofRect(permmat, ndim = p, ...)
+      
+      smacall$delta <- permmat
+      resperm <- eval(smacall) 
+      #resperm <- smacofRect(permmat, ndim = p, ...)
       stressvec[irep] <- resperm$stress
       congmat[irep, ] <- resperm$congvec
               

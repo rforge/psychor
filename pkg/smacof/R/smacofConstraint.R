@@ -1,7 +1,8 @@
 #smacof with linear constraints on the configuration (de Leeuw & Heiser, 1980; Borg & Groenen, p. 236)
 
-smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, weightmat = NULL, init = NULL, metric = TRUE,
-                             ties = "primary", verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
+smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, type = c("ratio", "interval", "ordinal"), 
+                             weightmat = NULL, init = NULL, ties = "primary", verbose = FALSE, 
+                             modulus = 1, itmax = 1000, eps = 1e-6)
 {
 # diss ... dissimilarity matrix
 # constraint ... either "linear", "unique", "diagonal", or a user-specified function
@@ -15,6 +16,8 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
 # itmax ... maximum number of iterations
 # eps ... change in loss function
 
+  type <- match.arg(type, c("ratio", "interval", "ordinal"), several.ok = FALSE) 
+  
   diss <- delta
   if ((is.matrix(diss)) || (is.data.frame(diss))) {
     diss <- strucprep(diss)  #if data are provided as dissimilarity matrix
@@ -122,13 +125,13 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
 
   #------- begin majorization -----------
   repeat {                                             #majorization iterations
-	b <- bmat(dhat,wgths,d)                        #B matrix
+	      b <- bmat(dhat,wgths,d)                        #B matrix
         y <-v%*%b%*%x                                  #Y computation
-	y <- constrfun(y,w,external)                   #update Y with corresponding constraints            
+	      y <- constrfun(y,w,external)                   #update Y with corresponding constraints            
         e <- dist(y)                                   #Y distances
 	ssma <- sum(wgths*(dhat-e)^2)                  #new stress
 
-	if (!metric) {                                 #nonmetric MDS
+	if (type == "ordinal") {                                 #nonmetric MDS
 	    if ((itel%%modulus) == 0) {
 			if (ties=="primary") daux <- monregP(diss,e,wgths)
 			if (ties=="secondary") daux <- monregS(diss,e,wgths)
@@ -136,6 +139,14 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
 			dhat<-normDissN(daux,wgths,1)
 			}
 	}
+  
+	## --- interval MDS
+	if (type == "interval") {
+	  Amat <- cbind(1, as.vector(diss), as.vector(diss)^2) 
+	  daux <- nnlsPred(Amat, as.vector(e), as.vector(wgths))$pred
+	  dhat <- normDissN(daux,wgths,1)
+	}
+  
 	snon <- sum(wgths*(dhat-e)^2)                  #nonmetric stress
         
 	if (verbose) cat("Iteration: ",formatC(itel,width=3, format="d")," Stress (not normalized): ",
@@ -150,12 +161,8 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
   }
   #------- end majorization -----------
  
-  snon <- snon/nn                   #stress normalization
-  ssma <- ssma/nn
-  
-  if (metric) snon <- NULL          #no non-metric stress
-  if (!metric) ssma <- NULL
-  
+ stress <- sqrt(snon/nn)                   #stress normalization
+ 
   if (any(is.na(y))) {              #reduce ndim for external == simplex
     csy <- colSums(y)
     ind <- which(is.na(csy))
@@ -187,8 +194,13 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, w
   }
   
   if (itel == itmax) warning("Iteration limit reached! Increase itmax argument!")
-
-  result <- list(delta = diss, obsdiss = dhat, confdiss = confdiss, conf = y, stress.m = ssma, stress.nm = snon, spp = spp, ndim = p, model = "SMACOF constraint", niter = itel, nobj = n, metric = metric, call = match.call()) 
+ 
+  ## compute C
+  Z <- as.matrix(external)
+  X <- y
+  C <- solve(t(Z)%*%Z)%*%t(Z)%*%X  
+ 
+  result <- list(delta = diss, obsdiss = dhat, confdiss = confdiss, conf = y, C = C, stress = stress, spp = spp, ndim = p, model = "SMACOF constraint", niter = itel, nobj = n, type = type, call = match.call()) 
   class(result) <- c("smacofB","smacof")
   result 
 }
