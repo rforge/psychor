@@ -2,7 +2,7 @@
 \alias{gravity}
 
 \title{Gravity dissimilarities}
-\description{Computes the dissimilarities using an (exponential) gravity model based on co-occurences
+\description{Computes the dissimilarities using a gravity model based on co-occurences
 }
 
 \usage{
@@ -10,17 +10,16 @@ gravity(X, lambda = 1)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{X}{A numeric matrix}
-  \item{lambda}{Tuning parameter}
+  \item{X}{numeric matrix}
+  \item{lambda}{tuning parameter}
 }
 
 \details{The first step in this function is to compute the co-occurences. Based on the 
 binarized data matrix \eqn{Y} we compute \eqn{Y'Y} which leads to the co-occurence matrix.
 We then use the gravity model to compute the gravity dissimilarities. 
-In order to give more (or less) structure to the MDS solution, the tuning parameter lambda can 
-be increased (or decresed with lower bound 0). In addition, a weight matrix is created 
-that sets cells with no co-occurences to 0, i.e. they are blanked out in a subsequent 
-smacof fit.
+In order to give more (or less) structure to the MDS solution, the tuning parameter (which 
+defines a power transformation) can be increased (or decreased with lower bound 0). In addition, 
+a weight matrix is created that sets cells with no co-occurences to 0, i.e. they are blanked out in a subsequent smacof fit (in the \code{gravdiss} output they are fixed to a value of 1000.
 }
 
 \value{

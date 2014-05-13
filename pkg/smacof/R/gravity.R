@@ -3,7 +3,7 @@ gravity <- function(X, lambda = 1)
   Y <- X
   Y[Y > 0] <- 1
   co.maty <- t(Y)%*%Y       #co-occurences 
-  grav.disty <- sqrt(rowSums(co.maty)%*%t(colSums(co.maty))/co.maty)  # gravity distance
+  grav.disty <- sqrt(diag(co.maty)%*%t(diag(co.maty))/co.maty) # gravity distance
   rownames(grav.disty) <- colnames(grav.disty)
   grav.disty1 <- grav.disty
   vec.disty <- grav.disty[lower.tri(grav.disty)][which(grav.disty[lower.tri(grav.disty)] != Inf)]
