@@ -5,14 +5,14 @@
 \description{Variant of smacof for rectangular matrices (typically ratings, preferences) which is also known as metric unfolding.
 }
 \usage{
-smacofRect(delta, ndim = 2, circle = c("none", "column", "row"), weightmat = NULL, 
+smacofRect(delta, ndim = 2, circle = c("none","row","column"), weightmat = NULL, 
            init = NULL, verbose = FALSE, itmax = 1000, reg = 1e-6, eps = 1e-6)
 }
 
 \arguments{
   \item{delta}{Data frame or matrix of preferences, ratings, dissimilarities.}
   \item{ndim}{Number of dimensions}
-  \item{circle}{If \code{"column"}, the column configurations are restricted to be on a circle, if \code{"row"}, row configurations are on a circle}
+  \item{circle}{If \code{"column"}, the column configurations are restricted to be on a circle, if \code{"row"}, row configurations are on a circle, if \code{"none"}, there are no restrictions on row and column configurations}
   \item{weightmat}{Optional matrix with dissimilarity weights}
   \item{init}{Matrix with starting values for configurations (optional)}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}

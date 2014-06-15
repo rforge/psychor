@@ -70,16 +70,18 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
     if (missing(xlim)) xlim <- range(as.vector(x$delta))
     if (missing(ylim)) ylim <- range(as.vector(x$confdiss))
 
-    plot(as.vector(x$delta), as.vector(x$confdiss), main = main, type = "p", pch = 1,
+    plot(as.vector(x$delta), as.vector(x$confdiss), main = main, type = "p", pch = 20, cex = .5,
          xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim, ...)
 
-    if (x$type == "ordinal") {
-      isofit <- isoreg(as.vector(x$delta), as.vector(x$confdiss))  #isotonic regression
-      points(sort(isofit$x), isofit$yf, type = "b", pch = 16)
-    } else {
-      regfit <- lsfit(as.vector(x$delta), as.vector(x$confdiss))   #linear regression
-      abline(regfit, lwd = 0.5)
-    }
+    points(as.vector(x$delta[x$iord]),as.vector(x$obsdiss[x$iord]), type = "b", pch = 20, cex = .5)
+    
+#     if (x$type == "ordinal") {
+#       isofit <- isoreg(as.vector(x$delta), as.vector(x$confdiss))  #isotonic regression
+#       points(sort(isofit$x), isofit$yf, type = "b", pch = 20)
+#     } else {
+#       regfit <- lsfit(as.vector(x$delta), as.vector(x$confdiss))   #linear regression
+#       abline(regfit, lwd = 0.5)
+#     }
   }
 
   #--------------- Residual plot --------------------

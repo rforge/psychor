@@ -6,9 +6,10 @@
 Multidimensional scaling (stress minimization: SMACOF) on symmetric dissimilarity matrix. 
 }
 \usage{
-smacofSym(delta, ndim = 2, type = c("ratio", "interval","ordinal"), weightmat = NULL, 
-          init = NULL, ties = "primary", verbose = FALSE, relax = FALSE, modulus = 1, 
-          itmax = 1000, eps = 1e-06)
+smacofSym(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
+          weightmat = NULL, init = NULL, ties = "primary", verbose = FALSE, 
+          relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-06, 
+          spline.degree = 2, spline.intKnots = 2)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -24,6 +25,8 @@ smacofSym(delta, ndim = 2, type = c("ratio", "interval","ordinal"), weightmat = 
   \item{modulus}{Number of smacof iterations per monotone regression call}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
+  \item{spline.degree}{Degree of the spline for \code{"mspline"} MDS type}
+  \item{spline.intKnots}{Number of interior knots of the spline for \code{"mspline"} MDS type}
 }
 \details{This is the simplest MDS-SMACOF version of the package. It solves the stress target function for symmetric dissimiliby means of the majorization approach (SMACOF) and reports the Stress-1 value (normalized). The main output are the coordinates in the low-dimensional space (configurations; \code{conf}).
 This function allows for fitting three basic types of MDS: ratio MDS (default), interval MDS (polynomial transformation), and ordinal MDS (aka nonmetric MDS).

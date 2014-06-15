@@ -1,11 +1,11 @@
-smacofRect <- function(delta, ndim = 2, circle = c("none", "column", "row"), weightmat = NULL, init = NULL, verbose = FALSE,
+`smacofRect` <- function(delta, ndim = 2, circle = c("none", "row", "column"), weightmat = NULL, init = NULL, verbose = FALSE,
                        itmax = 1000, reg = 1e-6, eps = 1e-6)
 
 # init ... either a list of 2 matrices of dimension n \times p and m \times p with 
 # starting values. if NULL, svd is used.
 {
   
-  circle <- match.arg(circle, c("none", "column", "row"))
+  circle <- match.arg(circle, c("none", "row", "column"), several.ok = FALSE)
   diss <- delta
   rnames <- rownames(delta)
   if (is.data.frame(diss)) diss <- as.matrix(diss)

@@ -1,6 +1,18 @@
 \name{NEWS}
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
+\section{Changes in Version 1.5-0}{
+ \itemize{
+    \item Recoding of transformations:
+    \itemize{
+       \item Ordinal transformations are coded in C++ and therefore much faster.
+       \item Added monotone spline transformations (\code{type = mspline} with number of interior knots \code{spline.intKnots} and degree of the spline \code{spline.degree = 2}.       
+    }
+    \item \code{smacofConstraint} allows for transformations of the external variables through \code{constraint.type} (\code{"ratio", "interval", "ordinal", "spline", "spline",} or \code{"mspline"}). Missing values (\code{NA}) are estimated by the model. Choosing the number of external variables equal to the number of dimensions together with \code{constraint.type = "ordinal", constraint.ties = "primary"} will effectively restrict the configuration to parallel regions defined by the categories of the external variables.
+    \item Stress values reported by \code{verbose = TRUE} during iterations of \code{smacofSym}, \code{smacofConstraint}, and \code{smacofRect} are normalized Stress values.
+ }
+}
+
 \section{Changes in Version 1.4-0}{
   \itemize{
     \item Gravity model for dissimilarity computation based on co-occurrences added: see \code{gravity()}. 
