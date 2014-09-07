@@ -1,6 +1,6 @@
 `anacor` <-
 function(tab, ndim = 2, row.covariates, col.covariates, scaling = c("Benzecri","Benzecri"), 
-eps = 1e-6) 
+ellipse = TRUE, eps = 1e-6) 
 {
 #tab ... 2-way frequency table
 #ndim ... number of dimensions
@@ -136,11 +136,16 @@ prob <- sval/chisq; pcum<-cumsum(prob)
 cs.mat <- cbind(sval, prob, pcum)
 
 #------------------------- generalized SVD and derivatives ---------------------
-res.deriv <- gsvdDer(tab,ndim)                             #Compute gradients
-res.deriv.scaling <- gsvdScal(res.deriv,scaling)           #Rescale gradients
-res.acov <- acovuv(res.deriv.scaling, prop, n, m, N, ndim) #VC-matrices
-se.sigma <- sqrt(diag(res.acov$acovd))                     #standard errors for singular values
-
+if (ellipse)
+{
+  res.deriv <- gsvdDer(tab,ndim)                             #Compute gradients
+  res.deriv.scaling <- gsvdScal(res.deriv,scaling)           #Rescale gradients
+  res.acov <- acovuv(res.deriv.scaling, prop, n, m, N, ndim) #VC-matrices
+  se.sigma <- sqrt(diag(res.acov$acovd))                     #standard errors for singular values
+} else {
+  res.acov <- NULL
+  se.sigma <- NULL
+}
 #------------------------ end generalized SVD and derivatives ------------------
 
 #---------------------- labels ---------------------

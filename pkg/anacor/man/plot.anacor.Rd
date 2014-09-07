@@ -24,7 +24,7 @@ arrows = TRUE, main, xlab, ylab, zlab, xlim, ylim, zlim, ...)
   \item{plot.type}{Type of plot to be produced (details see below): 2-D and 3-D for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}; 2-D for \code{"regplot"}, \code{"graphplot"}, \code{"benzplot"}, \code{"transplot"}, and \code{"orddiag"}.}
   \item{plot.dim}{Vector of length 2 with Dimensions to be plotted. For \code{"regplot"} a single value should be provided, for  \code{"transplot"} more than two dimensions are allowed, and for \code{"benzplot"} this argument is ignored.}
   \item{legpos}{Position of the legend (for \code{"transplot"} only)}
-  \item{conf}{Ellipsoid confidence level for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}. If \code{NULL}, no ellipsoids are drawn.}
+  \item{conf}{Ellipsoid confidence level for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}, assuming that the ellipse where computed in \code{anacor()}. If \code{NULL}, no ellipsoids are drawn.}
   \item{arrows}{If \code{TRUE} the points in \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"} are connected with the origin.}
   \item{wlines}{For \code{"graphplot"} only: If 0, all lines are of the same thickness. For values > 0 line thickness indicates the strength of the pull}
   \item{col.r}{Color for row score plots}

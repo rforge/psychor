@@ -9,7 +9,7 @@ Different scaling methods for row and column scores are provided.
 }
 \usage{
 anacor(tab, ndim = 2, row.covariates, col.covariates, 
-scaling = c("Benzecri","Benzecri"), eps = 1e-06)
+scaling = c("Benzecri","Benzecri"), ellipse = TRUE, eps = 1e-06)
 
 \method{print}{anacor}(x,...)
 \method{summary}{anacor}(object,...)
@@ -20,9 +20,9 @@ scaling = c("Benzecri","Benzecri"), eps = 1e-06)
   \item{ndim}{Number of dimensions.}
   \item{row.covariates}{Matrix with n rows containing covariates for the row scores.}
   \item{col.covariates}{Matrix with m rows containing covariates for the column scores.}
-  \item{scaling}{A vector with two elements. The first one corresponds to the method for row scaling, the 
-  second one for column scaling. Available scaling methods are \code{"standard"}, \code{"centroid"}, 
+  \item{scaling}{A vector with two elements. The first one corresponds to the method for row scaling, the second one for column scaling. Available scaling methods are \code{"standard"}, \code{"centroid"}, 
   \code{"Benzecri"}, \code{"Goodman"}.}
+  \item{ellipse}{If \code{TRUE}, confidence ellipses are computed.}
   \item{eps}{Convergence criterion for reconstitution algorithm.}
   \item{x}{Object of class \code{"anacor"} in \code{print.anacor}.}
   \item{object}{Object of class \code{"anacor"} in \code{summary.anacor}.}
@@ -34,6 +34,9 @@ scaling = c("Benzecri","Benzecri"), eps = 1e-06)
   Principal coordinates can be computed by means of Benzecri decomposition. 
   Furthermore, scores can be scaled around their centroid. 
   Goodman scaling is based on Fisher-Maung decomposition.  
+  
+  For large datasets it is suggested to set \code{ellipse = FALSE}. If \code{conf = TRUE}, make sure
+  that there are no rows and columns that have full 0 entries. 
 }
 \value{
   \item{row.scores}{Scaled row scores.}
@@ -59,8 +62,7 @@ scaling = c("Benzecri","Benzecri"), eps = 1e-06)
   \item{sitescores}{List containing the site scores (CCA only).}
   \item{isetcor}{List containing the intraset correlations (CCA only).}
 }
-\references{de Leeuw, J. and Mair, P. (2009). Simple and Canonical Correspondence Analysis Using the R Package anacor. 
-Journal of Statistical Software, 31(5), 1-18. \url{http://www.jstatsoft.org/v31/i05/}
+\references{De Leeuw, J. and Mair, P. (2009). Simple and Canonical Correspondence Analysis Using the R Package anacor. Journal of Statistical Software, 31(5), 1-18. \url{http://www.jstatsoft.org/v31/i05/}
 }
 \author{Jan de Leeuw, Patrick Mair}
 

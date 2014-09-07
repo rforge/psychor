@@ -123,7 +123,7 @@ if (plot.type == "rowplot") {
 
   plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, ylim = ylim,...)
   text(xa, rownames(x$row.scores), pos = 3, cex = 0.8, offset = 0.2, ...)
-  if (!is.null(conf)) {
+  if ((!is.null(conf)) && (!is.null(x$row.acov))) {
     rad<-sqrt(qchisq(conf,2))
     for (i in 1:n) ellipse(xa[i,], x$row.acov[plot.dim,plot.dim,i], rad, col = "darkgray", center.cex = 0.4, 
     lwd = 1)
@@ -149,7 +149,7 @@ if (plot.type == "colplot") {
   
   plot(ya, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, ylim = ylim,...)
   text(ya, rownames(x$col.scores), pos = 3, cex = 0.8, offset = 0.2)
-  if (!is.null(conf)) {
+  if ((!is.null(conf)) && (!is.null(x$col.acov))) {
     rad<-sqrt(qchisq(conf,2))
     for (i in 1:m) ellipse(ya[i,], x$col.acov[plot.dim,plot.dim,i], rad, col = "darkgray", center.cex = 0.4, 
     lwd = 1)
@@ -183,10 +183,13 @@ if (plot.type == "jointplot") {
   text(ya, rownames(ya), col = "BLUE", pos = 3, cex = 0.8, offset = 0.2)
   if (!is.null(conf)) {
     rad<-sqrt(qchisq(conf,2))
-    for (i in 1:n) ellipse(xa[i,], x$row.acov[plot.dim,plot.dim,i], rad, col = hcl(30), center.cex = 0.4, 
-    lwd = 1)
-    for (i in 1:m) ellipse(ya[i,], x$col.acov[plot.dim,plot.dim,i], rad, col = hcl(230), center.cex = 0.4, 
-    lwd = 1)
+    if (!is.null(x$row.acov)) 
+    {
+    for (i in 1:n) ellipse(xa[i,], x$row.acov[plot.dim,plot.dim,i], rad, col = hcl(30), center.cex = 0.4, lwd = 1)
+    }
+    if (!is.null(x$row.acov)) {
+    for (i in 1:m) ellipse(ya[i,], x$col.acov[plot.dim,plot.dim,i], rad, col = hcl(230), center.cex = 0.4, lwd = 1)
+    }
   }
   if (arrows) {
     arrows(0,0,xa[,1],xa[,2], col = hcl(30), length = 0.1)
