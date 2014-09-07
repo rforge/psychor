@@ -11,7 +11,8 @@ This functions offers active set strategies for a collection of isotone optimiza
 package. 
 }
 \usage{
-activeSet(isomat, mySolver = "LS", x0 = NULL, ups = 1e-12, check = TRUE, maxiter = 100, ...)
+activeSet(isomat, mySolver = "LS", x0 = NULL, ups = 1e-12, check = TRUE, 
+maxiter = 100, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -70,7 +71,8 @@ Atot
 fit.ls1 <- activeSet(Atot, "LS", y = y, weights = w1)
 fit.ls1
 summary(fit.ls1)
-fit.ls2 <- activeSet(Atot, fSolver, fobj = function(x) sum(w1*(x-y)^2), gobj = function(x) 2*drop(w1*(x-y)), y = y, weights = w1)
+fit.ls2 <- activeSet(Atot, fSolver, fobj = function(x) sum(w1*(x-y)^2), 
+gobj = function(x) 2*drop(w1*(x-y)), y = y, weights = w1)
 
 ## LS vs. GLS solver (needs weight matrix)
 set.seed(12345)
@@ -120,7 +122,8 @@ fit.loop <- activeSet(Aloop, "LS", y = y, weights = w1)
 
 
 ## LS on block ordering
-Ablock <- cbind(c(rep(1,3),rep(2,3),rep(3,3),rep(4,3),rep(5,3),rep(6,3)),c(rep(c(4,5,6),3),rep(c(7,8,9),3)))
+Ablock <- cbind(c(rep(1,3),rep(2,3),rep(3,3),rep(4,3),rep(5,3),rep(6,3)),c(rep(c(4,5,6),3),
+rep(c(7,8,9),3)))
 Ablock
 fit.block <- activeSet(Ablock, "LS", y = y, weights = w1)
 
