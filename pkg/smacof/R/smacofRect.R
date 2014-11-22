@@ -99,17 +99,19 @@ rownames(x) <- rownames(diss) <- rownames(d) <- rnames
 
 # point stress 
 resmat <- as.matrix(d - diss)^2    #point stress
-spp.col <- colMeans(resmat)
-spp.row <- rowMeans(resmat)
+spp.col <- colMeans(resmat, na.rm = TRUE)
+spp.row <- rowMeans(resmat, na.rm = TRUE)
   
 if (itel == itmax) warning("Iteration limit reached! Increase itmax argument!")
 
 ## stress normalization
-lnew <- sqrt(sum(w*(diss-d)^2)/sum(d^2))
+lnew <- sqrt(sum(w*(diss-d)^2, na.rm = TRUE)/sum(d^2, na.rm = TRUE))
   
 ## congruence coefficients
-congnum <- diag(diss %*% t(d))
-congdenom <- sqrt(diag(diss %*% t(diss)) * diag(d %*% t(d)))
+diss0 <- diss
+diss0[is.na(diss0)] <- 0
+congnum <- diag(diss0 %*% t(d))
+congdenom <- sqrt(diag(diss0 %*% t(diss0)) * diag(d %*% t(d)))
 congvec <- congnum/congdenom
   
 #return configuration distances, row and column configurations, stress 
