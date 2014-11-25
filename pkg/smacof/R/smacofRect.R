@@ -64,10 +64,10 @@
         b <- w*delta_plus/d                #B matrix
         br <- rowSums(b)                   #rows B
         bc <- colSums(b)                   #columns W
-
+       
         xraw <- (br*x)-(b%*%y)
         yraw <- (bc*y)-crossprod(b,x)
-
+        
         y <- v%*%(yraw+crossprod(ww,xraw/wr)) #x update 
         x <- (xraw+(ww%*%y))/wr               #y update
         
@@ -83,6 +83,7 @@
      }  
 
     d <- distRect(x,y,reg)             #compute distances (update)
+    
     lnew <- sum(w*(delta-d)^2)         #compute stress
 
     if (verbose) cat("Iteration: ",formatC(itel,digits=6,width=6), "   Stress (not normalized):",formatC(lnew,digits=6,width=12,format="f"),"   Dif:",formatC(lold-lnew,digits=6,width=12,format="f"),"\n")
