@@ -16,14 +16,9 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
   diss <- delta
   p <- ndim
   if (constraint == "indscal") constraint <- "diagonal"
-  
   constr <- constraint
-  
-  
- 
   if (!is.list(diss)) diss <- list(diss)
   if ((is.matrix(diss[[1]])) || (is.data.frame(diss[[1]]))) diss <- lapply(diss, strucprep)
-
   if (is.null(weightmat)) wgths <- initWeights(diss)
   if (!is.list(wgths)) {
     wgths <- list(wgths)
@@ -42,8 +37,7 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
   if (is.null(attr(diss[[1]], "Labels"))) {
      for (i in 1:m) attr(diss[[i]], "Labels") <- paste(1:n)
   }
-  
-      
+        
   dr <- list()
   wr <- list()
   vr <- list()
@@ -59,15 +53,15 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
 
   if (is.null(init)) {  
     aconf <- torgerson(sumList(diss),p)        #torgerson 
-  } else xr <- init                              #list of starting values 
+  } else aconf <- init                              #list of starting values 
   #else aconf <- matrix(rnorm(n*p),n,p)     
   
   bconf <- repList(diag(p),m)                  #1-matrix
   for (j in 1:m) {                             
-	if (is.null(init)) xr[[j]] <- aconf%*%bconf[[j]]  #same starting values for all ways
-	dr[[j]] <- dist(xr[[j]])                          #configuration distances
-        sf1 <- sf1 + sum(wgths[[j]]*dr[[j]]*dh[[j]])
-	sf2 <- sf2 + sum(wgths[[j]]*dr[[j]]^2)
+    xr[[j]] <- aconf%*%bconf[[j]]  #same starting values for all ways
+    dr[[j]] <- dist(xr[[j]])                          #configuration distances
+    sf1 <- sf1 + sum(wgths[[j]]*dr[[j]]*dh[[j]])
+    sf2 <- sf2 + sum(wgths[[j]]*dr[[j]]^2)
   }
   
   lb <- sf1/sf2                           #normalization constant
@@ -219,7 +213,7 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
   sunc <- sunc/nn
   scon <- scon/nn
   
-  stress <- sqrt(snon)
+  stress <- sqrt(snon)/n
   
   
   confdiss <- rep(list(NULL), m)
