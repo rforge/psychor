@@ -208,12 +208,8 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
   rownames(aconf) <- labels(diss[[1]])
   names(bconf) <- names(dh)
   
-  snon <- snon/nn                   #stress normalization
-  ssma <- sold/nn
-  sunc <- sunc/nn
-  scon <- scon/nn
-  
-  stress <- sqrt(snon)/n
+  snon <- (snon/m)/nn                   #stress normalization  nn <- n*(n-1)/2, m number lists
+  stress <- sqrt(snon)
   
   
   confdiss <- rep(list(NULL), m)
