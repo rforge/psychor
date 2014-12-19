@@ -19,7 +19,7 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
   constr <- constraint
   if (!is.list(diss)) diss <- list(diss)
   if ((is.matrix(diss[[1]])) || (is.data.frame(diss[[1]]))) diss <- lapply(diss, strucprep)
-  if (is.null(weightmat)) wgths <- initWeights(diss)
+  if (is.null(weightmat)) wgths <- initWeights(diss) else wgths <- weightmat
   if (!is.list(wgths)) {
     wgths <- list(wgths)
     if (length(wgths) != length(diss)) wgths <- sapply(diss, function(wwr) return(wgths))
