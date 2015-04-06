@@ -11,7 +11,5 @@ function(theta, Xim, DXm, SSk) {
   for (i in 3:(R+1)) {
     for (j in 2:(i-1)) f[i,j] <- S[i,j] - theta[i]*theta[j]
   }
-  
-  ## return(f)
-  return(0.5 * base::sum(diag(f^2)))
+  return(f[lower.tri(f, diag = TRUE)])
 }

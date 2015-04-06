@@ -19,7 +19,7 @@ Xim <- H %*% M
 sqvec <- rowSums(M)/R
 MSEI <- squareform(sqvec)         ## Averaged symmetric dissimilarity matrix.
 
-X <- cmdscale(MSEI, k = 2)        ## Octave uses set-to-0, R uses sum-0 restriction
+X <- cmdscale(MSEI, k = dim)        
 DX <- as.vector(dist(X))
 DXm <- DX - (1/m * ones(m) %*% DX)
 result <- list(X = X, m = m, R = R, Xi = Xi, Xim = Xim, DX = DX, DXm = DXm)

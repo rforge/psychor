@@ -39,8 +39,7 @@ semds <- function(D, dim = 2, saturated = 0, theta0 = NULL, maxiter = 1000, eps 
 
   saturado <- saturated
   if (conf1$R > 2) saturado <- 0
-
-  ## [Delta,theta]=FunDispariSEM3(Xi,Xim,R,DXm,SSk,theta0,saturado);
+  
   disp1 <- FunDispariSEM3(Xi = conf1$Xi, Xim = conf1$Xim, R = R, DXm = conf1$DXm, SSk = SSk, theta0 = theta0, saturado = saturado)
 
   ## Normalization for the identification constraint of var(Delta)
@@ -48,21 +47,21 @@ semds <- function(D, dim = 2, saturated = 0, theta0 = NULL, maxiter = 1000, eps 
   DISPARIM <- squareform(DISPARI)
   Distancia <- squareform(conf1$DX)
 
-## ************************* SMACOF-SEM*****************************
-k <- 1
-NumIte <- maxiter
-STRSSB <- NULL
-Ddiff <- DISPARIM-Distancia
-STRSSB[1] = (1/2)*sum(diag(Ddiff %*% Ddiff)) ## Raw initial STRESS
-N <- NULL
-N[1] <- 1
-SS <- NULL
-SS[1] <- 0
-STRSSB_N <- NULL
-STRSSB_N[1] <- STRSSB[k]/sum(DISPARI^2)    ## STRESS normalizado
-BZ <- matrix(0, n, n)
-theta0 <- disp1$theta
-sdiff <- 1
+## ------------------------ SMACOF-SEM ------------------------------
+  k <- 1
+  NumIte <- maxiter
+  STRSSB <- NULL
+  Ddiff <- DISPARIM-Distancia
+  STRSSB[1] = (1/2)*sum(diag(Ddiff %*% Ddiff)) ## Raw initial STRESS
+  N <- NULL
+  N[1] <- 1
+  SS <- NULL
+  SS[1] <- 0
+  STRSSB_N <- NULL
+  STRSSB_N[1] <- STRSSB[k]/sum(DISPARI^2)    ## STRESS normalizado
+  BZ <- matrix(0, n, n)
+  theta0 <- disp1$theta
+  sdiff <- 1
 
 ## Alternating estimation procedure: The configuration is estimated using
 ## the Guttman transformation and the disparities are estimated in SEM.
@@ -70,54 +69,56 @@ sdiff <- 1
 ## FIXME: continue here!!!!
 
 while ((k==1 || k < NumIte) && (sdiff > eps)) {
-    k <- k+1
-    
-    ## Guttman step
-    for (l in (1:n)) {
-        for (h in (1:n)) {
-            if (l != h) { 
-              BZ[l,h] <- -DISPARIM[l,h]/Distancia[l,h] 
-            } else {
-                BZ[l,h] <- 0
-            }
-        }
+  k <- k+1
+  
+  ## Guttman step
+  for (l in (1:n)) {
+    for (h in (1:n)) {
+      if (l != h) { 
+        BZ[l,h] <- -DISPARIM[l,h]/Distancia[l,h] 
+      } else {
+        BZ[l,h] <- 0
+      }
     }
-    for (l in 1:n) BZ[l,l] = -sum(BZ[l,])
-    
-    X <- (1/n)*BZ %*% Z     ## Y1 GUTTMAN transformation
-    
-    ## SEM step
-    DX <- as.vector(dist(X))
-    DXm <- DX-(1/m)*ones(m) %*% DX  ## Column vector
-    disp <- FunDispariSEM3(conf1$Xi, conf1$Xim, R, DXm, SSk, theta0, saturado)
-    Distancia <- squareform(DX)
-    DISPARI <- as.vector(disp$Delta %*% sqrt((n*(n-1)/2)/sum(disp$Delta^2)))
-    
-    DISPARIM <- squareform(DISPARI)
-    ## Raw STRESS
-    Ddiff <- DISPARIM-Distancia
-    STRSSB[k] = (1/2)*sum(diag(Ddiff %*% Ddiff)) ## Raw initial STRESS  
-    STRSSB_N[k] <- STRSSB[k]/sum(DISPARI^2)                 ## Normallized STRESS
-    SS[k] <- STRSSB[k-1]-STRSSB[k] ## Medimos las diferencias para el bruto.
-    N[k] <- k
-    if (SS[k] > 0) {
-        Z <- X
-        theta0 <- disp$theta
-        SSk <- STRSSB_N[k-1]-STRSSB_N[k] ##*std(Delta);
-        STRSSBNFinal <- STRSSB_N[k]
-        STRSSBFinal <- STRSSB[k]
-        Deltafinal <- DISPARI 
-        NiterSEM <- k
-        Thetaf <- disp$theta
-    } else {
-        DX <- as.vector(dist(X)) 
-        DXm=DX-(1/m)*ones(m) %*% DX  ## Column vector.
-    }
-    
-    sdiff <- STRSSB[k-1]-STRSSB[k]
+  }
+  for (l in 1:n) BZ[l,l] = -sum(BZ[l,])
+  
+  X <- (1/n)*BZ %*% Z     ## Y1 GUTTMAN transformation
+  
+  ## SEM step
+  DX <- as.vector(dist(X))
+  DXm <- DX-(1/m)*ones(m) %*% DX  ## Column vector
+  disp <- FunDispariSEM3(conf1$Xi, conf1$Xim, R, DXm, SSk, theta0, saturado)
+  Distancia <- squareform(DX)
+  DISPARI <- as.vector(disp$Delta %*% sqrt((n*(n-1)/2)/sum(disp$Delta^2)))
+  
+  DISPARIM <- squareform(DISPARI)
+  ## Raw STRESS
+  Ddiff <- DISPARIM-Distancia
+  STRSSB[k] = (1/2)*sum(diag(Ddiff %*% Ddiff)) ## Raw initial STRESS  
+  STRSSB_N[k] <- STRSSB[k]/sum(DISPARI^2)                 ## Normallized STRESS
+  SS[k] <- STRSSB[k-1]-STRSSB[k] ## Medimos las diferencias para el bruto.
+  N[k] <- k
+  if (SS[k] > 0) {
+    Z <- X
+    theta0 <- disp$theta
+    SSk <- STRSSB_N[k-1]-STRSSB_N[k] ##*std(Delta);
+    STRSSBNFinal <- STRSSB_N[k]
+    STRSSBFinal <- STRSSB[k]
+    Deltafinal <- DISPARI 
+    NiterSEM <- k
+    Thetaf <- disp$theta
+  } else {
+    DX <- as.vector(dist(X)) 
+    DXm=DX-(1/m)*ones(m) %*% DX  ## Column vector.
+  }
+  
+  sdiff <- STRSSB[k-1]-STRSSB[k]
 }
 
-## *********************************END SMACOF-SEM**************************
+if (NiterSEM == maxiter) warning("Iteration Limit Reached! Increase maxiter!")
+
+## --------------------------- END SMACOF-SEM ---------------------------------------
 
 CoordMDSSEM <- Z
 rownames(CoordMDSSEM) <- cnames
