@@ -1,6 +1,6 @@
-%\VignetteIndexEntry{Gifi Methods for Optimal Scaling in R: The Package homals}
-
-\documentclass[article, nojss]{jss}
+%\VignetteIndexEntry{An Introduction to the homals package}
+%\VignetteEngine{knitr::knitr} 
+\documentclass[10pt,nojss,nofooter,fleqn]{jss}
 \usepackage{amsmath, amsfonts}
 \usepackage{float,amssymb}
 \usepackage{hyperref}
@@ -11,17 +11,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% almost as usual
-\author{Jan de Leeuw\\University of California, Los Angeles \And 
-        Patrick Mair \\WU Wirtschaftsuniversit\"at Wien}
+\author{Patrick Mair \\ Harvard University \And 
+        Jan de Leeuw \\ University of California, Los Angeles}
 \title{Gifi Methods for Optimal Scaling in \proglang{R}:\\ The Package \pkg{homals}}
 %
 %%% for pretty printing and a nice hypersummary also set:
-\Plainauthor{Jan de Leeuw, Patrick Mair} %% comma-separated
+\Plainauthor{Patrick Mair, Jan de Leeuw} %% comma-separated
 \Plaintitle{Gifi Methods for Optimal Scaling in R: The Package homals} %% without formatting
 \Shorttitle{Homals in \proglang{R}} %% a short title (if necessary)
 
 %% an abstract and keywords
 \Abstract{
+This package vignette is an update and extension of the paper by published in the Journal of Statistical Software.
 Homogeneity analysis combines the idea of maximizing the correlations between variables of a multivariate data set with
 that of optimal scaling. In this article we present methodological and practical issues of the \proglang{R} package \pkg{homals} which performs homogeneity analysis and various extensions. By setting rank constraints nonlinear principal component analysis can be performed. The variables can be partitioned into sets such that homogeneity analysis is extended to nonlinear canonical correlation analysis or to predictive models which emulate discriminant analysis and regression models. For each model the scale level of the variables can be taken into account by setting level constraints. All algorithms allow for missing values.
 }
@@ -42,11 +43,11 @@ that of optimal scaling. In this article we present methodological and practical
 %% The address of (at least) one author should be given
 %% in the following format:
 \Address{
-  Jan de Leeuw\\
-  Department of Statistics\\
-  University of California, Los Angeles\\
-  E-mail: \email{deleeuw@stat.ucla.edu}\\
-  URL: \url{http://www.stat.ucla.edu/~deleeuw/}
+  Patrick Mair\
+  Department of Psychology\\
+  Harvard University\\
+  E-mail: \email{mair@fas.harvard.edu}\\
+  URL: \url{http://scholar.harvard.edu/mair}
 }
 %% It is also possible to add a telephone and fax number
 %% before the e-mail in the following format:
@@ -60,6 +61,11 @@ that of optimal scaling. In this article we present methodological and practical
 
 
 \begin{document}
+
+<<preliminaries, echo=FALSE>>=
+require(homals)
+@
+
 \section{Introduction}
 \label{sec:int}
 In recent years correspondence analysis (CA) has become a popular descriptive statistical method to analyze categorical data \citep{Benzecri:73, Greenacre:84, Gifi:90, Greenacre+Blasius:06}. Due to the fact that the visualization capabilities of statistical software have increased during this time, researchers of many areas apply CA and map objects and variables (and their respective categories) onto a common metric plane. 
@@ -144,7 +150,7 @@ The goodness-of-fit of a solution can be examined by means of a screeplot of the
 \section{Extensions of homogeneity analysis}
 \citet{Gifi:90} provides various extensions of homogeneity analysis and elaborates connections to other multivariate methods. The package \pkg{homals} allows for imposing restrictions on the variable ranks and levels as well as defining sets of variables. These options offer a wide spectrum of additional possibilities for multivariate data analysis beyond classical homogeneity analysis (cf. broad sense view in the Introduction).
 
-\subsection{Nonlinear principal component analysis}
+\subsection{Nonlinear (categorical) principal component analysis}
 Having a $n \times m$ data matrix with metric variables, principal components analysis (PCA) is a common technique to reduce the dimensionality of the data set, i.e., to project the variables into a subspace $\mathbb{R}^p$ where $p \ll m$. The Eckart-Young theorem states that this classical form of \emph{linear} PCA can be formulated by means of a loss function. Its minimization leads to a $n\times p$ matrix of \emph{component scores} and an $m \times p$ matrix of \emph{component loadings}.
 
 However, having nonmetric variables, nonlinear PCA (NLPCA) can be used. The term ``nonlinear" pertains to nonlinear transformations of the observed variables \citep{deLeeuw:06}. In Gifi terminology, NLPCA can be defined as homogeneity analysis with restrictions on the quantification matrix $Y_j$. Let us denote $r_j \leq p$ as the parameter for the imposed restriction on variable $j$. If no restrictions are imposed, as e.g. for a simple homals solution, 
@@ -294,235 +300,336 @@ $\overline A$, and thus it also is not necessary to compute the Gram-Schmidt tri
 
 \section[The R package homals]{The \proglang{R} package \pkg{homals}}
 \label{sec:R}
-At this point we show how the models described in the sections above can be computed using the package \pkg{homals} in \proglang{R} \citep{R:07} available on \href{http://cran.r-project.org}{CRAN}.
+% At this point we show how the models described in the sections above can be computed using the package \pkg{homals} in \proglang{R} \citep{R:07} available on \href{http://cran.r-project.org}{CRAN}.
+% 
+% The core function of the package for the computation of the methodology above is \code{homals()}. The extended models can be computed by setting corresponding arguments: The \code{rank} argument (integer value) allows for the calculation of rank-restricted nonlinear PCA. The \code{level} argument (strings) allows to set different scale levels. By default the level is set to nominal. Finally, the \code{sets} argument allows for partitioning the variables into two or more sets in order to perform nonlinear CCA. Examples can be found in the corresponding help files. 
+% 
+% As a result, an object of class \texttt{"homals"} is created and the following methods are provided: \code{print}, \code{summary}, \code{plot}, \code{plot3d}, \code{scatterplot3d} and \code{predict}. The \code{predict} method works as follows. Given a homals solution we can reconstruct the indicator matrix by assigning each object to the closest category point of the variable. We can then find out how well we have reconstructed the original data. For variables with rank restrictions we first have to project the objects on the hyperplane spanned by the category quantifications, and then compute distances in that plane. In any case we can make a square table of observed versus predicted for each variable, showing misclassification. 
+% 
+% The package offers a wide variety of plots; some of them are discussed in \citet{Michailidis+deLeeuw:98} and \citet{ Michailidis+deLeeuw:01}. In the \code{plot} method the user can specify the type of plot through the argument \code{plot.type}. For some plot types three-dimensional versions are provided in \code{plot3d} (dynamic) and \code{plot3dstatic}:
+% \begin{itemize}
+% \item Object plot (\texttt{"objplot"}): Plots the scores of the objects (rows in data set) on two or three dimensions. 
+% \item Category plot (\texttt{"catplot"}): Plots the rank-restricted category quantifications for each variable separately. Three-dimensional plots are available.
+% \item Voronoi plot (\texttt{"vorplot"}): Produces a category plot with Voronoi regions.
+% \item Joint plot (\texttt{"jointplot"}): The object scores and category quantifications are mapped in the same (two- or three-dimensional) device.
+% \item Graph plot (\texttt{"graphplot"}): Basically, a joint plot is produced with additional connections between the objects and the corresponding response categories.
+% \item Hull plot (\texttt{"hullplot"}): For a particular variable the object scores are mapped onto two dimensions. The convex hulls around the object scores are drawn with respect to each response category of this variable. 
+% \item Label plot (\texttt{"labplot"}): Similar to object plot, the object scores are plotted but for each variable separately with the corresponding category labels. A three-dimensional version is provided.
+% \item Span plot (\texttt{"spanplot"}): Like label plot, it maps the object scores for each variable and it connects them by the shortest path within each response category.
+% \item Star plot (\texttt{"starplot"}): Again, the object scores are mapped on two or three dimensions. In addition, these points are connected with the category centroid. 
+% \item Loss plot (\texttt{"lossplot"}): Plots the rank-restricted category quantifications against the unrestricted for each variable separately.
+% \item Projection plot (\texttt{"prjplot"}): For variables of rank 1 the object scores (two-dimensional) are projected onto
+% the orthogonal lines determined by the rank restricted category quantifications.  
+% \item Vector plot (\texttt{"vecplot"}): For variables of rank 1 the object scores (two-dimensional) are projected onto a straight line determined by the rank restricted category quantifications.
+% \item Transformation plot (\texttt{"trfplot"}): Plots variable-wise the original (categorical) scale against the transformed (metric) scale $Z_j$ for each solution.
+% \item Loadings plot (\texttt{"loadplot"}): Plots the loadings $\mathbf{a}_j$ and connects them with the origin. Note that if $r_j > 1$ only the first solution is taken.
+% \item Scree plot (\texttt{"screeplot"}): Produces a scree plot based on the eigenvalues. 
+% \item Discrimination measures (\texttt{"dmplot"}): Plots the discrimination measures for each variable. 
+% \end{itemize} 
+% 
+% 
+% \subsection{Simple homogeneity analysis}
+% \label{sec:sha}
+% The first example is a simple (i.e., no level or rank restrictions, no sets defined) three-dimensional homogeneity analysis for the \code{senate} data set \citep{Ada:02}. The data consists of 2001 senate votes on 20 issues selected by Americans for Democratic Action. The votes selected cover a full spectrum of domestic, foreign, economic, military, environmental and social issues. We tried to select votes which display sharp liberal/conservative contrasts. As a consequence, Democrat candidates have many more ``yes" responses than Republican candidates. Due to non-responses we have several missings which are coded as \code{NA}. A full description of the items can be found in the corresponding package help file. The first column of the data set (i.e., the variable ``Party'' containing 50 Republicans vs. 49 Democrats and 1 Independent) is inactive and will be used for validation. 
+% 
+% <<>>=
+% data("senate")
+% res <- homals(senate, active = c(FALSE, rep(TRUE, 20)), ndim = 3)
+% @
+% <<eval = FALSE>>=
+% # Figure 1
+% par(mfrow = c(2, 2))
+% plot3d(res, plot.type = "objplot", sphere = FALSE, bgpng = NULL)
+% plot(res, plot.type = "spanplot", plot.dim = c(1, 2), var.subset = 1, xlim = c(-2, 3), ylim = c(-2, 3), asp = 1)
+% plot(res, plot.type = "spanplot", plot.dim = c(1, 3), var.subset = 1, xlim = c(-2, 3), ylim = c(-2, 3), asp = 1)
+% plot(res, plot.type = "spanplot", plot.dim = c(2, 3), var.subset = 1, xlim = c(-2, 3), ylim = c(-2, 3), asp = 1)
+% @
+% 
+% <<>>=
+% # Figure 2
+% par(mfrow = c(1, 1))
+% plot3dstatic(res, plot.type = "loadplot")
+% @
+% 
+% \begin{figure}[ht]
+% \begin{center}
+% \includegraphics[height=70mm, width=70mm]{senate.png}
+% \includegraphics[height=70mm, width=70mm]{senatespan12.pdf}
+% \includegraphics[height=70mm, width=70mm]{senatespan13.pdf}
+% \includegraphics[height=70mm, width=70mm]{senatespan23.pdf}
+% \caption{\label{fig:sen} 3D Object Plot and Span Plots for Senate Dataset}
+% \end{center}
+% \end{figure}
+% 
+% Figure \ref{fig:sen} shows four branches (or clusters) of senators which we will denote by north, south, west and east. The west and the north branches are composed by Republicans, the east and south branches by Democrats. Note that the 3D-plot is rotated in a way that Dimension 3 is horizontally aligned, Dimension 2 is vertically aligned, and Dimension 1 is the one aligned from front to back. The two-dimensional slices show that Dimension 1 vs. 2 does not distinguish between Democrats and Republicans. If Dimension 3 is involved, as in the two bottom plots in Figure \ref{fig:sen}, the separation between Democrats and Republicans is obvious. To distinguish within north-west and south-east, respectively, Item 19 has to be taken into account:
+% 
+% \emph{V19: S 1438. Military Base Closures. Warner (R-VA) motion to authorize an additional round of U.S. military base realignment and closures in 2003. A ``yes'' vote is a +.} 
+% 
+% Republicans belonging to the north branch as well as Democrats belonging to the east branch gave a ``yes'' vote. South-Wing Democrats and West-Wing Republicans voted with ``no''. It is well known that the response on this item mainly depends on whether there is a military base in the senator's district or not; those senators who have a military base in their district do not want to close it since such a base provides working places and is an important income source for the district. Hence, this is the determining factor and not the party affiliation of the senator. This result is underpinned by Figure \ref{fig:senload} where Item 19 is clearly separated from the remaining items.
+% 
+% \begin{figure}[ht]
+% \begin{center}
+% \includegraphics[height=85mm, width=85mm]{senateload.pdf}
+% \caption{\label{fig:senload} Loadings Plot for Senate Dataset}
+% \end{center}
+% \end{figure}
+% 
+% Given a (multiple) homals solution, we can reconstruct the indicator matrix by assigning each object to the closest points of the variable.
+% 
+% <<>>=
+% p.res <- predict(res)
+% p.res$cl.table$Party
+% @
+% 
+% From the classification table we see that 91\% of the party affiliations are correctly classified. Note that in the case of such a simple homals solution it can happen that a lower dimensional solution results in a better classification rate than a higher dimensional. The reason is that in simple homals the classification rate is not the criterion to be optimized. 
 
-The core function of the package for the computation of the methodology above is \code{homals()}. The extended models can be computed by setting corresponding arguments: The \code{rank} argument (integer value) allows for the calculation of rank-restricted nonlinear PCA. The \code{level} argument (strings) allows to set different scale levels. By default the level is set to nominal. Finally, the \code{sets} argument allows for partitioning the variables into two or more sets in order to perform nonlinear CCA. Examples can be found in the corresponding help files. 
+\subsection{Categorical Principal Component Analysis}
+Standard PCA assumes that the data are metric (i.e. equidistant categories within and across variables) and assumes a linear relationship among the observed variables. Having ordinal variables such as Likert items, these assumptions are often 
+not fulfilled in practice. In this case we have two options: run an ordinal factor analysis (FA) based on polychoric correlations as implemented in the \code{fa.poly()} function in the \pkg{psych} package, or run a nonlinear (ordinal) PCA as presented here. 
+Apart from the conceptual differences between FA and PCA in general, the advantage of NLPCA over polychoric FA is that we do not have to pose any underlying distribution assumption on our data, whereas a polychoric (or tetrachoric in the binary case) correlation assumes that the categories are realizations of an underlying latent normal distribution. 
 
-As a result, an object of class \texttt{"homals"} is created and the following methods are provided: \code{print}, \code{summary}, \code{plot}, \code{plot3d}, \code{scatterplot3d} and \code{predict}. The \code{predict} method works as follows. Given a homals solution we can reconstruct the indicator matrix by assigning each object to the closest category point of the variable. We can then find out how well we have reconstructed the original data. For variables with rank restrictions we first have to project the objects on the hyperplane spanned by the category quantifications, and then compute distances in that plane. In any case we can make a square table of observed versus predicted for each variable, showing misclassification. 
+In \pkg{homals} there is the \code{princals()} function which performs NLPCA. Since NLPCA is just a rank-1 restricted 
+version of general homogeneity analysis, internally \code{princals()} uses \code{homals()} as engine. An effort was made 
+to make the PRINCALS output as PCA-like (i.e. \code{princomp()}-like) as possible in terms of comparable 
+eigenvalues, explaned amount of variance on each dimension, and loadings.
 
-The package offers a wide variety of plots; some of them are discussed in \citet{Michailidis+deLeeuw:98} and \citet{ Michailidis+deLeeuw:01}. In the \code{plot} method the user can specify the type of plot through the argument \code{plot.type}. For some plot types three-dimensional versions are provided in \code{plot3d} (dynamic) and \code{plot3dstatic}:
-\begin{itemize}
-\item Object plot (\texttt{"objplot"}): Plots the scores of the objects (rows in data set) on two or three dimensions. 
-\item Category plot (\texttt{"catplot"}): Plots the rank-restricted category quantifications for each variable separately. Three-dimensional plots are available.
-\item Voronoi plot (\texttt{"vorplot"}): Produces a category plot with Voronoi regions.
-\item Joint plot (\texttt{"jointplot"}): The object scores and category quantifications are mapped in the same (two- or three-dimensional) device.
-\item Graph plot (\texttt{"graphplot"}): Basically, a joint plot is produced with additional connections between the objects and the corresponding response categories.
-\item Hull plot (\texttt{"hullplot"}): For a particular variable the object scores are mapped onto two dimensions. The convex hulls around the object scores are drawn with respect to each response category of this variable. 
-\item Label plot (\texttt{"labplot"}): Similar to object plot, the object scores are plotted but for each variable separately with the corresponding category labels. A three-dimensional version is provided.
-\item Span plot (\texttt{"spanplot"}): Like label plot, it maps the object scores for each variable and it connects them by the shortest path within each response category.
-\item Star plot (\texttt{"starplot"}): Again, the object scores are mapped on two or three dimensions. In addition, these points are connected with the category centroid. 
-\item Loss plot (\texttt{"lossplot"}): Plots the rank-restricted category quantifications against the unrestricted for each variable separately.
-\item Projection plot (\texttt{"prjplot"}): For variables of rank 1 the object scores (two-dimensional) are projected onto
-the orthogonal lines determined by the rank restricted category quantifications.  
-\item Vector plot (\texttt{"vecplot"}): For variables of rank 1 the object scores (two-dimensional) are projected onto a straight line determined by the rank restricted category quantifications.
-\item Transformation plot (\texttt{"trfplot"}): Plots variable-wise the original (categorical) scale against the transformed (metric) scale $Z_j$ for each solution.
-\item Loadings plot (\texttt{"loadplot"}): Plots the loadings $\mathbf{a}_j$ and connects them with the origin. Note that if $r_j > 1$ only the first solution is taken.
-\item Scree plot (\texttt{"screeplot"}): Produces a scree plot based on the eigenvalues. 
-\item Discrimination measures (\texttt{"dmplot"}): Plots the discrimination measures for each variable. 
-\end{itemize} 
+Standard PCA is solved by an eigenvalue decomposition of the input correlation matrix $R$ based on the original 
+data which gives us eigenvalue vector $\lambda$ of length $m$. Subsequently, the amount 
+of explained variance for each dimension can be computed by dividing each eigenvalue by the sum of the $m$ eigenvalues. 
+One of the cores outputs of any Gifi model is that it provides a ``new'' data matrix where the original categories are optimally scaled for each dimension. Now can now compute the correlation matrix $R^{\ast}$ on the new data matrix (it does not matter 
+which one we use since the $p$ matrices are linearly dependent) and perform an eigenvalue decomposition. 
+This gives us the eigenvalue vector $\lambda^{\ast}$ of length $m$. As above, we can compute the amount 
+of explained variance for each of the $m$ dimensions. In addition, in order to evaluate the amount of ``improvement'' 
+of NLPCA over PCA we can compute the eigenvalue ratio, e.g. for the first dimension we have $\lambda_1^{\ast}/\lambda_1$. 
+This gives us a measure for the violations of equidistance and linearity in our original data. 
 
+Regarding the loadings, in standard PCA they are normed to $\|w\|^2 = 1$. 
+In order to make the loadings $w^{\ast}$ from NLPCA comparable to standard PCA, they need to be normalized the same way.
+The \code{princals()} function performs all these computations internally and returns the $p$ eigenvalues based on the 
+$R^{\ast}$, the amount of variance explained for each of the $p$ dimensions, and the standardized loadings. 
 
-\subsection{Simple homogeneity analysis}
-\label{sec:sha}
-The first example is a simple (i.e., no level or rank restrictions, no sets defined) three-dimensional homogeneity analysis for the \code{senate} data set \citep{Ada:02}. The data consists of 2001 senate votes on 20 issues selected by Americans for Democratic Action. The votes selected cover a full spectrum of domestic, foreign, economic, military, environmental and social issues. We tried to select votes which display sharp liberal/conservative contrasts. As a consequence, Democrat candidates have many more ``yes" responses than Republican candidates. Due to non-responses we have several missings which are coded as \code{NA}. A full description of the items can be found in the corresponding package help file. The first column of the data set (i.e., the variable ``Party'' containing 50 Republicans vs. 49 Democrats and 1 Independent) is inactive and will be used for validation. 
+Through the \code{level} argument the user can specify the scale levels of the variables (\code{"ordinal" as default}. If all variables are set to \code{"numerical"}, PRINCALS mimics standard PCA. In terms of plotting possibilities, a generic plot function allows for a loadings plot (default), a scree plot, transformation plots, and a biplot by specifying the 
+\code{plot.type} argument accordingly. 
+
+Now we show an ordinal PCA example on the ABC dataset which reproduces the analysis in \cite{Ferrari+Barbiero:2012}. 
+ABC is a ficticious company which launched a customer satisfaction survey. In this analysis we use six items, 
+each of them on a 5-point Likert scale, covering certain aspects of customer satisfaction: 
+equipment, sales support, technical support, training, purchase, and pricing. 
+
+First, we start with a full-dimensional PRINCALS solution and examine the scree plot.
 
 <<>>=
-library("homals")
-data("senate")
-res <- homals(senate, active = c(FALSE, rep(TRUE, 20)), ndim = 3)
-@
-<<eval = FALSE>>=
-# Figure 1
-plot3d(res, plot.type = "objplot", sphere = FALSE, bgpng = NULL)
-plot(res, plot.type = "spanplot", plot.dim = c(1, 2), var.subset = 1, xlim = c(-2, 3), ylim = c(-2, 3), asp = 1)
-plot(res, plot.type = "spanplot", plot.dim = c(1, 3), var.subset = 1, xlim = c(-2, 3), ylim = c(-2, 3), asp = 1)
-plot(res, plot.type = "spanplot", plot.dim = c(2, 3), var.subset = 1, xlim = c(-2, 3), ylim = c(-2, 3), asp = 1)
+ABC6 <- ABC[, 6:11]   
+fitfull <- princals(ABC6, ndim = 6)
+fitfull
+summary(fitfull)
 @
 
-<<eval = FALSE>>=
-# Figure 2
-par(mfrow = c(1, 1))
-plot3dstatic(res, plot.type = "loadplot")
-@
+The scree plot is given in in the left panel of Figure \ref{fig:abcsree}. 
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[height=70mm, width=70mm]{senate.png}
-\includegraphics[height=70mm, width=70mm]{senatespan12.pdf}
-\includegraphics[height=70mm, width=70mm]{senatespan13.pdf}
-\includegraphics[height=70mm, width=70mm]{senatespan23.pdf}
-\caption{\label{fig:sen} 3D Object Plot and Span Plots for Senate Dataset}
+Second, we fit a two-dimensional ordinal solution. The loadings plot is given in Figure \ref{fig:abcscree} (right panel). 
+<<>>=
+fit2d <- princals(ABC6, ndim = 2)
+fit2d
+summary(fit2d)
+@
+We see that we explain around 63\% of the variance.
+
+<<abcscree-plot, eval=FALSE>>=
+op <- par(mfrow = c(1,2))
+plot(fitfull, plot.type = "screeplot")
+plot(fit2d)
+par(op)
+@
+\begin{figure}
+\begin{center}  % fig.width='15cm', fig.height='6cm'
+<<abcscree-plot1, echo=FALSE, fig.width=10, fig.height=5, dev='postscript'>>=
+<<abcscree-plot>>
+@
 \end{center}
+\caption{\label{fig:abcscree} Left panel: Scree plot for full-dimensional PRINCALS. Right panel: 
+Loadings plot for two-dimensional solution.}
 \end{figure}
 
-Figure \ref{fig:sen} shows four branches (or clusters) of senators which we will denote by north, south, west and east. The west and the north branches are composed by Republicans, the east and south branches by Democrats. Note that the 3D-plot is rotated in a way that Dimension 3 is horizontally aligned, Dimension 2 is vertically aligned, and Dimension 1 is the one aligned from front to back. The two-dimensional slices show that Dimension 1 vs. 2 does not distinguish between Democrats and Republicans. If Dimension 3 is involved, as in the two bottom plots in Figure \ref{fig:sen}, the separation between Democrats and Republicans is obvious. To distinguish within north-west and south-east, respectively, Item 19 has to be taken into account:
+Now we fit a one-dimensional ordinal PCA.
+<<>>=
+fit1d <- princals(ABC6, ndim = 1)
+fit1d
+summary(fit1d)
+@
 
-\emph{V19: S 1438. Military Base Closures. Warner (R-VA) motion to authorize an additional round of U.S. military base realignment and closures in 2003. A ``yes'' vote is a +.} 
-
-Republicans belonging to the north branch as well as Democrats belonging to the east branch gave a ``yes'' vote. South-Wing Democrats and West-Wing Republicans voted with ``no''. It is well known that the response on this item mainly depends on whether there is a military base in the senator's district or not; those senators who have a military base in their district do not want to close it since such a base provides working places and is an important income source for the district. Hence, this is the determining factor and not the party affiliation of the senator. This result is underpinned by Figure \ref{fig:senload} where Item 19 is clearly separated from the remaining items.
-
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[height=85mm, width=85mm]{senateload.pdf}
-\caption{\label{fig:senload} Loadings Plot for Senate Dataset}
-\end{center}
-\end{figure}
-
-Given a (multiple) homals solution, we can reconstruct the indicator matrix by assigning each object to the closest points of the variable.
+Let us compare it with the outcome of a standard PCA solution using \code{princomp()} and compute the ratio of the first 
+eigenvalues.
 
 <<>>=
-p.res <- predict(res)
-p.res$cl.table$Party
+ABC6m <- sapply(ABC6, function(x) as.numeric(levels(x))[x])
+fitpc <- princomp(ABC6m)
+fitpc
+fit1d$eigenvalues/(fitpc$sdev^2)[1]       ## eigenvalue ratio NLPCA/PCA
 @
 
-From the classification table we see that 91\% of the party affiliations are correctly classified. Note that in the case of such a simple homals solution it can happen that a lower dimensional solution results in a better classification rate than a higher dimensional. The reason is that in simple homals the classification rate is not the criterion to be optimized. 
-
-
-\subsection{Predictive models and canonical correlation}
-\label{sec:pmcca}
-The \code{sets} argument allows for partitioning the variables into sets in order to emulate canonical correlation analysis and predictive models. As outlined above, if the variables are partitioned into asymmetric sets of one variable vs. the others, we can put this type of homals model into a predictive modeling context. If not, the interpretation in terms of canonical correlation is more appropriate. 
-
-\begin{figure}[hbt]
-\begin{center}
-\includegraphics[height=75mm, width=75mm]{galoVor.pdf}
-\includegraphics[height=75mm, width=75mm]{galoLab.pdf}
-\caption{\label{fig:vor}Voronoi Plot and Label Plot for Galo Data}
-\end{center}
-\end{figure}
-
-To demonstrate this, we use the \code{galo} dataset \citep{Peschar:75} where data of 1290 school children in the sixth grade of an elementary school in the city of Groningen (Netherlands) were collected. The variables are Gender, IQ (categorized into 9 ordered categories), Advice (teacher categorized the children into 7 possible forms of secondary education, i.e., Agr = agricultural; Ext = extended primary education; Gen = general; 
-Grls = secondary school for girls; Man = manual, including housekeeping; None = no further education; Uni = pre-University), SES (parent's profession in 6 categories) and School (37 different schools). In this example it could be of interest to predict Advice from Gender, IQ, and SES (whereas School is inactive).
+The eigenvalue ratio of suggests \Sexpr{round(fit1d$eigenvalues/(fitpc$sdev^2)[1], 2)} a slight improvement 
+of NLPCA over standard PCA. This implies that the response categories are approximately equidistant and 
+the relationship between the variables is not far from linear.
+If we want to mimic standard PCA with PRINCALS, we declare all the variables as numeric.
 
 <<>>=
-data("galo")
+fit1dm <- princals(ABC6, ndim = 1, level = "numerical")
+fit1dm
+fit1dm$eigenvalues/(fitpc$sdev^2)[1]       ## eigenvalue ratio NLPCA/PCA
 @
-<<echo = FALSE>>=
-options(warn = -1)
-@
+
+The size of the eigenvalue ratio decreased since we are essentially doing the same thing. 
+Finally, we can also abandon the order assumption in the response categories and treat all variables 
+as nominal. This is the least restrictive of our one-dimensional PRINCALS models.
+
 <<>>=
-res <- homals(galo, active = c(rep(TRUE, 4), FALSE), sets = list(c(1,2,4),3,5))
-predict(res)
-@
-<<eval = FALSE>>=
-plot(res, plot.type = "vorplot", var.subset = 3, asp = 1)
-plot(res, plot.type = "labplot", var.subset = 2, asp = 1)
+fit1dc <- princals(ABC6, ndim = 1, level = "nominal")
+fit1dc
 @
 
-A rate of .6310 correctly classified teacher advice results. The Voronoi plot in Figure \ref{fig:vor} shows the Voronoi regions for the same variable. A labeled plot is given for the IQs which shows that on the upper half of the horseshoe there are mainly children with IQ-categories 7-9. Distinctions between these levels of intelligence are mainly reflected by Dimension 1. For the lower horseshoe half it can be stated that both dimensions reflect differences in lower IQ-categories.
+We see that the nominal PCA leads pretty much to the same fit as the ordinal version which suggests that 
+the ordinal scale level for the variables holds. 
 
-Using the classical iris dataset, the aim is to predict Species from Petal/Sepal Length/Width. The polynomial level constraint is posed on the predictors and the response is treated as nominal. A hull plot for the response, a label plot Petal Length and loss plots for all predictors are produced.
-
-<<eval = FALSE>>=
-data("iris")
-res <- homals(iris, sets = list(1:4, 5), level = c(rep("polynomial", 4), "nominal"), rank = 2, itermax = 2000)
-plot(res, plot.type = "hullplot", var.subset = 5, cex = 0.7, xlim = c(-3,3), ylim = c(-4,3), asp = 1)
-plot(res, plot.type = "labplot", var.subset = 3, cex = 0.7, xlim = c(-3,3), ylim = c(-4,3), asp = 1)
-@
-
-\begin{figure}[hbt]
-\begin{center}
-\includegraphics[height=75mm, width=75mm]{irisHull.pdf}
-\includegraphics[height=75mm, width=75mm]{irisLab.pdf}
-\caption{\label{fig:iris}Hullplot and Label Plot for Iris Data}
-\end{center}
-\end{figure}
-
-For this two-dimensional homals solution, 100\% of the iris species are correctly classified. The hullplot in Figure \ref{fig:iris} shows that the species are clearly separated on the two-dimensional plane. In the label plot the object scores are labeled with the response on Petal Length and it becomes obvious that small lengths form the setosa ``cluster", whereas iris virginica are composed by obervations with large petal lengths. Iris versicolor have medium lengths. 
-
-The loss plots in Figure \ref{fig:irisLoss} show the fitted rank-2 solution (red lines) against the unrestricted solution. The implication of the polynomial level restriction for the fitted model is obvious.
-
-<<eval = FALSE>>=
-plot(res, plot.type = "lossplot", var.subset = 1:4, cex = 0.7, xlim = c(-3, 3), ylim = c(-5, 3), asp = 1)
-@
-
-\begin{figure}[hbt]
-\begin{center}
-\includegraphics[height=70mm, width=70mm]{irisLoss1.pdf}
-\includegraphics[height=70mm, width=70mm]{irisLoss2.pdf}
-\includegraphics[height=70mm, width=70mm]{irisLoss3.pdf}
-\includegraphics[height=70mm, width=70mm]{irisLoss4.pdf}
-\caption{\label{fig:irisLoss}Loss plots for Iris Predictors}
-\end{center}
-\end{figure}
-
-To show another homals application of predictive (in this case regression) modeling we use the Neumann dataset \citep{Wilson:26}: Willard Gibbs discovered a theoretical formula connecting the density, the pressure, and the absolute temperature of a mixture of gases with convertible 
-components. He applied this formula and the estimated constants to 65 experiments carried out by Neumann, and he discusses the systematic and accidental divergences (residuals). In the \pkg{homals} package such a linear regression of density on temperature and pressure can be emulated by setting numerical levels. Constraining the levels to be ordinal, we get a monotone regression \citep{Gifi:90}. 
-
-<<eval = FALSE>>=
-data("neumann")
-res.lin <- homals(neumann, sets = list(3,1:2), level = "numerical", rank = 1)
-res.mon <- homals(neumann, sets = list(3,1:2), level = "ordinal", rank = 1)
-plot(res.lin, plot.type = "loadplot", main = "Loadings Plot Linear Regression", xlim = c(-10, 10), ylim = c(-5, 10), asp = 1)
-plot(res.mon, plot.type = "loadplot", main = "Loadings Plot Monotone Regression", xlim = c(-10, 10), ylim = c(-5, 10), asp = 1)
-@
-
-The points in the loadings plot in Figure \ref{fig:neuload} correspond to regression coefficients.
-
-\begin{figure}[hbt]
-\begin{center}
-\includegraphics[height=70mm, width=70mm]{neuloadlin.pdf}
-\includegraphics[height=70mm, width=70mm]{neuloadmon.pdf}
-\caption{\label{fig:neuload}Loading Plots for Neumann Regression}
-\end{center}
-\end{figure}
-
-The impact of the level restrictions on the scaling is visualized in the transformation plots in Figure \ref{fig:neutrf}. Numerical level restrictions lead to linear transformations of the original scale with respect to the homals scaling (i.e. linear regression). Pertaining to ordinal levels, monotone transformations are carried out (i.e. monotone regression). 
-
-\begin{figure}[hbt]
-\begin{center}
-\includegraphics[height=70mm, width=70mm]{neutrftemp.pdf}
-\includegraphics[height=70mm, width=70mm]{neutrfpres.pdf}
-\includegraphics[height=70mm, width=70mm]{neutrfdens.pdf}
-\caption{\label{fig:neutrf}Transformation Plots for Neumann Regression}
-\end{center}
-\end{figure}
-
-\subsection{NLPCA on Roskam data}
-\label{sec:pcex}
-\citet{Roskam:68} collected preference data where 39 psychologists ranked all nine areas (see Table \ref{tab:area}) of the Psychology Department at the University of Nijmengen. 
-
-\begin{table}[ht]
-\centering
-\begin{tabular}{|c|l|}
-\hline
-SOC& Social Psychology\\
-EDU& Educational and Developmental Psychology\\
-CLI& Clinical Psychology\\
-MAT& Mathematical Psychology and Psychological Statistics\\
-EXP& Experimental Psychology\\
-CUL& Cultural Psychology and Psychology of Religion\\
-IND& Industrial Psychology\\
-TST& Test Construction and Validation\\
-PHY& Physiological and Animal Psychology\\
-\hline
-\end{tabular}
-\caption{\label{tab:area}Psychology Areas in Roskam Data.}
-\end{table}
-
-Using this data set we will perform two-dimensional NLPCA by restricting the rank to be 1. Note that the objects are the areas and the variables are the psychologists. Thus, the input data structure is a $9 \times 39$ data frame. Note that the scale level is set to ``ordinal".
-
-<<eval = FALSE>>=
-data("roskam")
-res <- homals(roskam, rank = 1, level = "ordinal")
-plot(res, plot.type = "objplot", xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5), asp = 1)
-plot(res, plot.type = "vecplot", var.subset = 2, main = "Vector Plot Rater 2", xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5), asp = 1)
-@
-
-\begin{figure}[hbt]
-\begin{center}
-\includegraphics[height=75mm, width=75mm]{roskamobj.pdf}
-\includegraphics[height=75mm, width=75mm]{roskamvec.pdf}
-\caption{\label{fig:roskam}Plots for Roskam data}
-\end{center}
-\end{figure}
-
-The object plot in Figure \ref{fig:roskam} shows interesting rating ``twins" of departmental areas: mathematical and experimental psychology, industrial psychology and test construction (both are close to the former two areas), educational and social psychology, clinical and cultural psychology. Physiological and animal psychology are somewhat separated from the other areas. Obviously this rater is attracted to areas like social, cultural and clinical psychology rather than to methodological fields. 
-The vector plot on the right hand side projects the category scores onto a straight line determined by rank restricted category quantifications. Similarly, a projection plot could be created. Further analyses of this dataset within a PCA context can be found in \citet{deLeeuw:06}. 
+% 
+% \subsection{Predictive models and canonical correlation}
+% \label{sec:pmcca}
+% The \code{sets} argument allows for partitioning the variables into sets in order to emulate canonical correlation analysis and predictive models. As outlined above, if the variables are partitioned into asymmetric sets of one variable vs. the others, we can put this type of homals model into a predictive modeling context. If not, the interpretation in terms of canonical correlation is more appropriate. 
+% 
+% \begin{figure}[hbt]
+% \begin{center}
+% \includegraphics[height=75mm, width=75mm]{galoVor.pdf}
+% \includegraphics[height=75mm, width=75mm]{galoLab.pdf}
+% \caption{\label{fig:vor}Voronoi Plot and Label Plot for Galo Data}
+% \end{center}
+% \end{figure}
+% 
+% To demonstrate this, we use the \code{galo} dataset \citep{Peschar:75} where data of 1290 school children in the sixth grade of an elementary school in the city of Groningen (Netherlands) were collected. The variables are Gender, IQ (categorized into 9 ordered categories), Advice (teacher categorized the children into 7 possible forms of secondary education, i.e., Agr = agricultural; Ext = extended primary education; Gen = general; 
+% Grls = secondary school for girls; Man = manual, including housekeeping; None = no further education; Uni = pre-University), SES (parent's profession in 6 categories) and School (37 different schools). In this example it could be of interest to predict Advice from Gender, IQ, and SES (whereas School is inactive).
+% 
+% <<>>=
+% data("galo")
+% res <- homals(galo, active = c(rep(TRUE, 4), FALSE), sets = list(c(1,2,4),3,5))
+% plot(res, plot.type = "vorplot", var.subset = 3, asp = 1)
+% plot(res, plot.type = "labplot", var.subset = 2, asp = 1)
+% predict(res)
+% @
+% 
+% A rate of .6310 correctly classified teacher advice results. The Voronoi plot in Figure \ref{fig:vor} shows the Voronoi regions for the same variable. A labeled plot is given for the IQs which shows that on the upper half of the horseshoe there are mainly children with IQ-categories 7-9. Distinctions between these levels of intelligence are mainly reflected by Dimension 1. For the lower horseshoe half it can be stated that both dimensions reflect differences in lower IQ-categories.
+% 
+% Using the classical iris dataset, the aim is to predict Species from Petal/Sepal Length/Width. The polynomial level constraint is posed on the predictors and the response is treated as nominal. A hull plot for the response, a label plot Petal Length and loss plots for all predictors are produced.
+% 
+% <<eval = FALSE>>=
+% data("iris")
+% res <- homals(iris, sets = list(1:4, 5), level = c(rep("polynomial", 4), "nominal"), rank = 2, itermax = 2000)
+% plot(res, plot.type = "hullplot", var.subset = 5, cex = 0.7, xlim = c(-3,3), ylim = c(-4,3), asp = 1)
+% plot(res, plot.type = "labplot", var.subset = 3, cex = 0.7, xlim = c(-3,3), ylim = c(-4,3), asp = 1)
+% @
+% 
+% \begin{figure}[hbt]
+% \begin{center}
+% \includegraphics[height=75mm, width=75mm]{irisHull.pdf}
+% \includegraphics[height=75mm, width=75mm]{irisLab.pdf}
+% \caption{\label{fig:iris}Hullplot and Label Plot for Iris Data}
+% \end{center}
+% \end{figure}
+% 
+% For this two-dimensional homals solution, 100\% of the iris species are correctly classified. The hullplot in Figure \ref{fig:iris} shows that the species are clearly separated on the two-dimensional plane. In the label plot the object scores are labeled with the response on Petal Length and it becomes obvious that small lengths form the setosa ``cluster", whereas iris virginica are composed by obervations with large petal lengths. Iris versicolor have medium lengths. 
+% 
+% The loss plots in Figure \ref{fig:irisLoss} show the fitted rank-2 solution (red lines) against the unrestricted solution. The implication of the polynomial level restriction for the fitted model is obvious.
+% 
+% <<eval = FALSE>>=
+% plot(res, plot.type = "lossplot", var.subset = 1:4, cex = 0.7, xlim = c(-3, 3), ylim = c(-5, 3), asp = 1)
+% @
+% 
+% \begin{figure}[hbt]
+% \begin{center}
+% \includegraphics[height=70mm, width=70mm]{irisLoss1.pdf}
+% \includegraphics[height=70mm, width=70mm]{irisLoss2.pdf}
+% \includegraphics[height=70mm, width=70mm]{irisLoss3.pdf}
+% \includegraphics[height=70mm, width=70mm]{irisLoss4.pdf}
+% \caption{\label{fig:irisLoss}Loss plots for Iris Predictors}
+% \end{center}
+% \end{figure}
+% 
+% To show another homals application of predictive (in this case regression) modeling we use the Neumann dataset \citep{Wilson:26}: Willard Gibbs discovered a theoretical formula connecting the density, the pressure, and the absolute temperature of a mixture of gases with convertible 
+% components. He applied this formula and the estimated constants to 65 experiments carried out by Neumann, and he discusses the systematic and accidental divergences (residuals). In the \pkg{homals} package such a linear regression of density on temperature and pressure can be emulated by setting numerical levels. Constraining the levels to be ordinal, we get a monotone regression \citep{Gifi:90}. 
+% 
+% <<eval = FALSE>>=
+% data("neumann")
+% res.lin <- homals(neumann, sets = list(3,1:2), level = "numerical", rank = 1)
+% res.mon <- homals(neumann, sets = list(3,1:2), level = "ordinal", rank = 1)
+% plot(res.lin, plot.type = "loadplot", main = "Loadings Plot Linear Regression", xlim = c(-10, 10), ylim = c(-5, 10), asp = 1)
+% plot(res.mon, plot.type = "loadplot", main = "Loadings Plot Monotone Regression", xlim = c(-10, 10), ylim = c(-5, 10), asp = 1)
+% @
+% 
+% The points in the loadings plot in Figure \ref{fig:neuload} correspond to regression coefficients.
+% 
+% \begin{figure}[hbt]
+% \begin{center}
+% \includegraphics[height=70mm, width=70mm]{neuloadlin.pdf}
+% \includegraphics[height=70mm, width=70mm]{neuloadmon.pdf}
+% \caption{\label{fig:neuload}Loading Plots for Neumann Regression}
+% \end{center}
+% \end{figure}
+% 
+% The impact of the level restrictions on the scaling is visualized in the transformation plots in Figure \ref{fig:neutrf}. Numerical level restrictions lead to linear transformations of the original scale with respect to the homals scaling (i.e. linear regression). Pertaining to ordinal levels, monotone transformations are carried out (i.e. monotone regression). 
+% 
+% \begin{figure}[hbt]
+% \begin{center}
+% \includegraphics[height=60mm, width=60mm]{neutrftemp.pdf}
+% \includegraphics[height=60mm, width=60mm]{neutrfpres.pdf}
+% \includegraphics[height=60mm, width=60mm]{neutrfdens.pdf}
+% \caption{\label{fig:neutrf}Transformation Plots for Neumann Regression}
+% \end{center}
+% \end{figure}
+% 
+% \subsection{NLPCA on Roskam data}
+% \label{sec:pcex}
+% \citet{Roskam:68} collected preference data where 39 psychologists ranked all nine areas (see Table \ref{tab:area}) of the Psychology Department at the University of Nijmengen. 
+% 
+% \begin{table}[ht]
+% \centering
+% \begin{tabular}{|c|l|}
+% \hline
+% SOC& Social Psychology\\
+% EDU& Educational and Developmental Psychology\\
+% CLI& Clinical Psychology\\
+% MAT& Mathematical Psychology and Psychological Statistics\\
+% EXP& Experimental Psychology\\
+% CUL& Cultural Psychology and Psychology of Religion\\
+% IND& Industrial Psychology\\
+% TST& Test Construction and Validation\\
+% PHY& Physiological and Animal Psychology\\
+% \hline
+% \end{tabular}
+% \caption{\label{tab:area}Psychology Areas in Roskam Data.}
+% \end{table}
+% 
+% Using this data set we will perform two-dimensional NLPCA by restricting the rank to be 1. Note that the objects are the areas and the variables are the psychologists. Thus, the input data structure is a $9 \times 39$ data frame. Note that the scale level is set to ``ordinal".
+% 
+% <<eval = FALSE>>=
+% data("roskam")
+% res <- homals(roskam, rank = 1, level = "ordinal")
+% plot(res, plot.type = "objplot", xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5), asp = 1)
+% plot(res, plot.type = "vecplot", var.subset = 2, main = "Vector Plot Rater 2", xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5), asp = 1)
+% @
+% 
+% \begin{figure}[hbt]
+% \begin{center}
+% \includegraphics[height=75mm, width=75mm]{roskamobj.pdf}
+% \includegraphics[height=75mm, width=75mm]{roskamvec.pdf}
+% \caption{\label{fig:roskam}Plots for Roskam data}
+% \end{center}
+% \end{figure}
+% 
+% The object plot in Figure \ref{fig:roskam} shows interesting rating ``twins" of departmental areas: mathematical and experimental psychology, industrial psychology and test construction (both are close to the former two areas), educational and social psychology, clinical and cultural psychology. Physiological and animal psychology are somewhat separated from the other areas. Obviously this rater is attracted to areas like social, cultural and clinical psychology rather than to methodological fields. 
+% The vector plot on the right hand side projects the category scores onto a straight line determined by rank restricted category quantifications. Similarly, a projection plot could be created. Further analyses of this dataset within a PCA context can be found in \citet{deLeeuw:06}. 
  
 \section{Discussion}
 In this paper theoretical foundations of the methodology used in the \pkg{homals} package are elaborated and package application and visualization issues are presented. Basically, \pkg{homals} covers the techniques described in \citet{Gifi:90}: Homogeneity analysis, NLCCA, predictive models, and NLPCA. It can handle missing data and the scale level of the variables can be taken into account. The package offers a broad variety of real-life datasets and furthermore provides numerous methods of visualization, either in a two-dimensional or in a three-dimensional way. Future enhancements will be to replace indicator matrices by more general B-spline bases and to incorporate weights for observations. To conclude, \pkg{homals} provides flexible, easy-to-use routines which allow researchers from different areas to compute, interpret, and visualize methods belonging to the Gifi family. 
 
-\bibliography{homalsR}
+\bibliography{homals}
 
 \end{document}
 

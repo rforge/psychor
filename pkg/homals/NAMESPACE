@@ -1,5 +1,6 @@
 import("stats", "graphics", "rgl", "scatterplot3d", "ape")
 export(homals)
+export(princals)
 export(plot3dstatic)
 
 S3method(print, homals)
@@ -10,5 +11,11 @@ S3method(predict, homals)
 S3method(print, predict.homals)
 S3method(summary, predict.homals)
 S3method(plot3dstatic, homals)
+
+S3method(print, princals)
+S3method(print, summary.princals)
+S3method(summary, princals)
+S3method(plot, princals)
+
 
 
