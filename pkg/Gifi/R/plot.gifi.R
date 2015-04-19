@@ -1,4 +1,4 @@
-`plot.homals` <-
+plot.gifi <-
 function(x, plot.dim = c(1,2), plot.type = "loadplot", var.subset, main, type, xlab, ylab, 
          xlim, ylim, leg.pos = "topright", identify = FALSE, ...)
 {

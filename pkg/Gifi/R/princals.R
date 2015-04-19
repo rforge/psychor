@@ -3,8 +3,8 @@ princals <- function(data, ndim = 2, level = "ordinal", active = TRUE,
 ## NLPCA wrapper function for homals 
 {
   name <- deparse(substitute(data))  
-  fit <- homals(data = data, ndim = ndim, rank = 1, level = level, active = active, eps = eps, 
-                itermax = itermax, verbose = verbose)
+  fit <- gifi(data = data, ndim = ndim, rank = 1, level = level, active = active, eps = eps, 
+                itermax = itermax, verbose = verbose)        ## rank-1 call
   
   scores1 <- fit$scoremat[,,1]                               ## matrix with category scores (first dimension)
   R1 <- cor(scores1)                                         ## new correlation matrix
@@ -20,6 +20,6 @@ princals <- function(data, ndim = 2, level = "ordinal", active = TRUE,
                  cat.centroids = fit$cat.centroids, ind.mat = fit$ind.mat,  
                  discrim = fit$discrim, ndim = fit$ndim, niter = fit$niter, level = fit$level, 
                  loss = fit$loss, active = fit$active, dframe = fit$dframe, call = match.call())
-  class(result) <- c("princals", "homals")
+  class(result) <- c("princals", "gifi")
   return(result)
 }

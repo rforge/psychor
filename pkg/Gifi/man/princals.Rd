@@ -6,7 +6,7 @@
 \alias{plot.princals}
 \title{Categorical Principal Component Analysis}
 \description{
-  Performs categorical PCA (aka nonlinear PCA). Internally it uses \code{homals()} with a rank-1 restriction. 
+  Performs categorical PCA (aka nonlinear PCA). Internally it uses \code{gifi()} with a rank-1 restriction. 
   It presents and scales eigenvalues, explained amount of variance, and loadings such that they are comparable 
   to standard PCA as e.g. fitted using \code{princomp()}. Compared to standard PCA, categorical PCA abandons the 
   assumption of metric input data as well as linearity among the observed variables.
@@ -35,20 +35,20 @@ princals(data, ndim = 2, level = "ordinal", active = TRUE,
 
 \value{
   Returns an object of class \code{"princals"}. The specific output values are below, the remaining ones are the 
-  same as in \code{\link{homals}}.
+  same as in \code{\link{gifi}}.
   
   \item{eigenvalues}{Eigenvalues.}
   \item{expvar}{Amount of explained variance in percent}
   \item{loadings}{Loadings.}
 }
 \references{
-De Leeuw, J., \& Mair, P. (2009). Gifi methods for optimal scaling in R: The package homals. 
+De Leeuw, J., & Mair, P. (2009). Gifi methods for optimal scaling in R: The package homals. 
 Journal of Statistical Software, 31(4), 1-20, \url{http://www.jstatsoft.org/v31/i04/}. 
 
 Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
 }
 \author{Patrick Mair, Jan de Leeuw}
-\seealso{\code{\link{homals}}}
+\seealso{\code{\link{gifi}}}
 \examples{
 ## extract subset of ABC data
 ABC6 <- ABC[, 6:11]

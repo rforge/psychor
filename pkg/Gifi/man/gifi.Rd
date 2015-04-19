@@ -1,16 +1,14 @@
-\name{homals}
-\alias{homals}
-\title{Homogeneity Analysis}
+\name{gifi}
+\alias{gifi}
+\alias{print.gifi}
+\alias{summary.gifi}
+\title{Gifi Methods for Categorical (nonlinear) Multivariate Analysis}
 \description{
-  This function performs a homogeneity analysis, aka a multiple correspondence
-  analysis, but with many additional options. Variables can be grouped into
-  sets, in order to emulate regression analysis and canonical analysis. For
-  each variable there are, in addition, rank constraints on the category
-  quantifications (or transformations) and level constraints (which allows
-  one to treat a variable as nominal, ordinal, or numerical). 
+  This is the core function of the package, used by most of the wrapper functions. 
+  Through this function the user can specify special models not covered by the wrapper functions. 
 }
 \usage{
-homals(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE, 
+gifi(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE, 
        eps = 1e-06, itermax = 1000, verbose = 0)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -29,11 +27,8 @@ homals(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE,
   \item{verbose}{0 for no iteration output, 1 prints outer iterations, 2 prints outer and inner iterations, 3 prints outer and inner and innermost iterations.}
 }
 \details{
-  The general idea of homogeneity analysis is to make a joint plot in p-space of all
-  objects (or individuals) and the categories of all variables. The technique, in
-  its most simple form, makes the graph plot in such a way that the sum of squares
-  of the length of the nm lines is a small as possible, subject to a normalization
-  of the object scores (their n x p coordinate matrix must be orthonormal).
+  The general idea of Gifi models is to make a joint plot in p-space of all
+  objects (or individuals) and the categories of all variables. 
   
   Rank constraints require the category quantifications of the categories of
   a variable to lie in a subspace of p-space. Requiring rank equal to one for all
@@ -50,7 +45,7 @@ homals(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE,
 }
 
 \value{
-  Returns an object of class \code{"homals"}.
+  Returns an object of class \code{"gifi"}.
   
   \item{datname}{Name of the data file.}
   \item{catscores}{List of category scores for each variable.}
@@ -68,43 +63,16 @@ homals(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE,
   \item{active}{Vector with active/inactive variables.}
 }
 \references{
-de Leeuw, J., \& Mair, P. (2009). Gifi methods for optimal scaling in R: The package homals. 
+De Leeuw, J., & Mair, P. (2009). Gifi methods for optimal scaling in R: The package homals. 
 Journal of Statistical Software, 31(4), 1-20, \url{http://www.jstatsoft.org/v31/i04/}. 
 
 Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
 }
-\author{Jan de Leeuw, Patrick Mair}
-\seealso{\code{\link{plot.homals}}}
+\author{Patrick Mair, Jan de Leeuw}
+\seealso{\code{\link{princals}}}
 \examples{
-  data(galo)
-  
-  ##simple homals 2D-homals solution (School not active)
-  res <- homals(galo, active = c(rep(TRUE, 4), FALSE))
-  
-  ##predict IQ 
-  res <- homals(galo, active = c(rep(TRUE, 4), FALSE), sets = list(c(1,3,4),2,5))
-  
-  ##Single ranks for each variable (non-linear PCA)
-  res <- homals(galo, active = c(rep(TRUE, 4), FALSE), sets = list(c(1,3,4),2,5))
-  
-  ##Nonlinear canonical correlation (2 sets of variables)
-  res <- homals(galo, active = c(rep(TRUE, 4), FALSE), sets = list(c(1,2),c(3,4),5))
-  
-  ##regression (linear)
-  data(neumann)
-  res <- homals(neumann, sets = list(3, 1:2), level = "numerical", rank = 1)
-  
-  ##regression (monotone)
-  res <- homals(neumann, sets = list(3, 1:2), level = "ordinal", rank = 1)
-  
-  ##3-dimensional senate solution
-  data(senate)
-  res <- homals(senate, active = c(FALSE, rep(TRUE, 20)), ndim = 3)
-  
-  ##Predicting Species in iris dataset (polynomial level constraints for predictors)
-  data(iris)
-  res <- homals(iris, sets = list(1:4,5), level = c(rep("polynomial",4),"nominal"), 
-  rank = 2, itermax = 1000)
-
+    
+  ##simple Gifi 2D-homals solution (School not active)
+  res <- gifi(galo, active = c(rep(TRUE, 4), FALSE))
 }
 \keyword{models}

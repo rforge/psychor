@@ -1,4 +1,4 @@
-%\VignetteIndexEntry{An Introduction to the homals package}
+%\VignetteIndexEntry{An Introduction to the Gifi package}
 %\VignetteEngine{knitr::knitr} 
 \documentclass[10pt,nojss,nofooter,fleqn]{jss}
 \usepackage{amsmath, amsfonts}
@@ -13,12 +13,12 @@
 %% almost as usual
 \author{Patrick Mair \\ Harvard University \And 
         Jan de Leeuw \\ University of California, Los Angeles}
-\title{Gifi Methods for Optimal Scaling in \proglang{R}:\\ The Package \pkg{homals}}
+\title{The Gifi Package for Categorical Multivariate Analysis in \proglang{R}}
 %
 %%% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Patrick Mair, Jan de Leeuw} %% comma-separated
 \Plaintitle{Gifi Methods for Optimal Scaling in R: The Package homals} %% without formatting
-\Shorttitle{Homals in \proglang{R}} %% a short title (if necessary)
+\Shorttitle{Gifi in \proglang{R}} %% a short title (if necessary)
 
 %% an abstract and keywords
 \Abstract{
@@ -63,7 +63,7 @@ that of optimal scaling. In this article we present methodological and practical
 \begin{document}
 
 <<preliminaries, echo=FALSE>>=
-require(homals)
+require(Gifi)
 @
 
 \section{Introduction}
@@ -629,7 +629,7 @@ the ordinal scale level for the variables holds.
 \section{Discussion}
 In this paper theoretical foundations of the methodology used in the \pkg{homals} package are elaborated and package application and visualization issues are presented. Basically, \pkg{homals} covers the techniques described in \citet{Gifi:90}: Homogeneity analysis, NLCCA, predictive models, and NLPCA. It can handle missing data and the scale level of the variables can be taken into account. The package offers a broad variety of real-life datasets and furthermore provides numerous methods of visualization, either in a two-dimensional or in a three-dimensional way. Future enhancements will be to replace indicator matrices by more general B-spline bases and to incorporate weights for observations. To conclude, \pkg{homals} provides flexible, easy-to-use routines which allow researchers from different areas to compute, interpret, and visualize methods belonging to the Gifi family. 
 
-\bibliography{homals}
+\bibliography{Gifi}
 
 \end{document}
 

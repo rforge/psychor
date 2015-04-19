@@ -1,0 +1,21 @@
+import("stats", "graphics", "ape")
+export(gifi)
+export(princals)
+export(morals)
+
+S3method(print, gifi)
+S3method(summary, gifi)
+S3method(plot, gifi)
+
+S3method(print, princals)
+S3method(print, summary.princals)
+S3method(summary, princals)
+S3method(plot, princals)
+
+S3method(print, morals)
+S3method(predict, morals)
+S3method(print, predict.morals)
+S3method(summary, predict.morals)
+
+
+

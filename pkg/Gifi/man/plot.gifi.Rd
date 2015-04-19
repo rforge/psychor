@@ -1,26 +1,18 @@
-\name{plot.homals}
-\alias{plot.homals}
-\alias{plot3dstatic}
-\alias{plot3dstatic.homals}
-\alias{plot3d.homals}
+\name{plot.gifi}
+\alias{plot.gifi}
 
-\title{Plot methods for homals}
-\description{These methods provide various 2D and 3D plots for objects of class \code{"homals"}.
+\title{Plot methods for Gifi}
+\description{These methods provide various 2D and 3D plots for objects of class \code{"gifi"}.
 }
 \usage{
-\method{plot}{homals}(x, plot.dim = c(1, 2), plot.type = "loadplot", var.subset, main, 
+\method{plot}{gifi}(x, plot.dim = c(1, 2), plot.type = "loadplot", var.subset, main, 
 type, xlab, ylab, xlim, ylim, leg.pos = "topright", identify = FALSE, ...)
 
-\method{plot3d}{homals}(x, plot.dim = c(1, 2, 3), plot.type = "jointplot", var.subset, type, xlab, ylab, 
-zlab, col, main, sphere = TRUE, bgpng = "particle.png", ax.grid = TRUE, ...)
-
-\method{plot3dstatic}{homals}(x, plot.dim = c(1, 2, 3), plot.type = "jointplot", var.subset, main, type, 
-xlab, ylab, zlab, xlim, ylim, zlim, ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{x}{Object of class \code{"homals"}}
+  \item{x}{Object of class \code{"gifi"}}
   \item{plot.dim}{Vector with dimensions to be plotted against.}
   \item{plot.type}{String indicating which type of plot to be produced: \code{"jointplot"}, \code{"catplot"} 
   \code{"labplot"}, \code{"objplot"}, \code{"starplot"}, \code{"graphplot"}, \code{"hullplot"},
@@ -32,18 +24,12 @@ xlab, ylab, zlab, xlim, ylim, zlim, ...)
   \item{type}{Type of points/lines to be plotted.}
   \item{xlab}{Label of x-axis.}
   \item{ylab}{Label of y-axis.}
-  \item{zlab}{Label of z-axis.}
-  \item{col}{Plotting color.}
   \item{xlim}{Limits for x-axis.}
   \item{ylim}{Limits for y-axis.}
-  \item{zlim}{Limits for z-axis.}
   \item{leg.pos}{Position of the legend (for \code{"trfplot"} and \code{"spanplot"} only) 
   as provided in \code{\link{legend}}.}
   \item{identify}{If \code{TRUE}, interactive plots are provided.}
-  \item{sphere}{Whether 3D-sphere should be drawn.}
-  \item{bgpng}{Background image in /library/rgl/textures/. If \code{NULL}, blank background.}
-  \item{ax.grid}{If \code{TRUE} grid is drawn.}
-  \item{\dots}{Further plot arguments passed: see \code{\link[graphics]{plot}}, \code{\link[rgl]{plot3d}} in package \code{rgl}, and \code{\link[scatterplot3d]{scatterplot3d}} in package \code{scatterplot3d} for detailed information.
+  \item{\dots}{Further plot arguments passed: see \code{\link[graphics]{plot}}
 }
 }
 \details{Plot description:
@@ -93,20 +79,15 @@ transformed (metric) scale on each dimension over the categories of each variabl
 - Discrimination measures (\code{plot.type = "dmplot"}): Plots the discrimination measures for each variable. 
 }
 
-\seealso{\code{\link{homals}}}
+\seealso{\code{\link{gifi}}}
 \examples{
 
 ##Graphplot for Hartigan solution: 3 dimensions extracted, dimension 1 plotted
 ##against dimension 3.
 data(hartigan)
-res <- homals(hartigan, ndim = 3)
+res <- gifi(hartigan, ndim = 3)
 plot(res, plot.dim = c(1,3), plot.type = "graphplot")
 
-##3D star plot for indentation and bottom
-plot3d(res, plot.type = "starplot", var.subset = c(2,4))
-
-##Static 3D joint plot for thread and bottom
-plot3dstatic(res, plot.type = "jointplot", var.subset = c(1,4))
 }
 
 \keyword{ hplot }
