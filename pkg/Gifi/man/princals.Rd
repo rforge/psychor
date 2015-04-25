@@ -12,8 +12,9 @@
   assumption of metric input data as well as linearity among the observed variables.
 }
 \usage{
-princals(data, ndim = 2, level = "ordinal", active = TRUE, 
-       eps = 1e-6, itermax = 1000, verbose = 0)
+princals(data, ndim = 2, level = "ordinal", , rotation = "none", 
+         controlRot = list(normalize = TRUE, eps1 = 1e-5, m = 4), 
+         active = TRUE, eps = 1e-6, itermax = 1000, verbose = 0)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -23,6 +24,9 @@ princals(data, ndim = 2, level = "ordinal", active = TRUE,
   \code{"ordinal"}, \code{"numerical"}, and \code{"polynomial"} which can be defined as single 
   character (if all variable are of the same level) or as vector which length corresponds to the
   number of variables.} 
+  \item{rotation}{\code{"none"} for no rotation, \code{"varimax"} for VARIMAX rotation, 
+  \code{"promax"} for PROMAX rotation.}
+  \item{controlRot}{A list with control arguments for rotation (see details). } 
   \item{active}{Which variables are active for computation (\code{TRUE} means all)}
   \item{eps}{Iteration precision.}
   \item{itermax}{Maximum number of iterations.}
@@ -31,15 +35,21 @@ princals(data, ndim = 2, level = "ordinal", active = TRUE,
 \details{
   Details about the computation of PCA-comparable eigenvalues, explained amount of variance, and loadings can be 
   found in the package vignette. 
+  
+  For rotation, the unrotated PRINCALS loadings (i.e. eigenvectors) are scaled by the square roots of the corresponding eigenvalues, 
+  internally. Through the \code{controlRot} argument several specifications for PROMAX and VARIMAX rotations can be made. See 
+  \code{\link{varimax}} and \code{\link{promax}} for details. 
 }
 
 \value{
   Returns an object of class \code{"princals"}. The specific output values are below, the remaining ones are the 
-  same as in \code{\link{gifi}}.
+  same as in \code{\link{Gifi}}.
   
   \item{eigenvalues}{Eigenvalues.}
-  \item{expvar}{Amount of explained variance in percent}
+  \item{vaf}{Component's variance accounted for (in percent).}
   \item{loadings}{Loadings.}
+  \item{pcscores}{Principal component scores.}
+  \item{rotmat}{Rotation matrix (in case a rotation was performed.}
 }
 \references{
 De Leeuw, J., & Mair, P. (2009). Gifi methods for optimal scaling in R: The package homals. 

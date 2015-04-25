@@ -1,5 +1,5 @@
-\name{gifi}
-\alias{gifi}
+\name{Gifi}
+\alias{Gifi}
 \alias{print.gifi}
 \alias{summary.gifi}
 \title{Gifi Methods for Categorical (nonlinear) Multivariate Analysis}
@@ -8,7 +8,7 @@
   Through this function the user can specify special models not covered by the wrapper functions. 
 }
 \usage{
-gifi(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE, 
+Gifi(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE, 
        eps = 1e-06, itermax = 1000, verbose = 0)
 }
 %- maybe also 'usage' for other objects documented here.
