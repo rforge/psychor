@@ -8,7 +8,10 @@ iter<-1; sold<-Inf
 repeat{
 	ytilde<-y-z2%*%a2
 	z1<-tcrossprod(ytilde,a1)/sum(a1^2)
-	z1<-twoDirections(z1,d); z1<-z1/sqrt(sum(d*z1^2))
+	## z1<-twoDirections(z1,d)
+	z <- .C("wmonreg", as.numeric(z1), as.numeric(d), as.integer(length(d)))[[1]]  ## PG monotone regression
+	
+  z1<-z1/sqrt(sum(d*z1^2))
 	a1<-crossprod(z1,d*ytilde)
 	ytilde<-y-z1%*%a1
   	qq<-La.svd(sqrt(d)*ytilde,r-1,r-1)

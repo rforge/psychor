@@ -76,230 +76,7 @@ In this paper we present the \proglang{R} package \pkg{homals}, starting from th
 More detailed methodological descriptions can be found in \citet{Gifi:90} and some of them are revisited in \citet{Michailidis+deLeeuw:98}. 
 
 
-\section{Homogeneity analysis}
-In this section we will focus on the underlying methodological aspects of \pkg{homals}. Starting with the formulation of the loss function, the classical alternating least squares algorithm is presented in brief and the relation to CA is shown. Based on simple homogeneity analysis we elaborate various extensions such as nonlinear canonical analysis and nonlinear principal component analysis. A less formal introduction to Gifi methods can be found in \citet{Mair+deLeeuw:2008}. 
 
-\subsection{Establishing the loss function}
-Homogeneity analysis is based on the criterion of minimizing the departure from homogeneity. This departure is measured by a loss function. To write the corresponding basic equations the following definitions are needed. For $i=1,\ldots,n$ objects, data on $m$ (categorical) variables are collected where each of the $j=1,\ldots,m$ variable takes on $k_j$ different values (their \emph{levels} or \emph{categories}). We code them using $n\times k_j$ binary \emph{indicator matrices} $G_j$, i.e., a matrix of dummy variables for each variable. The whole set of indicator matrices can be collected in a block matrix
-\begin{equation}
-G\defi\begin{bmatrix}G_1&\vdots&G_2&\vdots&\cdots&\vdots&G_m\end{bmatrix}.
-\end{equation}
-In this paper we derive the loss function including the option for missing values. For a simpler (i.e. no missings) introduction the reader is referred to \citet[][p. 307--314]{Michailidis+deLeeuw:98}. In the indicator matrix missing observations are coded as complete zero rows; if object $i$ is missing on variable $j$, then row $i$ of $G_j$ is 0. Otherwise the row sum becomes 1 since the category entries are disjoint. This corresponds to the first missing option presented in \citet[\emph{missing data passive}][p. 74]{Gifi:90}. Other possibilities would be to add an additional column to the indicator matrix for each variable with missing data or to add as many additional columns as there are missing data for the $j$-th variable. However, our approach is to define the binary diagonal matrix $M_j$ if dimension $n \times n$ for each variable $j$. The diagonal element $(i,i)$ is equal to 0 if object $i$ has a missing value on variable $j$ and equal to 1 otherwise. Based on $M_j$ we can define $M_\star$ as the sum of the $M_j$'s and $M_\bullet$ as their average.  
-
-For convenience we introduce
-\begin{equation}
-D_j^{}\defi G_j'M_j^{}G_j^{}=G_j'G_j^{},
-\end{equation}
-as the $k_j\times k_j$ diagonal matrix with the (marginal) frequencies of variable $j$ in its main diagonal. 
-
-Now let $X$ be the unknown $n\times p$ matrix containing the coordinates (\emph{object scores}) of the object projections into $\mathbb{R}^p$. Furthermore, let $Y_j$ be the unknown $k_j \times p$ matrix containing the coordinates of the category projections into the same $p$-dimensional space (\emph{category quantifications}). 
-The problem of finding these solutions can be formulated by means of the following loss function to be minimized:
-\begin{equation}
-\label{eq:loss}
-\sigma(X;Y_1,\ldots,Y_m)\defi \sum_{j=1}^m\mathbf{tr}(X-G_jY_j)'M_j(X-G_jY_j)
-\end{equation}
-We use the normalization $\mathbf{u}'M_\bullet X=0$ and $X'M_\bullet X=I$ in order to avoid the trivial solution $X=0$ and $Y_j=0$. The first restriction centers the graph plot (see Section \ref{sec:R}) around the origin whereas the second restriction makes the columns of the object score matrix orthogonal. Multiplying the scores by $\sqrt{n/m}$ gives a mean of 0 and a variance of 1 (i.e., they are $z$-scores). Note that from an analytical point of view the loss function represents the sum-of-squares of $(X-G_jY_j)$ which obviously involves the object scores and the category quantifications. Thus, we minimize simultaneously over $X$ and $Y_j$. We give a graphical interpretation of the loss function in the following section. 
-
-\subsection{Geometry of the loss function}
-In the \pkg{homals} package we use homogeneity analysis as a graphical method to explore multivariate data sets. The \emph{joint plot} mapping object scores and the category quantifications in a joint space, can be considered as the classical or standard homals plot. The category points are the centers of gravity of the object points that share the same category. The larger the spread between category points the better a variable discriminates and thus the smaller the contribution to the loss. The closeness of two objects in the plot is related to the similarity of their response patterns. A ``perfect'' solution, i.e., without any loss at all, would imply that all object points coincide with their category points. 
-
-Moreover, we can think of $G$ as the adjacency matrix of a bipartite graph in which the $n$ objects and the $k_j$ categories ($j=1,\ldots,m$) are the vertices. In the corresponding \emph{graph plot} an object and a category are connected by an edge if the object is in the corresponding category. The loss in (\ref{eq:loss}) pertains to the sum of squares of the line lengths in the graph plot. Producing a \emph{star plot}, i.e., connecting the object scores with their category centroid, the loss corresponds to the sum over variables of the sum of squared line lengths. More detailed plot descriptions are given in Section \ref{sec:R}.
-
-
-\subsection{Minimizing the loss function}
-Typically, the minimization problem is solved by the iterative \emph{alternating least squares algorithm} (ALS; sometimes quoted as \emph{reciprocal averaging algorithm}). At iteration $t=0$ we start with arbitrary object scores $X^{(0)}$. Each iteration $t$ consists of three steps:
-\begin{enumerate}
-\item Update category quantifications: $Y_j^{(t)}=D_j^{-1}G_j'X^{(t)}$ for $j=1,\ldots,m$
-\item Update object scores: $\tilde X^{(t)}=M_\star^{-1}\sum_{j=1}^m G_j^{}Y_j^{(t)}$
-\item Normalization: $X^{(t+1)}=M_\star^{-\frac12}{\bf orth}(M_\star^{-\frac12}\tilde X^{(t)})$
-\end{enumerate}
-Note that matrix multiplications using indicator matrices can be implemented efficiently as cumulating the sums of rows over $X$ and $Y$. 
-
-Here $\mathbf{orth}$ is some technique which computes an orthonormal basis for the column space of a matrix. We can use QR decomposition, modified Gram-Schmidt, or the singular value decomposition (SVD). In the \pkg{homals} package the left singular vectors of $\tilde X^{(t)}$, here denoted as $\mathbf{lsvec}$, are used. 
-
-To simplify, let $P_j$ denote the orthogonal projector on the subspace spanned by the columns of $G_j$, i.e.,
-$P_j^{}=G_j^{}D_j^{-1}G_j'$. Correspondingly, the sum over the $m$ projectors is 
-\begin{equation}
-P_\star=\sum_{j=1}^m P_j = \sum_{j=1}^m G_j^{}D_j^{-1}G_j'.
-\end{equation}
-Again, $P_\bullet$ denotes the average. By means of the $\mathbf{lsvec}$ notation and including $P_\bullet$ we can describe a complete iteration step as 
-\begin{equation}
-\label{eq:Xlsv}
-X^{(t+1)}=\mathbf{lsvec}(\tilde X^{(t)})=\mathbf{lsvec}(M_\bullet^{-1}P_\bullet^{} X^{(t)}).
-\end{equation}
-In each iteration $t$ we compute the value of the loss function to monitor convergence. Note that Formula (\ref{eq:Xlsv}) is not suitable for computation, because it replaces computation with sparse indicator matrices by computations with a dense average projector. 
-
-Computing the homals solution in this way is the same as performing a CA on $G$. Usually, multiple CA solves the generalized eigenproblem for the Burt matrix $C=G'G$ and its diagonal \(D\) \citep{Greenacre:84,Greenacre+Blasius:06}.
-Thus, we can put the problem in Equation \ref{eq:loss} into a SVD context \citep{deLeeuw+Michailides+Wang:99}. Using the block matrix notation, we have to solve the generalized singular value problem of the form
-\begin{eqnarray}
-GY=M_\star X\Lambda, \\
-G'X=DY\Lambda,
-\end{eqnarray}
-or equivalently one of the two generalized eigenvalue problems
-\begin{eqnarray}
-GD^{-1}G'X=M_\star X\Lambda^2, \\
-G'M_\star^{-1}GY=DY\Lambda^2.
-\end{eqnarray}
-Here the eigenvalues $\Lambda^2$ are the ratios along each dimension of the average between-category variance and the average total variance.
-Also $X'P_jX$ is the between-category dispersion for variable $j$. Further elaborations can be found in \citet{Michailidis+deLeeuw:98}. 
-
-Compared to the classical SVD approach, the ALS algorithm only computes the first $p$ dimensions of the solution. This leads to an increase in computational efficiency. Moreover, by capitalizing on sparseness of $G$, the \pkg{homals} package is able to handle large data sets.
-
-The goodness-of-fit of a solution can be examined by means of a screeplot of the eigenvalues. The contribution of each variable to the final solution can be examined by means of discrimination measures defined by $\left|\left|G_jY_j\right|\right|^2/n$ \citep[see][]{Meulman:1996}. 
-
-\section{Extensions of homogeneity analysis}
-\citet{Gifi:90} provides various extensions of homogeneity analysis and elaborates connections to other multivariate methods. The package \pkg{homals} allows for imposing restrictions on the variable ranks and levels as well as defining sets of variables. These options offer a wide spectrum of additional possibilities for multivariate data analysis beyond classical homogeneity analysis (cf. broad sense view in the Introduction).
-
-\subsection{Nonlinear (categorical) principal component analysis}
-Having a $n \times m$ data matrix with metric variables, principal components analysis (PCA) is a common technique to reduce the dimensionality of the data set, i.e., to project the variables into a subspace $\mathbb{R}^p$ where $p \ll m$. The Eckart-Young theorem states that this classical form of \emph{linear} PCA can be formulated by means of a loss function. Its minimization leads to a $n\times p$ matrix of \emph{component scores} and an $m \times p$ matrix of \emph{component loadings}.
-
-However, having nonmetric variables, nonlinear PCA (NLPCA) can be used. The term ``nonlinear" pertains to nonlinear transformations of the observed variables \citep{deLeeuw:06}. In Gifi terminology, NLPCA can be defined as homogeneity analysis with restrictions on the quantification matrix $Y_j$. Let us denote $r_j \leq p$ as the parameter for the imposed restriction on variable $j$. If no restrictions are imposed, as e.g. for a simple homals solution, 
-$r_j = k_j -1$ iff $k_j \leq p$, and $r_j = p$ otherwise. 
-
-We start our explanations with the simple case for $r_j = 1$ for all $j$. In this case we say that all variables are \emph{single} and the rank restrictions are imposed by 
-\begin{equation}
-\label{eq:srank}
-Y_j = \mathbf{z}_j\mathbf{a}_j',
-\end{equation}
-where $\mathbf{z}_j$ is a vector of length $k_j$ with category quantifications and $\mathbf{a}_j$ a vector of length $p$ with weights. Thus, each quantification matrix is restricted to rank 1, which allows for the existence of object scores with a single category quantification. 
-
-\subsection{Multiple quantifications}
-It is not necessarily needed that we restrict the rank of the score matrix to 1. Our \pkg{homals} implementation allows for multiple rank restrictions. We can simply extend Equation \ref{eq:srank} to the general case 
-\begin{equation}
-\label{E:res}
-Y_j=Z_jA_j'
-\end{equation}
-where again $1 \leq r_j \leq \min{(k_j-1,p)}$, $Z_j$ is $k_j \times r_j$ and $A_j$ is $p \times r_j$. We require, without loss of generality, that
-$Z_j'D_j^{}Z_j^{}=I$. Thus, we have the situation of \emph{multiple quantifications} which implies imposing an additional constraint each time PCA is carried out. 
-
-To establish the loss function for the rank constrained version we write $r_\star$ for the sum of the $r_j$ and $r_\bullet$ for their average. The block matrix $G$ of dummy variables now becomes 
-\begin{equation}
-Q\defi\begin{bmatrix}G_1Z_1&\vdots&G_2Z_2&\vdots&\cdots&\vdots&G_mZ_m\end{bmatrix}.
-\end{equation}
-Gathering the $A_j$'s in a block matrix as well, the $p \times r_\star$ matrix
-\begin{equation}
-A\defi\begin{bmatrix}A_1&\vdots&A_2&\vdots&\cdots&\vdots&A_m\end{bmatrix}
-\end{equation}
-results. Then, Equation \ref{eq:loss} becomes
-\begin{eqnarray}
-\label{eq:lossr}
-\sigma(X;Z;A)=\sum_{j=1}^m\mathbf{tr}\ (X-G_jZ_jA_j')'M_j(X-G_jZ_jA_j')=\nonumber \\
-=m\mathbf{tr}\ X'M_\star X-2\mathbf{tr}\ X'QA+\mathbf{tr}\ A'A=\nonumber \\
-=mp+\mathbf{tr}\ (Q-XA)'(Q-XA)-\mathbf{tr}\ Q'Q=\nonumber \\
-=\mathbf{tr}(Q-XA)'(Q-XA)+m(p-r_\bullet) 
-\end{eqnarray}
-This shows that $\sigma(X;Y_1,\cdots,Y_m)\geq m(p-r_\bullet)$ and the loss is equal to
-this lower bound if we can choose the $Z_j$ such that $Q$ is of rank $p$. In fact, by
-minimizing (\ref{eq:lossr}) over $X$ and $A$ we see that
-\begin{equation}
-\sigma(Z)\defi\min_{X,A}\sigma(X;Z;A)=
-\sum_{s=p+1}^{r_\star}\lambda_s^2(Z)+m(p-r_\bullet),
-\end{equation}
-where the $\lambda_s$ are the ordered singular values. A corresponding example in terms of a \emph{lossplot} is given in Section \ref{sec:R}.
-
-\subsection{Level constraints: Optimal scaling}
-From a general point of view, \emph{optimal scaling} attempts to do two things simultaneously: The transformation of the data by a transformation appropriate for the scale level (i.e. level constraints), and the fit of a model to the transformed data to account for the data. Thus it is a simultaneous process of data transformation and data representation \citep{Takane:2005}. In this paper we will take into account the scale level of the variables in terms of restrictions within $Z_j$. To do this, the starting point is to split up Equation \ref{eq:lossr} into two separate terms. Using \(\hat Y_j=D_j^{-1}G_j'X\) this leads to 
-\begin{eqnarray}
- & \sum_{j=1}^m \mathbf{tr}(X-G_jY_j)'M_j(X-G_jY_j) & \nonumber \\
-& = \sum_{j=1}^m \mathbf{tr}(X-G_j(\hat Y_j + (Y_j - \hat Y_j)))'M_j(X-G_j(\hat Y_j + (Y_j - \hat Y_j))) & \nonumber \\
-= & \sum_{j=1}^m\mathbf{tr}(X-G_j\hat Y_j)'M_j(X-G_j\hat Y_j)+\sum_{j=1}^m \mathbf{tr}(Y_j-\hat Y_j)'D_j(Y_j-\hat Y_j). &
-\end{eqnarray}
-Obviously, the rank restrictions $Y_j=Z_jA_j'$ affect only the second term and hence, we will proceed on our explanations by regarding this particular term only, i.e.,
-\begin{equation}
-\label{eq:lt2}
-\sigma(Z;A)=\sum_{j=1}^m \mathbf{tr}(Z_jA_j'-\hat Y_j)'D_j(Z_jA_j'-\hat Y_j).
-\end{equation}
-Now, level constraints for nominal, ordinal, polynomial, and numerical variables can be imposed on $Z_j$ in the following manner. 
-For nominal variables, all columns in $Z_j$ are unrestricted. Equation \ref{eq:lt2} is minimized under the conditions $\mathbf{u}'D_jZ_j=0$ and $Z_j'D_jZ_j=I$. The stationary equations are 
-\begin{subequations}
-\begin{align}
-A_j&=Y_j'D_jZ_j,\\
-Y_jA_j&=Z_jW+\mathbf{uh}',
-\end{align}
-\end{subequations}
-with $W$ as a symmetric matrix of Langrange multipliers. Solving, we find
-\begin{equation}
-\mathbf{h}=\frac{1}{\mathbf{u}'D_j\mathbf{u}}A_j'Y_j'D_j\mathbf{u}=\mathbf{0},
-\end{equation}
-and thus, letting $\overline Z_j\defi D_j^{1/2}Z_j$ and $\overline Y_j\defi D_j^{1/2}Y_j$, it follows that
-\begin{equation}
-\overline Y_j\overline Y_j' \overline Z_j=\overline Z_jW.
-\end{equation}
-If $\overline Y_j=K\Lambda L'$ is the SVD of $\overline Y_j$, then
-we see that $\overline Z_j=K_rO$ with $O$ as an arbitrary rotation matrix and $K_r$ as the singular vectors corresponding with the $r$ largest singular values. Thus, $Z_j=D_j^{-1/2}K_rO$, and $A_j=\overline Y_j'\overline Z_j=L_r\Lambda_r O$. Moreover, $Z_jA_j'=D_j^{-1/2}K_r\Lambda_rL_r'$.
-
-Having ordinal variables, the first column of $Z_j$ is constrained to be either increasing or decreasing, the rest is free. Again (\ref{eq:lt2}) has to be minimized under the condition $Z_j'D_j^{}Z_j^{}=I$ (and optionally additional conditions on $Z_j$). If we minimize over $A_j$, we can also solve the problem $\mathbf{tr}(Z_j'D_j^{}Y_j^{}Y_j'D_j^{}Z_j^{})$ with $Z_j'D_j^{}Z_j^{}=I$.
-
-For polynomial constraints the matrix $Z_j$ are the first \(r_j\) orthogonal polynomials. Thus all \(p\) columns of \(Y_j\) are polynomials of degree \(r_j\).  In the case of numerical variables, the first column in $Z_j$ denoted by $\mathbf{z}_{j0}$ is fixed and linear with the category numbers, the rest is free. 
-Hence, the loss function in (\ref{eq:lt2}) changes to 
-\begin{equation}
-\label{eq:lossnum}
-\sigma(Z,A)=\sum_{j=1}^m \mathbf{tr}(Z_jA_j'+\mathbf{z}_{j0}\mathbf{a}_{j0}'- \hat Y_j)'D_j(Z_jA_j'+\mathbf{z}_{j0}\mathbf{a}_{j0}'-\hat Y_j).
-\end{equation}
-Since column $\mathbf{z}_{j0}$ is fixed, $Z_j$ is a $k_j \times (r_j-1)$ matrix and $A_j$, with $\mathbf{a}_{j0}$ as the first column, is $p \times (r_j-1)$. In order to minimize (\ref{eq:lossnum}), $\mathbf{z}_{j0}'D_jZ_j=0$ is required as minimization condition.
-
-Note that level constraints can be imposed additionally to rank constraints. If the data set has variables with different scale levels, the \pkg{homals} package allows for setting level constraints for each variable $j$ separately. Unlike in \citet{Gifi:90} and \citet{Michailidis+deLeeuw:98} it is not necessary to have rank 1 restrictions in order to allow for different scaling levels. Our implementation allows for multiple ordinal, multiple numerical etc. level constraints. 
-
-\subsection{Nonlinear canonical correlation analysis}
-In Gifi terminology, nonlinear canonical correlation analysis (NLCCA) is called ``OVERALS" \citep{vanderBurg+deLeeuw+Verdegaal:88, vanderBurg+deLeeuw+Dijksterhuis:94}. This is due to the fact that it has most of the other Gifi-models as special cases. 
-In this section the relation to homogeneity analysis is shown. The \pkg{homals} package allows for the definition of \emph{sets} of variables and thus, for the computation NLCCA between $g = 1,\ldots,K$ sets of variables. 
-
-Recall that the aim of homogeneity analysis is to find $p$ orthogonal vectors in $m$ indicator matrices $G_j$. 
-This approach can be extended in order to compute $p$ orthogonal vectors in $K$ general matrices $G_v$, each of dimension $n \times m_v$ where $m_v$ is the number of variables ($j = 1,\ldots ,m_v$) in set $v$. Thus, 
-\begin{equation}
-G_v\defi\begin{bmatrix}G_{v_1}&\vdots&G_{v_2}&\vdots&\cdots&\vdots&G_{v_{m_v}}\end{bmatrix}.
-\end{equation}
-The loss function can be stated as
-\begin{equation}
-\label{eq:lcca}
-\sigma(X;Y_1,\ldots,Y_K)\defi\frac{1}{K}\sum_{v=1}^K\mathbf{tr}\left(X-\sum_{j=1}^{m_v}G_{v_j}Y_{v_j}\right)'M_v\left(X-\sum_{j=1}^{m_v}G_{v_j}Y_{v_j}\right).
-\end{equation}
-$X$ is the $n \times p$ matrix with object scores, $G_{v_j}$ is $n \times k_j$, and $Y_{v_j}$ is the $k_j \times p$ matrix containing the coordinates. Missing values are taken into account in $M_v$ which is the element-wise minimum of the $M_j$ in set $v$. The normalization conditions are $XM_\bullet X = I$ and $\mathbf{u}'M_\bullet X=0$ where $M_\bullet$ is the average of $M_v$.
-
-Since NLPCA can be considered as special case of NLCCA, i.e., for $K=m$, all the additional restrictions for different scaling levels can straightforwardly be applied for NLCCA. 
-Unlike classical canonical correlation analysis, NLCCA is not restricted to two sets of variables but allows for the definition of an arbitrary number of sets. Furthermore, if the sets are treated in an asymmetric manner predictive models such as regression analysis and discriminant analysis can be emulated. For $v=1,2$ sets this implies that $G_1$ is $n \times 1$ and $G_2$ is $n \times m-1$. Corresponding examples will be given in Section \ref{sec:pmcca}.
-
-\subsection{Cone restricted SVD}
-In this final methodological section we show how the loss functions of these models can be solved in terms of cone restricted SVD. All the transformations discussed above are projections on some convex cone $\mathcal{K}_j$.  
-For the sake of simplicity we drop the $j$ and $v$ indexes and we look only at the second term of the partitioned loss function (see Equation \ref{eq:lt2}), i.e., 
-\begin{equation}
-\sigma(Z,A)=\mathbf{tr}(ZA'-\hat Y)'D(ZA'- \hat Y),
-\end{equation}
-over $Z$ and $A$, where $\hat Y$ is $k\times p$, $Z$ is $k\times r$, and $A$ is $p\times r$. Moreover
-the first column $z_0$ of $Z$ is restricted by $z_0\in\mathcal{K}$, with $\mathcal{K}$
-as a convex cone. $Z$ should also satisfy the common normalization conditions $u'DZ=0$ and $Z'DZ=I$.
-
-The basic idea of the algorithm is to apply alternating least squares with rescaling.
-Thus we alternate minimizing over $Z$ for fixed $A$ and over $A$ for fixed $Z$.
-The ``non-standard" part of the algorithm is that we do not impose the normalization
-conditions if we minimize over $Z$. We show below that we can still produce a
-sequence of normalized solutions with a non-increasing sequence of loss function
-values.
-
-Suppose $(\hat Z,\hat A)$ is our current best solution. To improve it we  first minimize over the non-normalized $Z$, satisfying the cone constraint, and keeping $A$ fixed at $\hat A$. This gives $\tilde Z$ and a corresponding loss function value $\sigma(\tilde Z,\hat A)$. Clearly,
-\begin{equation}
-\sigma(\tilde Z,\hat A)\leq\sigma(\hat Z,\hat A),
-\end{equation}
-but $\tilde Z$ is not normalized. Now update $Z$ to $Z^+$ using the weighted Gram-Schmidt solution $\tilde Z=Z^+S$ for $Z$ where $S$ is the Gram-Schmidt triangular matrix. The first column $\tilde z_0$ of $\tilde Z$ satisfies the cone constraint, and because of the nature of Gram-Schmidt, so does the first column of $Z^+$. Observe that it is quite possible that
-\begin{equation}
-\sigma(Z^+,\hat A)>\sigma(\hat Z,\hat A).
-\end{equation}
-This seems to invalidate the usual convergence proof, which is based on
-a non-increasing sequence of loss function values. But now also adjust
-$\hat A$ to $\overline A=\hat A(S^{-1})'$. Then $\tilde Z\hat A'=Z^+\overline A'$, and thus
-\begin{equation}
-\sigma(\tilde Z,\hat A)=\sigma(Z^+,\overline A).
-\end{equation}
-Finally compute $A^+$ by minimizing $\sigma(Z^+,A)$ over $A$. Since $\sigma(Z^+,A^+)\leq\sigma(Z^+,\overline A)$ 
-we have the chain
-\begin{equation}
-\sigma(Z^+,A^+)\leq\sigma(Z^+,\overline A)=\sigma(\tilde Z,\hat A)\leq\sigma(\hat Z,\hat A).
-\end{equation}
-In any iteration the loss function does not increase. In actual computation, it is not necessary to compute 
-$\overline A$, and thus it also is not necessary to compute the Gram-Schmidt triangular matrix $S$.
-
-\section[The R package homals]{The \proglang{R} package \pkg{homals}}
-\label{sec:R}
 % At this point we show how the models described in the sections above can be computed using the package \pkg{homals} in \proglang{R} \citep{R:07} available on \href{http://cran.r-project.org}{CRAN}.
 % 
 % The core function of the package for the computation of the methodology above is \code{homals()}. The extended models can be computed by setting corresponding arguments: The \code{rank} argument (integer value) allows for the calculation of rank-restricted nonlinear PCA. The \code{level} argument (strings) allows to set different scale levels. By default the level is set to nominal. Finally, the \code{sets} argument allows for partitioning the variables into two or more sets in order to perform nonlinear CCA. Examples can be found in the corresponding help files. 
@@ -382,8 +159,10 @@ $\overline A$, and thus it also is not necessary to compute the Gram-Schmidt tri
 % @
 % 
 % From the classification table we see that 91\% of the party affiliations are correctly classified. Note that in the case of such a simple homals solution it can happen that a lower dimensional solution results in a better classification rate than a higher dimensional. The reason is that in simple homals the classification rate is not the criterion to be optimized. 
+\section{Gifi Methods for Categorical Multivariate Analysis}
 
-\subsection{Categorical Principal Component Analysis}
+
+\section{Categorical Principal Component Analysis}
 Standard PCA assumes that the data are metric (i.e. equidistant categories within and across variables) and assumes a linear relationship among the observed variables. Having ordinal variables such as Likert items, these assumptions are often 
 not fulfilled in practice. In this case we have two options: run an ordinal factor analysis (FA) based on polychoric correlations as implemented in the \code{fa.poly()} function in the \pkg{psych} package, or run a nonlinear (ordinal) PCA as presented here. 
 Apart from the conceptual differences between FA and PCA in general, the advantage of NLPCA over polychoric FA is that we do not have to pose any underlying distribution assumption on our data, whereas a polychoric (or tetrachoric in the binary case) correlation assumes that the categories are realizations of an underlying latent normal distribution. 
@@ -411,6 +190,16 @@ $R^{\ast}$, the amount of variance explained for each of the $p$ dimensions, and
 Through the \code{level} argument the user can specify the scale levels of the variables (\code{"ordinal" as default}. If all variables are set to \code{"numerical"}, PRINCALS mimics standard PCA. In terms of plotting possibilities, a generic plot function allows for a loadings plot (default), a scree plot, transformation plots, and a biplot by specifying the 
 \code{plot.type} argument accordingly. 
 
+\subsection{Rotation and Goodness-Of-Fit}
+The package also offers options for rotating a PRINCALS solution. Note that ``rotation'' is a concept developed within factor 
+analysis (FA) by transforming the factor loadings through a rotation matrix and computing the corresponding rotated factor scores 
+afterwards. Strictly speaking, PCA eigenvectors of the correlation/covariance matrix are not loadings (even though we just called them ``loadings'') above. Loadings within an FA context are eigenvectors scaled by the square roots of the corresponding eigenvalues. 
+For unrotated PCA/PRINCALS solutions this difference is not so important, but if we want to rotate a solution the PCA/PRINCALS 
+``loadings'' need to be re-scaled such that they are loadings in the FA sense. Thus, we can apply standard \code{varimax()} and \code{promax()} rotations as provided in \pkg{stats}. In order to get the rotated principal scores, we multiply unrotated matrix 
+of the PRINCALS PC-scores with the generalized inverse of the rotated loadings matrix. 
+
+
+\subsection{Example: ABC Company}
 Now we show an ordinal PCA example on the ABC dataset which reproduces the analysis in \cite{Ferrari+Barbiero:2012}. 
 ABC is a ficticious company which launched a customer satisfaction survey. In this analysis we use six items, 
 each of them on a 5-point Likert scale, covering certain aspects of customer satisfaction: 

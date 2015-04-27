@@ -5,7 +5,7 @@ morals <- function(data, resp = 1, level = "ordinal", active = TRUE,
   name <- deparse(substitute(data))  
   cols <- seq(1, ncol(data))
   
-  fit <- gifi(data = data, ndim = 1, sets = list(c(resp), cols[-resp]),
+  fit <- gifiEngine(data = data, ndim = 1, sets = list(c(resp), cols[-resp]),
               level = level, active = active, eps = eps, 
               itermax = itermax, verbose = verbose)          ## dim-1 call
   

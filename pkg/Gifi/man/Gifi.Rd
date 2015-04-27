@@ -2,6 +2,8 @@
 \alias{Gifi}
 \alias{print.gifi}
 \alias{summary.gifi}
+\alias{scores}
+\alias{scores.gifi}
 \title{Gifi Methods for Categorical (nonlinear) Multivariate Analysis}
 \description{
   This is the core function of the package, used by most of the wrapper functions. 
@@ -73,6 +75,6 @@ Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
 \examples{
     
   ##simple Gifi 2D-homals solution (School not active)
-  res <- gifi(galo, active = c(rep(TRUE, 4), FALSE))
+  res <- Gifi(galo, active = c(rep(TRUE, 4), FALSE))
 }
 \keyword{models}

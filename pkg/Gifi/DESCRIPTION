@@ -1,16 +1,16 @@
 Package: Gifi
 Type: Package
 Title: Gifi Methods for Categorical Multivariate Analysis
-Version: 0.1-0
-Date: 2015-04-19
-Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email = "mair@fas.harvard.edu"), person("Jan", "De Leeuw", role = "aut"))
-Author: Patrick Mair [aut, cre], Jan De Leeuw [aut]
+Version: 0.5-0
+Date: 2015-04-27
+Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email = "mair@fas.harvard.edu"), person("Jan", "De Leeuw", role = "aut"), person("Jan", "De Leeuw", role = "ctb"))
+Author: Patrick Mair [aut, cre], Jan De Leeuw [aut], Patrick Groenen [ctb]
 Maintainer: Patrick Mair <mair@fas.harvard.edu>
 Description: Gifi implements methods for multivariate analysis of categorical data. It replaces the homals package. The core function is called gifi and several wrapper functions are available for computing the following Gifi models: multiple correspondence analysis (HOMALS), categorical PCA (PRINCALS), multiple monotone regression (MORALS). 
 License: GPL-2
 URL: http://r-forge.r-project.org/projects/psychor/
-Imports: graphics, stats
-Depends: ape
+Imports: graphics, stats, MASS
+Depends: ape, psych
 Suggests: knitr
 VignetteBuilder: knitr
 LazyData: yes

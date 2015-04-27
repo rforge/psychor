@@ -79,13 +79,13 @@ transformed (metric) scale on each dimension over the categories of each variabl
 - Discrimination measures (\code{plot.type = "dmplot"}): Plots the discrimination measures for each variable. 
 }
 
-\seealso{\code{\link{gifi}}}
+\seealso{\code{\link{Gifi}}}
 \examples{
 
 ##Graphplot for Hartigan solution: 3 dimensions extracted, dimension 1 plotted
 ##against dimension 3.
 data(hartigan)
-res <- gifi(hartigan, ndim = 3)
+res <- Gifi(hartigan, ndim = 3)
 plot(res, plot.dim = c(1,3), plot.type = "graphplot")
 
 }

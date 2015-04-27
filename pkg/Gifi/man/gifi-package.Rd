@@ -11,8 +11,8 @@ the following Gifi models: multiple correspondence analysis aka homogeneity anal
 \tabular{ll}{
 Package: \tab Gifi\cr
 Type: \tab Package\cr
-Version: \tab 0.1-0\cr
-Date: \tab 2015-04-19\cr
+Version: \tab 0.5-0\cr
+Date: \tab 2015-04-27\cr
 License: \tab GPL-2\cr
 URL: \tab \url{http://r-forge.r-project.org/projects/psychor/}\cr
 }
@@ -25,12 +25,9 @@ Patrick Mair, Jan de Leeuw
 Maintainer: Patrick Mair <mair@fas.harvard.edu>
 }
 \references{
-De Leeuw, J., & Mair, P. (2009). Gifi methods for optimal scaling in R: The package homals. 
-Journal of Statistical Software, 31(4), 1-20, \url{http://www.jstatsoft.org/v31/i04/}. 
-
 Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
 }
 
 \keyword{ package }
-\seealso{\code{\link{gifi}}, \code{\link{princals}}
+\seealso{\code{\link{Gifi}}, \code{\link{princals}}, \code{\link{morals}}
 }

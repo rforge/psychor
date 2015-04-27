@@ -12,9 +12,7 @@
   assumption of metric input data as well as linearity among the observed variables.
 }
 \usage{
-princals(data, ndim = 2, level = "ordinal", , rotation = "none", 
-         controlRot = list(normalize = TRUE, eps1 = 1e-5, m = 4), 
-         active = TRUE, eps = 1e-6, itermax = 1000, verbose = 0)
+princals(data, ndim = 2, level = "ordinal", active = TRUE, eps = 1e-6, itermax = 1000, verbose = 0)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,9 +22,6 @@ princals(data, ndim = 2, level = "ordinal", , rotation = "none",
   \code{"ordinal"}, \code{"numerical"}, and \code{"polynomial"} which can be defined as single 
   character (if all variable are of the same level) or as vector which length corresponds to the
   number of variables.} 
-  \item{rotation}{\code{"none"} for no rotation, \code{"varimax"} for VARIMAX rotation, 
-  \code{"promax"} for PROMAX rotation.}
-  \item{controlRot}{A list with control arguments for rotation (see details). } 
   \item{active}{Which variables are active for computation (\code{TRUE} means all)}
   \item{eps}{Iteration precision.}
   \item{itermax}{Maximum number of iterations.}
@@ -35,10 +30,6 @@ princals(data, ndim = 2, level = "ordinal", , rotation = "none",
 \details{
   Details about the computation of PCA-comparable eigenvalues, explained amount of variance, and loadings can be 
   found in the package vignette. 
-  
-  For rotation, the unrotated PRINCALS loadings (i.e. eigenvectors) are scaled by the square roots of the corresponding eigenvalues, 
-  internally. Through the \code{controlRot} argument several specifications for PROMAX and VARIMAX rotations can be made. See 
-  \code{\link{varimax}} and \code{\link{promax}} for details. 
 }
 
 \value{
@@ -46,10 +37,9 @@ princals(data, ndim = 2, level = "ordinal", , rotation = "none",
   same as in \code{\link{Gifi}}.
   
   \item{eigenvalues}{Eigenvalues.}
-  \item{vaf}{Component's variance accounted for (in percent).}
+  \item{vaf}{variance accounted for (component-wise in \%).}
   \item{loadings}{Loadings.}
   \item{pcscores}{Principal component scores.}
-  \item{rotmat}{Rotation matrix (in case a rotation was performed.}
 }
 \references{
 De Leeuw, J., & Mair, P. (2009). Gifi methods for optimal scaling in R: The package homals. 
@@ -58,42 +48,45 @@ Journal of Statistical Software, 31(4), 1-20, \url{http://www.jstatsoft.org/v31/
 Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
 }
 \author{Patrick Mair, Jan de Leeuw}
-\seealso{\code{\link{gifi}}}
+\seealso{\code{\link{Gifi}}}
 \examples{
 ## extract subset of ABC data
 ABC6 <- ABC[, 6:11]
 
-## ordinal PCA, 1 dimension
+## --------- ordinal PCA, 1 dimension --------------------
 fit2 <- princals(ABC6, ndim = 1)
 fit2
 summary(fit2)
 fit2$loadings                         ## loadings
 
-## comparison with standard PCA
+## comparison with standard PCA 
 as.numeric.factor <- function(x) as.numeric(levels(x))[x]
 ABC6m <- sapply(ABC6, as.numeric.factor)
 fitpc <- princomp(ABC6m)
 fitpc
-fit2$eigenvalues/(fitpc$sdev^2)[1]       ## eigenvalue ratio NLPCA/PCA
+fit2$eigenvalues/(fitpc$sdev^2)[1]       ## eigenvalue ratio PRINCALS/PCA
 
-## 2D solution 
+## ---- 2D solution 
 fit3 <- princals(ABC6, ndim = 2)
 fit3
 summary(fit3)
 plot(fit3)                               ## loadings plot
+newdata <- scores(fit3)                  ## extract the rescaled data matrix (first dimension)
+head(newdata)
+## can act as input data for subsequent models
 
-## Full solution
+## --- Full solution
 fit4 <- princals(ABC6, ndim = 6)
 fit4
 summary(fit4)
 plot(fit4, plot.type = "screeplot")      ## scree plot
 
-## Fitting a metric PCA through princals
+## --- Metric PCA 
 fit5 <- princals(ABC6, ndim = 1, level = "numerical")
 fit5
-fit5$eigenvalues/(fitpc$sdev^2)[1]       ## eigenvalue ratio NLPCA/PCA
+fit5$eigenvalues/(fitpc$sdev^2)[1]       ## eigenvalue ratio PRINCALS/PCA
 
-## Treating the response categories as nominal
+## --- Nominal PCA
 fit6 <- princals(ABC6, ndim = 1, level = "nominal")
 fit6
 
