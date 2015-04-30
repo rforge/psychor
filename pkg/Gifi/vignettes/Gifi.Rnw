@@ -12,7 +12,9 @@
 
 %% almost as usual
 \author{Patrick Mair \\ Harvard University \And 
-        Jan de Leeuw \\ University of California, Los Angeles}
+        Jan de Leeuw \\ University of California, Los Angeles \AND
+        Patrick Groenen \\ Erasmus University Rotterdam
+}
 \title{The Gifi Package for Categorical Multivariate Analysis in \proglang{R}}
 %
 %%% for pretty printing and a nice hypersummary also set:
@@ -68,104 +70,69 @@ require(Gifi)
 
 \section{Introduction}
 \label{sec:int}
-In recent years correspondence analysis (CA) has become a popular descriptive statistical method to analyze categorical data \citep{Benzecri:73, Greenacre:84, Gifi:90, Greenacre+Blasius:06}. Due to the fact that the visualization capabilities of statistical software have increased during this time, researchers of many areas apply CA and map objects and variables (and their respective categories) onto a common metric plane. 
-
-Currently, \proglang{R} \citep{R:07} offers a variety of routines to compute CA and related models. An overview of functions and packages is given in \citet{Mair+Hatzinger:07}. The package \pkg{ca} \citep{Nenadic+Greenacre:06} is a comprehensive tool to perform simple and multiple CA. Various two- and three-dimensional plot options are provided.  
-
-In this paper we present the \proglang{R} package \pkg{homals}, starting from the simple homogeneity analysis, which corresponds to a multiple CA, and providing several extensions. \citet{Gifi:90} points out that homogeneity analysis can be used in a \emph{strict} and a \emph{broad} sense. In a strict sense homogeneity analysis is used for the analysis of strictly categorical data, with a particular loss function and a particular algorithm for finding the optimal solution. In a broad sense homogeneity analysis refers to a class of criteria for analyzing multivariate data in general, sharing the characteristic aim of optimizing the homogeneity of variables under various forms of manipulation and simplification \citep[p. 81]{Gifi:90}. This view of homogeneity analysis will be used in this article since \pkg{homals} allows for such general computations. Furthermore, the two-dimensional as well as three-dimensional plotting devices offered by \proglang{R} are used to develop a variety of customizable visualization techniques.    
-More detailed methodological descriptions can be found in \citet{Gifi:90} and some of them are revisited in \citet{Michailidis+deLeeuw:98}. 
 
 
-
-% At this point we show how the models described in the sections above can be computed using the package \pkg{homals} in \proglang{R} \citep{R:07} available on \href{http://cran.r-project.org}{CRAN}.
-% 
-% The core function of the package for the computation of the methodology above is \code{homals()}. The extended models can be computed by setting corresponding arguments: The \code{rank} argument (integer value) allows for the calculation of rank-restricted nonlinear PCA. The \code{level} argument (strings) allows to set different scale levels. By default the level is set to nominal. Finally, the \code{sets} argument allows for partitioning the variables into two or more sets in order to perform nonlinear CCA. Examples can be found in the corresponding help files. 
-% 
-% As a result, an object of class \texttt{"homals"} is created and the following methods are provided: \code{print}, \code{summary}, \code{plot}, \code{plot3d}, \code{scatterplot3d} and \code{predict}. The \code{predict} method works as follows. Given a homals solution we can reconstruct the indicator matrix by assigning each object to the closest category point of the variable. We can then find out how well we have reconstructed the original data. For variables with rank restrictions we first have to project the objects on the hyperplane spanned by the category quantifications, and then compute distances in that plane. In any case we can make a square table of observed versus predicted for each variable, showing misclassification. 
-% 
-% The package offers a wide variety of plots; some of them are discussed in \citet{Michailidis+deLeeuw:98} and \citet{ Michailidis+deLeeuw:01}. In the \code{plot} method the user can specify the type of plot through the argument \code{plot.type}. For some plot types three-dimensional versions are provided in \code{plot3d} (dynamic) and \code{plot3dstatic}:
-% \begin{itemize}
-% \item Object plot (\texttt{"objplot"}): Plots the scores of the objects (rows in data set) on two or three dimensions. 
-% \item Category plot (\texttt{"catplot"}): Plots the rank-restricted category quantifications for each variable separately. Three-dimensional plots are available.
-% \item Voronoi plot (\texttt{"vorplot"}): Produces a category plot with Voronoi regions.
-% \item Joint plot (\texttt{"jointplot"}): The object scores and category quantifications are mapped in the same (two- or three-dimensional) device.
-% \item Graph plot (\texttt{"graphplot"}): Basically, a joint plot is produced with additional connections between the objects and the corresponding response categories.
-% \item Hull plot (\texttt{"hullplot"}): For a particular variable the object scores are mapped onto two dimensions. The convex hulls around the object scores are drawn with respect to each response category of this variable. 
-% \item Label plot (\texttt{"labplot"}): Similar to object plot, the object scores are plotted but for each variable separately with the corresponding category labels. A three-dimensional version is provided.
-% \item Span plot (\texttt{"spanplot"}): Like label plot, it maps the object scores for each variable and it connects them by the shortest path within each response category.
-% \item Star plot (\texttt{"starplot"}): Again, the object scores are mapped on two or three dimensions. In addition, these points are connected with the category centroid. 
-% \item Loss plot (\texttt{"lossplot"}): Plots the rank-restricted category quantifications against the unrestricted for each variable separately.
-% \item Projection plot (\texttt{"prjplot"}): For variables of rank 1 the object scores (two-dimensional) are projected onto
-% the orthogonal lines determined by the rank restricted category quantifications.  
-% \item Vector plot (\texttt{"vecplot"}): For variables of rank 1 the object scores (two-dimensional) are projected onto a straight line determined by the rank restricted category quantifications.
-% \item Transformation plot (\texttt{"trfplot"}): Plots variable-wise the original (categorical) scale against the transformed (metric) scale $Z_j$ for each solution.
-% \item Loadings plot (\texttt{"loadplot"}): Plots the loadings $\mathbf{a}_j$ and connects them with the origin. Note that if $r_j > 1$ only the first solution is taken.
-% \item Scree plot (\texttt{"screeplot"}): Produces a scree plot based on the eigenvalues. 
-% \item Discrimination measures (\texttt{"dmplot"}): Plots the discrimination measures for each variable. 
-% \end{itemize} 
-% 
-% 
-% \subsection{Simple homogeneity analysis}
-% \label{sec:sha}
-% The first example is a simple (i.e., no level or rank restrictions, no sets defined) three-dimensional homogeneity analysis for the \code{senate} data set \citep{Ada:02}. The data consists of 2001 senate votes on 20 issues selected by Americans for Democratic Action. The votes selected cover a full spectrum of domestic, foreign, economic, military, environmental and social issues. We tried to select votes which display sharp liberal/conservative contrasts. As a consequence, Democrat candidates have many more ``yes" responses than Republican candidates. Due to non-responses we have several missings which are coded as \code{NA}. A full description of the items can be found in the corresponding package help file. The first column of the data set (i.e., the variable ``Party'' containing 50 Republicans vs. 49 Democrats and 1 Independent) is inactive and will be used for validation. 
-% 
-% <<>>=
-% data("senate")
-% res <- homals(senate, active = c(FALSE, rep(TRUE, 20)), ndim = 3)
-% @
-% <<eval = FALSE>>=
-% # Figure 1
-% par(mfrow = c(2, 2))
-% plot3d(res, plot.type = "objplot", sphere = FALSE, bgpng = NULL)
-% plot(res, plot.type = "spanplot", plot.dim = c(1, 2), var.subset = 1, xlim = c(-2, 3), ylim = c(-2, 3), asp = 1)
-% plot(res, plot.type = "spanplot", plot.dim = c(1, 3), var.subset = 1, xlim = c(-2, 3), ylim = c(-2, 3), asp = 1)
-% plot(res, plot.type = "spanplot", plot.dim = c(2, 3), var.subset = 1, xlim = c(-2, 3), ylim = c(-2, 3), asp = 1)
-% @
-% 
-% <<>>=
-% # Figure 2
-% par(mfrow = c(1, 1))
-% plot3dstatic(res, plot.type = "loadplot")
-% @
-% 
-% \begin{figure}[ht]
-% \begin{center}
-% \includegraphics[height=70mm, width=70mm]{senate.png}
-% \includegraphics[height=70mm, width=70mm]{senatespan12.pdf}
-% \includegraphics[height=70mm, width=70mm]{senatespan13.pdf}
-% \includegraphics[height=70mm, width=70mm]{senatespan23.pdf}
-% \caption{\label{fig:sen} 3D Object Plot and Span Plots for Senate Dataset}
-% \end{center}
-% \end{figure}
-% 
-% Figure \ref{fig:sen} shows four branches (or clusters) of senators which we will denote by north, south, west and east. The west and the north branches are composed by Republicans, the east and south branches by Democrats. Note that the 3D-plot is rotated in a way that Dimension 3 is horizontally aligned, Dimension 2 is vertically aligned, and Dimension 1 is the one aligned from front to back. The two-dimensional slices show that Dimension 1 vs. 2 does not distinguish between Democrats and Republicans. If Dimension 3 is involved, as in the two bottom plots in Figure \ref{fig:sen}, the separation between Democrats and Republicans is obvious. To distinguish within north-west and south-east, respectively, Item 19 has to be taken into account:
-% 
-% \emph{V19: S 1438. Military Base Closures. Warner (R-VA) motion to authorize an additional round of U.S. military base realignment and closures in 2003. A ``yes'' vote is a +.} 
-% 
-% Republicans belonging to the north branch as well as Democrats belonging to the east branch gave a ``yes'' vote. South-Wing Democrats and West-Wing Republicans voted with ``no''. It is well known that the response on this item mainly depends on whether there is a military base in the senator's district or not; those senators who have a military base in their district do not want to close it since such a base provides working places and is an important income source for the district. Hence, this is the determining factor and not the party affiliation of the senator. This result is underpinned by Figure \ref{fig:senload} where Item 19 is clearly separated from the remaining items.
-% 
-% \begin{figure}[ht]
-% \begin{center}
-% \includegraphics[height=85mm, width=85mm]{senateload.pdf}
-% \caption{\label{fig:senload} Loadings Plot for Senate Dataset}
-% \end{center}
-% \end{figure}
-% 
-% Given a (multiple) homals solution, we can reconstruct the indicator matrix by assigning each object to the closest points of the variable.
-% 
-% <<>>=
-% p.res <- predict(res)
-% p.res$cl.table$Party
-% @
-% 
-% From the classification table we see that 91\% of the party affiliations are correctly classified. Note that in the case of such a simple homals solution it can happen that a lower dimensional solution results in a better classification rate than a higher dimensional. The reason is that in simple homals the classification rate is not the criterion to be optimized. 
 \section{Gifi Methods for Categorical Multivariate Analysis}
+\label{sec:gifi}
 
+\subsection{The Gifi Loss Function}
+In this section we give the very general definition of the Gifi loss function. 
+We restrict our elaborations to the very basic expressions. For simplicity, we are not incorporating the formulation for missing data even though the package allows for this. A more detailed and slightly more technical formulation can be found in \citet{deLeeuw+Mair:2009a}. 
+
+
+Homogeneity analysis is based on the criterion of minimizing the departure from homogeneity. This departure is measured by a loss function. To write the corresponding basic equations the following definitions are needed. For $i=1,\ldots,n$ objects, data on $m$ (categorical) variables are collected in a data matrix $H$ of dimension $n \times m$. 
+Each of the $j=1,\ldots,m$ variable takes on $k_j$ different values (their \emph{levels} or \emph{categories}). We code them using $n\times k_j$ binary \emph{indicator matrices} $G_j$, i.e., a matrix of dummy variables for each variable. The whole set of indicator matrices can be collected in a block matrix
+\begin{equation}
+G\defi\begin{bmatrix}G_1&\vdots&G_2&\vdots&\cdots&\vdots&G_m\end{bmatrix}.
+\end{equation}
+For convenience we introduce $D_j^{}=G_j'G_j^{}$ as the $k_j\times k_j$ diagonal matrix with the (marginal) frequencies of variable $j$ in its main diagonal. 
+
+Let $X$ be the unknown $n\times p$ matrix containing the coordinates (\emph{object scores}) of the object projections into $\mathbb{R}^p$. Furthermore, let $Y_j$ be the unknown $k_j \times p$ matrix containing the coordinates of the category projections into the same $p$-dimensional space (\emph{category quantifications}). 
+The problem of finding these solutions can be formulated by means of the following sum-of-squares (SSQ) loss function to be minimized:
+\begin{equation}
+\label{eq:loss}
+\sigma(X;Y_1,\ldots,Y_m) = \frac{1}{m} \sum_{j=1}^m\mathbf{tr}(X-G_jY_j)'(X-G_jY_j)
+\end{equation}
+We use the normalization $X'X=I$ in order to avoid the trivial solution $X=0$ and $Y_j=0$. Note that from an analytical point of view the loss function represents the sum-of-squares of $(X-G_jY_j)$ which obviously involves the object scores and the category quantifications. Thus, we minimize simultaneously over $X$ and $Y_j$. 
+
+This minimization problem is solved by the iterative \emph{alternating least squares algorithm} (ALS; sometimes quoted as \emph{reciprocal averaging algorithm}). At iteration $t=0$ we start with arbitrary object scores $X^{(0)}$. Each iteration $t$ consists of three steps:
+\begin{enumerate}
+\item Update category quantifications: $Y_j^{(t+1)}=D_j^{-1}G_j'X^{(t)}$ for $j=1,\ldots,m$
+\item Update object scores: $\tilde X^{(t+1)}=\sum_{j=1}^m G_j^{}Y_j^{(t+1)}$
+\item Normalization: $X^{(t+1)}= \sqrt{n}\tilde X^{(t+1)}\left(\tilde X^{(t+1)}{'}\tilde X^{(t+1)}\right)^{-\frac{1}{2}}$
+\end{enumerate}
+The algorithm stops when the decrease in the loss function gets below a prespecified level $\varepsilon$. 
+
+These are the ingredients we need in order to formulate important variants of the general Gifi model. 
+In the following section we start with the most important one: PRINCALS.
 
 \section{Categorical Principal Component Analysis}
-Standard PCA assumes that the data are metric (i.e. equidistant categories within and across variables) and assumes a linear relationship among the observed variables. Having ordinal variables such as Likert items, these assumptions are often 
-not fulfilled in practice. In this case we have two options: run an ordinal factor analysis (FA) based on polychoric correlations as implemented in the \code{fa.poly()} function in the \pkg{psych} package, or run a nonlinear (ordinal) PCA as presented here. 
-Apart from the conceptual differences between FA and PCA in general, the advantage of NLPCA over polychoric FA is that we do not have to pose any underlying distribution assumption on our data, whereas a polychoric (or tetrachoric in the binary case) correlation assumes that the categories are realizations of an underlying latent normal distribution. 
+\label{sec:princals}
+Standard PCA was developed for metric variables and assumes that the relationships between the variables are linear.
+PCA can be solved either by a SVD on the centered data matrix with each variable divided by $\sqrt{n-1}$, or  
+by an eigenvalue decomposition of the correlation (or covariance) matrix. That is, $\boldsymbol{H} = \boldsymbol{P\Lambda Q'}$ or 
+$\boldsymbol R(\boldsymbol H) = \boldsymbol{P \Lambda^2 P'}$ where $\boldsymbol{\Lambda}^2$ is an $m \times m$ diagonal matrix with the 
+eigenvalues on the diagonal. 
+
+The eigenvalues in $\boldsymbol{\Lambda}^2$ represent the variances of the principal component scores and the eigenvectors in the $m \times m$ matrix $\boldymbol P$. The principal component scores are then simply given by $\boldsymbol{P\Lambda}$. 
+give the vectors of weights (loadings). PCA is targeted on explaining variance and typically we are aiming to find a satisfactory solution (in terms of the explained amount of variance) in a low-dimensional space $p$. 
+
+How does this translate into the Gifi world? The short answer is: not directly. We need to make a few elaborations. 
+From a homogeneity analysis perspective, i.e. in analogy to equation (\ref{eq:loss}) the standard PCA problem can be stated as follows: 
+\begin{equation}
+\sigma(x;a) = = \frac{1}{m} \sum_{j=1}^m\mathbf{tr}(X-G_jY_j)'(X-G_jY_j)
+\end{equation}
+
+
+In many fields researchers often have to deal with categorical variables such as Likert items in the Social Sciences. Running a PCA on a set of items implies treating them as metric, i.e. the distances between categories (i.e. 1--2, 2--3, 3--4, etc.) have to be constant across categories. Together with the linear relationship assumption, these requirements are often not fulfilled in practice. 
+In addition, the concept of variance only applied to metric variables. 
+
+If we want to treat the variables on an ordinal scale, we have two options: run an ordinal factor analysis (FA) based on polychoric correlations as implemented in the \code{fa.poly()} function in the \pkg{psych} package, or run a categorical (ordinal) PCA as presented here. Apart from the conceptual differences between FA and PCA, the advantage of PRINCALS over polychoric FA is that we do not have to pose any underlying distribution assumption on our data, whereas a polychoric (or tetrachoric in the binary case) correlation assumes that the categories are realizations of an underlying latent normal distribution. 
+
+PRINCALS does not only allow for ordinal input data, it can be also applied to mixed scale levels: some variables can be metric, 
+some variables ordinal, some variables nominal. 
+
+
 
 In \pkg{homals} there is the \code{princals()} function which performs NLPCA. Since NLPCA is just a rank-1 restricted 
 version of general homogeneity analysis, internally \code{princals()} uses \code{homals()} as engine. An effort was made 

@@ -1,10 +1,10 @@
 \name{monspline}
 \alias{monspline}
 \alias{bsb}
-\title{Monotone B-Splines}
+\title{Monotone Splines}
 \description{
-  These two utility functions allow to create montone B-splines. \code{bsb()} creates a B-spline basis and 
-  \code{monspline} creates a monotone B-spline by using a dual method that uses \code{nnls()} to find the Lagrange multipliers. 
+  Here we provide the following two utiliy function: \code{bsb()} can be used to create a B-spline basis. \code{monspline()} transforms an arbitrary spline (non-monotone) into a monotone spline by using a dual method that uses \code{nnls()} to find the Lagrange multipliers 
+  (see description for details). 
 }
 \usage{
 bsb(x, knots, order = 3) 
@@ -27,6 +27,7 @@ monspline(y, X)
   or any other non-monotone spline matrix (number of rows correspond to the number of observations \eqn{n}, number of columns to 
   the number of knots). The function minimizes \eqn{((y-Xb)'(y-Xb))} over \eqn{b} that satisfy \eqn{AXb \geq 0}. \eqn{A}
   is a bidiagonal matrix of dimension \eqn{(n-1) \times n} 1's and -1's in the diagonals created internally.  
+  In example section we show how to transform a B-spline into a monotone B-spline.
 }
 
 \value{
@@ -37,7 +38,7 @@ monspline(y, X)
 
   \code{monspline} returns a list containing:
   
-  \item{yhat}{Fitted spline values for predictor x.}
+  \item{yhat}{Fitted spline values for input basis.}
   \item{RSS}{Residual SS from the regression fit.}
 }
 
