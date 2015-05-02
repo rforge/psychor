@@ -30,16 +30,21 @@ princals(data, ndim = 2, level = "ordinal", active = TRUE, eps = 1e-6, itermax =
 \details{
   Details about the computation of PCA-comparable eigenvalues, explained amount of variance, and loadings can be 
   found in the package vignette. 
+  
+  In addition to the standard Gifi category scores, \code{princals()} provides also a standardized version 
+  where, within each variable \eqn{j}, the scores are normalized to \eqn{y_j'D_jy_j = n} where \eqn{n} is the 
+  number of subjects and \eqn{D_j} is a diagonal matrix containing the frequencies for each category on the 
+  main diagonal.
 }
 
 \value{
-  Returns an object of class \code{"princals"}. The specific output values are below, the remaining ones are the 
-  same as in \code{\link{Gifi}}.
+  Returns an object of class \code{"princals"}. The output objects specific to PRINCALS are described below, the remaining ones are the same as in \code{\link{Gifi}}.
   
   \item{eigenvalues}{Eigenvalues.}
   \item{vaf}{variance accounted for (component-wise in \%).}
   \item{loadings}{Loadings.}
   \item{pcscores}{Principal component scores.}
+  \item{catscoresn}{Normalized category scores for the first dimension (see details).}
 }
 \references{
 De Leeuw, J., & Mair, P. (2009). Gifi methods for optimal scaling in R: The package homals. 

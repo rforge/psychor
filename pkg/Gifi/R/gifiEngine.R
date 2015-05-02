@@ -1,5 +1,4 @@
-gifiEngine <-
-function(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE, 
+gifiEngine <- function(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE, normXn = TRUE,
 eps = 1e-6, itermax = 1000, verbose = 0, call)
 {
 ## data ... data frame
@@ -8,6 +7,7 @@ eps = 1e-6, itermax = 1000, verbose = 0, call)
 ## ndim ... number of dimensions
 ## active ... which variables are active (single TRUE means all)
 ## rank ... which category quantification ranks (default all ndim)
+## normXn ... if TRUE X'X = nI, if FALSE X'X = 1/mI
 ## eps ... iteration precision eigenvalues (default 1e-6)   
 
 #----------------------------- constants --------------------------------
@@ -67,8 +67,8 @@ for (j in 1:nvar) {
 #----------------initialize scores and counters-----------------------------
 
 x <- cbind(orthogonalPolynomials(mis,1:nobj,ndim))          ## initialize object scores
-x <- normX(centerX(x,mis),mis)$q
-#x <- normX(centerX(x,mis),mis)$q*sqrt(nobj*nvar)           #norm to X'MX=nmI --> X are z-scores
+
+if (normXn) x <- normX(centerX(x,mis),mis)$q*sqrt(nobj*nvar)  else x <- normX(centerX(x,mis),mis)$q     #norm to X'MX=nmI --> X are z-scores
 
 y <- lapply(1:nvar, function(j) computeY(dframe[,j],x))     ## compute category scores based on X
 #y <- updateY(dframe,x,y,active,rank,level,sets)
@@ -83,9 +83,8 @@ repeat {
 	smid <- totalLoss(dframe, x, y, active, rank, level, sets)/(nobj * nvar * ndim)
 	ssum <- totalSum(dframe, x, y, active, rank, level, sets)
   qv <- normX(centerX((1/mis)*ssum,mis),mis)
-	z <- qv$q
-  #z <- qv$q*sqrt(nobj*nvar)                                   #norm to var = 1 
-  
+	if (normXn) z <- qv$q*sqrt(nobj*nvar) else z <- qv$q
+                        
 	snew <- totalLoss(dframe, z, y, active, rank, level, sets)/(nobj * nvar * ndim)
 	if (verbose > 0) cat("Iteration:",formatC(iter,digits=3,width=3),"Loss Value: ", formatC(c(smid),digits=6,width=6,format="f"),"\n")
 	

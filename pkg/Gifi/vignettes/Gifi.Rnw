@@ -19,7 +19,7 @@
 %
 %%% for pretty printing and a nice hypersummary also set:
 \Plainauthor{Patrick Mair, Jan de Leeuw} %% comma-separated
-\Plaintitle{Gifi Methods for Optimal Scaling in R: The Package homals} %% without formatting
+\Plaintitle{The Gifi Package for Categorical Multivariate Analysis in R} %% without formatting
 \Shorttitle{Gifi in \proglang{R}} %% a short title (if necessary)
 
 %% an abstract and keywords
@@ -28,8 +28,8 @@ This package vignette is an update and extension of the paper by published in th
 Homogeneity analysis combines the idea of maximizing the correlations between variables of a multivariate data set with
 that of optimal scaling. In this article we present methodological and practical issues of the \proglang{R} package \pkg{homals} which performs homogeneity analysis and various extensions. By setting rank constraints nonlinear principal component analysis can be performed. The variables can be partitioned into sets such that homogeneity analysis is extended to nonlinear canonical correlation analysis or to predictive models which emulate discriminant analysis and regression models. For each model the scale level of the variables can be taken into account by setting level constraints. All algorithms allow for missing values.
 }
-\Keywords{Gifi methods, optimal scaling, homogeneity analysis, correspondence analysis, nonlinear principal component analysis, nonlinear canonical correlation analysis, homals, \proglang{R}}
-\Plainkeywords{Gifi methods, optimal scaling, homogeneity analysis, optimal scaling, correspondence analysis, nonlinear principal component analysis, nonlinear canonical correlation analysis, homals, R} %% without formatting
+\Keywords{Gifi methods, optimal scaling, homogeneity analysis, categorical PCA}
+\Plainkeywords{Gifi methods, optimal scaling, homogeneity analysis, categorical PCA} %% without formatting
 %% at least one keyword must be supplied
 
 %% publication information
@@ -80,93 +80,135 @@ In this section we give the very general definition of the Gifi loss function.
 We restrict our elaborations to the very basic expressions. For simplicity, we are not incorporating the formulation for missing data even though the package allows for this. A more detailed and slightly more technical formulation can be found in \citet{deLeeuw+Mair:2009a}. 
 
 
-Homogeneity analysis is based on the criterion of minimizing the departure from homogeneity. This departure is measured by a loss function. To write the corresponding basic equations the following definitions are needed. For $i=1,\ldots,n$ objects, data on $m$ (categorical) variables are collected in a data matrix $H$ of dimension $n \times m$. 
-Each of the $j=1,\ldots,m$ variable takes on $k_j$ different values (their \emph{levels} or \emph{categories}). We code them using $n\times k_j$ binary \emph{indicator matrices} $G_j$, i.e., a matrix of dummy variables for each variable. The whole set of indicator matrices can be collected in a block matrix
+Homogeneity analysis is based on the criterion of minimizing the departure from homogeneity. This departure is measured by a loss function. To write the corresponding basic equations the following definitions are needed. For $i=1,\ldots,n$ objects, data on $m$ (categorical) variables are collected in a data matrix $\mathbf H$ of dimension $n \times m$. 
+Each of the $j=1,\ldots,m$ variable takes on $k_j$ different values (their \emph{levels} or \emph{categories}). We code them using $n\times k_j$ binary \emph{indicator matrices} $\mathbf G_j$, i.e., a matrix of dummy variables for each variable. The whole set of indicator matrices can be collected in a block matrix
 \begin{equation}
-G\defi\begin{bmatrix}G_1&\vdots&G_2&\vdots&\cdots&\vdots&G_m\end{bmatrix}.
+\mathbf G\defi\begin{bmatrix}\mathbf G_1&\vdots&\mathbf G_2&\vdots&\cdots&\vdots&\mathbf G_m\end{bmatrix}.
 \end{equation}
-For convenience we introduce $D_j^{}=G_j'G_j^{}$ as the $k_j\times k_j$ diagonal matrix with the (marginal) frequencies of variable $j$ in its main diagonal. 
+For convenience we introduce $\mathbf D_j^{}=\mathbf G_j'\mathbf G_j^{}$ as the $k_j\times k_j$ diagonal matrix with the (marginal) frequencies of variable $j$ in its main diagonal. 
 
-Let $X$ be the unknown $n\times p$ matrix containing the coordinates (\emph{object scores}) of the object projections into $\mathbb{R}^p$. Furthermore, let $Y_j$ be the unknown $k_j \times p$ matrix containing the coordinates of the category projections into the same $p$-dimensional space (\emph{category quantifications}). 
+Let $\mathbf X$ be the unknown $n\times p$ matrix containing the coordinates (\emph{object scores}) of the object projections into $\mathbb{R}^p$. Furthermore, let $\mathbf Y_j$ be the unknown $k_j \times p$ matrix containing the coordinates of the category projections into the same $p$-dimensional space (\emph{category quantifications}). 
 The problem of finding these solutions can be formulated by means of the following sum-of-squares (SSQ) loss function to be minimized:
 \begin{equation}
 \label{eq:loss}
-\sigma(X;Y_1,\ldots,Y_m) = \frac{1}{m} \sum_{j=1}^m\mathbf{tr}(X-G_jY_j)'(X-G_jY_j)
+\sigma(\mathbf X;\mathbf Y_1,\ldots,Y_m) = \frac{1}{m} \sum_{j=1}^m\mathbf{tr}(\mathbf X-\mathbf G_j\mathbf Y_j)'
+(\mathbf X-\mathbf G_j\mathbf Y_j)
 \end{equation}
-We use the normalization $X'X=I$ in order to avoid the trivial solution $X=0$ and $Y_j=0$. Note that from an analytical point of view the loss function represents the sum-of-squares of $(X-G_jY_j)$ which obviously involves the object scores and the category quantifications. Thus, we minimize simultaneously over $X$ and $Y_j$. 
+We use the normalization $\mathbf X'\mathbf X=n\mathbf I$ in order to avoid the trivial solution $\mathbf X=\mathbf 0$ 
+and $\mathbf Y_j=\mathbf 0$. Note that from an analytical point of view the loss function represents the sum-of-squares of 
+$(\mathbf X-\mathbf G_j\mathbf Y_j)$ which obviously involves the object scores and the category quantifications. Thus, we minimize simultaneously over $\mathbf X$ and $\mathbf Y_j$. 
 
-This minimization problem is solved by the iterative \emph{alternating least squares algorithm} (ALS; sometimes quoted as \emph{reciprocal averaging algorithm}). At iteration $t=0$ we start with arbitrary object scores $X^{(0)}$. Each iteration $t$ consists of three steps:
+This minimization problem is solved by the iterative \emph{alternating least squares algorithm} (ALS; sometimes quoted as \emph{reciprocal averaging algorithm}). At iteration $t=0$ we start with arbitrary object scores $\mathbf X^{(0)}$. Each iteration $t$ consists of three steps:
 \begin{enumerate}
-\item Update category quantifications: $Y_j^{(t+1)}=D_j^{-1}G_j'X^{(t)}$ for $j=1,\ldots,m$
-\item Update object scores: $\tilde X^{(t+1)}=\sum_{j=1}^m G_j^{}Y_j^{(t+1)}$
-\item Normalization: $X^{(t+1)}= \sqrt{n}\tilde X^{(t+1)}\left(\tilde X^{(t+1)}{'}\tilde X^{(t+1)}\right)^{-\frac{1}{2}}$
+\item Update category quantifications: $\mathbf Y_j^{(t+1)}=\mathbf D_j^{-1}\mathbf G_j'\mathbf X^{(t)}$ for $j=1,\ldots,m$
+\item Update object scores: $\tilde{\mathbf X}^{(t+1)}=\sum_{j=1}^m \mathbf G_j^{}\mathbf Y_j^{(t+1)}$
+\item Normalization: $X^{(t+1)}= \tilde{\mathbf X}^{(t+1)}\left(\tilde{\mathbf X}^{(t+1)}{'}\tilde{\mathbf X}^{(t+1)}\right)^{-\frac{1}{2}}\sqrt{n}$
 \end{enumerate}
-The algorithm stops when the decrease in the loss function gets below a prespecified level $\varepsilon$. 
+The algorithm stops when the decrease in the loss function gets below a pre-specified level $\varepsilon$. 
 
-These are the ingredients we need in order to formulate important variants of the general Gifi model. 
-In the following section we start with the most important one: PRINCALS.
+A core output of the Gifi optimization is a set of $n \times m$ score matrices 
+for each dimension. These matrices contain the rescaled category scores instead of the observed categories. 
+Typically, the one of the first dimension denoted as $\mathbf H^{\ast}$ is the most important one.  
+It can be used for subsequent statistical analyses and replaces the original data matrix $\mathbf{H}$.
+
+\subsection{Optimal Scaling}
+\label{sec:opt}
+
+\subsection{Coding Schemes for the Indicator Matrix}
 
 \section{Categorical Principal Component Analysis}
 \label{sec:princals}
-Standard PCA was developed for metric variables and assumes that the relationships between the variables are linear.
-PCA can be solved either by a SVD on the centered data matrix with each variable divided by $\sqrt{n-1}$, or  
-by an eigenvalue decomposition of the correlation (or covariance) matrix. That is, $\boldsymbol{H} = \boldsymbol{P\Lambda Q'}$ or 
-$\boldsymbol R(\boldsymbol H) = \boldsymbol{P \Lambda^2 P'}$ where $\boldsymbol{\Lambda}^2$ is an $m \times m$ diagonal matrix with the 
-eigenvalues on the diagonal. 
-
-The eigenvalues in $\boldsymbol{\Lambda}^2$ represent the variances of the principal component scores and the eigenvectors in the $m \times m$ matrix $\boldymbol P$. The principal component scores are then simply given by $\boldsymbol{P\Lambda}$. 
-give the vectors of weights (loadings). PCA is targeted on explaining variance and typically we are aiming to find a satisfactory solution (in terms of the explained amount of variance) in a low-dimensional space $p$. 
-
-How does this translate into the Gifi world? The short answer is: not directly. We need to make a few elaborations. 
-From a homogeneity analysis perspective, i.e. in analogy to equation (\ref{eq:loss}) the standard PCA problem can be stated as follows: 
+\subsection{Nonlinear PCA Theory}
+From a homogeneity analysis perspective, i.e. in analogy to equation (\ref{eq:loss}), the PCA problem can be stated as follows: 
 \begin{equation}
-\sigma(x;a) = = \frac{1}{m} \sum_{j=1}^m\mathbf{tr}(X-G_jY_j)'(X-G_jY_j)
+\label{eq:losspc}
+\sigma(\mathbf X;\mathbf A) = = \frac{1}{m} \sum_{j=1}^m 
+\mathbf{tr}(\mathbf X - \mathbf h_j\mathbf a_j')'(\mathbf X - \mathbf h_j\mathbf a_j')
 \end{equation}
 
+with $\mathbf X$ as $n \times p$ matrix and $\mathbf A$ as $m \times p$ matrix. The vectors $\mathbf a_j'$ are the rows 
+of $\mathbf A$ containing the weights for variable $j$; $\mathbf h_j$ are simply the columns of the data matrix $\mathbf H$. 
+We see that $\mathbf h_j\mathbf a_j'$ reflects a linear weighting of the observed values $\mathbf h_j$ (i.e. a linear transformation). Minimizing (\ref{eq:losspc}) means computing the $p$ principal components. 
 
-In many fields researchers often have to deal with categorical variables such as Likert items in the Social Sciences. Running a PCA on a set of items implies treating them as metric, i.e. the distances between categories (i.e. 1--2, 2--3, 3--4, etc.) have to be constant across categories. Together with the linear relationship assumption, these requirements are often not fulfilled in practice. 
-In addition, the concept of variance only applied to metric variables. 
+A strinking feature of the Gifi framework is that we have several possibilities to transform each variable individually in a nonlinear way through optimal scaling. Let $\phi_j(\cdot)$ denote the corresponding transformation function. Incorporating, 
+$\phi(\cdot)$ into (\ref{eq:losspc}) gives
+
+\begin{equation}
+\label{eq:losspc}
+\sigma(\mathbf X;\mathbf A) = = \frac{1}{m} \sum_{j=1}^m 
+\mathbf{tr}(\mathbf X - \phi_j(\mathbf h_j)\mathbf a_j')'(\mathbf X - \phi_j(\mathbf h_j)\mathbf a_j')
+\end{equation}
+
+The weights $\mathbf a_j$ can only be identified when $\phi_j(\mathbf h_j)$ is normalized. Since these two quantities are 
+confounded we can subsume $\mathbf a_j$ in $\phi_j(\mathbf h_j)$. In Gifi, $\mathbf H$ is categorical and the minimization does not operate directly on the raw variables $\mathbf h_j$. Rather, it operates on the corresponding indicator matrix $\mathbf G_j$. 
+Therefore  $\phi_j(\mathbf h_j) = \mathbf G_j\mathbf y_j$ where $\mathbf y_j$ is a vector of single category 
+quantifications (rather then using the original $\mathbf h_j$). We can express (\label{eq:losspc}) as
+
+\begin{equation}
+\label{eq:loss1}
+\sigma(\mathbf X;\mathbf y_1,\ldots,y_m) = \frac{1}{m} \sum_{j=1}^m\mathbf{tr}(\mathbf X-\mathbf G_j\mathbf y_j)'
+(\mathbf X-\mathbf G_j\mathbf y_j).
+\end{equation}
+
+If we compare equation (\ref{eq:loss1}) with the general Gifi loss function in (\ref{eq:loss}) we see that in (\ref{eq:loss}) we have the matrix $\mathbf Y_j$ of dimension $k_j \times p$. In PCA, however we want to have a single weighting 
+scheme. This can be achieved by posing a rank-1 restriction on the matrix $\mathbf Y_j$. We can do this by applying
+a simple linear weighting where $\mathbf z_j$ denotes the vector of single category quantifications and $\mathbf a_j$ 
+the vector of weights which we call the PRINCALS loadings. Therefore, the rank-1 restriction can be expressed as $\mathbf Y_j = \mathbf z_j\mathbf a_j'$ and we have reconstructed our general Gifi loss function through the rank-1 restricted PRINCALS version. 
+Consequently, PRINCALS can be estimated through the general Gifi framework. 
+
+Note that if we were to apply a numerical (i.e. linear) transformation on the observed categories in $j$, minimizing 
+(\ref{eq:loss1}) means computing a PCA in a numerical way. Since the optimal scaling is performed for 
+each variable individually, PRINCALS allows for mixed scale levels of the input data. 
+
+\subsection{PRINCALS vs. PCA}
+Standard PCA was developed for metric variables and assumes that the relationships between the variables are linear.
+PCA can be solved either by a SVD on the centered data matrix with each variable divided by $\sqrt{n-1}$, or  
+by an eigenvalue decomposition of the correlation (or covariance) matrix. That is, 
+$\mathbf{H}_c = \mathbf P\boldsymbol{\Lambda} \mathbf Q'$ or 
+$\mathbf R(\mathbf H) = \mathbf P \boldsymbol{\Lambda}^2 \mathbf P'$ where $\boldsymbol{\Lambda}^2$ is an $m \times m$ diagonal matrix with the eigenvalues in the diagonal. 
+
+The eigenvalues in $\boldsymbol{\Lambda}^2$ represent the variances of the principal component scores and the eigenvectors in the $m \times m$ matrix $\mathbf P$ the loadings. The principal component scores are then simply given by $\mathbf P\boldsymbol{\Lambda}$. give the vectors of weights (loadings). PCA is targeted on explaining variance and typically we are aiming to find a satisfactory solution (in terms of the explained amount of variance) in a low-dimensional space $p$. 
+
+We see standard PCA solves the dimension reduction problem analytically, PRINCALS numerically. PCA gives eigenvalues, 
+loadings, and principal component scores; PRINCALS gives object scores, category quantifications, loadings, and the score matrix. 
+At this point we show how to ``translate'' the PRINCALS outputs into a PCA output. The starting point 
+is the score matrix $\mathbf H^{\ast}$ of the first dimension. First, we compute the correlation matrix 
+$\mathbf R^(\mathbf H^{\ast})$. Second, we perform an eigenvalue decomposition on the correlation matrix which 
+gives the $m \times m$ matrix of eigenvectors $\mathbf P$ and the diagonal matrix $\boldsymbol{\Lambda}^2$ containing 
+the eigenvalues. 
+
+Note that in standard PCA the loadings are normalized to $\|\mathbf a_j\|^2 = 1$. In order to make the 
+PRINCALS loadings $\mathbf a_j$ comparable to standard PCA, they need to be normalized the same way.
+The \code{princals()} function performs all these computations internally and returns the $p$ eigenvalues based on the 
+$\mathbf R^(\mathbf H^{\ast})$, the variance accounted for (VAF) by each dimensions (based on the eigenvalues), 
+the standardized loadings, and the principal component scores. 
+
+Note that a difference between PCA and PRINCALS is that the PRINCALS solutions for varying dimensionality $p$ are not nested. 
+In PCA they are, of course. If we want to compare the gain of a PRINCALS solution over a PCA we can compute the respective 
+eigenvalue ratios. This gives us a measure for the violations of equidistance and linearity in our original data. 
+
+
+\subsection{Rotation and Goodness-Of-Fit}
+The package also offers options for rotating a after fitting a PRINCALS solution. Note that ``rotation'' is a concept developed within factor analysis (FA) by transforming the factor loadings through a rotation matrix and computing the corresponding rotated factor scores afterwards. Strictly speaking, PCA eigenvectors of the correlation/covariance matrix are not loadings (even though we just called them ``loadings'') above. Loadings within an FA context are eigenvectors scaled by the square roots of the corresponding eigenvalues. 
+
+Therefore, if we want to rotate a PRINCALS solution, the loadings need to be re-scaled such that they are loadings in the FA sense. This applies to PRINCALS as well as to PCA. The package offers Varimax and Promax rotations and does the corresponding loadings 
+normalization internally. In order to get the rotated principal scores, we multiply unrotated matrix 
+of the PRINCALS principal component scores with the generalized inverse of the rotated loadings matrix. 
+
+In order to determine the number of components, \emph{very simple structure} (VSS) analysis as well as parallel 
+analysis based on random (or permuted) data matrices can be performed for PRINCALS in the same way as for PCA. 
+
+\subsection{Example: ABC Company}
+In many fields researchers often have to deal with categorical variables such as Likert items in the Social Sciences. Running a PCA on a set of items implies treating them as metric, i.e. the distances between categories (i.e. 1--2, 2--3, 3--4, etc.) have to be constant across categories. Together with the linear relationship assumption, these requirements are often not fulfilled in practice. In addition, the concept of variance only applies to metric variables. 
 
 If we want to treat the variables on an ordinal scale, we have two options: run an ordinal factor analysis (FA) based on polychoric correlations as implemented in the \code{fa.poly()} function in the \pkg{psych} package, or run a categorical (ordinal) PCA as presented here. Apart from the conceptual differences between FA and PCA, the advantage of PRINCALS over polychoric FA is that we do not have to pose any underlying distribution assumption on our data, whereas a polychoric (or tetrachoric in the binary case) correlation assumes that the categories are realizations of an underlying latent normal distribution. 
 
 PRINCALS does not only allow for ordinal input data, it can be also applied to mixed scale levels: some variables can be metric, 
 some variables ordinal, some variables nominal. 
 
-
-
-In \pkg{homals} there is the \code{princals()} function which performs NLPCA. Since NLPCA is just a rank-1 restricted 
-version of general homogeneity analysis, internally \code{princals()} uses \code{homals()} as engine. An effort was made 
-to make the PRINCALS output as PCA-like (i.e. \code{princomp()}-like) as possible in terms of comparable 
-eigenvalues, explaned amount of variance on each dimension, and loadings.
-
-Standard PCA is solved by an eigenvalue decomposition of the input correlation matrix $R$ based on the original 
-data which gives us eigenvalue vector $\lambda$ of length $m$. Subsequently, the amount 
-of explained variance for each dimension can be computed by dividing each eigenvalue by the sum of the $m$ eigenvalues. 
-One of the cores outputs of any Gifi model is that it provides a ``new'' data matrix where the original categories are optimally scaled for each dimension. Now can now compute the correlation matrix $R^{\ast}$ on the new data matrix (it does not matter 
-which one we use since the $p$ matrices are linearly dependent) and perform an eigenvalue decomposition. 
-This gives us the eigenvalue vector $\lambda^{\ast}$ of length $m$. As above, we can compute the amount 
-of explained variance for each of the $m$ dimensions. In addition, in order to evaluate the amount of ``improvement'' 
-of NLPCA over PCA we can compute the eigenvalue ratio, e.g. for the first dimension we have $\lambda_1^{\ast}/\lambda_1$. 
-This gives us a measure for the violations of equidistance and linearity in our original data. 
-
-Regarding the loadings, in standard PCA they are normed to $\|w\|^2 = 1$. 
-In order to make the loadings $w^{\ast}$ from NLPCA comparable to standard PCA, they need to be normalized the same way.
-The \code{princals()} function performs all these computations internally and returns the $p$ eigenvalues based on the 
-$R^{\ast}$, the amount of variance explained for each of the $p$ dimensions, and the standardized loadings. 
-
 Through the \code{level} argument the user can specify the scale levels of the variables (\code{"ordinal" as default}. If all variables are set to \code{"numerical"}, PRINCALS mimics standard PCA. In terms of plotting possibilities, a generic plot function allows for a loadings plot (default), a scree plot, transformation plots, and a biplot by specifying the 
 \code{plot.type} argument accordingly. 
 
-\subsection{Rotation and Goodness-Of-Fit}
-The package also offers options for rotating a PRINCALS solution. Note that ``rotation'' is a concept developed within factor 
-analysis (FA) by transforming the factor loadings through a rotation matrix and computing the corresponding rotated factor scores 
-afterwards. Strictly speaking, PCA eigenvectors of the correlation/covariance matrix are not loadings (even though we just called them ``loadings'') above. Loadings within an FA context are eigenvectors scaled by the square roots of the corresponding eigenvalues. 
-For unrotated PCA/PRINCALS solutions this difference is not so important, but if we want to rotate a solution the PCA/PRINCALS 
-``loadings'' need to be re-scaled such that they are loadings in the FA sense. Thus, we can apply standard \code{varimax()} and \code{promax()} rotations as provided in \pkg{stats}. In order to get the rotated principal scores, we multiply unrotated matrix 
-of the PRINCALS PC-scores with the generalized inverse of the rotated loadings matrix. 
-
-
-\subsection{Example: ABC Company}
 Now we show an ordinal PCA example on the ABC dataset which reproduces the analysis in \cite{Ferrari+Barbiero:2012}. 
 ABC is a ficticious company which launched a customer satisfaction survey. In this analysis we use six items, 
 each of them on a 5-point Likert scale, covering certain aspects of customer satisfaction: 
@@ -181,71 +223,95 @@ fitfull
 summary(fitfull)
 @
 
-The scree plot is given in in the left panel of Figure \ref{fig:abcsree}. 
+The scree plot is given in Figure \ref{fig:abcscree} including the eigenvalues from a parallel analysis
+(permutation version). 
 
-Second, we fit a two-dimensional ordinal solution. The loadings plot is given in Figure \ref{fig:abcscree} (right panel). 
+<<abcscree-plot, eval=FALSE>>=
+fitpar <- parallel(fitfull)   
+fitpar
+summary(fitpar)
+plot(fitpar)
+@
+\begin{figure}
+\begin{center}  % fig.width='15cm', fig.height='6cm'
+<<abcscree-plot1, echo=FALSE, fig.width=6, fig.height=6, dev='postscript'>>=
+<<abcscree-plot>>
+@
+\end{center}
+\caption{\label{fig:abcscree} Scree plot including eigenvalues from parallel analysis.}
+\end{figure}
+
+In addition, we run a VSS. Note that if the input model for \code{parallel()} and \code{vss()} does not 
+represent a full-dimensional solution, the full-dimensional models is fitted internally.  
+ 
 <<>>=
+fitvss <- vss(fitfull)   
+fitvss
+summary(fitvss)
+@
+
+Now we fit a two-dimensional ordinal solution and produce a loadings plot and a biplot (see \ref{fig:loadbi})
+
+<<loadbi-plot, eval=FALSE>>=
 fit2d <- princals(ABC6, ndim = 2)
 fit2d
 summary(fit2d)
-@
-We see that we explain around 63\% of the variance.
-
-<<abcscree-plot, eval=FALSE>>=
 op <- par(mfrow = c(1,2))
-plot(fitfull, plot.type = "screeplot")
-plot(fit2d)
+plot(fit2d, "loadplot", main - "Loadings Plot ABC Data")
+plot(fit2d, "biplot", labels.scores = TRUE, main = "Biplot ABC Data")
 par(op)
 @
 \begin{figure}
 \begin{center}  % fig.width='15cm', fig.height='6cm'
-<<abcscree-plot1, echo=FALSE, fig.width=10, fig.height=5, dev='postscript'>>=
-<<abcscree-plot>>
+<<loadbi-plot1, echo=FALSE, fig.width=10, fig.height=5, dev='postscript'>>=
+<<loadbi-plot>>
 @
 \end{center}
-\caption{\label{fig:abcscree} Left panel: Scree plot for full-dimensional PRINCALS. Right panel: 
-Loadings plot for two-dimensional solution.}
+\caption{\label{fig:loadbi} Loadings plot and biplot for ABC dataset.}
 \end{figure}
 
-Now we fit a one-dimensional ordinal PCA.
+We see that we account for \Sexpr{round(sum(fit2d$vaf), 2)} of the variance.
+
+Now we fit a one-dimensional ordinal PCA, and compare the eigenvalue to the one from a standard PCA. 
 <<>>=
 fit1d <- princals(ABC6, ndim = 1)
-fit1d
-summary(fit1d)
-@
-
-Let us compare it with the outcome of a standard PCA solution using \code{princomp()} and compute the ratio of the first 
-eigenvalues.
-
-<<>>=
 ABC6m <- sapply(ABC6, function(x) as.numeric(levels(x))[x])
 fitpc <- princomp(ABC6m)
-fitpc
-fit1d$eigenvalues/(fitpc$sdev^2)[1]       ## eigenvalue ratio NLPCA/PCA
+fit1d$eigenvalues/(fitpc$sdev^2)[1]       ## eigenvalue ratio PRINCALS/PCA
 @
 
-The eigenvalue ratio of suggests \Sexpr{round(fit1d$eigenvalues/(fitpc$sdev^2)[1], 2)} a slight improvement 
-of NLPCA over standard PCA. This implies that the response categories are approximately equidistant and 
+The eigenvalue ratio of \Sexpr{round(fit1d$eigenvalues/(fitpc$sdev^2)[1], 2)} suggests a slight improvement 
+of PRINCALS over standard PCA. This implies that the response categories are approximately equidistant and 
 the relationship between the variables is not far from linear.
 If we want to mimic standard PCA with PRINCALS, we declare all the variables as numeric.
 
 <<>>=
 fit1dm <- princals(ABC6, ndim = 1, level = "numerical")
-fit1dm
 fit1dm$eigenvalues/(fitpc$sdev^2)[1]       ## eigenvalue ratio NLPCA/PCA
 @
-
 The size of the eigenvalue ratio decreased since we are essentially doing the same thing. 
-Finally, we can also abandon the order assumption in the response categories and treat all variables 
-as nominal. This is the least restrictive of our one-dimensional PRINCALS models.
 
-<<>>=
-fit1dc <- princals(ABC6, ndim = 1, level = "nominal")
-fit1dc
+
+Finally, for illustration, we include a binary variable (nominal) into the dataset and specify two of the remaining variables
+as nominal, two of them as ordinal, and two of them as metric. The transformation plot in Figure \ref{fig:transplot}
+shows nicely the optimal scaling transformations of the original categories. 
+
+<<transplot-plot, eval=FALSE>>=
+ABC7 <- ABC[,c(3, 6:11)]
+fit7 <- princals(ABC7, ndim = 2, 
+        level = c("nominal", rep(c("nominal", "ordinal", "numerical"), each = 2)))
+plot(fit7, "transplot")
 @
+\begin{figure}
+\begin{center}  
+<<transplot-plot1, echo=FALSE, fig.width=10, fig.height=10, dev='postscript'>>=
+<<transplot-plot>>
+@
+\end{center}
+\caption{\label{fig:transplot} Transformation plots.}
+\end{figure}
 
-We see that the nominal PCA leads pretty much to the same fit as the ordinal version which suggests that 
-the ordinal scale level for the variables holds. 
+ 
 
 % 
 % \subsection{Predictive models and canonical correlation}
@@ -382,8 +448,8 @@ the ordinal scale level for the variables holds.
 % The object plot in Figure \ref{fig:roskam} shows interesting rating ``twins" of departmental areas: mathematical and experimental psychology, industrial psychology and test construction (both are close to the former two areas), educational and social psychology, clinical and cultural psychology. Physiological and animal psychology are somewhat separated from the other areas. Obviously this rater is attracted to areas like social, cultural and clinical psychology rather than to methodological fields. 
 % The vector plot on the right hand side projects the category scores onto a straight line determined by rank restricted category quantifications. Similarly, a projection plot could be created. Further analyses of this dataset within a PCA context can be found in \citet{deLeeuw:06}. 
  
-\section{Discussion}
-In this paper theoretical foundations of the methodology used in the \pkg{homals} package are elaborated and package application and visualization issues are presented. Basically, \pkg{homals} covers the techniques described in \citet{Gifi:90}: Homogeneity analysis, NLCCA, predictive models, and NLPCA. It can handle missing data and the scale level of the variables can be taken into account. The package offers a broad variety of real-life datasets and furthermore provides numerous methods of visualization, either in a two-dimensional or in a three-dimensional way. Future enhancements will be to replace indicator matrices by more general B-spline bases and to incorporate weights for observations. To conclude, \pkg{homals} provides flexible, easy-to-use routines which allow researchers from different areas to compute, interpret, and visualize methods belonging to the Gifi family. 
+% \section{Discussion}
+% In this paper theoretical foundations of the methodology used in the \pkg{homals} package are elaborated and package application and visualization issues are presented. Basically, \pkg{homals} covers the techniques described in \citet{Gifi:90}: Homogeneity analysis, NLCCA, predictive models, and NLPCA. It can handle missing data and the scale level of the variables can be taken into account. The package offers a broad variety of real-life datasets and furthermore provides numerous methods of visualization, either in a two-dimensional or in a three-dimensional way. Future enhancements will be to replace indicator matrices by more general B-spline bases and to incorporate weights for observations. To conclude, \pkg{homals} provides flexible, easy-to-use routines which allow researchers from different areas to compute, interpret, and visualize methods belonging to the Gifi family. 
 
 \bibliography{Gifi}
 

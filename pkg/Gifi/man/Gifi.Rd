@@ -52,7 +52,7 @@ Gifi(data, ndim = 2, rank = ndim, level = "nominal", sets = 0, active = TRUE,
   \item{datname}{Name of the data file.}
   \item{catscores}{List of category scores for each variable.}
   \item{scoremat}{Array containing the reproduced data matrix based on category scores.}
-  \item{objscores}{Matrix with object scores on each dimension.}
+  \item{objscores}{Matrix with object scores on each dimension (scaled as z-scores).}
   \item{cat.centroids}{List of category centroids.}
   \item{ind.mat}{Dummy coded indicator matrix.}
   \item{loadings}{List of loadings of the variables on each dimension.}
