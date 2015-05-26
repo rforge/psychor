@@ -12,7 +12,8 @@
   assumption of metric input data as well as linearity among the observed variables.
 }
 \usage{
-princals(data, ndim = 2, level = "ordinal", active = TRUE, eps = 1e-6, itermax = 1000, verbose = 0)
+princals(data, ndim = 2, level = "ordinal", active = TRUE, eps = 1e-6, itermax = 1000, 
+         verbose = 0)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

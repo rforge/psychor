@@ -12,7 +12,8 @@
 parallel(x, N = 1000, method = "permutation")
 
 \method{plot}{princalspa}(x, main = "Parallel Analysis", xlab = "Number of Components", 
-                          ylab = "Eigenvalues", leg.pos = "topright", leg.lab = c("Fitted", "Simulated"), ylim, ...) 
+                          ylab = "Eigenvalues", leg.pos = "topright", 
+                          leg.lab = c("Fitted", "Simulated"), ylim, ...) 
 
 }
 %- maybe also 'usage' for other objects documented here.

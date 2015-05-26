@@ -13,8 +13,10 @@
 \usage{
 vss(x, ndim = NULL)
 
-\method{plot}{princalsvss}(x, main = "Very Simple Structure", xlab = "Number of Components", 
-                           ylab = "VSS", ylim = c(0,1), leg.pos = "bottomleft", leg.lab = c("VSS1", "VSS2"), ...) 
+\method{plot}{princalsvss}(x, main = "Very Simple Structure", 
+                           xlab = "Number of Components", 
+                           ylab = "VSS", ylim = c(0,1), leg.pos = "bottomleft", 
+                           leg.lab = c("VSS1", "VSS2"), ...) 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
