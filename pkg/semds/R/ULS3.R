@@ -12,4 +12,5 @@ function(theta, Xim, DXm, SSk) {
     for (j in 2:(i-1)) f[i,j] <- S[i,j] - theta[i]*theta[j]
   }
   return(f[lower.tri(f, diag = TRUE)])
+  ##return(log(f[lower.tri(f, diag = TRUE)]))
 }

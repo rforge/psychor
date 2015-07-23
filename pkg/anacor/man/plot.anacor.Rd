@@ -57,7 +57,7 @@ and the row scores (red line x-axis) are used.
 The transformation plot (\code{"transplot"}) plots the row/column categories against the row/column scores. The Benzecri plot (\code{"benzplot"}) plots the observed distances against the fitted distances. It is assumed that the CA result is Benzecri scaled. The ordination diagram (\code{"orddiag"}) for CCA produces a joint plot and includes the column and row covariates based on intraset correlations. 
 }
 
-\references{de Leeuw, J., \& Mair, P. (2007). Simple and canonical correspondence analysis using the R package anacor. Preprint available at \url{http://gifi.stat.ucla.edu/anacor.pdf}}
+\references{De Leeuw, J. and Mair, P. (2009). Simple and Canonical Correspondence Analysis Using the R Package anacor. Journal of Statistical Software, 31(5), 1-18. \url{http://www.jstatsoft.org/v31/i05/}}
 \author{Jan de Leeuw, Patrick Mair}
 
 \seealso{\code{\link{anacor}}}

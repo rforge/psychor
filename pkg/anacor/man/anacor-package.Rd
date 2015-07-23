@@ -9,8 +9,8 @@ This package performs simple and canonical CA on a two-way frequency table (with
 \tabular{ll}{
 Package: \tab anacor\cr
 Type: \tab Package\cr
-Version: \tab 1.0-4\cr
-Date: \tab 2013-11-30\cr
+Version: \tab 1.0-6\cr
+Date: \tab 2015-07-23\cr
 License: \tab GPL\cr
 }
 The main function of the package is \code{anacor()} which performs simple CA. The input dataset \code{tab} is a (incomplete) frequency table. 
@@ -20,7 +20,7 @@ Utility functions to create various types of indicator matrices are implemented.
 }
 \author{Jan de Leeuw, Patrick Mair
 
-Maintainer: Jan de Leeuw <deleeuw@stat.ucla.edu>
+Maintainer: Patrick Mair <mair@fas.harvard.edu>
 }
 \references{
 de Leeuw, J. and Mair, P. (2009). Simple and Canonical Correspondence Analysis Using the R Package anacor. 

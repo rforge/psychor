@@ -1,6 +1,6 @@
 Package: semds
-Version: 0.0-2
-Date: 2015-04-05
+Version: 0.0-3
+Date: 2015-07-04
 Title: Structural Equation Multidimensional Scaling
 Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email =
     "mair@fas.harvard.edu"), person("Jose Fernando", "Vera", role = "aut", 

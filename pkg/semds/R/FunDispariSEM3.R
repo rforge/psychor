@@ -29,6 +29,11 @@ function(Xi, Xim, R, DXm, SSk, theta0, saturado) {
     Delta <- t(Delta)
  } else  {                                     ## Not satured model
     theta <- lsqnonlin(ULS3, theta0, Xim = Xim, DXm = DXm, SSk = SSk, options = list(tau = 1e-1, maxeval = 1000, tolg = 1e-7))$x
+        
+    ## FIXME: log version for lower bounds < 0 
+    #theta <- lsqnonlin(ULS3, log(theta0), Xim = Xim, DXm = DXm, SSk = SSk, options = list(tau = 1e-1, maxeval = 1000, tolg = 1e-7))$x
+    ##cat(theta,"\n")
+    
     Lambda <- theta[2:(R+1)]  ## Row vector.
     Sgm <- matrix(0, R, R)
     for (i in (2:(R+1))) Sgm[i-1,i-1] <- theta[i]^2+theta[R+2]
