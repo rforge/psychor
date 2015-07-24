@@ -1,5 +1,4 @@
-FunDispariSEM3 <-
-function(Xi, Xim, R, DXm, SSk, theta0, saturado) {
+FunDispariSEM3 <- function(Xi, Xim, R, DXm, SSk, theta0, saturado) {
 ## Input parameters:
     ## Xi matrix of effect indicators as column vectors
     ## Xim centered effect indicators
@@ -28,9 +27,10 @@ function(Xi, Xim, R, DXm, SSk, theta0, saturado) {
     Delta <- c(theta[2], theta[3]) %*% solve(rbind(c(theta[2]^2+theta[4], theta[2]*theta[3]), c(theta[2]*theta[3], theta[3]^2+theta[5]))) %*% rbind(x1, x2)
     Delta <- t(Delta)
  } else  {                                     ## Not satured model
-    theta <- lsqnonlin(ULS3, theta0, Xim = Xim, DXm = DXm, SSk = SSk, options = list(tau = 1e-1, maxeval = 1000, tolg = 1e-7))$x
+    #theta <- lsqnonlin(ULS3, theta0, Xim = Xim, DXm = DXm, SSk = SSk, options = list(tau = 1e-1, maxeval = 1000, tolg = 1e-7))$x
         
     ## FIXME: log version for lower bounds < 0 
+    theta <- nls.lm(theta0, lower = rep(0, length(theta0)), fn = ULS3, Xim = Xim, DXm = DXm, SSk = SSk)$par
     #theta <- lsqnonlin(ULS3, log(theta0), Xim = Xim, DXm = DXm, SSk = SSk, options = list(tau = 1e-1, maxeval = 1000, tolg = 1e-7))$x
     ##cat(theta,"\n")
     

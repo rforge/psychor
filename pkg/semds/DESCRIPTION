@@ -1,6 +1,6 @@
 Package: semds
-Version: 0.0-3
-Date: 2015-07-04
+Version: 0.1-0
+Date: 2015-07-24
 Title: Structural Equation Multidimensional Scaling
 Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email =
     "mair@fas.harvard.edu"), person("Jose Fernando", "Vera", role = "aut", 
@@ -8,8 +8,8 @@ Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email =
 Author: Patrick Mair [aut, cre], 
   Jose Fernando Vera [aut]
 Maintainer: Patrick Mair <mair@fas.harvard.edu>
-Imports: graphics, stats, pracma
-Depends: R (>= 3.1.0)
+Imports: graphics, stats, pracma, minpack.lm
+Depends: R (>= 3.0.0)
 Suggests: MASS
 Description: Fits a multidimensional scaling (MDS) model for multi-way one-mode asymmetric dissimilarity data. It uses an alternating estimation procedure in which the unknown symmetric dissimilarity matrix is estimated in a structural equation modeling (SEM) framework while the objects are represented in a low-dimensional space.
 License: GPL (>= 2)
