@@ -14,7 +14,7 @@
 
 \author{Jan de Leeuw\\University of California,\\Los Angeles \And 
         Kurt Hornik\\WU  Wirtschafts-\\universit\"at Wien  \And 
-        Patrick Mair \\WU Wirtschafts-\\universit\"at Wien}
+        Patrick Mair \\Harvard University}
 \Plainauthor{Jan de Leeuw, Kurt Hornik, Patrick Mair}
 
 \title{Isotone Optimization in \proglang{R}: Pool-Adjacent-Violators Algorithm (PAVA) and Active Set Methods}
