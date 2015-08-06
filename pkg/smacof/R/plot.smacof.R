@@ -9,6 +9,12 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
 # sphere ... if TRUE, sphere is drawn for spherical smacof
   
 {
+  ## --- check label lists
+  if (is.null(label.conf$label)) label.conf$label <- TRUE
+  if (is.null(label.conf$pos)) label.conf$pos <- 3
+  if (is.null(label.conf$col)) label.conf$col <- 1
+  if (is.null(label.conf$cex)) label.conf$cex <- 0.8
+  
   #--------------- utility function for circle drawing -----------------
   circle <- function(x, y, r, ...) {
     ang <- seq(0, 2*pi, length = 100)
@@ -24,11 +30,9 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
   #----------------- configuration plot ---------------------
   if (plot.type == "confplot") {
     
-    if (length(label.conf) != 4) stop("label.conf needs to be a list of length 4!")
-    names(label.conf) <- c("label", "pos", "col", "cex")
-    if (type == "n") label.conf$pos <- NULL
     
-    
+    #if (type == "n") label.conf$pos <- NULL
+      
     if (missing(main)) main <- paste("Configuration Plot") else main <- main
     if (missing(xlab)) xlab <- paste("Dimension", x1,sep = " ") else xlab <- xlab
     if (missing(ylab)) ylab <- paste("Dimension", y1,sep = " ") else ylab <- ylab

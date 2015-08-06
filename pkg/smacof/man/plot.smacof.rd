@@ -92,7 +92,7 @@ wish.dist <- sim2diss(wish, method = 7)
 res <- smacofSym(wish.dist, type = "ordinal")
 res
 plot(res, ylim = c(-0.6, 1))    ## aspect ratio = 1 (default)
-plot(res, label.conf = list(FALSE, 1, 1, 1), asp = NA) ## asp not 1, no labels
+plot(res, label.conf = list(FALSE), asp = NA) ## asp not 1, no labels
 plot(res, type = "n")           ## labels only (at configuration coordinates)
 
 ## Shepard plots

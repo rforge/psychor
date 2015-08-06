@@ -71,7 +71,7 @@ res <- mds(kinshipdelta)
 res
 summary(res)
 plot(res)
-plot(res, type = "p", label.conf = list(TRUE, 3, "darkgray", 0.8), pch = 25, col = "red")
+plot(res, type = "p", label.conf = list(label = TRUE, col = "darkgray"), pch = 25, col = "red")
 
 ## interval MDS
 res <- smacofSym(kinshipdelta, type = "interval")

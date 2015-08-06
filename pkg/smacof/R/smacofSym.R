@@ -126,3 +126,4 @@
   result 
 }
 
+mds <- smacofSym
