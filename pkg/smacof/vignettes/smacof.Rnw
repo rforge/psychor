@@ -1,5 +1,6 @@
 %\VignetteIndexEntry{SMACOF in R}
 %\VignetteEngine{knitr::knitr} 
+%\VignetteDepends{RgoogleMaps}
 
 \documentclass[article, nojss]{jss}
 \usepackage{amsmath, amsfonts, thumbpdf}
@@ -16,10 +17,10 @@
         Jan de Leeuw\\ University of California, Los Angeles \AND
         Patrick J. F. Groenen\\ Erasmus University Rotterdam
         }
-\title{Multidimensional Scaling Using Majorization: SMACOF in \proglang{R}}
+\title{Multidimensional Scaling in \proglang{R}: SMACOF}
 
-\Plainauthor{Jan de Leeuw, Patrick Mair} %% comma-separated
-\Plaintitle{Multidimensional Scaling Using Majorization: SMACOF in R} %% without formatting
+\Plainauthor{Patrick Mair, Jan de Leeuw, Patrick J. F. Groenen} %% comma-separated
+\Plaintitle{Multidimensional Scaling in R: SMACOF} %% without formatting
 \Shorttitle{SMACOF in \proglang{R}} %% a short title (if necessary)
 
 %% an abstract and keywords
@@ -54,11 +55,11 @@ offered by the corresponding package.
 %% The address of (at least) one author should be given
 %% in the following format:
 \Address{
-  Jan de Leeuw\\
-  Department of Statistics\\
-  University of California, Los Angeles\\
-  E-mail: \email{deleeuw@stat.ucla.edu}\\
-  URL: \url{http://www.stat.ucla.edu/~deleeuw/}
+  Patrick Mair\\
+  Department of Psychology\\
+  Harvard University\\
+  E-mail: \email{mair@fas.harvard.edu}\\
+  URL: \url{http://http://scholar.harvard.edu/mair}
 }
 %% It is also possible to add a telephone and fax number
 %% before the e-mail in the following format:
@@ -75,6 +76,7 @@ offered by the corresponding package.
 
 <<echo=FALSE>>=
 require(smacof)
+require(RgoogleMaps)
 @
 \section{Introduction}
 From a general point of view, \emph{multidimensional scaling} (MDS) is a set of 
@@ -126,7 +128,8 @@ between the points in the space match as well as possible the observed
 dissimilarities. By representing the results graphically, the configurations 
 represent the coordinates in the configuration plot. 
 
-SMACOF stands for Stress Majorization of a COmplicated Function. For MDS, majorization was introduced by \citet{gren} and further elaborated in 
+SMACOF stands for Stress Majorization of a COmplicated Function. 
+For MDS, majorization was introduced by \citet{gren} and further elaborated in 
 \citet{ling} and \citet{dlh80}. Kruskal's \emph{stress} \(\sigma(X)\) is defined by
 \begin{equation}
 \label{eq:stress}
@@ -145,105 +148,81 @@ imposing missing value structures: $w_{ij}=1$ if $\delta_{ij}$ is known and
 $w_{ij}=0$ if $\delta_{ij}$ is missing. However, other kinds of weighting 
 structures are allowed along with the restriction $w_{ij}\geq0$.
 
-Following \citet{gren}, stress, as given in (\ref{eq:stress}), can be decomposed 
-as \begin{align*}
-\label{eq:stdecomp}
-\sigma(X) & = \sum_{i<j} w_{ij}\delta_{ij}^2 + \sum_{i<j} w_{ij} d_{ij}^2(X) - 
-2\sum_{i<j} w_{ij} \delta_{ij} d_{ij}(X) = \\
-& = \eta^2_{\delta} + \eta^2(X) - 2\rho(X). 
-\end{align*}
-From restriction (\ref{eq:weights}) it follows that the first component 
-$\eta^2_{\delta} = n(n-1)/2$. The second component $\eta^2(X)$ is a weighted sum 
-of the squared distances $d^2_{ij}(X)$, and thus a convex quadratic.  The third 
-one, i.e. $-2\rho(X)$, is the negative of a  weighted sum of the $d_{ij}(X)$, 
-and is consequently concave.  
+Let us start with a very simple example where the input dissimilarities are actually (Euclidean) distances. 
+The data we use are from Michael Friendly's website (\url{http://www.datavis.ca/gallery/guerry/}) and 
+represent distances between French department centroids in 1830. We compute a two-dimensional ratio MDS (input dissimilarities not transformed) which reproduces the map and the resulting configurations correspond to map coordinates.
+In the left panel of Figure \ref{fig:france} we see that it is not quite the geographical map of France since it is rotated. Note that MDS is blind to geographic directions since it solely operates on dissimilarities/distances. In practice, this does not matter unless we work with geographical data. 
 
-The third component is the crucial term for majorization. Let us define the 
-matrix $A_{ij}=(e_i-e_j)(e_i-e_j)'$ whose elements equal 1 at $a_{ii}=a_{jj}=1$, 
--1 at $a_{ij}=a_{ji}$, and 0 elsewhere. Furthermore, we define 
-\begin{equation}
-\label{eq:Vmat}
-V = \sum_{i<j} w_{ij} A_{ij}
-\end{equation} 
-as the weighted sum of row and column centered matrices $A_{ij}$. Hence, we can 
-rewrite
-\begin{equation}
-\eta^2(X) = \mathbf{tr}\ X'VX.
-\end{equation}
+<<>>=
+data(Guerry)
+fit.guerry <- mds(Guerry)
+@
 
-For a similar representation of $\rho(X)$ we define the matrix 
-\begin{equation}
-\label{eq:Bmat}
-B(X)=\sum_{i<j} w_{ij} s_{ij}(X)A_{ij}
-\end{equation}
-where
-\[
-s_{ij}(X)=\begin{cases}\delta_{ij}/d_{ij}(X)&\text{ if }d_{ij}(X)>0,\\
-0&\text{ if }d_{ij}(X)=0.
-\end{cases}
-\]
-Using $B(X)$ we can rewrite $\rho(X)$ as
-\begin{equation}
-\label{rho}
-\rho(X) = \mathbf{tr}\ X'B(X)X
-\end{equation}
-and, consequently, the stress decomposition becomes
-\begin{equation}
-\label{eq:strdec}
-\sigma(X) = n(n-1)/2 + \mathbf{tr}\ X'VX - 2\mathbf{tr}\   X'B(X)X.
-\end{equation}
-At this point it is straightforward to find the majorizing function of 
-$\sigma(X)$. Let us denote the supporting point by $Y$ which, in the case of 
-MDS, is a $n \times p$ matrix of configurations. Similar to (\ref{eq:Bmat}) we 
-define
-\begin{equation}
-\label{eq:Bymat}
-B(Y) = \sum_{i<j} w_{ij} s_{ij}(Y)A_{ij}
-\end{equation}
-with
-\[
-s_{ij}(Y)=\begin{cases}\delta_{ij}/d_{ij}(Y)&\text{ if }d_{ij}(Y)>0,\\
-0&\text{ if }d_{ij}(Y)=0.
-\end{cases}
-\]
-The Cauchy-Schwartz inequality implies that for all pairs of configurations X 
-and Y, we have $\rho(X) \geq \mathbf{tr}\ X'B(Y)Y$. Thus we minorize the convex 
-function $\rho(X)$ with a linear function. This gives us a majorization of 
-\emph{stress}
-\begin{align}
-\label{eq:stdectr}
-\sigma(X) &= n(n-1)/2 + \mathbf{tr}\ X'VX - 2\mathbf{tr} X'B(X)X \nonumber \\
-& \leq n(n-1)/2 + \mathbf{tr}\ X'VX - 2\mathbf{tr}\ X'B(Y)Y = \tau(X,Y).
-\end{align}
-Obviously, $\tau(X,Y)$ is a (simple) quadratic function in $X$ which majorizes 
-stress. Finding its minimum analytically involves
-\begin{equation}
-\frac{\partial \tau(X,Y)}{\partial X} = 2VX - 2B(Y)Y = \mathbf{0}.
-\end{equation}
-To solve this equation system we use the Moore-Penrose inverse $V^+ = (V + 
-n^{-1}\boldsymbol{11}')^{-1}-n^{-1}\boldsymbol{11}'$ which leads to 
-\begin{equation}
-\overline{X} = V^+ B(Y)Y.
-\end{equation}
-This is known as the Guttman transform \citep{gu} of a configuration. Note that 
-if $w_{ij}=1$ for all $i\not= j$ we have $V=2n(I-n^{-1}\boldsymbol{11}')$ and 
-the Guttman transform simply becomes $\overline{X} = n^{-1}B(Y)Y$. 
 
-Since majorization is an iterative procedure, in step $t=0$ we set $Y:=X^{(0)}$ 
-where $X^{(0)}$ is a start configuration. Within each iteration $t$ we compute 
-$\overline{X}^{(t)}$ which, for simple SMACOF, gives us the update $X^{(t)}$. 
-Now the stress $\sigma(X^{(t)})$ can be calculated and we stop iterating if 
-$\sigma(X^{(t)}) - \sigma(X^{(t-1)}) < \epsilon$ or a certain iteration limit is 
-reached. Majorization guarantees a series of non-increasing stress values with a 
-linear convergence rate \citep{delcon}. As shown in \citet{Groenen+Heiser:1996} 
-local minima are more likely to occur in low-dimensional solutions (especially 
-unidimensional scaling). For high-dimensional solutions local minima are rather 
-unlikely whereas fulldimensional scaling has no local minimum problem. 
+<<france-plot, eval=FALSE>>=
+op <- par(mfrow = c(1,2))
+plot(fit.guerry)
+theta <- 82*pi/180            ## degrees to radians
+rot <- matrix(c(cos(theta), sin(theta), -sin(theta), cos(theta)), ncol = 2)
+configs82 <- fit.guerry$conf %*% rot                ## rotated configurations
+francemap1 <- GetMap(destfile="mypic1.png", zoom = 6, center = c(46.55, 3.05), 
+                     maptype = "satellite")
+PlotOnStaticMap(francemap1)
+text(configs82*280, labels = rownames(configs82), col = "white", cex = 0.7)
+par(op)
+@
 
+\begin{figure}
+\begin{center}  
+<<france-plot1, echo=FALSE, fig.width=12, fig.height=6, dev='postscript'>>=
+<<france-plot>>
+@
+\end{center}
+\caption{\label{fig:france} Left panel: original MDS solution. Right panel: rotated MDS solution with French map as background.}
+\end{figure}
+
+The right panel in Figure \ref{fig:france} shows a rotated solution (82 degrees) and the coordinates are multiplied by a dilation 
+factor of 280. Both values are determined by trial-and-error. More sophisticated rotation/translation/dilation configuration 
+transformations will be explained in the section on Procrustes analysis. 
+
+In practice, researchers do not have Euclidean distances as data. Having a regular subject $\times$ variables data frame, 
+one can compute proximities such as correlations or various kind of distance measures. The \pkg{smacof} package always
+requires dissimilarities as input. Having similarities such as correlations, the \code{sim2diss} helper function offers possibilities for corresponding transformations. 
+
+The next dataset is based on ratings of \Sexpr{nrow(RockHard)} records in a German Heavy Metal magazine called Rock Hard, collected in 2013. For the moment we are only interested in the judges who rated each record on a scale from 0 (super bad) 
+to 10 (incredibly awesome), .5 ratings were allowed. We use an MDS to explore which judges have a similar taste. 
+We use the Euclidean distance between the judges to compute the input dissimilarities. Note that some input 
+dissimilarities are missing (more on that in Section \ref{sec:missing}). We compute a three-dimensional ratio MDS solution.
+
+<<>>=
+ratings <- RockHard[,5:18]
+rockdiss <- dist(t(ratings))
+fit.rock <- mds(rockdiss, ndim = 3)
+fit.rock
+@
+
+<<judge-plot, eval=FALSE>>=
+op <- par(mfrow = c(1,2))
+plot(fit.rock, plot.dim = c(1,2), main = "Configurations D1 vs. D2")
+plot(fit.rock, plot.dim = c(1,3), main = "Configurations D1 vs. D3")
+par(op)
+@
+
+\begin{figure}
+\begin{center}  
+<<judge-plot1, echo=FALSE, fig.width=12, fig.height=6, dev='postscript'>>=
+<<judge-plot>>
+@
+\end{center}
+\caption{\label{fig:judge} Left panel: Configuration plot dimension 1 vs. 2. Right panel: Configuration plot dimension 1 vs. 3.}
+\end{figure}
+
+Figure \ref{fig:judge} shows two configuration plots for the corresponding dimensions. Naturally, one could also produce 
+a three-dimensional configuration plot using either the \pkg{scatterplot3d} or the \pkg{rgl} package. 
 
 \subsection{Transforming the dissimilarities}
 \label{sec:nmsmacof}
-An important MDS issue in practice concerns the scale level we want to assign to the proximities/dissimilarities. 
+An important MDS issue in practice concerns the scale level we want to assign to the dissimilarities. 
 This leads to the basic classical distinction between \emph{metric} and \emph{nonmetric} MDS. 
 So far we did not consider transformations on the dissimilarities $\delta_{ij}$.  
 MDS was used to represent the data such that their ratios would correspond to the ratios of the distances in the MDS space. This is called \emph{ratio MDS} and is a special case of metric MDS. 
@@ -320,6 +299,7 @@ par(op)
 \end{figure}
 
 \subsection{Missing Values}
+\label{sec:missing}
 Sometimes we have the case where some input dissimilarities are missing. As usual in \proglang{R}, they should be coded 
 as \code{NA}. In order to perform an MDS computation, a proper specification of the weight matrix $W$ does the trick: 
 $w_{ij} = 0$ if $\delta_{ij}$ is missing; $w_{ij} = 1$ (or any other known weight), if $\delta_{ij}$ non-missing. 
@@ -1052,268 +1032,64 @@ West German configuration with Procrustes transformation.}
 
 
 \subsection{MDS Jackknife}
+\citet{mdsjack} proposed a jackknife strategy for MDS in order to examine the stability of a solution. 
+The MDS jackknife approach, as implemented via the \code{jackknife()} function in \pkg{smacof} computes 
+$i = 1, \ldots, n$ additional solutions with configurations $X_i^{\ast}$. Note that  $X_i^{\ast}$ denotes the 
+solution where object $i$ is left out. Each of these configurations is 
+subject to a Procrustes transformation with target configuration X, i.e. the original solution. In addition, the 
+average (centroid) jackknife solution $\bar X^{\ast}$ can be computed. It total, we have $n+2$ comparable 
+configurations which can be represented in a single plot. 
+
+As descriptive measures a stability measure \citep{Heiser+Meulman:1983} can be computed as follows:
+\[
+ST = 1-\frac{\sum_{i=1}^n \|X_i^{\ast} - \bar X^{\ast}\|^2}{\sum_{i=1}^n \|X_i^{\ast}\|^2}.
+\]
+
+It can be interpreted as the ratio of between and total variance. To measure the cross-validity, i.e.
+comparing the ``predicted'' configuration of object $i$ as the $i$-th row in $\bar X^{\ast}$ with 
+the actual configuration ($i$-th row in $X$), we can compute
+
+\[
+CV = 1-\frac{n \|X - \bar X^{\ast}\|^2}{\sum_{i=1}^n \|X_i^{\ast}\|^2}.
+\]
+
+Finally, the dispersion around the original solution $X$ can be expressed as 
+
+\begin{align*}
+DI &= \frac{1}{n} \sum_{i=1}^n \|X_i^{\ast} - X \|^2 \\
+   &= \frac{1}{n} \sum_{i=1}^n \|X_i^{\ast} - \bar X^{\ast} \|^2 + \|X - \bar X^{\ast}\|^2 \\
+   &= 2 - (ST + CV)
+\end{align*}
+
+As an example let's just look at the Lawler dataset once more. First we fit a two-dimensional interval 
+MDS on the data and then we perform the leave-one-out jackknife. The resulting plot is given 
+in Figure \ref{fig:jack}. Note that the labels denote the original solution $X$, the small dots the individual 
+configurations $X_i^{\ast}$, and the bigger dots the corresponding centroid $\bar X^{\ast}$, connected to each 
+$X_i^{\ast}$. 
+
+<<jack-plot, eval=FALSE>>=
+fit.lawler <- mds(LawlerD, type = "interval")
+jackfit <- jackknife(fit.lawler)
+jackfit
+plot(jackfit)
+@
+
+\begin{figure}
+\begin{center}  
+<<jack-plot1, echo=FALSE, fig.width = 8, fig.height = 8, dev='postscript'>>=
+<<jack-plot>>
+@
+\end{center}
+\caption{\label{fig:jack} Jackknife MDS plot: The labels denote the original MDS configuration. The small dots the 
+configurations resulting from leave-one-out procedure. The big dots, connected to the small dots, denote their centroids.}
+\end{figure}
 
 
- 
+\section{Discussion and Outlook}
+The \pkg{smacof} package provides the most comprehensive framework to perform MDS \proglang{R}. Future implementations 
+will include nonmetric unfolding \citep{busgrohei} and modeling asymmetric data as given in \citet{borg-groenen-2}, Chapter 23. 
 
- 
-%-------------------------- package description -------------------------------------- 
-% \section[The R package smacof]{The \proglang{R} package \pkg{smacof}}
-% \label{sec:package}
-% So far there does not exist a comprehensive \proglang{R} package for MDS. There 
-% are functions in \pkg{MASS} to perform classical MDS, Sammon mapping, and 
-% non-metric MDS. For the latter variant there are also some functionalities in 
-% \pkg{vegan} \citep{vegan:2007}, \pkg{labdsv} \citep{labdsv:2006}, \pkg{ecodist} 
-% \citep{ecodist:2007}, and \pkg{xgobi} \citep{xgobi:2005}. Individual differences 
-% MDS is implemented in the \pkg{SensoMineR} \citep{sensominer:2007} package. 
-% 
-% In the current version of \pkg{smacof} ellipsoids, parabolas, hyperbolas as well 
-% as geodesic distances are not implemented. The main functions are 
-% \code{smacofSym()} for basic (symmetric) SMACOF, \code{smacofIndDiff()} for 
-% three-way data, \code{smacofConstraint()} for SMACOF with external constraints, 
-% and, finally, \code{smacofSphere.primal()} and \code{smacofSphere.dual()} for 
-% sphere projections. Print, summary, and residual S3 methods are provided. The 
-% two-dimensional plot options are the configuration plot, Shepard diagram, 
-% residual plot, and stress decomposition diagram. The configuration plot is 
-% provided for three-dimensional solutions as well (static and dynamic).  
-% 
-% \subsection{SMACOF for Ekman's color data}
-% \citet{ekman} presents similarities for 14 colors (wavelengths from 434 to 674 
-% nm). The similarities are based on a rating by 31 subjects where each pair of 
-% colors was rated on a 5-point scale (0 = no similarity up to 4 = identical). 
-% After averaging, the similarities were divided by 4 such that they are within 
-% the unit interval. 
-% 
-% We perform a two-dimensional basic SMACOF solution using \code{smacofSym()} 
-% which uses the classical scaling solution \citep{torgerson} as default starting 
-% configuration. Note that all SMACOF functions allow for user-specified starting 
-% configurations as well.
-% 
-% We start with the transformation of similarities into dissimilarities by 
-% subtracting them from 1. Then we perform a two-dimensional basic SMACOF and a 
-% quadratic SMACOF, projecting the configurations on a sphere. Both computations 
-% are performed in a non-metric manner. 
-% 
-% <<>>=
-% require("smacof")
-% data("ekman")
-% ekman.d <- sim2diss(ekman, method = 1)
-% res.basic <- smacofSym(ekman.d, type = "ordinal")
-% @
-% <<eval = FALSE>>=
-% res.sphere <- smacofSphere(ekman.d, type = "ordinal")
-% @
-% 
-% <<eval = FALSE>>=
-% plot(res.basic, main = "Configurations Basic SMACOF")
-% plot(res.sphere, main = "Configurations Sphere SMACOF")
-% @
-% 
-% 
-% \begin{figure}
-% \begin{center}
-% \includegraphics[height=70mm, width=70mm]{ekmanbasic.pdf}
-% \includegraphics[height=70mm, width=70mm]{ekmansphere.pdf} 
-% \includegraphics[height=14mm, width=95mm]{spectrum.png}
-% \caption{\label{fig:ekman} Configuration plots and color wavelengths.}
-% \end{center}
-% \end{figure}
-% 
-% The resulting configuration plots are given in Figure \ref{fig:ekman}. For the 
-% nonmetric basic SMACOF solution we see that the wavelength configurations are 
-% approximately circularly arranged. Starting with the lowest wavelength we see 
-% that the pairs 434-445 and 465-472 correspond to bluish, 490 to turqoise, the 
-% set of 504-555 to greenish, 584-610 to yellow-orange, and finally 628-674 to 
-% reddish. Since the color palette is commonly represented as a circle, it is 
-% somewhat natural to compute a two-dimensional (nonmetric) spherical SMACOF 
-% solution which can be found on the right-hand side of Figure \ref{fig:ekman}. 
-% Obviously, the configurations lie perfectly on a circle with a radius 
-% $\lambda=.0714$. 
-% 
-% Now we try to evaluate the basic solution by comparing the SMACOF configuration 
-% to that obtained from other data. We can use the CIE Luv space \citep[see 
-% e.g.][]{Fairchild:2005} which is extensively used for applications such as 
-% computer graphics which deal with colored lights. It is based on human average 
-% color matching data and wavelength discrimination data and, thus, it is quite 
-% different than the Ekman judgments based on large color differences. Let us 
-% first obtain the Luv coordinates in \proglang{R}. First, we read-in the CIE XYZ 
-% 31 tristimulus values for an equal energy spectrum at the wavelengths used in 
-% the Ekman dataset from an online site. The last line in the code below adjusts 
-% these to equiluminance (a constant luminance plane).
-% 
-% \begin{figure}[t]
-% \begin{center}
-% \includegraphics[height = 90mm, width = 90mm]{ekmanLuv.pdf}
-% \caption{\label{fig:ekmanluv}Ekman configurations vs. Luv distances.}
-% \end{center}
-% \end{figure} 
-% 
-% <<eval = FALSE>>=
-% wl <- c(434, 445, 465, 472, 490, 504, 537, 555, 584, 600, 610, 628, 651, 674)
-% CIE31 <- read.table("http://cvision.ucsd.edu/database/data/cmfs/ciexyz31_1.txt", 
-% header = FALSE, sep = ",", colClasses = rep("numeric", 4), nrows = 471)
-% names(CIE31) <- c("WL", "xbar", "ybar", "zbar")
-% ekmanWL <- subset(CIE31, WL %in% wl)
-% ekmanWL[, -1] <- ekmanWL[, -1]/ekmanWL[, "ybar"]
-% @
-% 
-% In the next step for any given wavelength we extract the distance to the next 
-% higher one from the final MDS configuration. We do the same thing for the Luv 
-% data:
-% 
-% <<eval = FALSE>>=
-% ekman.mds.wld <- res.basic$confdiss[cumsum(c(1, 13:2))]
-% require(grDevices)
-% ekmanLuv <- convertColor(ekmanWL[, -1], "XYZ", "Luv")
-% Luv.dist <- dist(ekmanLuv)
-% Luv.wld <- Luv.dist[cumsum(c(1, 13:2))]
-% @
-% 
-% On the x-axis we plot the wavelengths and on the y-axis the distances to the 
-% subsequent one. 
-% 
-% <<eval = FALSE>>=
-% plot(wl[-14], ekman.mds.wld, type = "b", ylim = c(0.05, 0.9), xlab = 
-% "wavelength", ylab = "distance", main = "Ekman MDS vs. Luv")
-% lines(wl[-14], Luv.wld/400, col = "red", type = "b")
-% legend(600, 0.9, c("Ekman", "Luv"), lty = 1, col = c("black", "red"))
-% @
-% 
-% Note that the division of the Luv distances by 400 is arbitrary. The result is 
-% given in Figure \ref{fig:ekmanluv}. It shows striking similarities in the 
-% distances across different wavelengths. 
-%  
-% \subsection{Breakfast rating for rectangular SMACOF}
-% As a metric unfolding example we use the breakfast dataset from \citet{grerao} 
-% which is also analyzed in \citet[][Chapter 14]{borg-groenen-2}. 42 individuals 
-% were asked to order 15 breakfast items due to their preference. These items 
-% are: 
-% \code{toast} = toast pop-up, \code{butoast} = buttered toast, \code{engmuff} = 
-% English muffin and margarine, \code{jdonut} = jelly donut, \code{cintoast} = 
-% cinnamon toast, \code{bluemuff} = blueberry muffin and margarine, \code{hrolls} 
-% = hard rolls and butter, \code{toastmarm} = toast and marmalade, \code{butoastj} 
-% = buttered toast and jelly, \code{toastmarg} = toast and margarine, 
-% \code{cinbun} = cinnamon bun, \code{danpastry} = Danish pastry, \code{gdonut} = 
-% glazed donut, \code{cofcake} = coffee cake, and \code{cornmuff} = corn muffin 
-% and butter. For this $42 \times 15$ matrix we compute a rectangular SMACOF 
-% solution. 
-% 
-% <<>>=
-% data("breakfast")
-% res.rect <- smacofRect(breakfast, itmax = 1000)
-% @
-% 
-% <<eval=FALSE>>=
-% plot(res.rect, joint = TRUE, xlim = c(-10, 10), asp = 1)
-% plot(res.rect, plot.type = "Shepard", asp = 1)
-% @
-% 
-% \begin{figure}
-% \begin{center}
-% \includegraphics[height=70mm, width=70mm]{jconfbfast.pdf}
-% \includegraphics[height=70mm, width=70mm]{shepbfast.pdf} 
-% \caption{\label{fig:breakfast}Joint configuration plot/Shepard diagram for 
-% breakfast data.}
-% \end{center}
-% \end{figure}
-% 
-% The configuration plot on the left hand side in Figure \ref{fig:breakfast} 
-% generated by the method \code{plot.smacofR()} represents the coordinates of the 
-% breakfast types and the rater jointly. First, let us focus on the breakfast 
-% configurations. At the top and top-right we see a large toast cluster or, since 
-% hard rolls are there too, we could characterize it also as bread cluster. At the 
-% bottom we can identify a muffin cluster including the cinnamon toast. Moving 
-% more to the right the cinnamon bun and the coffee cake are grouped together. 
-% Finally, at the top-right corner the jelly and glazed donut form a donut cluster 
-% with the danish pastry close to them. 
-% 
-% Examining the raters we see, from a general perspective, that the individuals 
-% lie pretty much in the center of the configuration plots. This is reasonable 
-% since each rater was supposed to rate each breakfast type on an ordinal level. 
-% An interesting group of individuals (raters 32, 36, 37, 39) appears in the toast 
-% cluster. Looking closer at their ratings in the data file, their preferences in 
-% general are very similar, and, of course, the toasts are among their first 
-% preferences.
-% 
-% The Shepard diagram on the right-hand side in Figure \ref{fig:breakfast} 
-% represents the observed distances on the absciassae and the resulting 
-% configuration distances based on the final SMACOF solution on the ordinate. An 
-% isotonic regression is fitted through the corresponding pairs of observations. 
-% The Shepard diagram is useful for the goodness-of-fit examination of the 
-% results. 
-% 
-% \subsection{Three-way SMACOF based on bread ratings}
-% The data set we provide for three-way SMACOF is described in \citet{Bro:1998}. 
-% The raw data consist of ratings of 10 breads on 11 different attributes carried 
-% out by 8 raters. Note that the bread samples are pairwise replications: Each of 
-% the 5 different breads, which have a different salt content, was presented twice 
-% for rating. The attributes are bread odor, yeast odor, off-flavor, color, 
-% moisture, dough, salt taste, sweet taste, yeast taste, other taste, and total. 
-% First we fit an unconstrained solution followed by a model with identity 
-% restriction. 
-% 
-% <<>>=
-% data("bread")
-% res.uc <- smacofIndDiff(bread)
-% res.uc
-% @
-% 
-% <<>>=
-% res.id <- smacofIndDiff(bread, constraint = "identity")
-% res.id
-% @
-% 
-% <<eval = FALSE>>=
-% plot(res.uc, main = "Group Configurations Unconstrained", xlim = c(-1.2,1), ylim 
-% = c(-1.2,1), asp = 1)
-% plot(res.id, main = "Group Configurations Identity", xlim = c(-1.2,1), ylim = 
-% c(-1.2,1), asp = 1)
-% plot(res.uc, plot.type = "resplot", main = "Residuals Unconstrained", xlim = 
-% c(2,14), ylim = c(-3,3), asp = 1)
-% plot(res.id, plot.type = "resplot", main = "Residuals Indentity", xlim = 
-% c(2,14), ylim = c(-3,3), asp = 1)
-% @
-% 
-% \begin{figure}[hbt]
-% \begin{center}
-% \includegraphics[height=70mm, width=70mm]{inddiffconfuc.pdf}
-% \includegraphics[height=70mm, width=70mm]{inddiffconfid.pdf}
-% \includegraphics[height=70mm, width=70mm]{inddiffresuc.pdf}
-% \includegraphics[height=70mm, width=70mm]{inddiffresid.pdf}
-% \caption{\label{fig:bread}Group configuration and residual plots for bread 
-% data.}
-% \end{center}
-% \end{figure}
-% 
-% The identity restriction leads to the same configurations across the raters. The 
-% stress value for the identity solution is considerably higher than for the 
-% unconstrained solution. The unconstrained solution reflects nicely the bread 
-% replication pairs. Their configurations at the top of Figure \ref{fig:bread} are 
-% very close to each other. The residual plots on the bottom show a descending 
-% trend for both solutions: small distances are systematically overestimated, 
-% large distances are underestimated. Of course, the residuals for the 
-% unconstrained solution are in general smaller than those for the identity 
-% constrained. 
-% 
-% 
-% \section{Discussion}
-% In this final section we will discuss some relations to other models as well as 
-% some future extensions of the package. 
-% 
-% MDS is also related to correspondence analysis (CA) which, within the context of 
-% this special issue, is provided by the package \pkg{anacor}. CA is basically a 
-% two-mode technique, displaying row and column objects. From this point of view 
-% CA is related to the unfolding MDS, or, in our framework, to rectangular SMACOF 
-% from Section \ref{sec:rect}. 
-% 
-% Similar to CA, so far the \pkg{smacof} package can only handle positive 
-% dissimilarities. In subsequent versions we will allow also for negative 
-% dissimilarities. Furthermore, projections onto ellipsoids, hyperbolas and 
-% parabolas will be possible. The formal groundwork was given in Section 
-% \ref{sec:cmda}. This also includes the implementation of geodesic distances from 
-% Section \ref{sec:geodesic}. Furthermore, we can think of implementing additional 
-% plot types as given in \citet{Chen+Chen:2000}.  
-% 
+
 \bibliography{smacof}
 \end{document}
 

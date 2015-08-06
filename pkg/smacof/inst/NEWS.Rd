@@ -14,6 +14,7 @@
     \item Unidimensional scaling added (all permutations): \code{uniscale}. 
     \item Procrustes added: \code{Procrustes} including print and plot methods.    
     \item Function \code{torgerson} (for classical scaling) is now exported. 
+    \item Bug in \code{smacofConstraint} for external missing values removed.
 }
 }
 \section{Changes in Version 1.6-0}{

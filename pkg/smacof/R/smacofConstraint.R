@@ -70,7 +70,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
       } else if(constraint.trans=="mspline"){
         constraint.trans <- "mspline"
       }
-      extvars[[s]] <- transPrep(external[,s]-mean(external[,s]),
+      extvars[[s]] <- transPrep(external[,s]-mean(external[,s], na.rm = TRUE),
                                 trans = constraint.trans, 
                                 spline.intKnots = constraint.spline.intKnots, 
                                 spline.degree = constraint.spline.degree,
