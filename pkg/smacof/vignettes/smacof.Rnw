@@ -34,8 +34,7 @@ called SMACOF and it is implemented in an \proglang{R} package of the same name
 which is presented in this article. We extend the basic SMACOF theory 
 in terms of configuration constraints, three-way data, unfolding models, and 
 projection of the resulting configurations onto spheres and other quadratic 
-surfaces. 
-Various examples are presented to show the possibilities of the SMACOF approach 
+surfaces. Various examples are presented to show the possibilities of the SMACOF approach 
 offered by the corresponding package.
 }
 
@@ -74,18 +73,17 @@ offered by the corresponding package.
 
 \begin{document}
 
-<<echo=FALSE>>=
+<<echo=FALSE, hide=TRUE>>=
 require(smacof)
 require(RgoogleMaps)
 @
 \section{Introduction}
-From a general point of view, \emph{multidimensional scaling} (MDS) is a set of 
-methods for discovering ``hidden'' structures in multidimensional data. Based on 
-a proximity matrix derived from variables measured on objects as input entity, 
-these distances are mapped on a lower dimensional (typically two or three 
-dimensions) spatial representation. A classical example concerns airline 
-distances between US cities in miles as symmetric input matrix. Applying MDS, it 
-results in a two-dimensional graphical representation reflecting the US map 
+\emph{Multidimensional scaling} (MDS) is a family of scaling 
+methods for discovering structures in multidimensional data. Based on 
+an proximity matrix, typically derived from variables measured on objects as input entity, 
+these dissimilarities are mapped on a low-dimensional spatial representation. A classical example concerns airline 
+distances between cities in miles as symmetric input matrix. Applying MDS, it 
+results in a two-dimensional graphical representation reflecting the map 
 \citep[see][]{Kruskal+Wish:1978}. Depending on the nature of the original data 
 various proximity/dissimilarity measures can be taken into account. For an 
 overview see \citet[][Chapter 1]{Cox+Cox:2001} and an implementation of numerous 
@@ -96,7 +94,6 @@ social and behavioral sciences, marketing, biometrics, and ecology.
 For introductory MDS reading we refer to 
 \citet{Kruskal+Wish:1978} and more advanced topics can be found in 
 \citet{borg-groenen-2} and \citet{Cox+Cox:2001}. 
-
 
 The \pkg{smacof} package provides a broad variety of MDS implementations. 
 The basic implementation is symmetric SMACOF, i.e. MDS on symmetric input
@@ -186,11 +183,10 @@ factor of 280. Both values are determined by trial-and-error. More sophisticated
 transformations will be explained in the section on Procrustes analysis. 
 
 In practice, researchers do not have Euclidean distances as data. Having a regular subject $\times$ variables data frame, 
-one can compute proximities such as correlations or various kind of distance measures. The \pkg{smacof} package always
-requires dissimilarities as input. Having similarities such as correlations, the \code{sim2diss} helper function offers possibilities for corresponding transformations. 
+one can compute proximities such as correlations or various kind of distance measures. Having similarities such as correlations, the \code{sim2diss} helper function offers possibilities for corresponding transformations. Note that the \pkg{smacof} package always requires dissimilarities as input. 
 
-The next dataset is based on ratings of \Sexpr{nrow(RockHard)} records in a German Heavy Metal magazine called Rock Hard, collected in 2013. For the moment we are only interested in the judges who rated each record on a scale from 0 (super bad) 
-to 10 (incredibly awesome), .5 ratings were allowed. We use an MDS to explore which judges have a similar taste. 
+The next dataset is based on ratings of \Sexpr{nrow(RockHard)} records by \Sexpr{ncol(RockHard)-4} judges in a German Heavy Metal magazine called Rock Hard, collected in 2013. For the moment we are only interested in the judges who rated each record on a scale from 0 (super bad) 
+to 10 (incredibly awesome). Half point ratings were allowed. We use an MDS to explore which judges have a similar taste. 
 We use the Euclidean distance between the judges to compute the input dissimilarities. Note that some input 
 dissimilarities are missing (more on that in Section \ref{sec:missing}). We compute a three-dimensional ratio MDS solution.
 
@@ -228,7 +224,8 @@ So far we did not consider transformations on the dissimilarities $\delta_{ij}$.
 MDS was used to represent the data such that their ratios would correspond to the ratios of the distances in the MDS space. This is called \emph{ratio MDS} and is a special case of metric MDS. 
 
 The most popular approach, especially in the Social Sciences, are transformations that preserve the rank order of the dissimilarities, i.e. we assume that the dissimilarities are on an ordinal scale level. If such a transformation $f$ obeys only the monotonicity constraint $\delta_{ij} < \delta_{i'j'} \Rightarrow f(\delta_{ij}) < f(\delta_{i'j'})$, within an MDS 
-context it is referred to as \emph{ordinal MDS} or nonmetric MDS. The resulting $\hat d_{ij} = f(\delta_{ij})$ are commonly denoted as \emph{disparities} which have to be chosen in an optimal way. Straightforwardly, 
+context it is referred to as \emph{ordinal MDS} or nonmetric MDS \citep{k64b}. 
+The resulting $\hat d_{ij} = f(\delta_{ij})$ are commonly denoted as \emph{disparities} which have to be chosen in an optimal way. Straightforwardly, 
 the stress function (for the symmetric case) becomes 
 \begin{equation}
 \label{eq:nmstress}
@@ -256,20 +253,18 @@ When solving the monotone (or isotonic) regression problem in step $t$, one
 particular tie approach has to be taken into account. In MDS literature this 
 problem is referred to as \emph{primary monotone least squares regression} and 
 \pkg{smacof} solves it by means of the \emph{pooled-adjacent-violators 
-algorithm} \citep[PAVA,][]{Ayer+Brunk+Ewing+Reid+Silverman:1955, bbbb}. This 
-package performs monotone regression using weighted means (i.e., weighted with 
-elements $w_{ij}$). 
+algorithm} \citep[PAVA,][]{Ayer+Brunk+Ewing+Reid+Silverman:1955, bbbb}. 
 
 Another, even simpler type of transformation we can consider is a linear transformation where 
 $\hat d_{ij} = f(\delta_{ij}) = a + b\delta_{ij}$. This strategy is called \emph{interval MDS} and 
 plays and important role in modern metric MDS applications. In interval MDS, then, the ratio of differences of
 distances should be equal to the corresponding ratio of differences in the data.
-Having a linear transformation, the natural extension is to think of nonlinear transformations. We can think of simple polynomial 
-transformations, logarithmic and exponential transformations, or, even more sophisticated, (monotone) spline transformations. Splines are piecewise polynomial functions; the ``pieces'' are determined by knots and the spline degree. Within an MDS context, mostly monotone splines are relevant which lead to a smoother transformation of the $\delta_{ij}$'s compared to monotone regression. In the \pkg{smacof} we use $I$-splines (integrated splines), a special type of monotone splines. More technical MDS spline details can be found in \citet[][Chapter 9.6]{borg-groenen-2}. 
+Having a linear transformation, we can naturally think of nonlinear transformations as well. This could be a simple polynomial 
+transformation, logarithmic and exponential transformations, or, even more sophisticated, (monotone) spline transformations. Splines are piecewise polynomial functions; the ``pieces'' are determined by knots and the spline degree. Within an MDS context, mostly monotone splines are relevant which lead to a smoother transformation of the $\delta_{ij}$'s compared to monotone regression. In the \pkg{smacof} we use $I$-splines (integrated splines), a special type of monotone splines. More technical MDS spline details can be found in \citet[][Chapter 9.6]{borg-groenen-2}. 
 
 Transformations can be nicely shown in a Shepard diagram \citep[see][for a general description]{deLeeuw+Mair:2015}. A Shepard diagram consists of a scatterplot between the dissimilarities $\delta_{ij}$ and the configuration distances $d_{ij}(X)$. In addition, it shows the disparities $\hat d_{ij}$ and from this we see nicely how the $\delta_{ij}$ are transformed. 
-Some examples of various transformations using the kinship dissimilarity data \citep{Rosenberg+Kim:1975} are given in Figure 
-\ref{fig:shepard}. 
+Some examples of various transformations using the kinship dissimilarity data \citep{Rosenberg+Kim:1975} based 
+in 15 kinskip terms are given in Figure \ref{fig:shepard}. 
 
 <<shepard-plot, eval=FALSE>>=
 fit.interval <- mds(kinshipdelta, type = "interval")
@@ -303,24 +298,16 @@ par(op)
 Sometimes we have the case where some input dissimilarities are missing. As usual in \proglang{R}, they should be coded 
 as \code{NA}. In order to perform an MDS computation, a proper specification of the weight matrix $W$ does the trick: 
 $w_{ij} = 0$ if $\delta_{ij}$ is missing; $w_{ij} = 1$ (or any other known weight), if $\delta_{ij}$ non-missing. 
-The \pkg{smacof} package does this $W$ specification automatically if missing dissimilarities are found. Here is a small example 
-where we artifically puts some missing values into the management performance dataset \citep{Lawler:1967}. Note 
-that the data, as provided in the package, reflect correlations. 
-
-<<>>=
-Lawler.mis <- sim2diss(Lawler)
-Lawler.mis[5] <- Lawler.mis[13] <- Lawler.mis[22] <- NA
-fit.mis <- mds(Lawler.mis, ndim = 3)
-@
-
+The \pkg{smacof} package does this $W$ specification automatically if missing dissimilarities are found, the user 
+does not have to worry about. We have already seen a corresponding example using the RockHard data. 
 
 \subsection{Starting configurations}
 MDS often ends up in a local minimum, especially for low-dimensional solutions. By default, \pkg{smacof} performs classical 
-scaling to determine good starting configurations. A feasible strategy to check whether the algorithm ended up in a global 
-minimum is to try several random starting configurations and pick the one with the lowest stress value (of course, it can not 
-be guaranteed that this solution is actually a global minimum). Here is an small example on the full Lawler dataset, 
-based on 20 random starts and the standard solution based on classical scaling starting configurations.
- 
+scaling to determine (hopefully good) starting configurations. A common strategy to check whether the algorithm ended up in a global minimum is to try several random starting configurations and pick the one with the lowest stress value (of course, it can not be guaranteed that this solution is actually a global minimum). For an example we use the Lawler dataset 
+\citep{Lawler:1967} examining the performance of managers. There are three criteria or traits 
+(T1 = quality of output, T2 = ability to generate output, T3 = demonstrated effort to perform) and three methods
+(M1 = rating by superior, M2 = peer rating, M3 = self-rating). We look at the stress values of the default classical 
+scaling starting solution and 20 random starts. 
 
 <<>>=
 LawlerD <- sim2diss(Lawler)
@@ -333,15 +320,15 @@ for(i in 1:20) {
   stressvec[i] <- fitran$stress   
 }
 stressvec                          ## stress values
-which.min(stressvec)               ## which one is the best solution?
 @
 
-We see that the seventh solution is the best one of the random starts; and it is even better than the one based on classical 
+We see that the \Sexpr{which.min(stressvec)}th solution is the best one of the random starts; and it is even better than the one based on classical 
 scaling starting values. 
 
 
 \subsection{MDS goodness-of-fit}
-The goodness-of-fit of MDS solutions is typically judged by the stress value. The raw stress value itself is not very 
+MDS goodness-of-fit should be judged by the normalized stress value, the stress-per-point, the Shepard diagram, 
+and some tests. The core output value in MDS the stress value. The raw stress value itself is not very 
 informative. A large value does not necessarily indicate bad fit. Several normalizations have been proposed in the 
 literature in order to make the stress value not dependent on the measurement units used in $\Delta$ and $X$, respectively. 
 A popular normalization is Kruskal's \emph{stress-1} which is given by 
@@ -359,7 +346,7 @@ What is a ``good'' stress value then? \citet{k64a} gave some stress-1 benchmarks
 0.20 = poor, 0.10 = fair, 0.05 = good, 0.025 = excellent, and 0.00 = perfect. As always, such general rules of thumb are problematic since there are many aspects that need to be considered when judging stress \citep[see][for details]{Borg+Groenen+Mair:2012}. Early approaches \citep[e.g.][]{Spence+Ogilvie:1973} suggest to use the average stress value based 
 on random dissimilarity MDS fits as the upper benchmark. It turned out, however, that for most applications 
 it is not too difficult to achieve a stress value that is considerably lower than this benchmark, since there is always 
-some sort of structure in the data. The \pkg{smacof}
+some sort of structure in the data. Nonetheless, the \pkg{smacof}
 package provides the following utility function to compute random stress values dependent on the number of objects 
 $n$, the number of dimensions $p$, and the type of MDS. Let us look at the average ratio MDS stress value for 
 $n = 9$ and $p = 2$ (500 replications), as we had in the Lawler example above:
@@ -371,7 +358,7 @@ fit <- mds(LawlerD)
 fit$stress
 @
 
-Not surprisingly, in the Lawler example we get a stress value of \Sexpr{round(fit$stress, 2)} which is clearly smaller 
+Not surprisingly, the stress value of \Sexpr{round(fit$stress, 2)} in the Lawler example is clearly smaller 
 than the average random stress. However, it can be doubted that this is really a good solution.  
 
 More modern approaches focus on permutations of the dissimilarity matrix rather than on random dissimilarities. A simple 
@@ -394,7 +381,7 @@ res.perm
 
 
 It results that our MDS fit is not significantly better than the null solutions based on the permutations 
-($p = $ \Sexpr{res.perm$pval}). We see that permutation tests provide a somewhat ``sharper'' null hypothesis than 
+($p = $ \Sexpr{res.perm$pval}). We see that permutation tests provide a more useful null distribution than 
 the random dissimilarity approach. Figure \ref{fig:perm} shows the results. 
 
 <<perm-plot, eval=FALSE>>=
@@ -437,7 +424,7 @@ par(op)
 
 \begin{figure}
 \begin{center}  
-<<spp-plot1, echo=FALSE, fig.width = 8, fig.height = 5, dev='postscript'>>=
+<<spp-plot1, echo=FALSE, fig.width = 9, fig.height = 5, dev='postscript'>>=
 <<spp-plot>>
 @
 \end{center}
@@ -486,83 +473,17 @@ for all }i.
 And, of course, spheres are ellipses in which the matrix \(\Lambda\) is scalar, 
 i.e. $\Lambda=\lambda I$. 
 
-
 There are several strategies for fitting MDS-Q. The package \pkg{smacof} allows 
 for the following approaches: \emph{Primal methods}, in which the constraints 
 are incorporated in parametric form directly into the loss function, and 
 \emph{dual methods}, where constraints are imposed at convergence by using 
-penalty or Lagrangian terms. First, let us focus on the primal method.
-
-We start with primal gradient projection and how this can be solved using 
-majorization. The constraints~\eqref{E:r1} lead to the problem of minimizing 
-$\mathbf{tr}\ (\lambda Z-Y)'V(\lambda Z-Y)$ over all scalars $\lambda$ and over 
-all $Z$ with $\mathbf{diag}\ ZZ'=I$. The optimum $\lambda$ for given $Z$ is
-\begin{equation}
- \hat\lambda=\frac{\mathbf{tr}\ Y'VZ}{\mathbf{tr}\ Z'VZ},
-\end{equation}
-and the problem we need to solve is equivalent to the maximization of
-\begin{equation}
-\rho(Z)= \frac{[\mathbf{tr}\ Y'VZ]^2}{\mathbf{tr}\ Z'VZ}.
-\end{equation}
-
-
-In order to maximize the function $\rho(Z)$ we use the fractional programming 
-technique of~\citet{dinkelbach}. Suppose $\tilde Z$ is our current best 
-configuration. Define
-\begin{equation}
- \eta(Z,\tilde Z)=[\mathbf{tr}\ Y'VZ]^2-\rho(\tilde Z)\mathbf{tr}\ Z'VZ.
-\end{equation}
-If we find \(Z^+\) such that \(\eta(Z^+,\tilde Z)>\eta(\tilde Z,\tilde Z)=0\), 
-then \(\rho(Z^+)>\rho(\tilde Z)\). Thus for global convergence it is sufficient 
-to increase \(\eta(Z,\tilde Z)\).
-
-The dual method is known as CMDA 
+penalty or Lagrangian terms. The dual method is known as CMDA 
 (Constrained/Confirmatory Monotone Distance Analysis). It was proposed 
 by~\citet{borglin1,borglin2} and discussed in \citet[Section 
 10.4]{borg-groenen-2}. The idea is to impose the restrictions directly on the 
 distances and not on the configurations. This makes the method more specific to 
 MDS. 
  
-For Euclidean MDS, with points constrained on a circle or a sphere, 
-\citet{borglin1} introduce an extra point \(x_0\) into the MDS problem, and 
-define the family of penalized loss functions
-\begin{equation}\label{E:bg}
-\sigma_\kappa(X)=\min_{\Delta\in\mathcal{D}_L}\sigma_L(X,\Delta)+\kappa\min_{
-\Delta\in\mathcal{D}_C}\sigma_C(X,\Delta)
-\end{equation}
-The whole set $\mathcal{D} = \mathcal{D}_L \cup \mathcal{D}_C$ consists of all 
-non-negative and hollow symmetric matrices that satisfy the constraints. $\Delta 
-\in \mathcal{D}_L$ is the observed dissimilarity matrix and $\Delta \in 
-\mathcal{D}_L$ expresses the side constraints. In the case of the sphere, the 
-side constraints are that \(x_0\) has equal distance to all other points, while 
-the rest of the dissimilarities in $ \mathcal{D}_L$ are missing (i.e. have zero 
-$w_{ij}$). Correspondingly, we have two stress functions $\sigma_L(X,\Delta)$ 
-and $\sigma_C(X,\Delta)$. The non-negative quantity \(\kappa\) is a penalty 
-parameter. If \(\kappa\rightarrow\infty\) the second term is forced to zero, and 
-we minimize the first term under the conditions that the second term is zero, 
-i.e. that the \(x_i\) are on a sphere with center at \(x_0\) and with radius 
-\(\lambda\).
-  
-The CMDA approach has the advantage that it can be implemented quite simply by 
-using the standard Euclidean MDS majorization method. It has the usual 
-disadvantage that we have to select a penalty parameter, or a sequence of 
-penalty parameters, in some way or another. Moreover the Hessian of 
-\emph{stress} will become increasingly ill-conditioned for large penalties, and 
-convergence can consequently be quite slow. 
-
-The majorization algorithm for the penalty function~\eqref{E:bg} uses the 
-iterations
-\begin{equation}
- X^{(k+1)}=(V+\kappa I)^{-1}(V\overline{X}^{(k)}+\kappa\tilde X^{(k)}),
-\end{equation}
-where $\tilde x_i^{(k)}=\lambda x_i^{(k)}/\|x_i^{(k)}\|$. For large \(\kappa\) 
-this means
-\begin{equation}
- X^{(k+1)}\approx\tilde X^{(k)}+\frac{1}{\kappa}V(\overline{X}^{(k)}-\tilde 
-X^{(k)}),
-\end{equation}
-which indicates that convergence will tend to be slow.
-
 As an example, we use Ekman's color data \citep{ekman}. The dataset, as provided in the package represents similarities 
 for 14 colors. These need to be converted into dissimilarities (by simply subtracting from 1). Fitting a basic ordinal MDS 
 on the data we see that the colors are almost aligned in a circle (left panel of Figure \ref{fig:ekman}). Using 
@@ -600,7 +521,7 @@ not much worse than the unrestricted solution (stress-1: \Sexpr{round(fit.basic$
 \subsection{Linear restrictions}
 \citet{dlh80} introduced a SMACOF version with restrictions on the configuration 
 matrix $X$ which \citet[][Chapter 10]{borg-groenen-2} call \emph{confirmatory 
-MDS with external constraints}. The basic idea behind this approach is that the 
+MDS with external constraints} \citep[see also][]{Heiser+Meulman:1983}. The basic idea behind this approach is that the 
 researcher has some substantive underlying theory regarding a decomposition of 
 the dissimilarities. We start with the simplest restriction in terms of a linear 
 combination, show the majorization solution and then present some additional 
@@ -616,8 +537,8 @@ to be estimated.
 
 \subsection{Additional restrictions}
 Basically, the \pkg{smacof} package allows the user to implement arbitrary 
-configuration restrictions by specifying a corresponding update function for $X$ 
-as given in (\ref{eq:linup}). Nevertheless, we provide additional restriction 
+configuration restrictions by specifying a corresponding update function for $X$. 
+Nevertheless, we provide additional restriction 
 possibilities which are commonly used. Besides the classical linear restriction 
 described above, for the special case of number of predictors equal number of 
 dimensions, i.e. $q=p$, the square matrix $C$ can be restricted to be diagonal: 
@@ -649,17 +570,17 @@ Further specifications of this partially restricted framework can be found in
 \citet{meulpsy} incorporates the MDS approach into Gifi's 
 optimal scaling model family \citep{Gifi:1990, deLeeuw+Mair:2009a}. 
 In each MDS majorizaition iteration there is one more optimal scaling step in the external constraints. 
-Consequently, equation \ref{eq:reslin} changes to 
+Consequently, Equation (\ref{eq:reslin}) changes to 
 
 \begin{equation}
 X = \hat ZC.
 \end{equation}
-Each predictor variable $\boldsymbol{z_1}, \ldots, \boldsymbol{z_q}$ is subject to an optimal scaling transformation. 
+Each predictor variable $\mathbf z_1, \ldots, \mathbf z_q$ is subject to an optimal scaling transformation. 
 The classical case is to scale in an ordinal way (i.e. monotone regression) but we can think of additional transformations 
-which we have already applied to the dissimilarities: ratio, interval, and monotone splines. All of these transformations 
-(plus a regular spline without monotonicity constraints) are implemented in \pkg{smacof}. 
+which we have already applied to the dissimilarities such as interval and monotone splines. All of these transformations 
+(plus a spline without monotonicity constraints) are implemented in \pkg{smacof}. 
 They are not only applicable to the linearly constrained configurations but also to all kinds of configuration restrictions 
-presented above. Especially if we think of the general De Leeuw-Heiser framework as given in \ref{eq:lh} and which changes to 
+presented above. Especially if we think of the general De Leeuw-Heiser framework as given in (\ref{eq:lh}) and which changes to 
 
 \begin{equation}
 \label{eq:lh2}
@@ -680,7 +601,7 @@ res.parreg <- smacofConstraint(morse, type = "ordinal", ties = "primary",
                                init = res.unc$conf)
 @
 
-For the unconstrained solution we get a stress-1 value of $\Sexpr{round(res.unc$stress, 3)}$. For the theory-consistes solution 
+For the unconstrained solution we get a stress-1 value of $\Sexpr{round(res.unc$stress, 3)}$. For the theory-consistent solution 
 the stress is $\Sexpr{round(res.parreg$stress, 3)}$ which is only slightly worse than the first fit. The corresponding 
 configuration plots are given in Figure \ref{fig:morse}. 
 
@@ -724,9 +645,7 @@ we merge the resulting configurations $X_k$ into the configuration supermatrix
 \label{eq:Xblock}
 X^\ast = \begin{bmatrix} X_1 \\ X_2 \\ \vdots \\ X_{K} \end{bmatrix}.
 \end{equation*}
-Correspondingly, $V^\ast$ is block diagonal and one block consists of the 
-submatrix $V_k$ based on the configuration weights $W_k$ and is computed 
-according to Equation \ref{eq:Vmat}. Based on these weight matrices $W_k$ with 
+Allowing for weight matrices $W_k$ with 
 elements $w_{ij,k}$, the total stress to be minimized, consisting of the single 
 $\sigma(X_k)$'s, can be written as
 \begin{equation}
@@ -818,51 +737,10 @@ with
 \begin{equation}
 d_{ij}(X_1,X_2)=\sqrt{\sum_{s=1}^p(x_{1is}-x_{2js})^2}.
 \end{equation}
-Let $X$ be the $(n_1 + n_2) \times p$ joint matrix of configurations. It follows 
-that we can accomplish the same simple SMACOF representation as in 
-(\ref{eq:strdec}). The weights $w_{ij}$ are collected into the $n_1 \times n_2$ 
-matrix $W_{12}$ of weights having the same properties as in the former section. 
-The reason we use $W_{12}$ is that, due to the decomposition of $X$, $W$ has the 
-following block structure:
-\begin{equation*} 
-\label{eq:Wblmat}
-W = \begin{bmatrix} W_{11} & W_{12} \\ W_{12}' & W_{22} \\ \end{bmatrix} = 
-\begin{bmatrix} 0 & W_{12} \\ W_{12}' & 0 \\ \end{bmatrix}
-\end{equation*}
-The input data structure $X$ does not allow for within-sets proximities. 
-Therefore, $W_{11}$ and $W_{22}$ have 0 entries. 
-
-$V$ is computed following Equation \ref{eq:Vmat} and $B(X)$ following Equation 
-\ref{eq:Bmat}. Based on the decomposition of $X$, $V$ can be partitioned into
-\begin{equation*} 
-\label{eq:Vblmat}
-V = \begin{bmatrix} V_{11} & V_{12} \\ V_{12}' & V_{22} \\ \end{bmatrix},
-\end{equation*}
-and $B(X)$ into
-\begin{equation*} 
-B(X) = \begin{bmatrix} B_{11}(X) & B_{12}(X) \\ B_{12}(X)' & B_{22}(X) \\ 
-\end{bmatrix}.
-\end{equation*}
-$B_{11}(X)$ is a $n_1 \times n_1$ diagonal matrix with minus the row sums of 
-$B_{12}(X)$ in the diagonal. Correspondingly, $B_{22}$ is $n_2 \times n_2$ with 
-minus the column sums of $B_{12}(X)$ on the diagonal. 
-
-To apply majorization we need to define the supporting matrix $Y$ which for 
-rectangular SMACOF consists of the two blocks $Y_1$ and $Y_2$. In analogy to 
-$B(X)$ the block structure
-\begin{equation*} 
-B(Y) = \begin{bmatrix} B_{11}(Y) & B_{12}(Y) \\ B_{12}(Y)' & B_{22}(Y) \\ 
-\end{bmatrix}
-\end{equation*}
-results. The sandwich inequality is the same as in (\ref{eq:stdectr}). To 
-optimize the majorizing function we compute the Moore-Penrose inverse $V^+$ and 
-the updating formula (Guttman transform) within each iteration $t$ is again 
-$\overline{X}^{(t)} = V^+B(Y)Y$.
 
 So far, only the metric version of unfolding is implemented in \pkg{smacof}. 
 Nonmetric (ordinal) unfolding is slightly more complicated. The original techniques proposed by~\cite{Coombs} were purely 
-nonmetric and did not even lead to metric representations. In preference analysis, the prototypical area of application,  
-we often only have ranking information. Each individual ranks a number of candidates, or food samples, or investment opportunities.
+nonmetric and did not even lead to metric representations. 
 The ranking information is row-conditional, which means we cannot compare the ranks given by 
 individual \(i\) to the ranks given by individual \(k\). The order is defined only within rows.
 Metric data are generally unconditional, because we
@@ -874,16 +752,48 @@ renormalization and partitioning of the loss function. In nonmetric unfolding th
 \sigma(X_1,X_2)=\sum_{i=1}^{n_1}\sum_{j=1}^{n_2}w_{ij}(\hat d_{ij}-d_{ij}(X_1,X_2))^{2}
 \]
 with $\hat d_{ij} = f(\delta_{ij})$ reflecting a monotone regression on the dissimilarities. 
-Degenerate solutions are characterized by constant d-hats (disparities). \cite{busgrohei} 
+Degenerate solutions are characterized by constant disparities. \cite{busgrohei} 
 identify constant d-hats using the coefficient of variation and, subsequently, 
 penalize nonmetric transformations of the dissimilarities with small variation. They present a 
 majorization approach for minimizing the adjusted loss function which is a topic of future implementation. 
 
+As an example, let us use the RockHard data once more. This time we will not collapse the bands by means of 
+distance computations between the judges (as in the introductory MDS section). Rather, we try to compute and plot 
+configurations for the rows (bands/albums) and columns (judges) in the same space. Note that the input data 
+need to represent dissimilarities: that is, if a judge rated an album very high, the dissimilarity value should be 
+low and vice versa. Therefore, we reverse the coding of the input data. 
 
-\subsection{Unfolding with circular restrictions}
-% To be written PG
+<<>>=
+ratings <- 11-RockHard[,5:18]            ## reverse ratings 
+rownames(ratings) <- RockHard[,"Band"]
+fit.rock <- unfolding(ratings)           ## 2D metric unfolding solution
+fit.rock
+@
 
-\subsection{Permutation tests for unfolding}
+We see that the stress value is considerably high. We could consider a three-dimensional solution but 
+for illustration purposes the 2D solution is just fine. In Figure \ref{fig:band} we give the joint 
+configuration plot. We label all the judges and the 10 best and 10 worst rated bands.
+
+<<band-plot, eval=FALSE>>=
+plot(fit.rock, label.conf.rows = list(label = FALSE))
+best <- sort(rowMeans(ratings, na.rm = TRUE))[1:10]
+worst <- sort(rowMeans(ratings, na.rm = TRUE), decreasing = TRUE)[1:10]
+bestworst <- names(c(best, worst))
+text(fit.rock$conf.row[bestworst,], labels = bestworst, cex = 0.8, pos = 3, 
+     col = hcl(0, l = 50))
+@
+\begin{figure}
+\begin{center}  
+<<band-plot1, echo=FALSE, fig.width = 7, fig.height = 7, dev='postscript'>>=
+<<band-plot>>
+@
+\end{center}
+\caption{\label{fig:band} Joint configuration plot for unfolding solution of album ratings.}
+\end{figure}
+
+As we have seen in this example, the data can have missing values. The \pkg{smacof} package also 
+provides a permutation test implementation for unfolding. 
+
 
 %%--------------------------------------- Additional Methods -----------------------
 
@@ -895,9 +805,9 @@ such as time, ability, or preference.
 
 Unidimensional scaling is often considered as a special one-dimensional case of MDS. However, it
 is often discussed separately, because the unidimensional case is quite different from the general multidimensional case. It has been shown that the minimization of the Stress target function with equal weights leads to a combinatorial problem when the number of dimensions of the target space is one \citep{ling}. 
-The \pkg{smacof} package provides a simple implementation where all dissimilarity permutations are considered and the one which leads to a minimal stress is returned. Obviously, this strategy is feasible for small problems only \citep{Mair+deLeeuw:2015}. 
+The \pkg{smacof} package provides a simple implementation where all possible dissimilarity permutations are considered and the one which leads to a minimal stress is returned. Obviously, this strategy is feasible for small problems only \citep{Mair+deLeeuw:2015}. 
 
-In the following example we examine 7 works by Plato. The chronological order of Plato's works is unknown. Scholars only know that ``Republic'' was his first work, and ``Laws'' his last work. Unidimensional scaling can be used to map the works on a unidimensional continuum. The input dissimilarites are based on data from \citet{Cox+Brandwood:1959}. They extracted the last five syllables of each sentence. Each syllable is classified as long or short which gives 32 types. Consequently, we obtain a percentage distribution across the 32 scenarios for each of the seven works.
+In the following example we examine seven works by Plato. The chronological order of Plato's works is unknown. Scholars only know that ``Republic'' was his first work, and ``Laws'' his last work. Unidimensional scaling can be used to map the works on a unidimensional continuum. The input dissimilarites are based on data from \citet{Cox+Brandwood:1959}. They extracted the last five syllables of each sentence. Each syllable is classified as long or short which gives 32 types. Consequently, we obtain a percentage distribution across the 32 scenarios for each of the seven works.
 
 <<>>=
 PlatoD <- dist(t(Plato7))
@@ -920,15 +830,15 @@ plot(fit.uni)
 
 The results of our unidimensional scaling are shown in Figure \ref{fig:d1}. Of course, we could perform unidimensional 
 scaling through a regular MDS fit as well but it is pretty much guaranteed that we end up in a local minimum. For instance, 
-using the classical scaling starting configurations, not so surprisingly we get a larger stress value 
-(stress-1: \Sexpr{round(mds(PlatoD, ndim  = 1)$stress, 4)}). 
+using the default classical scaling starting configurations, we get a larger stress value 
+(stress-1: \Sexpr{round(mds(PlatoD, ndim  = 1)$stress, 4)}) than with the permutation approach, which is not really surprising.
 
 
 \subsection{Inverse MDS}
 The basic problem of inverse MDS is to compute a dissimilarity matrix $\Delta$ from a given configuration matrix $X$. 
 The corresponding theory can be found in \citet{DeLeeuw+Groenen:1997} and \citet{DeLeeuw:2012}. Here, we just give a simple example using a subset of the kinship data. First, we fit an MDS on the kinship dissimilarities and perform an 
-inverse MDS on the corresponding configuration matrix. This gives us 7 dissimilarity matrix which also 
-includes the trivial one with the Euclidean distances between the configurations. 
+inverse MDS on the corresponding configuration matrix. This gives us seven dissimilarity matrices which also 
+includes the trivial one with the Euclidean distances based on the fitted MDS configurations. 
 
 <<>>=
 D <- as.matrix(kinshipdelta)[1:6, 1:6]
@@ -936,7 +846,7 @@ fit <- mds(D)                       ## MDS D --> conf
 ifit <- inverseMDS(fit$conf)        ## inverse MDS conf --> D
 @
 
-Now we fit again 7 MDS on the resulting inverse MDS dissimilarity output matrices and look at the configurations 
+Now we fit again seven MDS on the resulting inverse MDS dissimilarity output matrices and look at the configurations 
 (see Figure \ref{fig:imds})
 
 <<imds-plot, eval=FALSE>>=
@@ -962,11 +872,11 @@ Note that so far \pkg{smacof} provides a very basic implementation only and it c
 dissimilarities are negative. Future extensions will implement the more sophisticated theory from \citet{DeLeeuw:2012}.
 
 \subsection{Procrustes}
-The Procrustes problem is the following: We have two known $n \times p$ (MDS configuration) matrices $X$ and $Y$. $X$ is the 
-target matrix. We want to modify $Y$ such that the configurations in the resulting matrix $\hat Y$ are a close as possible
+The Procrustes problem is the following: We have two known $n \times p$ matrices $X$ and $Y$ (MDS configurations). $X$ is the 
+target matrix. We want to transform $Y$ such that the configurations in the resulting matrix $\hat Y$ are a close as possible
 to the ones given in $X$. $Y$ is subject to three transformations: rotation ($T$ as rotation matrix), dilation ($s$ as 
-dilation factor), and translation ($\boldsymbol t$ as translation vector). Technical details can be found in 
-\citet{borg-groenen-2}, Chapter 20; here we just summarize the basic computations \citep[see][p. 436]{borg-groenen-2}. We need the restriction $T'T = I$ and $J = I - n^{-1}\boldsymbol{11}'$ as the centering matrix. 
+dilation factor), and translation ($\mathbf t$ as translation vector). Technical details can be found in 
+\citet{borg-groenen-2}, Chapter 20; here we just summarize the basic computations. We need the restriction $T'T = I$ and $J = I - n^{-1}\boldsymbol{11}'$ as the centering matrix. 
 
 \begin{enumerate}
 \item Compute $C = XJY$.
@@ -1025,8 +935,8 @@ par(op)
 @
 \end{center}
 \caption{\label{fig:proc} Top panels: configuration plots for separate MDS fits. Bottom left panel: Original 
-East German configuration with Procustes transformed West German configuration. Bottom right panel: Original 
-West German configuration with Procrustes transformation.}
+East German configuration (blue) with Procustes transformed West German configuration (red). Bottom right panel: Original 
+West German configuration (gray) with Procrustes transformation (red).}
 \end{figure}
 
 
@@ -1040,7 +950,7 @@ subject to a Procrustes transformation with target configuration X, i.e. the ori
 average (centroid) jackknife solution $\bar X^{\ast}$ can be computed. It total, we have $n+2$ comparable 
 configurations which can be represented in a single plot. 
 
-As descriptive measures a stability measure \citep{Heiser+Meulman:1983} can be computed as follows:
+A stability measure \citep{Heiser+Meulman:1983} can be computed as follows:
 \[
 ST = 1-\frac{\sum_{i=1}^n \|X_i^{\ast} - \bar X^{\ast}\|^2}{\sum_{i=1}^n \|X_i^{\ast}\|^2}.
 \]
@@ -1067,16 +977,18 @@ in Figure \ref{fig:jack}. Note that the labels denote the original solution $X$,
 configurations $X_i^{\ast}$, and the bigger dots the corresponding centroid $\bar X^{\ast}$, connected to each 
 $X_i^{\ast}$. 
 
-<<jack-plot, eval=FALSE>>=
+<<>>=
 fit.lawler <- mds(LawlerD, type = "interval")
 jackfit <- jackknife(fit.lawler)
 jackfit
+@
+<<jack-plot, eval=FALSE>>=
 plot(jackfit)
 @
 
 \begin{figure}
 \begin{center}  
-<<jack-plot1, echo=FALSE, fig.width = 8, fig.height = 8, dev='postscript'>>=
+<<jack-plot1, echo=FALSE, fig.width = 7, fig.height = 7, dev='postscript'>>=
 <<jack-plot>>
 @
 \end{center}
