@@ -1,0 +1,11 @@
+Package: APR
+Type: Package
+Title: Applied Psychometrics With R
+Version: 0.0-2
+Date: 2015-09-16
+Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email = "mair@fas.harvard.edu"))
+Maintainer: Patrick Mair <mair@fas.harvard.edu>
+Description: Supplementary materials and datasets for the book "Applied Psychometrics With R" (Mair, 2016, Springer useR! series).
+Imports: graphics, stats
+Depends: R (>= 3.0.2)
+License: GPL-2
