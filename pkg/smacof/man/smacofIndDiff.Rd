@@ -11,15 +11,15 @@ INDSCAL and IDIOSCAL.
 \usage{
 smacofIndDiff(delta, ndim = 2, type = c("ratio", "interval", "ordinal"), 
               constraint = c("indscal", "idioscal", "identity"),
-              weightmat = NULL, init = NULL, ties = "primary",  
+              weightmat = NULL, init = "torgerson", ties = "primary",  
               verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
               
 indscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal"), 
-        weightmat = NULL, init = NULL, ties = "primary", 
+        weightmat = NULL, init = "torgerson", ties = "primary", 
         verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
 
 idioscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal"), 
-         weightmat = NULL, init = NULL, ties = "primary", 
+         weightmat = NULL, init = "torgerson", ties = "primary", 
          verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
 
 }
@@ -55,15 +55,18 @@ Addtional weight restrictions can be imposed with \code{"identity"} which restri
   \item{gspace}{Joint configurations aka group stimulus space}
   \item{cweights}{Configuration weights}
   \item{stress}{Stress-1 value}
+  \item{resmat}{Matrix with squared residuals}
+  \item{rss}{Residual sum-of-squares}
   \item{spp}{Stress per point}
   \item{sps}{Stress per subject (matrix)}
   \item{ndim}{Number of dimensions}
   \item{model}{Type of smacof model}
   \item{niter}{Number of iterations}
   \item{nobj}{Number of objects}
-
 }
-\references{de Leeuw, J., & Mair, P. (2009). Multidimensional scaling using majorization: 
+
+\references{
+De Leeuw, J., & Mair, P. (2009). Multidimensional scaling using majorization: 
 The R package smacof. Journal of Statistical Software, 31(3), 1-30, \url{http://www.jstatsoft.org/v31/i03/} 
 }
 \author{Jan de Leeuw and Patrick Mair}

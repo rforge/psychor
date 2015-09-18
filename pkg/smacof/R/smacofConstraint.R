@@ -29,7 +29,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   
   type <- match.arg(type, c("ratio", "interval", "ordinal", "mspline"), several.ok = FALSE) 
   ties <- match.arg(ties, c("primary", "secondary", "tertiary"), several.ok = FALSE) 
-  constraint.type <- match.arg(type, c("ratio", "interval", "ordinal", "spline", "mspline"), several.ok = FALSE) 
+  constraint.type <- match.arg(constraint.type, c("ratio", "interval", "ordinal", "spline", "mspline"), several.ok = FALSE) 
   constraint.ties <- match.arg(constraint.ties, c("primary", "secondary", "tertiary"), several.ok = FALSE) 
   
   diss <- delta
@@ -50,9 +50,13 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   
   if (is.null(attr(diss, "Labels"))) attr(diss, "Labels") <- paste(1:n)
   
+  ## sanity check external
+  if (is.data.frame(external)) external <- as.matrix(external)
+  if (!is.list(external)) {
+    if (ncol(external) < p) stop("Number of external variables can not be smaller than the number of MDS dimensions!")
+  }
   #---- external specification -----
-  if (is.data.frame(external)) {
-    external <- as.matrix(external)
+  if (is.matrix(external)) {
     extvars <- list()
     for (s in 1:ncol(external)){
       # Prepare for optimal scaling of transformations
@@ -77,8 +81,8 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
                                 missing = "multiple")
       external[,s] <- extvars[[s]]$xInit - mean(extvars[[s]]$xInit)
     }
-    
-  }
+  } 
+
   
   if (is.list(external)) {                     
     if (external[[1]] == "simplex") {                           #simplex specification
@@ -230,7 +234,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
     snon <- sum(wgths*(dhat-e)^2)/nn               # nonmetric stress
     
     if (verbose) cat("Iteration: ",formatC(itel,width=3, format="d"),
-                     " Stress (normalized): ", formatC(c(snon),digits=8,width=10,format="f"),
+                     " Stress (raw): ", formatC(c(snon),digits=8,width=10,format="f"),
                      " Difference: ", formatC(c(sold-snon),digits=8,width=10,format="f"),
                      "\n")
     
@@ -262,6 +266,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   
   ## stress-per-point 
   spoint <- spp(dhat, confdiss, wgths)
+  rss <- sum(spoint$resmat[lower.tri(spoint$resmat)])  ## residual sum-of-squares
   
   if ((constraint == "diagonal") && (!simpcirc)) {
     if (p != ncol(y)) {
@@ -294,7 +299,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   
   result <- list(delta = diss, dhat = dhat, confdiss = confdiss, conf = y, C = C, 
                  stress = stress, spp = spoint$spp, ndim = p, iord = dhat2$iord.prim, extvars = extvars,
-                 external = external, weightmat = wgths, resmat = spoint$resmat, model = "SMACOF constraint", 
+                 external = external, weightmat = wgths, resmat = spoint$resmat, rss = rss, init = xstart, model = "SMACOF constraint", 
                  niter = itel, nobj = n, type = type, call = match.call()) 
   class(result) <- c("smacofB","smacof")
   result 

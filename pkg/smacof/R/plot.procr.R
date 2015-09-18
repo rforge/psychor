@@ -34,7 +34,7 @@ plot.procr <- function(x, plot.type = "jointplot", plot.dim = c(1,2), main, xlab
     if (label.conf$label) text(x$Y[,x1], x$Y[,y1], labels = labels, cex = label.conf$cex, pos = label.conf$pos, col = col.Y)
     if (label.conf$label) text(x$Yhat[,x1], x$Yhat[,y1], labels = labels, cex = label.conf$cex, pos = label.conf$pos, col = col.Yhat)  
     
-    if (arrows) arrows(x$Y[,1], x$Y[,2], x$Yhat[,1], x$Yhat[,2], length = length, col = col.Yhat, lwd = 0.8)
+    if (arrows) arrows(x$Y[,1], x$Y[,2], x$Yhat[,1], x$Yhat[,2], length = length, col = col.Y, lwd = 0.8)
   }
 }
 

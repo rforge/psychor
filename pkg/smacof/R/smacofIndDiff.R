@@ -2,7 +2,7 @@
 
 smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal"), 
                           constraint = c("indscal", "idioscal", "identity"),
-                          weightmat = NULL, init = NULL, ties = "primary", 
+                          weightmat = NULL, init = "torgerson", ties = "primary", 
                           verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
   
 # delta ... list of input objects: either of class dist() or a symmetric matrix
@@ -221,6 +221,7 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
 
   ## stress-per-point 
   spoint <- spp(dh, confdiss, wgths)
+  rss <- sum(spoint$resmat[lower.tri(spoint$resmat)])  ## residual sum-of-squares
   
   reslist <- mapply(function(ldh, lcd) {(as.matrix(ldh) - as.matrix(lcd))^2}, dh, confdiss, SIMPLIFY = FALSE) 
   sps <- sapply(reslist, mean)
@@ -229,7 +230,7 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
   
   #return configurations, configuration distances, normalized observed distances 
   result <- list(delta = diss, dhat = dh, confdiss = confdiss, conf = yr, gspace = aconf, cweights = bconf,
-                 stress = stress, spp = spoint$spp, weightmat = wgths, resmat = spoint$resmat, sps = sps, ndim = p, 
+                 stress = stress, spp = spoint$spp, weightmat = wgths, resmat = spoint$resmat, rss = rss, sps = sps, ndim = p, 
                  model = "Three-way SMACOF", niter = itel, nobj = n, type = type, call = match.call()) 
   class(result) <- "smacofID"
   result 

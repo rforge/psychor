@@ -10,8 +10,8 @@
 \description{These methods perform a permutation test for a symmetric or an unfolding SMACOF model.
 }
 \usage{
-\method{permtest}{smacof}(object, nrep = 100, verbose = TRUE)
-\method{permtest}{smacofR}(object, nrep = 100, verbose = TRUE)
+\method{permtest}{smacof}(object, nrep = 100, verbose = TRUE, method = "full")
+\method{permtest}{smacofR}(object, nrep = 100, verbose = TRUE, method = "full")
 \method{plot}{smacofPerm}(x, alpha = 0.05, main, xlab, ylab, ...)
 
 }
@@ -20,6 +20,7 @@
   \item{object}{Object of class \code{"smacofB"}, i.e., an MDS solution from \code{smacofSym()}}
   \item{nrep}{Number of permutations}
   \item{verbose}{If \code{TRUE}, permutation is printed out}
+  \item{method}{If \code{"rows"}, dissimilarites are permuted row-wise, otherwise full permutation}
      
   \item{x}{Object of class \code{"smacofPerm"}}
   \item{alpha}{Alpha level}

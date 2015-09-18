@@ -133,7 +133,8 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
     if (missing(ylim)) ylim <- range(x$conf[,y1])*1.1
     
     spp.perc <- x$spp
-    bubsize <- ((max(spp.perc) - spp.perc + 1)/length(spp.perc))*(bubscale + 3)
+    bubsize <- spp.perc/length(spp.perc)*(bubscale + 3)
+    
     
     plot(x$conf, cex = bubsize, main = main, xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim,...)
     xylabels <- x$conf

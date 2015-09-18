@@ -1,9 +1,10 @@
 ## MDS permutation test
-permtest.smacof <- function(object, nrep = 100, verbose = TRUE)
+permtest.smacof <- function(object, nrep = 100, verbose = TRUE, method = "full")
 {
 ## val ... stress value  
 ## n... number of objects
 ## p... number of dimensions
+## method ... "full" or "rows"  
     
     #if (class(object)[1] != "smacofB") stop("Permutation test is currenlty implemented for objects of class smacofB from smacofSym() only! \n")
     #if (object$model == "SMACOF constraint") stop("Permutation test is currenlty implemented for smacofSym() objects only! \n")
@@ -16,14 +17,25 @@ permtest.smacof <- function(object, nrep = 100, verbose = TRUE)
     
     m <- n*(n-1)/2            ## number of lower triangular elements
     irep <- 1
-    str <- rep (0, nrep)      ## vector for stress values
+    str <- rep(0, nrep)      ## vector for stress values
 
     repeat 
      {
-      delta <- matrix (0, n, n)
-      delta[outer(1:n, 1:n, ">")] <- sample(dissvec,m)           ## sample dissimilarity matrix
-      #delta[outer(1:n, 1:n, ">")] <- sample(1:m,m)           ## how it was before
-      delta <- delta + t(delta)                                  
+    
+      if (method == "full") { 
+      ## --- begin old permutation scheme
+         delta <- matrix(0, n, n)
+         delta[outer(1:n, 1:n, ">")] <- sample(dissvec, m)           ## sample dissimilarity matrix
+         delta <- delta + t(delta)
+       ## --- end old permutation scheme
+      } else {
+      ## --- alternative permutation scheme
+        delta1 <- as.matrix(object$delta)
+        permind <- sample(1:nrow(delta1))         ## index permutation row/columns
+        delta <- delta1[permind, ]
+        rownames(delta) <- colnames(delta) <- rownames(delta1)
+      } 
+      ## --- end alternative permutation scheme
       
       smacall$delta <- delta
       smRes <- eval(smacall)

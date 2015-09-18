@@ -1,4 +1,4 @@
-permtest.smacofR <- function(object, nrep = 100, verbose = TRUE)
+permtest.smacofR <- function(object, nrep = 100, verbose = TRUE, method = "full")
 {
 ## val ... stress value  
 ## n... number of objects
@@ -10,6 +10,7 @@ permtest.smacofR <- function(object, nrep = 100, verbose = TRUE)
     data <- object$obsdiss
     m <- object$nobj          ## number of objects (columns)
     n <- object$nind          ## number of observations (rows)
+    nm <- n * m
     p <- object$ndim          ## number of dimensions
     val <- object$stress      ## metric stress (normalized)
     smacall <- object$call
@@ -19,10 +20,17 @@ permtest.smacofR <- function(object, nrep = 100, verbose = TRUE)
     #perms <- shuffleSet(m, nset = nper)
     
     for (irep in 1:nrep) {
-      permmat <- t(apply(data, 1, function(pp) {     ## computes permuted matrix
-        ind <- sample(1:m, m)
-        pp[ind]
-      }))
+      
+      ## row-wise: activate later when row-conditional model is implemented
+      #permmat <- t(apply(data, 1, function(pp) {     ## computes permuted matrix
+      #  ind <- sample(1:m, m)
+      #  pp[ind]
+      #}))
+      
+      ## full permutation
+      ind <- sample(1:nm)
+      permmat <- matrix(as.vector(data)[ind], ncol = m)
+      
       
       smacall$delta <- permmat
       resperm <- eval(smacall) 

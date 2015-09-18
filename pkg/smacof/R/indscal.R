@@ -1,5 +1,5 @@
 indscal <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal"), 
-                   weightmat = NULL, init = NULL, ties = "primary", 
+                   weightmat = NULL, init = "torgerson", ties = "primary", 
                    verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6) {
   
   smacofIndDiff(delta = delta, ndim = ndim, type = type, constraint = "indscal",

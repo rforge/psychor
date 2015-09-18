@@ -9,9 +9,11 @@
 \usage{
 Procrustes(X, Y)
 
-\method{plot}{procr}(x, plot.type = "jointplot", plot.dim = c(1,2), main, xlab, ylab, xlim, ylim, asp = 1, pch = 20, 
-                       col.X = "cadetblue", col.Y = "gray", col.Yhat = "coral1", 
-                       label.conf = list(label = TRUE, pos = 3, cex = 0.8), arrows = TRUE, length = 0.10, ...)
+\method{plot}{procr}(x, plot.type = "jointplot", plot.dim = c(1,2), main, xlab, ylab, 
+                     xlim, ylim, asp = 1, pch = 20, col.X = "cadetblue", col.Y = "gray", 
+                     col.Yhat = "coral1", 
+                     label.conf = list(label = TRUE, pos = 3, cex = 0.8), 
+                     arrows = TRUE, length = 0.10, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -68,7 +70,8 @@ points(Y[,1], Y[,2], xlim = c(-3, 3), col = "gray")
 polygon(Y[,1], Y[,2], border = "gray")
 
 fitp <- Procrustes(X, Y)
-plot(fitp$Yhat[,1], fitp$Yhat[,2], col = "red", xlim = c(-3, 3), ylim = c(-2, 3.5), asp = 1, xlab = "", ylab = "")
+plot(fitp$Yhat[,1], fitp$Yhat[,2], col = "red", xlim = c(-3, 3), ylim = c(-2, 3.5), 
+     asp = 1, xlab = "", ylab = "")
 polygon(fitp$Yhat[,1], fitp$Yhat[,2], border = "red")
 par(op)
 
@@ -84,14 +87,20 @@ fit.proc <- Procrustes(fit.east$conf, fit.west$conf)
 fit.proc
 
 ## Configuration plots; Procrustes plots.
-op <- par(mfrow = c(2,2))
-plot(fit.east, main = "MDS East Germany")
-plot(fit.west, main = "MDS West Germany")
-plot(fit.proc)
-plot(fit.proc, plot.type = "transplot", length = 0.05)
-par(op)
+plot(fit.east, main = "MDS East Germany")   ## MDS plot East Germany
+plot(fit.west, main = "MDS West Germany")   ## MDS plot West Germany
 
+## Procrustes configurations (X and Yhat)
+plot(fit.proc, ylim = c(-1, 1))     
+legend("topleft", legend = c("East Germany", "West Germany"), 
+       col = c("cadetblue", "coral1"), pch = 19)
+
+## Procrustes transformations (Y and Yhat)
+plot(fit.proc, plot.type = "transplot", length = 0.05, ylim = c(-1,1))  
+legend("topleft", legend = c("West Germany (untransformed)", "West Germany (transformed)"), 
+       col = c("gray", "coral1"), pch = 19)
 
 }
 
 \keyword{models}
+ 
