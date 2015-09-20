@@ -48,6 +48,11 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   
   simpcirc <- FALSE
   
+  ## --- starting values 
+  startconf <- init
+  if (!is.null(startconf)) startconf <- as.matrix(init)   # x as matrix with starting values   
+  xstart <- startconf
+  
   if (is.null(attr(diss, "Labels"))) attr(diss, "Labels") <- paste(1:n)
   
   ## sanity check external
@@ -74,11 +79,13 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
       } else if(constraint.trans=="mspline"){
         constraint.trans <- "mspline"
       }
+      
       extvars[[s]] <- transPrep(external[,s]-mean(external[,s], na.rm = TRUE),
                                 trans = constraint.trans, 
                                 spline.intKnots = constraint.spline.intKnots, 
                                 spline.degree = constraint.spline.degree,
                                 missing = "multiple")
+            
       external[,s] <- extvars[[s]]$xInit - mean(extvars[[s]]$xInit)
     }
   } 
@@ -137,10 +144,6 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   v <- myGenInv(w)                              #Moore-Penrose inverse
   itel <- 1
   
-  ## --- starting values 
-  startconf <- init
-  if (!is.null(startconf)) startconf <- as.matrix(init)   # x as matrix with starting values   
-  xstart <- startconf
   
   #----------- pre-specified functions for constraints -----------
   # linear constraint (de Leeuw & Heiser, 1980, p.515), X=ZC 
@@ -175,37 +178,6 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
     if (is.null(xstart)) stop("Starting configuration must be specified!")
   }
   
-  # update function for transformation of external variables
-  updext <- function(x,w,external,extvars,constraint){
-    m <- ncol(external)
-    # reconstruct weigh matrix C
-    if (constraint == "linear"){
-      C <- solve(crossprod(external,w%*%external),crossprod(external,w%*%x))
-    } else if (constraint == "diagonal") {
-      C <- diag(colSums(external*(w%*%x))/colSums(external*(w%*%external)))
-    }
-    # For updating external[,s] we need a value larger than the largest eigenvalue
-    # of V kronecker CC'.  
-    svdC <- svd(C)
-    v2 <- 2*max(diag(w))* svdC$d[1]^2                     # 2*max(diag(w)) is an upperbound of the largest eigenvalue of w
-    z <- external - (1/v2)*(w %*% (external %*% C - x)) %*% t(C) # Compute the unconstrained majorization update
-    external.old <- external
-    iord.prim <- list()
-    for (s in 1:ncol(external)){
- #     tt <- transform(z[,s], extvars[[s]], normq = 0)     # Compute update for external variable s
- #     external[,s] <- tt$res*(n/sum(tt$res^2))^.5         # Make the external variable of length n
-      tt.plus <- transform(z[,s], extvars[[s]], normq = 0)     # Compute update for external variable s
-      tt.min  <- transform(-z[,s], extvars[[s]], normq = 0)    # Compute update for external variable s
-      if (sum((tt.plus$res - z[,s])^2) < sum(((tt.min$res + z[,s]))^2) ) {
-        #external[, s] <- tt.plus$res*(n/sum(tt.plus$res^2))^.5
-        iord.prim[[s]] <- tt.plus$iord.prim                    # Retain the ordening if primary approach to ties        
-      } else {
-        #external[, s] <- tt.min$res*(n/sum(tt.min$res^2))^.5
-        iord.prim[[s]] <- tt.min$iord.prim                     # Retain the ordening if primary approach to ties        
-      }      
-    }
-    return(list(external = external, iord.prim = iord.prim))
-  }
   
   #---------- end pre-specified functions for constraints -------
   
