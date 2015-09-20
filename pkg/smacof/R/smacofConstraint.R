@@ -192,9 +192,17 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
     external.old <- external
     iord.prim <- list()
     for (s in 1:ncol(external)){
-      tt <- transform(z[,s], extvars[[s]], normq = 0)     # Compute update for external variable s
-      external[,s] <- tt$res*(n/sum(tt$res^2))^.5         # Make the external variable of length n
-      iord.prim[[s]] <- tt$iord.prim                      # Retain the ordening if primary approach to ties
+ #     tt <- transform(z[,s], extvars[[s]], normq = 0)     # Compute update for external variable s
+ #     external[,s] <- tt$res*(n/sum(tt$res^2))^.5         # Make the external variable of length n
+      tt.plus <- transform(z[,s], extvars[[s]], normq = 0)     # Compute update for external variable s
+      tt.min  <- transform(-z[,s], extvars[[s]], normq = 0)    # Compute update for external variable s
+      if (sum((tt.plus$res - z[,s])^2) < sum(((tt.min$res + z[,s]))^2) ) {
+        #external[, s] <- tt.plus$res*(n/sum(tt.plus$res^2))^.5
+        iord.prim[[s]] <- tt.plus$iord.prim                    # Retain the ordening if primary approach to ties        
+      } else {
+        #external[, s] <- tt.min$res*(n/sum(tt.min$res^2))^.5
+        iord.prim[[s]] <- tt.min$iord.prim                     # Retain the ordening if primary approach to ties        
+      }      
     }
     return(list(external = external, iord.prim = iord.prim))
   }
@@ -204,6 +212,33 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   
   #x <- constrfun(xstart,w,external)                    #compute X
   if (constraint %in% c("linear","diagonal") & !simpcirc){
+    # First make random weight matrices
+    ncol.ext <- ncol(external)
+    if (constraint == "linear"){
+      # Make weight matrix C from a rotation matrix out of the left singular vectors of
+      # a centering matrix
+      C <- svd(diag(ncol.ext) - 1/ncol.ext)$u[, 1:ndim]
+      C <- matrix(runif(ncol.ext * ndim), ncol.ext, ndim)
+    } else if (constraint == "diagonal") {
+      C <- diag(ncol.ext)  # Make an initial C = I
+    }
+    # Initialize the optimally scaled external variables
+    x.unc <- xstart
+    for (s in 1:ncol.ext){
+      target <- x.unc %*% C[s, ]
+      external[, s] <- target;
+      tt.plus <- transform(target, extvars[[s]], normq = 0)     # Compute update for external variable s
+      tt.min  <- transform(-target, extvars[[s]], normq = 0)    # Compute update for external variable s
+      if (sum((tt.plus$res - target)^2) < sum(((tt.min$res + target))^2) ) {
+        external[, s] <- tt.plus$res
+      } else {
+        external[, s] <- tt.min$res
+      }
+      x.unc <- x.unc - outer(external[, s],C[s, ])
+    }
+    # Set external to column sum of squares n
+    #external <- apply(external, 2, FUN = function(x){x <- x*(length(x)/sum(x^2))^.5})
+    # Do an extra round of updates to get the column length restriction fine.
     updext.result <- updext(xstart,w,external,extvars,constraint)
     external <- updext.result$external
   }
