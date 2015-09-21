@@ -14,6 +14,7 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
   if (is.null(label.conf$pos)) label.conf$pos <- 3
   if (is.null(label.conf$col)) label.conf$col <- 1
   if (is.null(label.conf$cex)) label.conf$cex <- 0.8
+  if (identify) label.conf$label <- FALSE
   
   #--------------- utility function for circle drawing -----------------
   circle <- function(x, y, r, ...) {

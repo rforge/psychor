@@ -1,14 +1,20 @@
 # plot method for all smacof objects
 
-plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale = 5, 
-                          label.conf = list(label = TRUE, pos = 1, col = 1), identify = FALSE, 
-                          type, main, xlab, ylab, xlim, ylim, ...)
+plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale = 1, col = 1, 
+                          label.conf = list(label = TRUE, pos = 3, col = 1), identify = FALSE, 
+                          type = "p", pch = 20,  asp = 1, main, xlab, ylab, xlim, ylim, ...)
 
 # x ... object of class smacofID
 # plot.type ... types available: "confplot", "Shepard", "resplot"
 # Shepard plot and resplot are performed over sum of distances
   
 {
+  ## --- check label lists
+  if (is.null(label.conf$label)) label.conf$label <- TRUE
+  if (is.null(label.conf$pos)) label.conf$pos <- 3
+  if (is.null(label.conf$col)) label.conf$col <- 1
+  if (is.null(label.conf$cex)) label.conf$cex <- 0.8
+  if (identify) label.conf$label <- FALSE
   
   x1 <- plot.dim[1]
   y1 <- plot.dim[2]
@@ -19,21 +25,19 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
     if (missing(xlab)) xlab <- paste("Dimension", x1,sep = " ") else xlab <- xlab
     if (missing(ylab)) ylab <- paste("Dimension", y1,sep = " ") else ylab <- ylab
 
-    if (missing(xlim)) xlim <- range(x$gspace[,x1])
-    if (missing(ylim)) ylim <- range(x$gspace[,y1])
+    if (missing(xlim)) xlim <- range(x$gspace[,x1])*1.1
+    if (missing(ylim)) ylim <- range(x$gspace[,y1])*1.1
     
-    if (missing(type)) type <- "n" else type <- type
-    if (identify) type <- "p"
+    print(type)
+        
+    plot(x$gspace[,x1], x$gspace[,y1], main = main, type = type, xlab = xlab, ylab = ylab, 
+         xlim = xlim, ylim = ylim, pch = pch, asp = asp, col = col, ...)
+    if (label.conf$label) text(x$gspace[,x1], x$gspace[,y1], labels = rownames(x$gspace), 
+                               cex = label.conf$cex, pos = label.conf$pos, 
+                               col = label.conf$col)
     
-    ppos <- label.conf[[2]]
-    if (type == "n") ppos <- NULL
-
-    plot(x$gspace[,x1], x$gspace[,y1], main = main, type = type, xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim, ...)
-    
-    if (!identify) {
-      if (label.conf[[1]]) text(x$gspace[,x1], x$gspace[,y1], labels = rownames(x$gspace), cex = 0.8, pos = ppos, col = label.conf[[3]])    
-    } else {
-      identify(x$gspace[,x1], x$gspace[,y1], labels = rownames(x$gspace), cex = 0.8)
+    if (identify) {
+       identify(x$gspace[,x1], x$gspace[,y1], labels = rownames(x$gspace), cex = 0.8)
     }
   }
 
@@ -108,16 +112,13 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
     if (missing(ylim)) ylim <- range(x$gspace[,y1])*1.1
     
     spp.perc <- x$spp/sum(x$spp)*100
-    bubsize <- (max(spp.perc) - spp.perc + 1)/length(spp.perc)*bubscale
+    bubsize <- spp.perc/length(spp.perc)*(bubscale + 3)
     
     plot(x$gspace, cex = bubsize, main = main, xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim)
     xylabels <- x$gspace
     ysigns <- sign(x$gspace[,y1])
     xylabels[,2] <- (abs(x$gspace[,y1])-(x$gspace[,y1]*(bubsize/50)))*ysigns 
-    text(xylabels, rownames(x$gspace), pos = 1,cex = 0.7)
+    text(xylabels, rownames(x$gspace), pos = 1,cex = 0.7)    
   }  
 
-  
-
-  
 }

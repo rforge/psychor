@@ -1,7 +1,6 @@
 useDynLib("smacof")
 import("stats", "graphics", "Hmisc", "colorspace", "polynom", "nnls")
 importFrom("grDevices", "dev.new", "hcl")
-importFrom("plotrix", "draw.circle")
 export(smacofSym)
 export(smacofRect)
 export(smacofIndDiff)

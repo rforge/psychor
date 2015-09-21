@@ -145,7 +145,6 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
 		    er <- appendList(er,dist(yr[[j]]))
 		    scon <- scon+sum(wgths[[j]]*(dh[[j]]-er[[j]])^2) #constraint stress computation
       }
-
     }
     #-------- end constraints -----------
     
@@ -207,7 +206,7 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
   
   
   colnames(aconf) <- cnames
-  rownames(aconf) <- labels(diss[[1]])
+  rownames(aconf) <- rownames(as.matrix(delta[[1]]))
   names(bconf) <- names(dh)
   
   snon <- (snon/m)/nn                   #stress normalization  nn <- n*(n-1)/2, m number lists

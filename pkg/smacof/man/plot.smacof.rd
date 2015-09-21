@@ -22,9 +22,10 @@
                        col = hcl(240, l = 50), cex = 0.8), type = "p", pch = 20, 
                        asp = 1, main, xlab, ylab, xlim, ylim, ...)
 
-\method{plot}{smacofID}(x, plot.type = "confplot", plot.dim = c(1,2), bubscale = 5, 
-                        label.conf = list(label = TRUE, pos = 1, col = 1), 
-                        identify = FALSE, type, main, xlab, ylab, xlim, ylim, ...)
+\method{plot}{smacofID}(x, plot.type = "confplot", plot.dim = c(1,2), bubscale = 1, 
+                        col = 1, label.conf = list(label = TRUE, pos = 3, col = 1), 
+                        identify = FALSE, type = "p", pch = 20,  asp = 1, 
+                        main, xlab, ylab, xlim, ylim, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

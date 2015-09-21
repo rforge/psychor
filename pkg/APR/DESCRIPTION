@@ -1,7 +1,7 @@
 Package: APR
 Type: Package
 Title: Applied Psychometrics With R
-Version: 0.0-3
+Version: 0.0-4
 Date: 2015-09-20
 Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email = "mair@fas.harvard.edu"))
 Maintainer: Patrick Mair <mair@fas.harvard.edu>
