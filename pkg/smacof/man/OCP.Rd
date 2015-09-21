@@ -19,7 +19,7 @@ for a Common Structure.  In M. Myrtek (Ed.), The Person in Biological and Social
 pp. 211-228. Goettingen, Germany: Hogrefe Press. 
 }
 \examples{
-ocpD <- sim2diss(OCP[,-55])
+ocpD <- sim2diss(OCP[,1:54])
 fit <- mds(ocpD, type = "ordinal")
 plot(fit)
 }
