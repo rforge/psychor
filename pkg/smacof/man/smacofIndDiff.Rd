@@ -9,25 +9,28 @@ INDSCAL and IDIOSCAL.
 }
 
 \usage{
-smacofIndDiff(delta, ndim = 2, type = c("ratio", "interval", "ordinal"), 
+smacofIndDiff(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
               constraint = c("indscal", "idioscal", "identity"),
               weightmat = NULL, init = "torgerson", ties = "primary",  
-              verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
+              verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
+              spline.degree = 2, spline.intKnots = 2)
               
-indscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal"), 
+indscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
         weightmat = NULL, init = "torgerson", ties = "primary", 
-        verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
+        verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
+        spline.degree = 2, spline.intKnots = 2)
 
-idioscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal"), 
+idioscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
          weightmat = NULL, init = "torgerson", ties = "primary", 
-         verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
+         verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
+         spline.degree = 2, spline.intKnots = 2)
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{delta}{A list of dissimilarity matrices or a list objects of class \code{dist}}
   \item{ndim}{Number of dimensions}
-  \item{type}{MDS type}
+  \item{type}{MDS type: \code{"interval"}, \code{"ratio"}, \code{"ordinal"} (nonmetric MDS), or \code{"mspline"}}
   \item{weightmat}{Optional matrix with dissimilarity weights}
   \item{init}{Matrix with starting values for configurations (optional)}
   \item{ties}{Tie specification for non-metric MDS}
@@ -36,8 +39,11 @@ idioscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal"),
   \item{modulus}{Number of smacof iterations per monotone regression call}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
+   \item{spline.degree}{Degree of the spline for \code{"mspline"} MDS type}
+  \item{spline.intKnots}{Number of interior knots of the spline for \code{"mspline"} MDS type}
 }
-\details{If the constraint is \code{"indscal"}, INDSCAL is performed with configuration weight matrices restricted to be diagonal. \code{indscal()} is a corresponding wrapper function that can be used instead of \code{smacofIndDiff()} with 
+\details{
+If the constraint is \code{"indscal"}, INDSCAL is performed with configuration weight matrices restricted to be diagonal. \code{indscal()} is a corresponding wrapper function that can be used instead of \code{smacofIndDiff()} with 
 \code{"indscal"} constraints.
 
 IDIOSCAL can be computed using the \code{"idioscal"} argument. The weight matrices are then unconstrained. 
@@ -58,7 +64,7 @@ Addtional weight restrictions can be imposed with \code{"identity"} which restri
   \item{resmat}{Matrix with squared residuals}
   \item{rss}{Residual sum-of-squares}
   \item{spp}{Stress per point}
-  \item{sps}{Stress per subject (matrix)}
+  \item{sps}{Stress per point per subject}
   \item{ndim}{Number of dimensions}
   \item{model}{Type of smacof model}
   \item{niter}{Number of iterations}

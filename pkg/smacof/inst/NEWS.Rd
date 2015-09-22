@@ -2,10 +2,11 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
-\section{Changes in Version 1.8-2}{
+\section{Changes in Version 1.8-3}{
   \itemize{
     \item Optimization in \code{smacofConstraint} improved (monotone regression in two directions).  
     \item Some plot cosmetics for \code{smacofIndDiff} and \code{Procrustes} calls. 
+    \item Transformations in \code{smacofIndDiff} use C implementation (mspline can be done as well). 
 }  
 }
 

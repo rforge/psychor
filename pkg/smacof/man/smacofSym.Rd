@@ -24,7 +24,7 @@ mds(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
   \item{weightmat}{Optional matrix with dissimilarity weights}
   \item{init}{Either \code{"torgerson"} (classical scaling starting solution), \code{"random"} (random configuration), or a user-defined matrix}
   \item{type}{MDS type: \code{"interval"}, \code{"ratio"}, \code{"ordinal"} (nonmetric MDS), or \code{"mspline"}}
-  \item{ties}{Tie specification for ordinal MDS only: \code{"primary"}, \code{"secondary"}, or \code{"tertiary"}}
+  \item{ties}{Tie specification (ordinal MDS only): \code{"primary"}, \code{"secondary"}, or \code{"tertiary"}}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
   \item{relax}{If \code{TRUE}, block relaxation is used for majorization}
   \item{modulus}{Number of smacof iterations per monotone regression call}

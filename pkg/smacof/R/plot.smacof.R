@@ -141,7 +141,7 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
     xylabels <- x$conf
     ysigns <- sign(x$conf[,y1])
     xylabels[,2] <- (abs(x$conf[,y1])-(x$conf[,y1]*(bubsize/50)))*ysigns 
-    text(xylabels, rownames(x$conf), pos = 1,cex = 0.7)
+    text(xylabels, rownames(x$conf), pos = 3,cex = 0.7)
   }  
 
 }
