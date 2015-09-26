@@ -24,6 +24,7 @@ data("BrainIQ")
     \item{\code{Height}}{Body height.}
     \item{\code{MRI_Count}}{MRI pixel count (brain size).}
 }
+}
 
 \source{
 Willerman, L., Schultz, R., Rutledge, J. N., & Bigler, E. (1991). In vivo brain size and intelligence. Intelligence, 15, 223-228.
