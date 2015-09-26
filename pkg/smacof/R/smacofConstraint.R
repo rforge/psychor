@@ -46,7 +46,6 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   nn <- n*(n-1)/2
   m <- length(diss)
   
-  simpcirc <- FALSE
   
   ## --- starting values 
   startconf <- init
@@ -90,7 +89,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
     }
   } 
 
-  
+  simpcirc <- FALSE
   if (is.list(external)) {                     
     if (external[[1]] == "simplex") {                           #simplex specification
       d2 <- external[[2]]
@@ -181,7 +180,6 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   
   #---------- end pre-specified functions for constraints -------
   
-  
   #x <- constrfun(xstart,w,external)                    #compute X
   if (constraint %in% c("linear","diagonal") & !simpcirc){
     # First make random weight matrices
@@ -190,7 +188,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
       # Make weight matrix C from a rotation matrix out of the left singular vectors of
       # a centering matrix
       C <- svd(diag(ncol.ext) - 1/ncol.ext)$u[, 1:ndim]
-      C <- matrix(runif(ncol.ext * ndim), ncol.ext, ndim)
+      #C <- matrix(runif(ncol.ext * ndim), ncol.ext, ndim)
     } else if (constraint == "diagonal") {
       C <- diag(ncol.ext)  # Make an initial C = I
     }
@@ -198,7 +196,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
     x.unc <- xstart
     for (s in 1:ncol.ext){
       target <- x.unc %*% C[s, ]
-      external[, s] <- target;
+      external[, s] <- target
       tt.plus <- transform(target, extvars[[s]], normq = 0)     # Compute update for external variable s
       tt.min  <- transform(-target, extvars[[s]], normq = 0)    # Compute update for external variable s
       if (sum((tt.plus$res - target)^2) < sum(((tt.min$res + target))^2) ) {
