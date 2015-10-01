@@ -1,0 +1,335 @@
+%\VignetteIndexEntry{WRS2: Robust Statistical Methods}
+%\VignetteEngine{knitr::knitr} 
+
+\documentclass[article, nojss]{jss}
+\usepackage{amsmath, amsfonts, thumbpdf}
+\usepackage{float,amssymb}
+\usepackage{hyperref}
+\usepackage{amsmath}
+
+\newcommand{\defi}{\mathop{=}\limits^{\Delta}}  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{Patrick Mair\\ Harvard University \And 
+        Rand Wilcox\\ University of Southern California
+        }
+\title{Robust Statistical Methods: The \proglang{R} Package \pkg{WRS2}}
+
+\Plainauthor{Patrick Mair, Rand Wilcox} %% comma-separated
+\Plaintitle{Robust Statistical Methods: The R Package WRS2} %% without formatting
+\Shorttitle{The \pkg{WRS2} Package} %% a short title (if necessary)
+
+%% an abstract and keywords
+\Abstract{
+Here goes the abstract
+}
+
+\Keywords{some keywords}
+\Plainkeywords{some keywords} 
+
+%% publication information
+%% NOTE: This needs to filled out ONLY IF THE PAPER WAS ACCEPTED.
+%% If it was not (yet) accepted, leave them commented.
+%% \Volume{13}
+%% \Issue{9}
+%% \Month{September}
+%% \Year{2004}
+%% \Submitdate{2004-09-29}
+%% \Acceptdate{2004-09-29}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Patrick Mair\\
+  Department of Psychology\\
+  Harvard University\\
+  E-mail: \email{mair@fas.harvard.edu}\\
+  URL: \url{http://http://scholar.harvard.edu/mair}
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/1/31336-5053
+%% Fax: +43/1/31336-734
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+<<echo=FALSE, hide=TRUE>>=
+require(WRS2)
+require(beanplot)
+@
+\section{Introduction}
+Empirical data are rarely normal. Yet, many classical statistical methods assume normally distributed data, mostly for small samples. For large samples the central limit theorem tells us that we do not have to worry. Unfortunately, things are a little bit more complex than that. 
+We can think of all sorts of deviations from normal distributions. Prominent ``dangerous'' deviations are heavily skewed data, data with outliers, and 
+heavy-tailed distribution. 
+
+Before diving into statistical estimation and testing, let us look at the impact of normality deviations from a purely descriptive angle. It is common 
+knowledge that the mean can be heavily affected by outliers or highly skewed distributions. Computing the mean on such data would not give us the 
+``typical'' participant, it is just not a good location measure to characterize the sample. In this case a more robust measure such as the median or 
+trimmed mean would be favorable. Subsequent statistical tests involving median or trimmed mean comparisons are outside the classical statistical 
+testing framework. 
+
+Another strategy to deal with skewed data is to apply transformations such as logarithm or more sophisticated
+Box-Cox transformations \citep{Box+Cox:1964}. For instance, in a simple $t$-test scenario where we want to compate two group means 
+we can think of applying log-transformations within each group which could make the data more normal. The problem with this is, of course, 
+that a subsequent $t$-test compares the log-means between the groups (i.e., the geometric means) rather than the original means. This might 
+not be in line anymore with our original hypotheses. 
+
+Apart from such descriptive considerations, violations from normality influence the results of statistical tests. The approximation of sampling distribution 
+of the test statistic might not be proper, testing results are biased, confidence intervals not estimated in a satisfactory manner. 
+In general, we have the following options when doing inference on small, ugly datasets and we are worried about the sampling distribution and confidence 
+intervals. We can stay within the parametric framework and establish the sampling distribution via permutation strategies. The \proglang{R} \citep{R:2015} package \pkg{coin} \citep{Hothorn:2008} gives a general implementation of basic permutation strategies. Another option is to perform a parametric or nonparametric bootstrap for which the \pkg{boot} package \citep{Canty+Ripley:2015} provides a flexible framework. Alternatively, we can switch into the nonparametric testing 
+world. Nonparametric tests have less restrictive distributional assumptions than their parametric friends. Prominent examples for classical nonparametric tests 
+taught in most introductory statistics class are the Mann-Whitney $U$-test \citep{Mann+Whitney:1947}, the Wilcoxon signed-rank and rank-sum test \citep{Wilcoxon:1945}, and Kruskal-Wallis ANOVA \citep{Kruskal+Wallis:1952}. 
+
+Robust methods for statistical estimation and testing provide a great option to deal with data that are not well-behaved. Historically, the first 
+developments can be traced back to the 60's with publications by \citet{Tukey:1960}, \citet{Huber:1964}, and \citet{Hampel:1968}. Measures that characterize 
+a distribution (such as location and scale) are said to be \emph{robust} if slight changes in a distribution have a relatively small effect on their 
+value \citep[][p.23]{Wilcox:2012}. Robust methods are still assuming a functional form of the probability distribution but the main goal is 
+to produce outcomes that are less sensitive to small departures from the assumed functional form. These methods are important in situations where researchers have rather small samples and the data are not well-behaved. In such situations it is not a good idea to apply classical statistical tests such as $t$-tests, ANOVA, ANCOVA, etc. since they may deliver biased results or their power may be low. 
+
+This article introduces the \pkg{WRS2} package that implements methods from the original \pkg{WRS} package (\url{https://github.com/nicebread/WRS/tree/master/pkg}) in a much more user-friendly way. We focus on standard testing scenarios and introduce the tests in an accessible way especially targeting the Social Sciences audience. Further technical details and additional tests can be found in \citet{Wilcox:2012}. 
+
+
+\section{Robust Measures of Location and Dispersion}
+A robust alternative to the mean is the \emph{trimmed mean} which discards a certain percentage at both ends of the distribution. For instance, 
+a 10\% trimmed mean cuts-off 10\% at the low end and 10\% the high end. In \proglang{R}, this can be achieved by the basic \code{mean()} function by setting the \code{trim} argument accordingly. Note that if the trimming portion is set to $\gamma = 0.5$, the trimmed mean 
+$\bar x_t$ results in the median $\tilde x$.
+
+Another alternative is the \emph{Winsorized mean}. The process of giving less weight to observations in the tails of the distribution and higher weight to the ones in the center, is called \emph{Winsorizing}. Instead of computing the mean on the original distribution we compute the meanon the Winsorized distribution which results in the Winsorized mean. Similar to the trimmed mean, the amount of Windsorizing has to choosen a priori. The \pkg{WRS2} function to compute Windsorized means is \code{winmean()}. 
+
+A very general location measure is the $M$-estimator. The ``M'' stands for ``maximum likelihood-type''). The basic idea is to define a loss function to be minimized. Minimizing $\sum_{i=1}^n (x_i - \mu)^2$ would result in the arithmetic mean $\hat{\mu} = \frac{1}{n}\sum_{i=1}^n x_i$. Instead of a quadratic loss we can think of a more general, differentiable distance function $\xi(\cdot)$: 
+
+\begin{equation}
+\sum_{i=1}^n \xi(x_i - \mu_m) \rightarrow \textrm{min!}
+\end{equation}
+
+Let $\Psi = \xi'(\cdot)$ denote its derivative. The minimization problem reduces to $\sum_{i=1}^n \Psi(x_i - \mu_m) = 0$ where 
+$\mu_m$ denoted the $M$-estimator. Several distance functions have been proposed in the literature. As an example, Huber proposed the following 
+function:
+
+\begin{equation}
+\Psi(x) = 
+\begin{cases}
+    x            & \quad \text{if } |x|\leq K\\
+    K \text{sign}(x)      & \quad \text{if } |x|> K\\
+  \end{cases}
+\end{equation}
+
+Where $K$ is the bending constant. Huber proposed a value of $K = 1.28$ \citep[see][]{Huber:1981}. Increasing $K$ increases efficiency when 
+sampling from a normal distribution, but increases sensitivity to the tails of the distribution (and vice versa for decreasing $K$). 
+The estimation of $M$-estimators is performed iteratively and implemented in the \code{mest()} function. More details and additional distance functions can be found in \citet{Wilcox:2012}.
+The \pkg{WRS2} package provides also functions for computing standard errors of robust measures. 
+
+% continue p. 52, simulate function (see p. 31) and compute various measures. 
+% Chapter 3
+% sample trimmed mean (3.3), quantiles (3.5), M-estimators (3.6), outlier detection (3.13)
+
+
+\section{Comparing Two Groups}
+\section{Tests on Location Measures for Two Independent Groups}
+\citet{Yuen:1974} proposed a test statistic for a two-sample trimmed mean test which allows for unequal variances. The test statistic is given by 
+\begin{equation}
+T_y = \frac{\bar X_{t1} - \bar X_{t2}}{\sqrt{d_1 + d_2}},
+\end{equation}
+which, under the null ($H_0$: $\bar X_{t1} = \bar X_{t2}$), follows a $t$-distribution. Details on computation of the standard error and the degrees of freedom 
+can be found in \citet[p.157--158]{Wilcox:2012}. Note that if no trimming is involved, this method reduces to Welch's classical $t$-test with unequal variances \citep{Welch:1938}. It is not suggested to use this test statistic for a $\gamma = 0.5$ trimming level which would result in median comparisons, since the standard errors become highly inaccurate. Yuen's test in implemented in the \code{yuen()} function. 
+There is also a bootstrap version of it (see \code{yuenbt}) which is suggested to use for one-sided testing when the group sample sizes are unequal. 
+
+Let us compute an example. We use a dataset that contains various statistics of teams in five different European 
+soccer leagues in the season 2008/2009. In this section we focus on the Spanish Primera Division and the German 
+Bundesliga and are interested in comparing the trimmed means of goals scored per game 
+across these two Leagues. 
+
+In the group-wise boxplots and beanplots in Figure~\ref{fig:soccerplot} we see the difference in the distributions. 
+Spain has three outliers (Barcelona, Real Madrid, Atletico Madrid), many teams in the middle range, and a few 
+teams at the lower end that did not score many goals. In the German league, things look more balanced. 
+Performing a $t$-test on the group means could be risky, since the Spanish mean could be affected by the outliers. 
+A saver way is to perform a test on the trimmed means. We keep the default trimming level of $\gamma = 0.2$.
+
+
+<<soccer-plot, eval=FALSE, echo = FALSE>>=
+SpainGer <- subset(eurosoccer, League == "Spain" | League == "Germany")
+SpainGer <- droplevels(SpainGer)
+op <- par(mfrow = c(1,2))
+boxplot(GoalsGame ~ League, data = SpainGer, main = "Boxplot Goals Scored per Game")
+points(1:2, tapply(SpainGer$GoalsGame, SpainGer$League, mean, trim = 0.2), pch = 19, col = "red")
+beanplot(GoalsGame ~ League, data = SpainGer, log = "", main = "Beanplot Goals Scored per Game", 
+         col = "coral")
+par(op)
+@
+
+\begin{figure}
+\begin{center}  
+<<soccer-plot1, echo=FALSE, fig.height = 5, fig.width = 12, dev='postscript'>>=
+<<soccer-plot>>
+@
+\end{center}
+\caption{\label{fig:soccerplot} Left panel: Boxplots for scored goals per game (Spanish vs. German league). The 
+red dots correspond to the 20\% trimmed means. Right panel: Beanplots for the same setting.}
+\end{figure}
+ 
+Running a two-sample trimmed mean test suggests that there are no significant differences in the trimmed means 
+across the two leagues:
+
+<<>>=
+yuen(GoalsGame ~ League, data = SpainGer)
+@
+ 
+If we want to run a test on median differences or more general $M$-estimator differences, the \code{pb2gen()} function can be used. 
+<<>>=
+pb2gen(GoalsGame ~ League, data = SpainGer, est = "median")
+pb2gen(GoalsGame ~ League, data = SpainGer, est = "onestep")
+@
+
+The first test related to median differences, the second test to Huber's $\Psi$ estimator. The results in this 
+particular example are consistent across various robust location estimators. 
+
+% effect sizes 
+%  binomials (5.8), variances (5.5), dependent groups (5.9.6)
+
+\section{Comparing Multiple Groups}
+\subsection{One-way Comparisons}
+Let us start with one-way ANOVA-like settings. Often it is said that $F$-tests are quite robust against violations. 
+This statement is not unreservedly true. In fact, discussions and examples given in \citet{Games:1984}, \citet{Tan:1982}, \citet{Wilcox:1996} and \citet{Cressie+Whitford:1986} show that things can go wrong with applying ANOVA in situations where we have, for instance, heavy-tailed distributions, unequal sample sizes, and when distributions differ in skewness. Transforming the data is not a very appealing alternative either since, as in a $t$-test setting, we end up comparing geometric means. 
+
+The first robust alternative that we consider here is a comparison of multiple trimmed group means, implemented in the 
+\code{t1way()} function. Let us denote the number of groups with $J$. The test statistic which tests 
+
+\[
+H_0: \mu_{t1} = \mu_{t2} = \cdots = \mu_{tJ}.
+\]
+
+and, approximates an $F$-distribution under the null, is quite complicated and can be found in \citet[p. 293]{Wilcox:2012}. 
+Similar to the $t$-test, if no trimming is involved, we end up with Welch's ANOVA version allowing for unequal variances
+\citep{Welch:1951}. A bootstrap version of it is provided in \code{t1waybt()}. 
+
+A similar test statistic can be derived for comparing medians instead of trimmed means. This is implemented in the 
+\code{med1way()} function. Let us apply these two test statistics on the soccer dataset. This time we include all 
+five leagues. Figure~\ref{fig:soccerplot2} shows the corresponding boxplots and beanplots. We see that Germany and 
+Italy have a pretty symmetric distribution, England and The Nethderlands right-skewed distributions, and Spain has outliers. 
+
+<<soccer2-plot, eval=FALSE, echo=FALSE>>=
+op <- par(mfrow = c(2,1))
+boxplot(GoalsGame ~ League, data = eurosoccer, main = "Boxplot Goals Scored per Game")
+#points(1:2, tapply(SpainGer$GoalsGame, SpainGer$League, mean, trim = 0.2), pch = 19, col = "red")
+beanplot(GoalsGame ~ League, data = eurosoccer, log = "", main = "Beanplot Goals Scored per Game", 
+         col = "coral")
+par(op)
+@
+\begin{figure}[t]
+\begin{center}  
+<<soccer2-plot1, echo=FALSE, fig.height = 10, fig.width = 12, dev='postscript'>>=
+<<soccer2-plot>>
+@
+\end{center}
+\caption{\label{fig:soccerplot2} Left panel: Boxplots for scored goals per game (Spanish vs. German league). The 
+red dots correspond to the 20\% trimmed means. Right panel: Beanplots for the same setting.}
+\end{figure}
+ 
+Let us perform the following two tests involving the comparison of robust location measures:
+
+<<>>=
+t1way(GoalsGame ~ League, data = eurosoccer)
+med1way(GoalsGame ~ League, data = eurosoccer)
+@
+
+Again, none of the robust tests suggested a significant difference across groups. 
+For illustration, let us just perform all pairwise comparisons on these data, without expecting 
+any significant result. Post hoc tests on the trimmed means can be carried out using the \code{lincon()} 
+function:
+
+<<>>=
+lincon(GoalsGame ~ League, data = eurosoccer)
+@
+
+% Maybe a bit more description here, see Wilcox p. 319
+
+\subsection{Comparisons Involving Higher-Order Designs}
+Let us start with two-way factorial ANOVA design involving $J$ categories for the first factor, and $K$ categories 
+for the second factor. The test statistic for the one-way trimmed mean comparisons can be generalized to two-way 
+designs. The corresponding function is called \code{t2way()}. Similarly, we can \code{med2way()} for median comparisons. 
+For more general $M$-estimators the function \code{pbad2way()} does the job. 
+
+As an example, let us look at the infamous beer goggles dataset by \citet{Field:2012}. This dataset is about the effects of alcohol on mate selection in night-clubs. The hypothesis is that after alcohol had been consumed, subjective perceptions of physical attractiveness would become more inaccurate (beer-goggles effect). We have the two factors gender (24 male and 
+24 femals students) and the amount of alcohol consumed (none, 2 pints, 4 pints). As dependent variable (DV) the students 
+were supposed to provide an attractiveness rating on a scale from 0-100. Figure~\ref{fig:goggles} shows the 
+interaction plots using the median as location measure. It looks like there is some interaction going on between 
+gender and the amount of alcohol in terms of attractiveness rating. 
+
+<<goggles-plot, eval=FALSE, echo=FALSE>>=
+attach(goggles)
+op <- par(mfrow = c(1,2))
+interaction.plot(gender, alcohol, attractiveness, fun = median, ylab = "Attractiveness", xlab = "Gender", type = "b", pch = 20,
+                 lty = 1, col = c("black", "cadetblue", "coral"), main = "Interaction Plot Alcohol|Gender", legend = FALSE)  
+legend("right", legend = c("2 Pints","4 Pints", "None"), col = c("black", "cadetblue", "coral"), lty = 1, cex = 0.8)
+interaction.plot(alcohol, gender, attractiveness, fun = median, ylab = "Attractiveness", xlab = "Gender", type = "b", pch = 20,
+                 lty = 1, col = c("coral", "black"), main = "Interaction Plot Gender|Alcohol", legend = FALSE) 
+legend("bottomleft", legend = c("female", "male"), col = c("coral", "black"), lty = 1, cex = 0.8)
+par(op)
+detach(goggles)
+@
+
+\begin{figure}[t]
+\begin{center}  
+<<goggles-plot1, echo=FALSE, fig.height = 7, fig.width = 11, dev='postscript'>>=
+<<goggles-plot>>
+@
+\end{center}
+\caption{\label{fig:goggles} Interaction plot for beer goggles data.}
+\end{figure}
+
+<<>>=
+t2way(attractiveness ~ gender*alcohol, data = goggles)
+med2way(attractiveness ~ gender*alcohol, data = goggles)
+pbad2way(attractiveness ~ gender*alcohol, data = goggles)
+summary(aov(attractiveness ~ gender*alcohol, data = goggles))
+@
+
+% check pbad2way(attractiveness ~ gender*alcohol, data = goggles, est = "onestep")
+% 7.1-7.4
+% random effects 7.5
+% 
+
+%\section{Tests for Independence}
+% 9.3
+
+%\section{Robust Regression}
+% Chapter 10-11
+% mediator, moderator (11.7), ancova (11.11), longitudinal 11.12 
+
+%\section{Robust Multivariate Methods}
+% chapter 6
+
+
+
+
+% export(t3way)
+% export(rmanova)
+% export(rmanovab)
+% export(ancova)
+% export(ancboot)
+% export(tsplit)
+% export(sppba)
+% export(sppbb)
+% export(sppbi)
+% export(mcp2atm)
+% export(mcp2a)
+% export(lincon)
+% export(mcppb20)
+% export(rmmcp)
+% export(pairdepb)
+
+\bibliography{WRS2}
+\end{document}
+
+
+ 
