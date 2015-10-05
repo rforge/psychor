@@ -524,7 +524,6 @@ The \pkg{WRS2} package provides smoothers for trimmed means (\code{runmean}), ge
 bagging versions of general $M$-estimators (\code{runmbo}), recommended for small datasets. Let us look at a data example, involving various $f$ values and various robust location measures $\hat{\theta}_i$. We use a simple dataset from \cite{Wright+London:2009} where we are interested whether the length and heat of a chile are related. The length was measured in centimeters, the heat on a scale from 0 (``for sissys'') to 11 (``nuclear''). 
 
 <<smooth-plot, eval=FALSE, echo=FALSE>>=
-load("/home/patrick/Desktop/psychor/pkg/WRS2/data/chile.rda") ## FIXME
 colpal <- c(rainbow_hcl(5, c = 100))
 pal <- palette(colpal)
 attach(chile)
@@ -584,7 +583,6 @@ The dataset we use to demonstrate robust ANCOVA is from \citet{Gelman+Hill:2007}
 We are interested in comparisons at six particular design points. We set the smoothing parameters to a considerably small value.
 
 <<echo=2:5>>=
-load("/home/patrick/Desktop/psychor/pkg/WRS2/data/electric.rda") ## FIXME
 comppts <- c(18, 70, 80, 90, 100, 110)
 fitanc <- ancova(Posttest ~ Pretest + Group, fr1 = 0.3, fr2 = 0.3, 
                  data = electric, pts = comppts)
