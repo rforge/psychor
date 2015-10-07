@@ -2,6 +2,12 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.8-5}{
+  \itemize{
+    \item \code{biplot} function for creating MDS biplots added.
+}  
+}
+
 \section{Changes in Version 1.8-3}{
   \itemize{
     \item Optimization in \code{smacofConstraint} improved (monotone regression in two directions).  
