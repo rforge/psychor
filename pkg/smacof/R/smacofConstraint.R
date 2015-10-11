@@ -84,11 +84,11 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
                                 spline.intKnots = constraint.spline.intKnots, 
                                 spline.degree = constraint.spline.degree,
                                 missing = "multiple")
-            
+      
       external[,s] <- extvars[[s]]$xInit - mean(extvars[[s]]$xInit)
     }
   } 
-
+  
   simpcirc <- FALSE
   if (is.list(external)) {                     
     if (external[[1]] == "simplex") {                           #simplex specification
@@ -194,18 +194,33 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
     }
     # Initialize the optimally scaled external variables
     x.unc <- xstart
-    for (s in 1:ncol.ext){
-      target <- x.unc %*% C[s, ]
-      external[, s] <- target
-      tt.plus <- transform(target, extvars[[s]], normq = 0)     # Compute update for external variable s
-      tt.min  <- transform(-target, extvars[[s]], normq = 0)    # Compute update for external variable s
-      if (sum((tt.plus$res - target)^2) < sum(((tt.min$res + target))^2) ) {
-        external[, s] <- tt.plus$res
-      } else {
-        external[, s] <- tt.min$res
+    x.con <- matrix(0, n, p)
+    for (s in 1:ncol.ext){  # Find initial constrained configuration
+      target <- x.unc %*% C[, s]/sum(C[, s]^2)
+      loss <- sum((x.unc - outer(external[, s], C[, s]) )^2)
+      loss.old <- loss + 2 * eps
+      while (loss.old - loss > eps) {  
+        loss.old <- loss
+        tt.plus <- transform(target, extvars[[s]], normq = 0)     # Compute update for external variable s
+        tt.min  <- transform(-target, extvars[[s]], normq = 0)    # Compute update for external variable s
+        if (sum((tt.plus$res - target)^2) < sum(((tt.min$res + target))^2) ) {
+          external[, s] <- tt.plus$res
+        } else {
+          external[, s] <- tt.min$res
+        }
+        #x.unc <- x.unc - outer(external[, s],C[s, ])
+        if (constraint == "linear"){
+          C[, s] <- t(external[,s, drop = FALSE]) %*% x.unc / sum((external[,s])^2)
+          target <- x.unc %*% C[, s]/sum(C[, s]^2)         
+        } else if (constraint == "diagonal") {
+          C[s, s] <- t(external[, s, drop = FALSE]) %*% x.unc[, s, drop = FALSE] / sum((external[,s])^2)
+          target <- x.unc[, s] / C[s, s]          
+        } 
+        loss <- sum((x.unc - outer(external[, s], C[, s]) )^2)
       }
-      x.unc <- x.unc - outer(external[, s],C[s, ])
-    }
+      x.unc <- x.unc - outer(external[, s], C[, s])
+    }  
+    
     # Set external to column sum of squares n
     #external <- apply(external, 2, FUN = function(x){x <- x*(length(x)/sum(x^2))^.5})
     # Do an extra round of updates to get the column length restriction fine.
