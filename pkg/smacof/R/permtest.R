@@ -1,1 +1,1 @@
-permtest <- function(object, nrep = 100, verbose = TRUE, method = "full")UseMethod("permtest")
+permtest <- function(object, data,  method.dat = "pearson", method.diss = "full", nrep = 100, verbose = TRUE)UseMethod("permtest")

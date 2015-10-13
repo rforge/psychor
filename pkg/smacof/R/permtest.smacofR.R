@@ -1,4 +1,4 @@
-permtest.smacofR <- function(object, nrep = 100, verbose = TRUE, method = "full")
+permtest.smacofR <- function(object, data = NULL, method.dat = NULL, method.diss = "full", nrep = 100, verbose = TRUE)
 {
 ## val ... stress value  
 ## n... number of objects
@@ -6,6 +6,7 @@ permtest.smacofR <- function(object, nrep = 100, verbose = TRUE, method = "full"
 ## ... additional arguments to be passed from smacofRect  
     
     #if (class(object)[1] != "smacofR") stop("Permutation test is currenlty implemented for objects of class smacofB from smacofSym() only! \n")
+    method.diss <- match.arg(method.diss, c("full", "rows"))
     
     data <- object$obsdiss
     m <- object$nobj          ## number of objects (columns)
@@ -20,21 +21,19 @@ permtest.smacofR <- function(object, nrep = 100, verbose = TRUE, method = "full"
     #perms <- shuffleSet(m, nset = nper)
     
     for (irep in 1:nrep) {
-      
-      ## row-wise: activate later when row-conditional model is implemented
-      #permmat <- t(apply(data, 1, function(pp) {     ## computes permuted matrix
-      #  ind <- sample(1:m, m)
-      #  pp[ind]
-      #}))
-      
-      ## full permutation
-      ind <- sample(1:nm)
-      permmat <- matrix(as.vector(data)[ind], ncol = m)
-      
+          
+      if (method.diss == "rows") {                      ## permutation within rows
+        permmat <- t(apply(data, 1, function(pp) {     ## computes permuted matrix
+          ind <- sample(1:m, m)
+          pp[ind]
+        }))
+      } else {                                         ## full permutation
+       ind <- sample(1:nm)
+       permmat <- matrix(as.vector(data)[ind], ncol = m)
+      }
       
       smacall$delta <- permmat
       resperm <- eval(smacall) 
-      #resperm <- smacofRect(permmat, ndim = p, ...)
       stressvec[irep] <- resperm$stress
       congmat[irep, ] <- resperm$congvec
               

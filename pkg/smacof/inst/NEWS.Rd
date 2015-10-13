@@ -2,6 +2,12 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.8-6}{
+  \itemize{
+    \item Permutation tests based on permutations of the original data matrix added.
+}  
+}
+
 \section{Changes in Version 1.8-5}{
   \itemize{
     \item \code{biplot} function for creating MDS biplots added.
