@@ -1,4 +1,4 @@
-function (delta, constraint = "linear", external, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
+smacofConstraint <- function (delta, constraint = "linear", external, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
           weightmat = NULL, init = NULL, 
           ties = "primary", verbose = FALSE, modulus = 1, itmax = 1000, 
           eps = 1e-06, spline.intKnots = 4, spline.degree = 2, 
