@@ -196,8 +196,8 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
     x.unc <- xstart
     x.con <- matrix(0, n, p)
     for (s in 1:ncol.ext){  # Find initial constrained configuration
-      target <- x.unc %*% C[, s]/sum(C[, s]^2)
-      loss <- sum((x.unc - outer(external[, s], C[, s]) )^2)
+      target <- x.unc %*% C[s, ]/sum(C[s, ]^2)
+      loss <- sum((x.unc - outer(external[, s], C[s, ]) )^2)
       loss.old <- loss + 2 * eps
       while (loss.old - loss > eps) {  
         loss.old <- loss
@@ -210,15 +210,15 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
         }
         #x.unc <- x.unc - outer(external[, s],C[s, ])
         if (constraint == "linear"){
-          C[, s] <- t(external[,s, drop = FALSE]) %*% x.unc / sum((external[,s])^2)
-          target <- x.unc %*% C[, s]/sum(C[, s]^2)         
+          C[s, ] <- t(external[,s, drop = FALSE]) %*% x.unc / sum((external[,s])^2)
+          target <- x.unc %*% C[s, ]/sum(C[s, ]^2)         
         } else if (constraint == "diagonal") {
           C[s, s] <- t(external[, s, drop = FALSE]) %*% x.unc[, s, drop = FALSE] / sum((external[,s])^2)
           target <- x.unc[, s] / C[s, s]          
         } 
-        loss <- sum((x.unc - outer(external[, s], C[, s]) )^2)
+        loss <- sum((x.unc - outer(external[, s], C[s, ]) )^2)
       }
-      x.unc <- x.unc - outer(external[, s], C[, s])
+      x.unc <- x.unc - outer(external[, s], C[s, ])
     }  
     
     # Set external to column sum of squares n
