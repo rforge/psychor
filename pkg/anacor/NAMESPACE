@@ -1,18 +1,15 @@
-import("stats", "graphics", "rgl", "scatterplot3d", "colorspace")
+import("stats", "graphics", "colorspace")
 importFrom("car", "ellipse")
 importFrom("fda", "bsplineS")
 importFrom("splines", "spline.des")
 importFrom("grDevices", "dev.new", "hcl")
 export(anacor)
-export(plot3dstatic)
 export(burtTable)
 export(expandFrame)
 export(mkIndiList)
+export(screeplot)
 
 S3method(print, anacor)
-S3method(summary, anacor)
 S3method(plot, anacor)
-S3method(plot3d, anacor)
-S3method(plot3dstatic, anacor)
-
+S3method(screeplot, anacor)
 

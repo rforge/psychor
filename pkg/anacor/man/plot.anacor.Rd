@@ -1,40 +1,39 @@
 \name{plot.anacor}
 \alias{plot.anacor}
-\alias{plot3dstatic}
-\alias{plot3dstatic.anacor}
-\alias{plot3d.anacor}
+\alias{screeplot.anacor}
+\alias{screeplot}
 
-\title{2-D and 3D plots for anacor solution}
-\description{These functions produce various 2- and 3-dimensional plots for objects of class \code{"anacor"} 
+\title{Plots for anacor solution}
+\description{These functions produce various plots for objects of class \code{"anacor"} 
 }
 \usage{
-\method{plot}{anacor}(x, plot.type, plot.dim = c(1,2), legpos = "top", arrows = FALSE, conf = 0.95, 
-wlines = 0, xlab, ylab, main, type, xlim, ylim, cex.axis2, ...)
+\method{plot}{anacor}(x, plot.type = "jointplot", plot.dim = c(1,2), col.row = "cadetblue", 
+col.column = "coral1", catlabels = list(label.row = TRUE, label.col = TRUE, 
+col.row = "cadetblue", col.column = "coral1", cex = 0.8, pos = 3),
+legpos = "top", arrows = c(FALSE, FALSE), conf = 0.95, wlines = 0, asp = 1, pch = 20, 
+xlab, ylab, main, type, xlim, ylim, cex.axis2, ...)
 
-\method{plot3d}{anacor}(x, plot.type, plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", 
-arrows = TRUE, xlab, ylab, zlab, main, ...)
-
-\method{plot3dstatic}{anacor}(x, plot.type, plot.dim = c(1,2,3), col.r = "RED", col.c = "BLUE", 
-arrows = TRUE, main, xlab, ylab, zlab, xlim, ylim, zlim, ...)
-
+\method{screeplot}{anacor}(x, pch = 20, xlab = "Number of Dimensions", ylab = "Eigenvalues", 
+main = "CA Scree Plot", ...)
 }
 
 \arguments{
-  \item{x}{Object of class \code{"anacor"}.}
+  \item{x}{Object of class \code{"anacor"}}
   \item{plot.type}{Type of plot to be produced (details see below): 2-D and 3-D for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}; 2-D for \code{"regplot"}, \code{"graphplot"}, \code{"benzplot"}, \code{"transplot"}, and \code{"orddiag"}.}
   \item{plot.dim}{Vector of length 2 with Dimensions to be plotted. For \code{"regplot"} a single value should be provided, for  \code{"transplot"} more than two dimensions are allowed, and for \code{"benzplot"} this argument is ignored.}
+  \item{col.row}{Color row categories}
+  \item{col.column}{Color column categories}
+  \item{catlabels}{Various parameter settings for labels}
   \item{legpos}{Position of the legend (for \code{"transplot"} only)}
   \item{conf}{Ellipsoid confidence level for \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"}, assuming that the ellipse where computed in \code{anacor()}. If \code{NULL}, no ellipsoids are drawn.}
-  \item{arrows}{If \code{TRUE} the points in \code{"jointplot"}, \code{"rowplot"}, and \code{"colplot"} are connected with the origin.}
+  \item{arrows}{Whether arrows from the origin to the row scores (first element) or column scores (second element) should be drawn.}
   \item{wlines}{For \code{"graphplot"} only: If 0, all lines are of the same thickness. For values > 0 line thickness indicates the strength of the pull}
-  \item{col.r}{Color for row score plots}
-  \item{col.c}{Color for column score plots}
+  \item{asp}{Aspect ratio.}
+  \item{pch}{Symbol for plotting points.}
   \item{xlab}{Label x-axis.}
   \item{ylab}{Label y-axis.}
-  \item{zlab}{Label z-axis.}
   \item{xlim}{Scale x-axis.}
   \item{ylim}{Scale y-axis.}
-  \item{zlim}{Scale z-axis.}
   \item{main}{Plot title.}
   \item{type}{Whether points, lines or both should be plotted; for \code{"regplot"} and \code{"transplot"} only.}
   \item{cex.axis2}{For \code{"regplot"} only. The magnification to be used for the category labels in the scaled solution relative to the current setting of cex.}
@@ -64,11 +63,22 @@ The transformation plot (\code{"transplot"}) plots the row/column categories aga
 
 \examples{
 
-##Regression plots using Glass data
+## symmetric map
+data(tocher)
+res <- anacor(tocher)
+plot(res, conf = NULL, main = "Symmetric Map")
+
+## simple CA on Tocher data, asymmetric coordinates
+res <- anacor(tocher, scaling = c("standard", "Benzecri"))
+res
+
+## Regression plots using Glass data
 data(glass)
 res <- anacor(glass)
 plot(res, plot.type = "regplot", xlab = "fathers occupation", ylab = "sons occupation")
 
+## Screeplot 
+screeplot(res)
 
 ## Benzecri Plots for bitterling data
 data(bitterling)

@@ -1,18 +1,16 @@
 \name{anacor}
 \alias{anacor}
 \alias{print.anacor}
-\alias{summary.anacor}
 
 \title{Simple and Canonical Correspondence Analysis}
-\description{This function performs simple and canonical CA for incomplete tables based on SVD. 
+\description{This function performs simple and canonical CA for possibly incomplete tables based on SVD. 
 Different scaling methods for row and column scores are provided. 
 }
 \usage{
-anacor(tab, ndim = 2, row.covariates, col.covariates, 
-scaling = c("Benzecri","Benzecri"), ellipse = TRUE, eps = 1e-06)
+anacor(tab, ndim = 2, row.covariates, col.covariates, scaling = c("standard","standard"), 
+ellipse = TRUE, eps = 1e-06)
 
 \method{print}{anacor}(x,...)
-\method{summary}{anacor}(object,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,22 +18,17 @@ scaling = c("Benzecri","Benzecri"), ellipse = TRUE, eps = 1e-06)
   \item{ndim}{Number of dimensions.}
   \item{row.covariates}{Matrix with n rows containing covariates for the row scores.}
   \item{col.covariates}{Matrix with m rows containing covariates for the column scores.}
-  \item{scaling}{A vector with two elements. The first one corresponds to the method for row scaling, the second one for column scaling. Available scaling methods are \code{"standard"}, \code{"centroid"}, 
-  \code{"Benzecri"}, \code{"Goodman"}.}
+  \item{scaling}{A vector with two elements. The first one corresponds to the method for row scaling, the second one for column scaling. Available scaling methods are \code{"standard"}, \code{"Benzecri"}, \code{"Goodman"}.}
   \item{ellipse}{If \code{TRUE}, confidence ellipses are computed.}
   \item{eps}{Convergence criterion for reconstitution algorithm.}
   \item{x}{Object of class \code{"anacor"} in \code{print.anacor}.}
-  \item{object}{Object of class \code{"anacor"} in \code{summary.anacor}.}
   \item{\dots}{Additional arguments ignored.}
 }
 \details{
-  Missing values in \code{tab} are imputed using the reconstitution algorithm. 
-  Setting \code{scaling} to \code{"standard"} leads to standard coordinates. 
-  Principal coordinates can be computed by means of Benzecri decomposition. 
-  Furthermore, scores can be scaled around their centroid. 
+  Missing values in \code{tab} are imputed using the reconstitution algorithm. Setting \code{scaling} to \code{"standard"} leads to standard coordinates. Principal coordinates can be computed by means of Benzecri decomposition. Furthermore, scores can be scaled around their centroid. 
   Goodman scaling is based on Fisher-Maung decomposition.  
   
-  For large datasets it is suggested to set \code{ellipse = FALSE}. If \code{conf = TRUE}, make sure
+  For large datasets it is suggested to set \code{ellipse = FALSE}. If \code{ellipse = TRUE}, make sure
   that there are no rows and columns that have full 0 entries. 
 }
 \value{
@@ -46,9 +39,11 @@ scaling = c("Benzecri","Benzecri"), ellipse = TRUE, eps = 1e-06)
   \item{chisq.decomp}{Chi-square decomposition across dimensions with p-values.}
   \item{singular.values}{Singular values without trivial solution.}
   \item{se.singular.values}{Standard errors for the singular values.}
+  \item{stestmat}{Test results for singular values (only for \code{ellipse = TRUE}).}
   \item{left.singvec}{Left singular vectors without trivial solution.}
   \item{right.singvec}{Right singular vectors without trivial solution.}
-  \item{eigen.values}{Eigenvalues without trivial solution.}
+  \item{eigen.values}{Eigenvalues for the fitted dimensionality.}
+  \item{eigenvall}{Full vector of eigenvalues (principal inertias).}
   \item{datname}{Name of the dataset.}
   \item{tab}{Table with imputed frequencies in case of missings.}
   \item{row.covariates}{Matrix with row covariates.}
@@ -69,11 +64,14 @@ scaling = c("Benzecri","Benzecri"), ellipse = TRUE, eps = 1e-06)
 \seealso{\code{\link{plot.anacor}}}
 \examples{
 
-## simple CA on Tocher data, asymmetric coordinates
+## simple CA on Tocher data, symmetric standard coordinates
 data(tocher)
-res <- anacor(tocher, scaling = c("standard", "centroid"))
+res <- anacor(tocher)
 res
-summary(res)
+
+## simple CA on Tocher data, asymmetric coordinates
+res <- anacor(tocher, scaling = c("standard", "Benzecri"))
+res
 
 ## 2- and 5-dimensional solutions for bitterling data, Benzecri scaling
 data(bitterling)
@@ -87,8 +85,6 @@ data(maxwell)
 res <- anacor(maxwell$table, row.covariates = maxwell$row.covariates, 
 scaling = c("Goodman", "Goodman"))
 res
-summary(res)
-
 
 }
 

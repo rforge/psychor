@@ -1,11 +1,11 @@
-Package: APR
+Package: MPR
 Type: Package
-Title: Applied Psychometrics With R
-Version: 0.0-6
-Date: 2015-10-07
+Title: Modern Psychometrics With R
+Version: 0.0-7
+Date: 2015-10-24
 Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email = "mair@fas.harvard.edu"))
 Maintainer: Patrick Mair <mair@fas.harvard.edu>
-Description: Supplementary materials and datasets for the book "Applied Psychometrics With R" (Mair, 2016, Springer useR! series).
+Description: Supplementary materials and datasets for the book "Modern Psychometrics With R" (Mair, 2016, Springer useR! series).
 Imports: graphics, stats
 Depends: R (>= 3.0.2)
 License: GPL-2
