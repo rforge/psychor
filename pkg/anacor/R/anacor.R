@@ -1,5 +1,4 @@
-`anacor` <-
-function(tab, ndim = 2, row.covariates, col.covariates, scaling = c("Benzecri","Benzecri"), 
+anacor <- function(tab, ndim = 2, row.covariates, col.covariates, scaling = c("standard","standard"), 
 ellipse = TRUE, eps = 1e-6) 
 {
 #tab ... 2-way frequency table
@@ -12,8 +11,8 @@ ellipse = TRUE, eps = 1e-6)
 #----------- sanity checks ---------------
 tab <- as.matrix(tab)
 if (length(scaling) == 1) scaling <- rep(scaling, 2) 
-scaling[1] <- match.arg(scaling[1],c("standard", "centroid", "Benzecri", "Goodman"))
-scaling[2] <- match.arg(scaling[2],c("standard", "centroid", "Benzecri", "Goodman"))
+scaling[1] <- match.arg(scaling[1],c("standard", "Benzecri", "Goodman"))
+scaling[2] <- match.arg(scaling[2],c("standard", "Benzecri", "Goodman"))
 if (missing(row.covariates)) {
   row.covariates <- NULL
 } else {
@@ -28,8 +27,6 @@ if (missing(col.covariates)) {
 }
 if (ndim > min(dim(tab)) - 1) stop("Too many dimensions!")
 #------------------ end sanity checks -----------------
-
-
 
 name<-deparse(substitute(tab)) 
 
@@ -121,9 +118,7 @@ if (COL) {
 x <- x*sqrt(N)								#standard coordinates
 y <- y*sqrt(N)								#for each column holds: x'Dx = N, y'Ey=N
 
-#--------------- rescale scores ----------------
-if (scaling[2] == "centroid") y<-y*outer(rep(1,m),sigmavec)						
-if (scaling[1] == "centroid") x <-x*outer(rep(1,n),sigmavec)						
+#--------------- rescale scores ----------------		
 if (scaling[2] == "Goodman") 	y<-y*outer(rep(1,m),sqrt(sigmavec))
 if (scaling[1] == "Goodman")	x<-x*outer(rep(1,n),sqrt(sigmavec))
 if (scaling[2] == "Benzecri")	y<-y*outer(rep(1,m),sigmavec)
@@ -132,8 +127,12 @@ if (scaling[1] == "Benzecri")   x<-x*outer(rep(1,n),sigmavec)
 #compute Benzecri distances
 benzres <- benzdist(scaling, x, y, z, tab, n, m, r, c, row.covariates, col.covariates)           
   
-prob <- sval/chisq; pcum<-cumsum(prob)
+prob <- sval/chisq 
+pcum<-cumsum(prob)
+
 cs.mat <- cbind(sval, prob, pcum)
+
+eigenall <- sval/N
 
 #------------------------- generalized SVD and derivatives ---------------------
 if (ellipse)
@@ -152,18 +151,32 @@ if (ellipse)
 colnames(x) <- colnames(y) <- dimlab
 rownames(x) <- rownames(tab)
 rownames(y) <- colnames(tab)
-rownames(cs.mat) <- paste("Component", 1:dim(cs.mat)[1])
-colnames(cs.mat) <- c("Chisq","Proportion","Cumulative Proportion")
+
+rownames(cs.mat) <- paste("Dimension", 1:dim(cs.mat)[1])
+colnames(cs.mat) <- c("Chisq", "Proportion","Cumulative Proportion")
+
+#--------------------- z-test on singular values --------------------------
+if (!is.null(se.sigma)) {
+ z.values <- sigmavec/se.sigma
+ pvalues <- (1-pnorm(abs(z.values)))
+ stestmat <- data.frame(sigmavec, se.sigma, pvalues)
+ colnames(stestmat) <- c("Singular Value","Standard Error","p-value")
+ rownames(stestmat) <- paste("Dimension", 1:ndim)
+} else {
+  stestmat <- NULL
+}
 
                                                
 result <- list(datname = name, tab = tab, ndim = ndim, row.covariates = row.covariates, 
                col.covariates = col.covariates, row.scores = x, col.scores = y, 
-               chisq.decomp = cs.mat, chisq = chisq, singular.values = sigmavec, se.singular.values = se.sigma,
+               chisq.decomp = cs.mat, chisq = chisq, singular.values = sigmavec, se.singular.values = se.sigma, 
+               stestmat = stestmat,
                left.singvec = sv$u[,-1], right.singvec = sv$v[,-1],
-               eigen.values = sigmavec^2, scaling = scaling,
+               eigen.values = sigmavec^2, eigenall = eigenall, scaling = scaling,
                bdmat = benzres[1:4], rmse = benzres[5:6], 
                row.acov = res.acov$acovu, col.acov = res.acov$acovv, cancoef = list(rows = Tr, columns = Tc),
-               sitescores = list(rows = Xstar, columns = Ystar), isetcor = list(rows = isetCorRow, columns = isetCorCol)) 
+               sitescores = list(rows = Xstar, columns = Ystar), isetcor = list(rows = isetCorRow, columns = isetCorCol), 
+               call = match.call()) 
 class(result) <- "anacor"
 result
 

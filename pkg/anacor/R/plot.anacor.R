@@ -1,6 +1,6 @@
-`plot.anacor` <-
-function(x, plot.type = "jointplot", plot.dim = c(1,2), legpos = "top", arrows = FALSE, conf = 0.95, 
-         wlines = 0, xlab, ylab, main, type, xlim, ylim, cex.axis2, ...)
+plot.anacor <- function(x, plot.type = "jointplot", plot.dim = c(1,2), col.row = "cadetblue", col.column = "coral1", 
+         catlabels = list(label.row = TRUE, label.col = TRUE, col.row = "cadetblue", col.column = "coral1", cex = 0.8, pos = 3),
+         legpos = "top", arrows = c(FALSE, FALSE), conf = 0.95, wlines = 0, asp = 1, pch = 20, xlab, ylab, main, type, xlim, ylim, cex.axis2, ...)
 {
 # x         ... object of class "anacor"
 # plot.type ... string with values "jointplot", "rowplot", "colplot", "benzplot", 
@@ -8,7 +8,16 @@ function(x, plot.type = "jointplot", plot.dim = c(1,2), legpos = "top", arrows =
 # plot.dim  ... dimensions to be plotted 
 # conf ... confidence ellipsoids, either NULL of conf-value. 
 
+## establish catlabels list
+if (is.null(catlabels$label.row)) catlabels$label.row <- TRUE
+if (is.null(catlabels$label.column)) catlabels$label.column <- TRUE
+if (is.null(catlabels$pos)) catlabels$pos <- 3
+if (is.null(catlabels$col.row)) catlabels$col.row <- "cadetblue"
+if (is.null(catlabels$col.column)) catlabels$col.column <- "coral1"
+if (is.null(catlabels$cex)) catlabels$cex <- 0.8
+
 options(locatorBell = FALSE)
+
 n <- dim(x$tab)[1]
 m <- dim(x$tab)[2]
 if (x$ndim < 2) stop("No 2D plot can be produced for ndim < 2!")
@@ -39,13 +48,13 @@ if (plot.type == "regplot") {
   xaxt = "n", yaxt = "n", xlim = c(1,n), ylim = c(1,m), ...)
   axis(1, at = 1:(dim(x$tab)[1]), labels = rownames(x$tab), ...)
   axis(2, at = 1:(dim(x$tab)[2]), labels = colnames(x$tab), ...)
-  points(1:n, xave, type = type, col = "RED")
-  points(yave, 1:m, type= type, col = "BLUE")
+  points(1:n, xave, type = type, col = col.row)
+  points(yave, 1:m, type= type, col = col.column)
   abline(v=1:n, h=1:m, col = "lightgray", lty = 2 )
   for (i in 1:n) text(rep((1:n)[i],m),1:m,as.character(x$tab[i,]),cex=.8, col = "lightgray")
 
  
-  dev.new()
+  dev.next()
   #scaled solution
   
   scalevec <- c(as.vector(x$row.scores[,plot.dim]),as.vector(x$col.scores[,plot.dim]))
@@ -60,8 +69,8 @@ if (plot.type == "regplot") {
   plot(z, z, type = "n", xlab = paste(xlab1," scores"), ylab = paste(ylab1," scores"),main = main2,  
   xlim = xlim, ylim = ylim,...)
   
-  points(xa, xave, type = type, col = "RED")
-  points(yave, ya, type = type, col = "BLUE")
+  points(xa, xave, type = type, col = col.row)
+  points(yave, ya, type = type, col = col.column)
   abline(v = xa, h = ya, col = "lightgray", lty = 2)
 
   if (missing(cex.axis2)) cex.axis2 <- 0.6
@@ -121,14 +130,13 @@ if (plot.type == "rowplot") {
   if (missing(xlim)) xlim <- range(xa)*1.2
   if (missing(ylim)) ylim <- range(xa)*1.2
 
-  plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, ylim = ylim,...)
-  text(xa, rownames(x$row.scores), pos = 3, cex = 0.8, offset = 0.2, ...)
+  plot(xa, type = "p", asp = asp, xlab = xlab, ylab = ylab, main = main1, pch = pch, col = col.row, xlim = xlim, ylim = ylim,...)
+  if (catlabels$label.row) text(xa, rownames(x$row.scores), pos = catlabels$pos, cex = catlabels$cex, col = catlabels$col.row)
   if ((!is.null(conf)) && (!is.null(x$row.acov))) {
     rad<-sqrt(qchisq(conf,2))
-    for (i in 1:n) ellipse(xa[i,], x$row.acov[plot.dim,plot.dim,i], rad, col = "darkgray", center.cex = 0.4, 
-    lwd = 1)
+    for (i in 1:n) car::ellipse(xa[i,], x$row.acov[plot.dim,plot.dim,i], rad, col = col.row, center.cex = 0.4, lwd = 1)
   }
-  if (arrows) arrows(0,0,xa[,1],xa[,2], length = 0.1)
+  if (arrows[1]) arrows(0,0,xa[,1],xa[,2], length = 0.1, col = col.row)
   abline(h = 0, v = 0, col = "lightgray", lty = 2)
  
   
@@ -147,14 +155,13 @@ if (plot.type == "colplot") {
   if (missing(xlim)) xlim <- range(ya)*1.2
   if (missing(ylim)) ylim <- range(ya)*1.2
   
-  plot(ya, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, ylim = ylim,...)
-  text(ya, rownames(x$col.scores), pos = 3, cex = 0.8, offset = 0.2)
+  plot(ya, type = "p", asp = asp, xlab = xlab, ylab = ylab, main = main1, pch = pch, col = col.column, xlim = xlim, ylim = ylim,...)
+  if (catlabels$label.col) text(ya, rownames(x$col.scores), pos = catlabels$pos, cex = catlabels$cex, col = catlabels$col.column)
   if ((!is.null(conf)) && (!is.null(x$col.acov))) {
     rad<-sqrt(qchisq(conf,2))
-    for (i in 1:m) ellipse(ya[i,], x$col.acov[plot.dim,plot.dim,i], rad, col = "darkgray", center.cex = 0.4, 
-    lwd = 1)
+    for (i in 1:m) car::ellipse(ya[i,], x$col.acov[plot.dim,plot.dim,i], rad, col = col.column, center.cex = 0.4, lwd = 1)
   }
-  if (arrows) arrows(0,0,ya[,1],ya[,2], length = 0.1)
+  if (arrows[2]) arrows(0,0,ya[,1],ya[,2], length = 0.1, col = col.column)
   abline(h = 0, v = 0, col = "lightgray", lty = 2)
 }
 	
@@ -176,25 +183,22 @@ if (plot.type == "jointplot") {
   if (missing(xlim)) xlim <- range(rbind(xa,ya))*1.2
   if (missing(ylim)) ylim <- range(rbind(xa,ya))*1.2                                 
   
-  plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, 
-  ylim = ylim, col = "RED",...)
-  points(ya, pch = 20, col = "BLUE")
-  text(xa, rownames(xa), col = "RED", pos = 3, cex = 0.8, offset = 0.2)
-  text(ya, rownames(ya), col = "BLUE", pos = 3, cex = 0.8, offset = 0.2)
+  plot(xa, type = "p", asp = asp, xlab = xlab, ylab = ylab, main = main1, pch = pch,  col = col.row, xlim = xlim, ylim = ylim, ...)
+  points(ya, pch = pch, col = col.column)
+  if (catlabels$label.row) text(xa, rownames(xa), pos = catlabels$pos, cex = catlabels$cex, col = catlabels$col.row)
+  if (catlabels$label.col) text(ya, rownames(ya), pos = catlabels$pos, cex = catlabels$cex, col = catlabels$col.column)
   if (!is.null(conf)) {
     rad<-sqrt(qchisq(conf,2))
     if (!is.null(x$row.acov)) 
     {
-    for (i in 1:n) ellipse(xa[i,], x$row.acov[plot.dim,plot.dim,i], rad, col = hcl(30), center.cex = 0.4, lwd = 1)
+    for (i in 1:n) car::ellipse(xa[i,], x$row.acov[plot.dim,plot.dim,i], rad, col = col.row, center.cex = 0.4, lwd = 1)
     }
-    if (!is.null(x$row.acov)) {
-    for (i in 1:m) ellipse(ya[i,], x$col.acov[plot.dim,plot.dim,i], rad, col = hcl(230), center.cex = 0.4, lwd = 1)
+    if (!is.null(x$col.acov)) {
+    for (i in 1:m) car::ellipse(ya[i,], x$col.acov[plot.dim,plot.dim,i], rad, col = col.column, center.cex = 0.4, lwd = 1)
     }
   }
-  if (arrows) {
-    arrows(0,0,xa[,1],xa[,2], col = hcl(30), length = 0.1)
-    arrows(0,0,ya[,1],ya[,2], col = hcl(230), length = 0.1)
-  }  
+  if (arrows[1]) arrows(0,0,xa[,1],xa[,2], col = col.row, length = 0.1)
+  if (arrows[2]) arrows(0,0,ya[,1],ya[,2], col = col.column, length = 0.1)  
   abline(h = 0, v = 0, col = "lightgray", lty = 2)
 }
 
@@ -212,20 +216,20 @@ if (plot.type == "graphplot") {
   if (missing(xlim)) xlim <- range(rbind(xa,ya))
   if (missing(ylim)) ylim <- range(rbind(xa,ya))
   
-  
-  plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main, pch = 16, col = "RED",
-  xlim = xlim, ylim = ylim)
-  points(ya, pch = 2, col = "BLUE")
-  
+  plot(xa, type = "n",  xlab = xlab, ylab = ylab, main = main, xlim = xlim, ylim = ylim, ...)
   rg <- round(wlines*x$tab/max(x$tab))
   if (wlines > 0) {
-  	for (i in 1:n) for (j in 1:m)
-  		if (rg[i,j] > 0) lines(c(xa[i,1],ya[j,1]),c(xa[i,2],ya[j,2]),lwd=rg[i,j])
+    for (i in 1:n) for (j in 1:m)
+      if (rg[i,j] > 0) lines(c(xa[i,1],ya[j,1]),c(xa[i,2],ya[j,2]),lwd=rg[i,j], col = "gray")
   } else {
     for (i in 1:n) for (j in 1:m)
-  		lines(c(xa[i,1],ya[j,1]),c(xa[i,2],ya[j,2]))
+      lines(c(xa[i,1],ya[j,1]),c(xa[i,2],ya[j,2]), col = "gray")
   }
-  identify(rbind(xa,ya),labels = c(rownames(x$tab),colnames(x$tab)), cex = 0.8)
+  abline(h = 0, v = 0, col = "lightgray", lty = 2)
+  points(xa, pch = pch, col = col.row)
+  points(ya, pch = pch, col = col.column)
+  if (catlabels$label.row) text(xa, rownames(xa), pos = catlabels$pos, cex = catlabels$cex, col = catlabels$col.row)
+  if (catlabels$label.col) text(ya, rownames(ya), pos = catlabels$pos, cex = catlabels$cex, col = catlabels$col.column)
 }
 
 #------------------------------ end graphplot-----------------------------------
@@ -233,6 +237,7 @@ if (plot.type == "graphplot") {
 #----------------------------------- benzplot ----------------------------------
 if (plot.type == "benzplot") 
 {
+  op <- par(mfrow = c(1,2))
   if(x$scaling[1] == "Benzecri")
   {
     do <- x$bdmat[[1]]                        #observed row distances
@@ -245,13 +250,12 @@ if (plot.type == "benzplot")
     if (missing(main)) main1 <- paste("Benzecri Distances - Rows") else main1 <- paste(main," - Rows")
 
     plot(do, dr, xlim = c(0,dmax), ylim = c(0,dmax),  xlab = "observed distances", ylab = "fitted distances", 
-       main = main1, axes = FALSE, type = "p", col = "RED",...)
-    abline(0,1)                               #diagonal
+       main = main1, axes = FALSE, type = "p", col = col.row, ...)
+    abline(0,1, col = "lightgray")                               #diagonal
     abline(h = 0, v = 0)                      #axes
-    for (i in 1:n)
-  	for (j in 1:i)
-            lines(c(do[i,j],do[i,j]),c(0,dr[i,j]), col = "lightgray", lty = 2)
-    identify(cbind(as.vector(do),as.vector(dr)), labels = idlabels, col = "RED")
+    for (i in 1:n) for (j in 1:i) lines(c(do[i,j],do[i,j]),c(0,dr[i,j]), col = "lightgray", lty = 2)
+    labelcoor <- cbind(as.vector(do),as.vector(dr))
+    identify(labelcoor, labels = idlabels, cex = catlabels$cex, col = catlabels$col.row)
   }
 
   if(x$scaling[2] == "Benzecri")
@@ -265,16 +269,14 @@ if (plot.type == "benzplot")
    dmax <- max(dr,do)
    if (missing(main)) main2 <- paste("Benzecri Distances - Columns") else main2 <- paste(main," - Columns")
   
-   dev.new()
-   plot(do, dr, xlim = c(0,dmax), ylim = c(0,dmax), xlab = "observed distances", ylab = "fitted distances",
-        main = main2, axes=FALSE, col = "BLUE",...)
+   plot(do, dr, xlim = c(0,dmax), ylim = c(0,dmax), xlab = "observed distances", ylab = "fitted distances", main = main2, axes=FALSE, col = col.column,...)
    abline(0,1)
    abline(h = 0, v = 0)
-   for (i in 1:m)
-   	for (j in 1:i)
-   		lines(c(do[i,j],do[i,j]),c(0,dr[i,j]), col = "lightgray", lty = 2)
-   identify(cbind(as.vector(do),as.vector(dr)), labels = idlabels, col = "BLUE")
+   for (i in 1:m) for (j in 1:i) lines(c(do[i,j],do[i,j]),c(0,dr[i,j]), col = "lightgray", lty = 2)
+   labelcoor <- cbind(as.vector(do),as.vector(dr))
+   identify(labelcoor, labels = idlabels, cex = catlabels$cex, col = catlabels$col.column)
   } 
+  par(op)
 }
 #----------------------------------end benzplot --------------------------------
 
@@ -294,11 +296,10 @@ if (plot.type == "orddiag") {
   if (missing(xlim)) xlim <- range(rbind(xa,ya, crcor))
   if (missing(ylim)) ylim <- range(rbind(xa,ya, crcor))                                 
   
-  plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, 
-  ylim = ylim, col = "RED",...)
-  points(ya, pch = 20, col = "BLUE")
-  text(xa, rownames(xa), col = "RED", pos = 3, cex = 0.8, offset = 0.2)
-  text(ya, rownames(ya), col = "BLUE", pos = 3, cex = 0.8, offset = 0.2)
+  plot(xa, type = "p", xlab = xlab, ylab = ylab, main = main1, pch = 20, xlim = xlim, ylim = ylim, col = col.row,...)
+  points(ya, pch = 20, col = col.column)
+  text(xa, rownames(xa), col = catlabels$col.row, pos = catlabels$pos, cex = catlabels$cex)
+  text(ya, rownames(ya), col = catlabels$col.column, pos = catlabels$pos, cex = catlabels$cex)
   abline(h = 0, v = 0, col = "lightgray", lty = 2)
 
   #points(crcor, pch = 20, col = "GRAY")
