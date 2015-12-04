@@ -306,7 +306,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   ## compute C
   Z <- as.matrix(external)
   X <- y
-  C <- solve(t(Z)%*%Z)%*%t(Z)%*%X 
+  C <- ginv(t(Z)%*%Z)%*%t(Z)%*%X 
   if (constraint %in% c("linear","diagonal") && !simpcirc){
     for (s in 1:ncol(external)){
       extvars[[s]]$iord.prim <- updext.result$iord.prim[[s]]

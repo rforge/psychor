@@ -1,5 +1,5 @@
 useDynLib("smacof")
-import("stats", "graphics", "Hmisc", "colorspace", "polynom", "nnls")
+import("stats", "graphics", "Hmisc", "colorspace", "polynom", "nnls", "MASS")
 importFrom("grDevices", "dev.new", "hcl")
 export(smacofSym)
 export(smacofRect)
