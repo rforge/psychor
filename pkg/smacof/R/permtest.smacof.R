@@ -1,15 +1,14 @@
 ## MDS permutation test
-permtest.smacof <- function(object, data,  method.dat = "pearson", method.diss = "full", nrep = 100, verbose = TRUE) {
+permtest.smacof <- function(object, data,  method.dat = "pearson", nrep = 100, verbose = TRUE, ...) {
 
 ## val ... stress value  
 ## n... number of objects
 ## p... number of dimensions
 ## method ... "full" or "rows"  
     
-    #if (class(object)[1] != "smacofB") stop("Permutation test is currenlty implemented for objects of class smacofB from smacofSym() only! \n")
-    #if (object$model == "SMACOF constraint") stop("Permutation test is currenlty implemented for smacofSym() objects only! \n")
     method.dat <- match.arg(method.dat, c("pearson", "spearman", "kendall", "euclidean", "maximum", "manhattan", "canberra", "binary"))
-    method.diss <- match.arg(method.diss, c("full", "rows"))
+    #method.diss <- match.arg(method.diss, c("full", "rows"))
+    method.diss <- "full"
     
     n <- object$nobj          ## number of objects
     if (!missing(data)) if(ncol(data) != n) stop("Number of columns need to match number of MDS objects!") 
@@ -55,17 +54,19 @@ permtest.smacof <- function(object, data,  method.dat = "pearson", method.diss =
       N <- nrow(data)
       for (irep in 1:nrep) {
         proxmat <- diag(1, n, n)
-        for (i in 2:n) {                                
-          colperm <- data[sample(1:N),i:n]  
-          if (any(method.dat == c("pearson", "spearman", "kendall"))) {
-            proxmat[i-1, i:n] <- cor(data[,i-1], colperm, method = method.dat, use = "complete.obs")    ## compute proximities (correlation)
-          } else {
-            proxmat[i-1, i:n] <- as.matrix(dist(t(cbind(data[,i-1], colperm)), method = method.dat))[2:(n-i+2),1] ## compute dissimilarity
-          }
-        }
+         
+         for (i in 2:n) {                                
+           colperm <- data[sample(1:N),i:n]  
+           if (any(method.dat == c("pearson", "spearman", "kendall"))) {
+             proxmat[i-1, i:n] <- cor(data[,i-1], colperm, method = method.dat, use = "complete.obs")    ## compute proximities (correlation)
+           } else {
+             proxmat[i-1, i:n] <- as.matrix(dist(t(cbind(data[,i-1], colperm)), method = method.dat))[2:(n-i+2),1] ## compute dissimilarity
+           }
+         }
+
         proxmat[lower.tri(proxmat)] <- t(proxmat)[lower.tri(proxmat)] 
         
-        if (any(method.dat == c("pearson", "spearman", "kendall"))) dissmat <- sim2diss(proxmat) else dissmat <- proxmat
+        if (any(method.dat == c("pearson", "spearman", "kendall"))) dissmat <- sim2diss(proxmat, ...) else dissmat <- proxmat
         smacall$delta <- dissmat
         smRes <- eval(smacall)  
         str[irep] <- smRes$stress                      ## MDS fit

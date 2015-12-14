@@ -1,4 +1,4 @@
-permtest.smacofR <- function(object, data = NULL, method.dat = NULL, method.diss = "full", nrep = 100, verbose = TRUE)
+permtest.smacofR <- function(object, data = NULL, method.dat = "full", nrep = 100, verbose = TRUE, ...)
 {
 ## val ... stress value  
 ## n... number of objects
@@ -6,7 +6,7 @@ permtest.smacofR <- function(object, data = NULL, method.dat = NULL, method.diss
 ## ... additional arguments to be passed from smacofRect  
     
     #if (class(object)[1] != "smacofR") stop("Permutation test is currenlty implemented for objects of class smacofB from smacofSym() only! \n")
-    method.diss <- match.arg(method.diss, c("full", "rows"))
+    method.dat <- match.arg(method.dat, c("full", "rows"))
     
     data <- object$obsdiss
     m <- object$nobj          ## number of objects (columns)
@@ -22,7 +22,7 @@ permtest.smacofR <- function(object, data = NULL, method.dat = NULL, method.diss
     
     for (irep in 1:nrep) {
           
-      if (method.diss == "rows") {                      ## permutation within rows
+      if (method.dat == "rows") {                      ## permutation within rows
         permmat <- t(apply(data, 1, function(pp) {     ## computes permuted matrix
           ind <- sample(1:m, m)
           pp[ind]
