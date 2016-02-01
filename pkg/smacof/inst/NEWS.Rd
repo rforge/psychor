@@ -2,6 +2,13 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.8-10}{
+  \itemize{
+    \item Hue change in jackknife plot.
+}  
+}
+
+
 \section{Changes in Version 1.8-9}{
   \itemize{
     \item Some fixes in the permutation tests.
