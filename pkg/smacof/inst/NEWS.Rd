@@ -2,6 +2,13 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.8-11}{
+  \itemize{
+    \item In mds, smacofSym, smacofConstraint, smacofIndDiff, and smacofSphere the order of computations in update changed. This update improves the speed of computations for large data when using weightmat.
+}  
+}
+
+
 \section{Changes in Version 1.8-10}{
   \itemize{
     \item Hue change in jackknife plot.
