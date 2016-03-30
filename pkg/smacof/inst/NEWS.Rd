@@ -2,6 +2,14 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.8-12}{
+  \itemize{
+    \item Function dissWeight added to create weights as a function of the dissimilarities. 
+    Removed dissimilarities with weights 0 from Shepard plot. multistart.smacof added. 
+}  
+}
+
+
 \section{Changes in Version 1.8-11}{
   \itemize{
     \item In mds, smacofSym, smacofConstraint, smacofIndDiff, and smacofSphere the order of computations in update changed. This update improves the speed of computations for large data when using weightmat.
