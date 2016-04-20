@@ -140,7 +140,7 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
     bubsize <- spp.perc/length(spp.perc)*(bubscale + 3)
     
     
-    plot(x$conf, cex = bubsize, main = main, xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim,...)
+    plot(x$conf, cex = bubsize, main = main, xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim, asp = asp, ...)
     xylabels <- x$conf
     ysigns <- sign(x$conf[,y1])
     xylabels[,2] <- (abs(x$conf[,y1])-(x$conf[,y1]*(bubsize/50)))*ysigns 

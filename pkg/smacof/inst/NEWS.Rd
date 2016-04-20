@@ -2,6 +2,13 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.8-13}{
+  \itemize{
+    \item Aspect ratio 1 added as default for the bubble plot option in \code{plot.smacof()}. 
+}  
+}
+
+
 \section{Changes in Version 1.8-12}{
   \itemize{
     \item Function dissWeight added to create weights as a function of the dissimilarities. 
