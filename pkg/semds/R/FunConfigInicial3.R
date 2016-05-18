@@ -1,5 +1,4 @@
-FunConfigInicial3 <-
-function(M, dim) {
+FunConfigInicial3 <- function(M, dim) {
 ## m=n(n-1)/2, where n=number of objects.
 ## R is the number of dissimilarity matrices.
 ## Xi matrix of effect indicators arranged in columns

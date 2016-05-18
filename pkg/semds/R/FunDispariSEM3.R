@@ -14,8 +14,8 @@ FunDispariSEM3 <- function(Xi, Xim, R, DXm, SSk, theta0, saturado) {
 
  
  theta <- NULL         
- if ((saturado == 1) && (R == 2)) { ## Satured model (only for R=2)
-   S <- cov(cbind(DXm, Xim))
+ if ((saturado) && (R == 2)) { ## Satured model (only for R=2)
+    S <- cov(cbind(DXm, Xim))
     x1 <- Xi[,1]
     x2 <- Xi[,2]
     theta[1] <- sqrt(S[2,1]*S[3,1]/S[3,2])
@@ -23,16 +23,18 @@ FunDispariSEM3 <- function(Xi, Xim, R, DXm, SSk, theta0, saturado) {
     theta[3] <- sqrt(S[3,2]*S[3,1]/S[2,1])
     theta[4] <- S[2,2]-theta[2]^2
     theta[5] <- S[3,3]-theta[3]^2
-    ## FIXME: check saturated
+    theta[6] <- S[1,1]-theta[1]^2-SSk*S[1,1]
+    if (theta[6] < 0) theta[6] <- 0
+    
     Delta <- c(theta[2], theta[3]) %*% solve(rbind(c(theta[2]^2+theta[4], theta[2]*theta[3]), c(theta[2]*theta[3], theta[3]^2+theta[5]))) %*% rbind(x1, x2)
     Delta <- t(Delta)
+    thetatab <- NULL
  } else  {                                     ## Not satured model
     #theta <- lsqnonlin(ULS3, theta0, Xim = Xim, DXm = DXm, SSk = SSk, options = list(tau = 1e-1, maxeval = 1000, tolg = 1e-7))$x
-        
-    ## FIXME: log version for lower bounds < 0 
-    theta <- nls.lm(theta0, lower = rep(0, length(theta0)), fn = ULS3, Xim = Xim, DXm = DXm, SSk = SSk)$par
-    #theta <- lsqnonlin(ULS3, log(theta0), Xim = Xim, DXm = DXm, SSk = SSk, options = list(tau = 1e-1, maxeval = 1000, tolg = 1e-7))$x
-    ##cat(theta,"\n")
+       
+    thetaopt <- nls.lm(theta0, lower = rep(0, length(theta0)), fn = ULS3, Xim = Xim, DXm = DXm, SSk = SSk) 
+    theta <- thetaopt$par
+    thetatab <- summary(thetaopt)$coefficients
     
     Lambda <- theta[2:(R+1)]  ## Row vector.
     Sgm <- matrix(0, R, R)
@@ -48,6 +50,6 @@ FunDispariSEM3 <- function(Xi, Xim, R, DXm, SSk, theta0, saturado) {
     Delta <- t(Delta)     ## Column vector.
  }
 
- result <- list(Delta = Delta, theta = theta)
+ result <- list(Delta = Delta, theta = theta, thetatab = thetatab)
  return(result)
 }

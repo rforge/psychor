@@ -1,4 +1,4 @@
-semds <- function(D, dim = 2, saturated = 0, theta0 = NULL, maxiter = 1000, eps = 1e-6) {
+semds <- function(D, dim = 2, saturated = FALSE, theta0 = NULL, maxiter = 1000, eps = 1e-6) {
 
   cl <- match.call()
   
@@ -38,8 +38,11 @@ semds <- function(D, dim = 2, saturated = 0, theta0 = NULL, maxiter = 1000, eps 
   SSk <- 0.1                   ## decreasing identification constraints for DX.
 
   saturado <- saturated
-  if (conf1$R > 2) saturado <- 0
-  
+  if ((saturado) && (conf1$R > 2)) {
+    saturado <- FALSE
+    warning("Saturated models are implemented for the asymmetric special case only. A non-saturated model is fitted.")
+  }
+    
   disp1 <- FunDispariSEM3(Xi = conf1$Xi, Xim = conf1$Xim, R = R, DXm = conf1$DXm, SSk = SSk, theta0 = theta0, saturado = saturado)
 
   ## Normalization for the identification constraint of var(Delta)
@@ -66,7 +69,6 @@ semds <- function(D, dim = 2, saturated = 0, theta0 = NULL, maxiter = 1000, eps 
 ## Alternating estimation procedure: The configuration is estimated using
 ## the Guttman transformation and the disparities are estimated in SEM.
 
-## FIXME: continue here!!!!
 
 while ((k==1 || k < NumIte) && (sdiff > eps)) {
   k <- k+1
@@ -125,8 +127,20 @@ rownames(CoordMDSSEM) <- cnames
 colnames(CoordMDSSEM) <- paste0("D", 1:dim)
 DistMDSSEM <- dist(CoordMDSSEM)
 
-result <- list(stressnorm = STRSSBNFinal, stressraw = STRSSBFinal, Delta = Deltafinal, theta = Thetaf, conf = CoordMDSSEM,
-               dist = DistMDSSEM, niter = NiterSEM, call = cl)
+nobj <- nrow(as.matrix(DistMDSSEM))
+Deltamat <- matrix(0, nobj, nobj)
+rownames(Deltamat) <- colnames(Deltamat) <- cnames
+Deltamat[lower.tri(Deltamat)] <- Deltafinal
+Deltamat <- as.dist(Deltamat)  
+
+tnames <- c("b", paste0("lambda", 1:ncol(M)))
+if (saturado) tnames <- c(tnames, "sigma2_e1", "sigma2_e2", "sigma2_zeta") else  tnames <- c(tnames, "sigma2_e", "sigma2_zeta")
+names(Thetaf) <- tnames
+thetatab <- disp$thetatab
+if (!saturado) rownames(thetatab) <- tnames
+
+result <- list(stressnorm = sqrt(STRSSBNFinal), stressraw = STRSSBFinal, Delta = Deltamat, theta = Thetaf, conf = CoordMDSSEM,
+               dist = DistMDSSEM, niter = NiterSEM, thetatab = thetatab, call = cl)
 class(result) <- "semds"
 return(result)
 }

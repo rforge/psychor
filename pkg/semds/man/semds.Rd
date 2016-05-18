@@ -2,6 +2,7 @@
 \alias{semds}
 \alias{print.semds}
 \alias{plot.semds}
+\alias{summary.semds}
 \title{
 Structural Equation Multidimensional Scaling. 
 }
@@ -12,7 +13,7 @@ matrix is estimated in a structural equation modeling (SEM) framework while the 
 represented in a low-dimensional space.
 }
 \usage{
-semds(D, dim = 2, saturated = 0, theta0 = NULL, maxiter = 1000, eps = 1e-06)
+semds(D, dim = 2, saturated = FALSE, theta0 = NULL, maxiter = 1000, eps = 1e-06)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,7 +25,7 @@ single asymmetric dissimilarity matrix.
 Number of dimensions for MDS solution.
 }
   \item{saturated}{
-For the 2-way case only: whether the model is saturated (1) or not (0; default).
+For the 2-way case only: whether the model is saturated (TRUE) or not (FALSE; default).
 }
   \item{theta0}{
 Starting values for SEM parameter vector.
@@ -48,6 +49,7 @@ Returns an object of class \code{"semds"} containing the following elements.
 \item{conf}{MDS configurations.}
 \item{dist}{Distance matrix based on configurations}
 \item{niter}{Number of iterations.}
+\item{thetatab}{Parameter table.}
 \item{call}{Function call.}
 }
 \references{
@@ -60,14 +62,22 @@ Patrick Mair, Jose Fernando Vera.
 }
 
 \examples{
-## 2-way model 
+## asymmetric model 
 fit2way <- semds(Miller)
 fit2way
+summary(fit2way)
 plot(fit2way)
 
-## multi-way model
+
+## asymmetric model (saturated)
+fit2wayS <- semds(Miller, saturated = TRUE)
+fit2wayS
+fit2wayS$theta
+
+## general three-way model
 fitmway <- semds(BrahmsNorm)
 fitmway
+summary(fitmway)
 plot(fitmway)
 
 }

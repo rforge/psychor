@@ -5,7 +5,7 @@
 Structural Equation Multidimensional Scaling
 }
 \description{
-Fits a multidimensional scaling (MDS) model for multi-way one-mode asymmetric dissimilarity data. 
+Fits a multidimensional scaling (MDS) model for multi-way dissimilarity data. 
 It uses an alternating estimation procedure in which the unknown symmetric dissimilarity 
 matrix is estimated in a structural equation modeling (SEM) framework while the objects are 
 represented in a low-dimensional space.
@@ -14,8 +14,8 @@ represented in a low-dimensional space.
 \tabular{ll}{
 Package: \tab semds\cr
 Type: \tab Package\cr
-Version: \tab 0.0-1\cr
-Date: \tab 2015-03-16\cr
+Version: \tab 0.9-0\cr
+Date: \tab 2016-05-18\cr
 License: \tab GPL-2\cr
 }
 The core function of the package is \code{semds()}. It takes a list of lower triangular dissimilarity matrices which 
