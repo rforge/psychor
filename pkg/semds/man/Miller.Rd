@@ -19,11 +19,11 @@ by Hubert (1972) for this data set.
 }
 
 \references{
-Miller, G. A., \& Nicely, P. E. (1955). An analysis of perceptual confusions among some English consonants. The Journal of the Acoustic Society of America, 27, 338--352.
+Miller, G. A., & Nicely, P. E. (1955). An analysis of perceptual confusions among some English consonants. The Journal of the Acoustic Society of America, 27, 338--352.
 
 Hubert, L. (1972). Some extensions of Johnson's hierarchical clustering algorithms. Psychometrika, 37, 261--274.
 
-Vera, J. F. \& Rivera, C. D. (2014). A structural equation multidimensional scaling model for one-mode asymmetric dissimilarity data. Structural Equation Modeling: A Multidisciplinary Journal, 21(1), 54--62. 
+Vera, J. F. & Rivera, C. D. (2014). A structural equation multidimensional scaling model for one-mode asymmetric dissimilarity data. Structural Equation Modeling: A Multidisciplinary Journal, 21(1), 54--62. 
 }
 \examples{
 data(Miller)

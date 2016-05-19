@@ -30,9 +30,9 @@ FunDispariSEM3 <- function(Xi, Xim, R, DXm, SSk, theta0, saturado) {
     Delta <- t(Delta)
     thetatab <- NULL
  } else  {                                     ## Not satured model
-    #theta <- lsqnonlin(ULS3, theta0, Xim = Xim, DXm = DXm, SSk = SSk, options = list(tau = 1e-1, maxeval = 1000, tolg = 1e-7))$x
-       
-    thetaopt <- nls.lm(theta0, lower = rep(0, length(theta0)), fn = ULS3, Xim = Xim, DXm = DXm, SSk = SSk) 
+        
+    lbound <- c(rep(-Inf, (length(theta0)-2)), 0, 0)  ## lower 0 bound for variance parameters
+    thetaopt <- nls.lm(theta0, lower = lbound, fn = ULS3, Xim = Xim, DXm = DXm, SSk = SSk) 
     theta <- thetaopt$par
     thetatab <- summary(thetaopt)$coefficients
     
