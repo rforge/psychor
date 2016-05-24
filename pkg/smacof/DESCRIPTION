@@ -1,8 +1,8 @@
 Package: smacof
 Type: Package
 Title: Multidimensional Scaling
-Version: 1.8-13
-Date: 2016-04-20
+Version: 1.8-14
+Date: 2016-05-24
 Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email = "mair@fas.harvard.edu"), person("Jan", "De Leeuw", role = "aut"), person("Ingwer", "Borg", role = "ctb"), person("Patrick J. F.", "Groenen", role = "ctb"))
 Author: Patrick Mair [aut, cre], Jan De Leeuw [aut], Ingwer Borg [ctb], Patrick  J. F. Groenen [ctb]
 Maintainer: Patrick Mair <mair@fas.harvard.edu>

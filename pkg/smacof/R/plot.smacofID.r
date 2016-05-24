@@ -40,6 +40,50 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
     }
   }
 
+  # inserted from 1.7 by LOH 30 April 2016
+  
+  #---------------- Shepard diagram ------------------
+  if (plot.type == "Shepard") {
+      if (missing(main)) main <- paste("Shepard Diagram") else main <- main
+      if (missing(xlab)) xlab <- "Aggregated Observed Dissimilarities" else xlab <- xlab
+      if (missing(ylab)) ylab <- "Aggregated Configuration Distances" else ylab <- ylab
+      
+      delta <- sumList(x$delta)
+      confdiss <- sumList(x$confdiss)
+      
+      if (missing(xlim)) xlim <- range(as.vector(delta))
+      if (missing(ylim)) ylim <- range(as.vector(confdiss))
+      
+      plot(as.vector(delta), as.vector(confdiss), main = main, type = "p", pch = 1,
+           xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim, ...)
+      
+      if (x$type == "ordinal") {
+          isofit <- isoreg(as.vector(delta), as.vector(confdiss))  #isotonic regression
+          points(sort(isofit$x), isofit$yf, type = "b", pch = 16)
+      } else {
+          regfit <- lsfit(as.vector(delta), as.vector(confdiss))   #linear regression
+          abline(regfit, lwd = 0.5)
+      }
+  }
+  
+  #--------------- Residual plot -------------------- 
+  if (plot.type == "resplot") {
+      if (missing(main)) main <- paste("Residual plot") else main <- main
+      if (missing(xlab)) xlab <- "Aggregated Normalized Dissimilarities (d-hats)" else xlab <- xlab
+      if (missing(ylab)) ylab <- "Aggregated Configuration Distances" else ylab <- ylab
+      obsdiss <- sumList(x$dhat)
+      confdiss <- sumList(x$confdiss)
+      
+      if (missing(xlim)) xlim <- range(as.vector(obsdiss))
+      if (missing(ylim)) ylim <- range(as.vector(confdiss))
+      
+      plot(as.vector(obsdiss), as.vector(confdiss), main = main, type = "p", col = "darkgray", xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim,...)
+      abline(lsfit(as.vector(obsdiss), as.vector(confdiss)))
+      
+  }
+  # end of insert by LOH
+  
+  
   #----------------------- Stress decomposition -----------------
   if (plot.type == "stressplot") {
     if (missing(main)) main <- paste("Stress Decomposition Chart") else main <- main
