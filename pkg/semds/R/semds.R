@@ -136,11 +136,15 @@ Deltamat <- as.dist(Deltamat)
 tnames <- c("b", paste0("lambda", 1:ncol(M)))
 if (saturado) tnames <- c(tnames, "sigma2_e1", "sigma2_e2", "sigma2_zeta") else  tnames <- c(tnames, "sigma2_e", "sigma2_zeta")
 names(Thetaf) <- tnames
-thetatab <- disp$thetatab
-if (!saturado) rownames(thetatab) <- tnames
+if (!saturado) {
+  thetatab <- disp$thetatab
+  rownames(thetatab) <- tnames
+} else {
+  thetatab <- data.frame(Estimate = Thetaf,  Std.Error = NA)
+}
 
 result <- list(stressnorm = sqrt(STRSSBNFinal), stressraw = STRSSBFinal, Delta = Deltamat, theta = Thetaf, conf = CoordMDSSEM,
-               dist = DistMDSSEM, niter = NiterSEM, thetatab = thetatab, call = cl)
+               dist = DistMDSSEM, niter = NiterSEM, thetatab = thetatab[,1:2], call = cl)
 class(result) <- "semds"
 return(result)
 }

@@ -14,8 +14,8 @@ represented in a low-dimensional space.
 \tabular{ll}{
 Package: \tab semds\cr
 Type: \tab Package\cr
-Version: \tab 0.9-0\cr
-Date: \tab 2016-05-18\cr
+Version: \tab 0.9-2\cr
+Date: \tab 2016-06-14\cr
 License: \tab GPL-2\cr
 }
 The core function of the package is \code{semds()}. It takes a list of lower triangular dissimilarity matrices which 
@@ -37,8 +37,10 @@ A Multidisciplinary Journal, 21(1), 54--62.
 \examples{
 fit1 <- semds(Miller)
 fit1
+summary(fit1)
 
 fit2 <- semds(BrahmsNorm)
 fit2
+summary(fit2)
 
 }
