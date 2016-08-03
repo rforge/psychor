@@ -17,6 +17,7 @@ t3way <- function(formula, data, tr = 0.2){
   alpha <- 0.05
   
     data=as.matrix(mf)
+    ## FIXME: 
     temp=selby2(data,lev.col,var.col)
     lev1=length(unique(temp$grpn[,1]))
     lev2=length(unique(temp$grpn[,2]))
