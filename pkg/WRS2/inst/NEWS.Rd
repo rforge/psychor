@@ -1,6 +1,20 @@
 \name{NEWS}
 \title{News for Package \pkg{WRS2}}
 \encoding{UTF-8}
+\section{Changes in Version 0.8-0}{
+  \itemize{
+    \item Bugs in \code{mcp2a} and \code{mcp2atm} fixed. 
+    \item Argument \code{pro.dis} added in \code{pbad2way} for projected distance computation.
+    \item One-sided testing in \code{yuenbt} added. 
+    \item Functions for robust correlation coefficients added: \code{pbcor}, \code{wincor}, \code{pball}, \code{winall}. 
+    \item Functions for two-sample correlation tests added: \code{twocor}, \code{twopcor}.
+    \item Bug in comparison point determination in \code{ancova} fixed.
+    \item Outputs in \code{sppba}, \code{sppbb}, and \code{sppbi} reorganized. 
+    \item Several functions for comparing discrete distributions added: \code{binband}, \code{discANOVA}, \code{discmcp}, \code{discstep}
+    \item Convenience function \code{medpb2} added for comparing two independent samples medians.
+    \item Functions for quantile comparisons added: \code{qcomhd}, \code{Dqcomhd}, \code{Qanova}. 
+    } 
+}
 \section{Changes in Version 0.4-0}{
   \itemize{
     \item Vignette added.

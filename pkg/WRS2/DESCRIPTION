@@ -1,15 +1,14 @@
 Package: WRS2
 Type: Package
 Title: A Collection of Robust Statistical Methods
-Version: 0.4-0
-Date: 2015-10-04
+Version: 0.8-0
+Date: 2016-17-22
 Authors@R: c(person(given="Patrick", family="Mair", email="mair@fas.harvard.edu", role=c("cre","aut")),
-             person(given="Rand", family="Wilcox", email="rwilcox@usc.edu", role=c("aut")),
-             person(given="Felix", family="Schoenbrodt", email="felix@nicebread.de", role=c("ctr")))
+             person(given="Rand", family="Wilcox", email="rwilcox@usc.edu", role=c("aut")))
 Description: A collection of robust statistical methods based on Wilcox' WRS functions. It implements t-tests (independent and dependent samples), ANOVA (including between-within subject designs) and nonparametric ANCOVA models based on robust location measures.
 License: GPL-3
 URL: https://r-forge.r-project.org/projects/psychor/
-Imports: MASS, reshape, plyr, stats, graphics, grDevices, utils
+Imports: MASS, reshape, plyr, stats, graphics, grDevices, utils, mc2d
 Depends: R (>= 3.0.0)
 Suggests: knitr, beanplot, car, colorspace, ez
 VignetteBuilder: knitr

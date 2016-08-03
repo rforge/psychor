@@ -124,11 +124,6 @@ sampling from a normal distribution, but increases sensitivity to the tails of t
 The estimation of $M$-estimators is performed iteratively and implemented in the \code{mest} function. More details and additional distance functions can be found in \citet{Wilcox:2012}.
 
 
-% continue p. 52, simulate function (see p. 31) and compute various measures. 
-% Chapter 3
-% sample trimmed mean (3.3), quantiles (3.5), M-estimators (3.6), outlier detection (3.13)
-
-% describe MOM, onestep and MADN (further below)
 
 \section{Robust $t$-Test and ANOVA Strategies}
 In this section these robust location measures are used in order to test for differences across groups. We focus on basic $t$-test strategies
@@ -205,7 +200,8 @@ H_0: \mu_{t1} = \mu_{t2} = \cdots = \mu_{tJ}.
 The corresponding test statistic which approximates an $F$-distribution under the null, is quite complicated and can be found in 
 \citet[p. 293]{Wilcox:2012}. A bootstrap version is provided in \code{t1waybt}. If no trimming is involved we end up with Welch's ANOVA version allowing for unequal variances \citep{Welch:1951}.  
 
-% Maybe a bit more description here, see Wilcox p. 319
+% Maybe a bit more description here, see Wilcox p. 319, 
+% also explanatory effect size ksi, see p. 169
 
 A similar test statistic can be derived for comparing medians instead of trimmed means, implemented in the 
 \code{med1way} function. Let us apply these two tests on the soccer dataset. This time we include all 
@@ -243,6 +239,7 @@ lincon(GoalsGame ~ League, data = eurosoccer)
 @
 
 Post hoc tests for the bootstrap version of the trimmed mean ANOVA (\code{t1waybt}) are provided in \code{mcppb20}. 
+
 
 \subsection{Comparisons Involving Higher-Order Designs}
 Let us start with two-way factorial ANOVA design involving $J$ categories for the first factor, and $K$ categories 
@@ -484,7 +481,7 @@ fitF$ANOVA
 
 Finally, we base our comparisons on Huber's $M$-estimator for which we have to apply three separate functions, one for each effect. 
 
-<<echo=2:4>>=
+<<echo=2:4, eval=FALSE>>=
 set.seed(123)
 sppba(symptoms ~ group*time, id, data = hangover)
 sppbb(symptoms ~ group*time, id, data = hangover)
