@@ -60,8 +60,6 @@ sppbi <- function(formula, id, data, est = "mom", nboot = 500){
       x[[kv2]]<-xmat[,k]
     }}
   xx<-x
-  #if(SEED)set.seed(2) # set seed of random number generator so that
-  #             results can be duplicated.
   # Next determine the n_j values
   nvec<-NA
   jp<-1-K
@@ -153,7 +151,11 @@ sppbi <- function(formula, id, data, est = "mom", nboot = 500){
     rancomb <- apply(combn(levels(mf[,ranvar]), 2), 2, paste0, collapse = "-")
     fnames <- levels(mf[,fixvar])
     tnames <- as.vector(t(outer(fnames, rancomb, paste)))
-    rownames(tvec1) <- tnames
+    if (length(fnames) > 2) {
+      rownames(tvec1) <- tnames
+    } else {
+      if (length(rancomb) == nrow(tvec1)) rownames(tvec1) <- rancomb
+    }  
   } else {
     tvec1 <- tvec
   }

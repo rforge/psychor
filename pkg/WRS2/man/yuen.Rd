@@ -5,20 +5,25 @@
 \alias{pb2gen}
 \alias{medpb2}
 \alias{qcomhd}
+\alias{akp.effect}
+\alias{yuen.effect.ci}
 \alias{print.yuen}
 \alias{print.pb2}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Independent samples t-tests on robust location measures.
+\title{Independent samples t-tests on robust location measures including effect sizes.
 }
 \description{
-The function \code{yuen} performs Yuen's test for trimmed means, \code{yuenbt} is a bootstrap version of it. The \code{pb2gen} function performs a t-test based on various robust estimators, \code{medpb2} compares two independent groups using medians, \code{qcomhd} compares arbitrary quantiles. 
+The function \code{yuen} performs Yuen's test for trimmed means, \code{yuenbt} is a bootstrap version of it. \code{akp.effect} and \code{yuen.effect.ci} can be used for effect size computation. The \code{pb2gen} function performs a t-test based on various robust estimators, \code{medpb2} compares two independent groups using medians, and \code{qcomhd} compares arbitrary quantiles. 
 }
 \usage{
 yuen(formula, data, tr = 0.2)
 yuenbt(formula, data, tr = 0.2, nboot = 599, side = TRUE)
+akp.effect(formula, data, EQVAR = TRUE, tr = 0.2)
+yuen.effect.ci(formula, data, tr = 0.2, nboot = 400, alpha = 0.05)
 pb2gen(formula, data, est = "mom", nboot = 599)
 medpb2(formula, data, nboot = 2000)
-qcomhd(formula, data, q = c(0.1, 0.25, 0.5, 0.75, 0.9), nboot = 2000, alpha = 0.05, ADJ.CI = TRUE)
+qcomhd(formula, data, q = c(0.1, 0.25, 0.5, 0.75, 0.9), 
+       nboot = 2000, alpha = 0.05, ADJ.CI = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -49,6 +54,9 @@ alpha level.
 \item{ADJ.CI}{
 whether CIs should be adjusted.
 }
+\item{EQVAR}{
+whether variances are assumed to be equal across groups.
+}
 }
 
 \details{
@@ -64,6 +72,7 @@ Returns objects of classes \code{"yuen"} or \code{"pb2"} containing:
 \item{conf.int}{confidence interval}
 \item{df}{degress of freedom}
 \item{diff}{trimmed mean difference}
+\item{effsize}{explanatory measure of effect size}
 \item{call}{function call}
 
 \code{qcomhd} returns an object of class \code{"robtab"} containing:
@@ -71,7 +80,11 @@ Returns objects of classes \code{"yuen"} or \code{"pb2"} containing:
 \item{partable}{parameter table}
 }
 \references{
+Algina, J., Keselman, H.J., & Penfield, R.D. (2005). An alternative to Cohen's standardized mean difference effect size: A robust parameter and confidence interval in the two independent groups xase. Psychological Methods, 10, 317-328.
+
 Wilcox, R. (2012). Introduction to Robust Estimation and Hypothesis Testing (3rd ed.). Elsevier.
+
+Wilcox, R., & Tian, T. (2011). Measuring effect size: A robust heteroscedastic approach for two or more groups. Journal of Applied Statistics, 38, 1359-1368.
 
 Yuen, K. K. (1974). The two sample trimmed t for unequal population variances. Biometrika, 61, 165-170.
 }
@@ -84,6 +97,10 @@ yuen(Anxiety ~ Group, data = spider)
 
 ## Bootstrap version of Yuen's test (symmetric CIs)
 yuenbt(Anxiety ~ Group, data = spider)
+
+## Robust Cohen's delta
+akp.effect(Anxiety ~ Group, data = spider)
+##
 
 ## Using an M-estimator
 pb2gen(Anxiety ~ Group, data = spider, est = "mom")

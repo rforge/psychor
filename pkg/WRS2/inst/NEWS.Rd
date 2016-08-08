@@ -1,6 +1,14 @@
 \name{NEWS}
 \title{News for Package \pkg{WRS2}}
 \encoding{UTF-8}
+\section{Changes in Version 0.9-0}{
+  \itemize{
+    \item \code{Qanova} now allows for a vector of quantiles and applies multiple testing adjustment. 
+    \item \code{t3way} stops when design is incomplete. 
+    \item \code{ZYmediate} added for robust mediation test.
+    \item \code{essays} data added. 
+    } 
+}
 \section{Changes in Version 0.8-0}{
   \itemize{
     \item Bugs in \code{mcp2a} and \code{mcp2atm} fixed. 

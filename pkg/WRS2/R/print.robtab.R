@@ -5,6 +5,10 @@ function(x,...)
   print(x$call)
   
   cat("\nParameter table: \n")
-  print(x$partable)
+  if (ncol(x$partable) >= 8) {
+    print(round(x$partable, 4))
+  } else {  
+    print(x$partable)
+  }
   cat("\n")
 }

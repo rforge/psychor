@@ -19,7 +19,7 @@ an object of class formula.
 an optional data frame for the input data.
 }
   \item{q}{
-quantile to be used.
+quantile (or vector of quantiles) to be used.
 }
 \item{nboot}{
 number of bootstrap samples
@@ -47,9 +47,9 @@ Wilcox, R. (2012). Introduction to Robust Estimation and Hypothesis Testing (3rd
 fitmed <- Qanova(libido ~ dose, viagra, nboot = 200)
 fitmed
 
-## 1st quartile comparison
-fitquart1 <- Qanova(libido ~ dose, viagra, q = 0.25, nboot = 200)
-fitquart1
+## 1st, 3rd quartile comparison
+fitquart <- Qanova(libido ~ dose, viagra, q = c(0.25, 0.75), nboot = 200)
+fitquart
 
 
 
