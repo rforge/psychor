@@ -1,6 +1,11 @@
 \name{NEWS}
 \title{News for Package \pkg{WRS2}}
 \encoding{UTF-8}
+\section{Changes in Version 0.9-1}{
+  \itemize{
+    \item Vignette updated.
+    } 
+}
 \section{Changes in Version 0.9-0}{
   \itemize{
     \item \code{Qanova} now allows for a vector of quantiles and applies multiple testing adjustment. 
