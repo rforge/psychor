@@ -1,6 +1,7 @@
 \name{NeuralActivity}
 \alias{NeuralActivity}
 \alias{NeuralScales}
+\alias{NeuralScanner}
 \docType{data}
 \title{
 Neural Activity
@@ -14,17 +15,28 @@ On each trial, participants saw the name of a mental state (e.g., "awe"), and de
 \usage{
 data("NeuralActivity")
 data("NeuralScales")
+data("NeuralScanner")
 }
 \format{
-  A list of 20 dissimilarity matrices
+  A list of 20 dissimilarity matrices (NeuralActivity). 
+  
+  External scales (based on a questionnaire) containing proportions telling us to which degree people associate each of the 60 mental states to the 16 theoretical dimensions they extracted from the literature (NeuralScales).
+  
+  Scanner information on states, onset times and stimulus duration (NeuralScanner). 
 }
 
 \source{
-Tamir D. I., Thornton M. A., Contreras J. M., & Mitchell J. P. (2015) Neural evidence that three dimensions organize mental state representation: rationality, social impact, and valence. Proceedings of the National Academy of Sciences of the United States of America. Forthcoming.
+Tamir D. I., Thornton M. A., Contreras J. M., & Mitchell J. P. (2015) Neural evidence that three dimensions organize mental state representation: rationality, social impact, and valence. Proceedings of the National Academy of Sciences of the United States of America, 113(1), 194-199.
 }
 
 \examples{
 data(NeuralActivity)
 str(NeuralActivity)
+
+data(NeuralScales)
+str(NeuralScales)
+
+data(NeuralScanner)
+str(NeuralScanner)
 }
 \keyword{datasets}
