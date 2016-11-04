@@ -2,6 +2,7 @@
 \alias{NeuralActivity}
 \alias{NeuralScales}
 \alias{NeuralScanner}
+\alias{NeuralHM}
 \docType{data}
 \title{
 Neural Activity
@@ -23,6 +24,8 @@ data("NeuralScanner")
   External scales (based on a questionnaire) containing proportions telling us to which degree people associate each of the 60 mental states to the 16 theoretical dimensions they extracted from the literature (NeuralScales).
   
   Scanner information on states, onset times and stimulus duration (NeuralScanner). 
+  
+  Head motion parameters (NeuralHM). 
 }
 
 \source{
