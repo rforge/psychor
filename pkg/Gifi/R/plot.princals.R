@@ -1,5 +1,5 @@
 plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.loadings = "black", arrows = TRUE, cex.scores = 0.8, 
-                          cex.loadings = 0.8, labels.scores = FALSE, labels.loadings = TRUE, var.subset = "all", plot.dim = 1, 
+                          cex.loadings = 0.8, labels.scores = FALSE, labels.loadings = TRUE, var.subset = "all", plot.dim = 1, ask = FALSE,
                           main, xlab, ylab, xlim, ylim, ...)
 {
 
@@ -8,9 +8,10 @@ plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.load
 ## plot.dim ... vector of length 2 with dimensions to be plotted against
 ## plot.type ... type of plot to be drawn: "loadplot", "screeplot", "biplot"
 
+match.arg(plot.type, c("biplot", "loadplot", "screeplot", "transplot"))
 if ((x$ndim == 1) && (plot.type != "transplot")) stop("No biplot/loadings plot can be drawn for ndim = 1!")
 nvar <- dim(x$dframe)[2]
-match.arg(plot.type, c("biplot", "loadplot", "screeplot", "transplot"))
+
 
 
 #----------------------------------loadplot-------------------------------------
@@ -87,7 +88,6 @@ if (plot.type == "transplot") {
     plotcats <- lapply(plotvars, levels)
     ploty <- x$catscores[var.subset]
     
-    
     ## set up number of vertical and horizontal panels  
     npanv <- ceiling(sqrt(nvars)) 
     npanh <- floor(sqrt(nvars))
@@ -95,7 +95,6 @@ if (plot.type == "transplot") {
     
     op <- par(mfrow = c(npanv, npanh))
     for (i in 1:nvars) {
-      
       w <- options("warn")                               ## x-values
       options(warn = -1)
       xvals <- as.numeric(plotcats[[i]])
@@ -104,8 +103,8 @@ if (plot.type == "transplot") {
       
       yvals <- ploty[[i]][, plot.dim]                    ## y-values
       
-      if (length(xvals) > 20) pch <- "." else pch <- 19
-      plot(xvals, yvals, pch = pch, type = "b", xlab = xlab, ylab = ylab, main = main[i], xaxt = "n", ...)
+      if (length(xvals) > 10) pch <- "." else pch <- 19
+      plot(xvals[order(xvals)], yvals, type = "l", xlab = xlab, ylab = ylab, main = main[i], xaxt = "n", ...)
       axis(1, at = xvals, labels = plotcats[[i]])
     }
     par(op)

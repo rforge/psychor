@@ -29,6 +29,8 @@ if ((plot.type == "benzplot") && (!any(x$scaling == "Benzecri")))
 #draws a before and after regression plot for a table and a set of scores
 
 if (plot.type == "regplot") {
+  op <- par(mfrow = c(1,2))
+  
   if (length(plot.dim) != 1) plot.dim <- plot.dim[1]
   if (missing(xlab)) xlab1 = "row" else xlab1 <- xlab
   if (missing(ylab)) ylab1 = "column" else ylab1 <- ylab
@@ -54,7 +56,6 @@ if (plot.type == "regplot") {
   for (i in 1:n) text(rep((1:n)[i],m),1:m,as.character(x$tab[i,]),cex=.8, col = "lightgray")
 
  
-  dev.next()
   #scaled solution
   
   scalevec <- c(as.vector(x$row.scores[,plot.dim]),as.vector(x$col.scores[,plot.dim]))
@@ -75,13 +76,15 @@ if (plot.type == "regplot") {
 
   if (missing(cex.axis2)) cex.axis2 <- 0.6
    
-  for (i in 1:n) text(rep(xa[i],m),ya,as.character(x$tab[i,]), col = "lightgray")
+  for (i in 1:n) text(rep(xa[i],m),ya,as.character(x$tab[i,]), cex=0.8,col = "lightgray")
 
   #axis(3, at = xa, labels = names(xa), cex.axis = 0.6, col.axis = "lightgray", padj = 1,...)
   #axis(4, at = ya, labels = names(ya), cex.axis = 0.6, col.axis = "lightgray", padj = -1,...)
   
   axis(3, at = xa, labels = names(xa), cex.axis = cex.axis2, col.axis = "lightgray", padj = 1,...)
   axis(4, at = ya, labels = names(ya), cex.axis = cex.axis2, col.axis = "lightgray", padj = -1,...)
+  
+  par(op)
   
 }
 
