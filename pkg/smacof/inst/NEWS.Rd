@@ -2,6 +2,14 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+
+\section{Changes in Version 1.8-16}{
+  \itemize{
+    \item Bug in \code{smacofConstraint()} removed: now returns proper  matrix \code{C} when \code{constraint = "diagonal"}. 
+}  
+}
+
+
 \section{Changes in Version 1.8-15}{
   \itemize{
     \item \code{plot.smacofJK()} improved. 

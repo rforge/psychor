@@ -306,8 +306,15 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
   ## compute C
   Z <- as.matrix(external)
   X <- y
-  C <- ginv(t(Z)%*%Z)%*%t(Z)%*%X 
+  #C <- ginv(t(Z)%*%Z)%*%t(Z)%*%X
+  
   if (constraint %in% c("linear","diagonal") && !simpcirc){
+    # Inserted 1.8-16
+    if (constraint == "linear"){
+      C <- ginv(crossprod(external,w%*%external)) %*% crossprod(external,w%*%x)
+    } else if (constraint == "diagonal") {
+      C <- diag(colSums(external*(w%*%y))/colSums(external*(w%*%external)))
+    }
     for (s in 1:ncol(external)){
       extvars[[s]]$iord.prim <- updext.result$iord.prim[[s]]
       extvars[[s]]$final     <- external[,s]
