@@ -13,8 +13,6 @@ col.row = "cadetblue", col.column = "coral1", cex = 0.8, pos = 3),
 legpos = "top", arrows = c(FALSE, FALSE), conf = 0.95, wlines = 0, asp = 1, pch = 20, 
 xlab, ylab, main, type, xlim, ylim, cex.axis2, ...)
 
-\method{screeplot}{anacor}(x, pch = 20, xlab = "Number of Dimensions", ylab = "Eigenvalues", 
-main = "CA Scree Plot", ...)
 }
 
 \arguments{
@@ -77,8 +75,6 @@ data(glass)
 res <- anacor(glass)
 plot(res, plot.type = "regplot", xlab = "fathers occupation", ylab = "sons occupation")
 
-## Screeplot 
-screeplot(res)
 
 ## Benzecri Plots for bitterling data
 data(bitterling)

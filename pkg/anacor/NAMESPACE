@@ -7,9 +7,7 @@ export(anacor)
 export(burtTable)
 export(expandFrame)
 export(mkIndiList)
-export(screeplot)
 
 S3method(print, anacor)
 S3method(plot, anacor)
-S3method(screeplot, anacor)
 
