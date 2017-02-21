@@ -13,11 +13,11 @@ basic text processing tools. Finally, a document term matrix was created contain
 data("HarvardPsych")
 }
 \format{
- A word frequency table spanned 31 faculty members and 24 keywords.
+ A word frequency table spanned 29 faculty members and 43 keywords.
 }
 
 \source{
-URL: \url{http://www.isites.harvard.edu/icb/icb.do?keyword=k3007&pageid=icb.page18831}
+URL: \url{http://psychology.fas.harvard.edu/faculty}
 }
 
 \examples{
