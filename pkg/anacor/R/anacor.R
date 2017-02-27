@@ -1,5 +1,5 @@
-anacor <- function(tab, ndim = 2, row.covariates, col.covariates, scaling = c("standard","standard"), 
-ellipse = TRUE, eps = 1e-6) 
+anacor <- function(tab, ndim = 2, row.covariates, col.covariates, scaling = c("Benzecri","Benzecri"), 
+ellipse = FALSE, eps = 1e-6) 
 {
 #tab ... 2-way frequency table
 #ndim ... number of dimensions

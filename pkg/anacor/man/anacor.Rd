@@ -7,8 +7,8 @@
 Different scaling methods for row and column scores are provided. 
 }
 \usage{
-anacor(tab, ndim = 2, row.covariates, col.covariates, scaling = c("standard","standard"), 
-ellipse = TRUE, eps = 1e-06)
+anacor(tab, ndim = 2, row.covariates, col.covariates, scaling = c("Benzecri","Benzecri"), 
+ellipse = FALSE, eps = 1e-06)
 
 \method{print}{anacor}(x,...)
 }
@@ -25,7 +25,7 @@ ellipse = TRUE, eps = 1e-06)
   \item{\dots}{Additional arguments ignored.}
 }
 \details{
-  Missing values in \code{tab} are imputed using the reconstitution algorithm. Setting \code{scaling} to \code{"standard"} leads to standard coordinates. Principal coordinates can be computed by means of Benzecri decomposition. Furthermore, scores can be scaled around their centroid. 
+  Missing values in \code{tab} are imputed using the reconstitution algorithm. Setting \code{scaling} to \code{"standard"} leads to standard coordinates. Principal coordinates can be computed by means of Benzecri decomposition. 
   Goodman scaling is based on Fisher-Maung decomposition.  
   
   For large datasets it is suggested to set \code{ellipse = FALSE}. If \code{ellipse = TRUE}, make sure
