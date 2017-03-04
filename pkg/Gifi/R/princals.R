@@ -1,12 +1,14 @@
-princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsQ(data), degrees = 2, copies = 1, 
-                      missing = "m", active = TRUE, itmax = 1000, eps = 1e-6, seed = 123, verbose = FALSE)  {
+princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsD(data), degrees = 2, copies = 1, 
+                      missing = "m", normobj.z = TRUE, active = TRUE, itmax = 1000, eps = 1e-6, 
+                      seed = 123, verbose = FALSE)  {
     
     ## --- sanity checks
     names <- colnames(data, do.NULL = FALSE) 
     rnames <- rownames(data, do.NULL = FALSE)
     data_orig <- data
-    data <- makeNumeric(data)            
-    ## insert missing and ties match.arg
+    data <- makeNumeric(data)   
+    ties <- match.arg(ties, c("s", "p", "t"), several.ok = FALSE)
+    missing <- match.arg(missing, c("m", "s", "a"), several.ok = FALSE)
     ## --- end sanity checks
   
     aname <- deparse (substitute (data))
@@ -38,11 +40,16 @@ princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsQ
    ## --- output cosmetics
    dnames <- paste0("D", 1:ndim)
    transform <- do.call(cbind, v); colnames(transform) <- names; rownames(transform) <- rnames
+   
    rhat <- corList(v); rownames(rhat) <- colnames(rhat) <- names
    evals <- eigen(rhat)$values
+   
    objectscores <- as.matrix(h$x); colnames(objectscores) <- dnames; rownames(objectscores) <- rnames
+   if (normobj.z) objectscores <- nobs^0.5 * objectscores  
+   
    scoremat <- sapply(y, function(xx) xx[,1]); colnames(scoremat) <- names; rownames(scoremat) <- rnames
    quantifications <- as.matrix(z); names(quantifications) <- names; quantifications <- lapply(quantifications, "colnames<-", dnames)
+   
    dmeasures <- d; names(dmeasures) <- names; dmeasures <- lapply(dmeasures, "colnames<-", dnames); dmeasures <- lapply(dmeasures, "rownames<-", dnames)
    lambda <- dsum/ncol(data); rownames(lambda) <- colnames(lambda) <- dnames
    weights <- do.call(rbind, a); rownames(weights) <- names; colnames(weights) <- dnames 
@@ -51,7 +58,7 @@ princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsQ
    f <- h$f
    
    res <- list(transform = transform, rhat = rhat, evals = evals, objectscores = objectscores, scoremat = scoremat, quantifications = quantifications,
-               dmeasures = dmeasures, lambda = lambda, weights = weights, loadings = loadings, ntel = ntel, f = f, 
+               dmeasures = dmeasures, lambda = lambda, weights = weights, loadings = t(loadings), ntel = ntel, f = f, 
                data = data_orig, datanum = data, ndim = ndim, 
                call = match.call())
    class(res) <- "princals"

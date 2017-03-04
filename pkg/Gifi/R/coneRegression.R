@@ -18,7 +18,7 @@ amalgm <- function (x, w = rep (1, length (x))) {
   return (lf$y)
 }
 
-isotone <- function (x, y, w = rep (1, length (x)), ties = "s") {
+isotone <- function (x, y, w = rep (1, length (x)), ties = ties) {
     there <- which (!is.na (x))
     notthere <- which (is.na (x))
     xthere <- x[there]
@@ -66,7 +66,7 @@ isotone <- function (x, y, w = rep (1, length (x)), ties = "s") {
   }
 
 coneRegression <- function (data, target, basis = matrix (data, length(data), 1), type = "i",
-            ties = "s", missing = "m", itmax = 1000, eps = 1e-6) {
+            ties = ties, missing = missing, itmax = 1000, eps = 1e-6) {
     itel <- 1
     there <- which (!is.na (data))
     notthere <- which (is.na (data))
@@ -88,15 +88,7 @@ coneRegression <- function (data, target, basis = matrix (data, length(data), 1)
       }
      }
     if ((type == "i")  || ((type == "c") && (missing == "a"))) {
-      solution <-
-        dykstra (
-          target = target,
-          basis = basis,
-          data = data,
-          ties = ties,
-          itmax = itmax,
-          eps = eps
-        )
+      solution <- dykstra (target = target, basis = basis, data = data, ties = ties, itmax = itmax, eps = eps)
     }
     return (solution)
   }

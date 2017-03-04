@@ -12,6 +12,8 @@ bsplineBasis <- function (x, degree, innerknots, lowknot = min(x,innerknots), hi
 }
 
 knotsQ <- function (x, n = 5) {
+  x <- as.data.frame(x)
+  x <- makeNumeric(x)
   do <- function (z, n) {
     y <- quantile (z, probs = seq(0, 1, length = max (2, n)))
     return (y[-c(1, length(y))])
@@ -21,6 +23,8 @@ knotsQ <- function (x, n = 5) {
 }
 
 knotsR <- function (x, n = rep (5, ncol (x))) {
+  x <- as.data.frame(x)
+  x <- makeNumeric(x)
   do <- function (i) {
     y <- seq (min(x[, i]), max(x[, i]), length = max (2, n[i]))
     return (y[-c(1, length(y))])
@@ -28,11 +32,15 @@ knotsR <- function (x, n = rep (5, ncol (x))) {
   lapply (1:ncol(x),  function (i) do (i))
 }
 
-knotsE <- function (x = NULL) {
+knotsE <- function (x) {
+  x <- as.data.frame(x)
+  x <- makeNumeric(x)
   lapply (1:max(1, ncol(x)), function (i) numeric(0))
 }
 
 knotsD <- function (x) {
+  x <- as.data.frame(x)
+  x <- makeNumeric(x)
   do <- function (i) {
     y <- sort (unique(x[, i]))
     return (y[-c(1, length(y))])

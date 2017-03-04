@@ -11,13 +11,13 @@ plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.load
     match.arg(plot.type, c("biplot", "loadplot", "screeplot", "transplot"))
     
     if ((x$ndim == 1) && (plot.type != "transplot")) stop("No biplot/loadings plot can be drawn for ndim = 1!")
-    nvar <- dim(x$loadings)[2]
+    nvar <- dim(x$loadings)[1]
     
     
     
     #----------------------------------loadplot-------------------------------------
     if (plot.type == "loadplot") {
-      xycoor <- t(x$loadings[plot.dim, ])
+      xycoor <- x$loadings[,plot.dim]
       if (missing(xlim)) {                            ## x limits
         xlim.min <- min(xycoor[,1],0)
         xlim.max <- max(xycoor[,1],0)
@@ -44,7 +44,7 @@ plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.load
     
     ## --------------------------------- biplot ------------------------------------
     if (plot.type == "biplot") {
-      xycoorL <- t(x$loadings)[, plot.dim]
+      xycoorL <- x$loadings[, plot.dim]
       xycoorS <- x$objectscores[, plot.dim]
       if (missing(xlim)) {                            ## x limits
         xlim.min <- min(c(xycoorL[,1], xycoorS[,1]), 0)
@@ -77,11 +77,11 @@ plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.load
     
     if (plot.type == "transplot") {
       
-      if (missing(main)) main <- colnames(x$loadings)
+      if (missing(main)) main <- rownames(x$loadings)
       if (missing(xlab)) xlab <- "Observed"
       if (missing(ylab)) ylab <- "Transformed"
       
-      if (var.subset[1] == "all") var.subset <- colnames(x$loadings)       ## extract variables and scores to be plotted
+      if (var.subset[1] == "all") var.subset <- rownames(x$loadings)       ## extract variables and scores to be plotted
       nvars <- length(var.subset)                                 ## number of variables to be plotted
       plotvars <- x$datanum[,var.subset]   
       xlabels <- x$data[,var.subset]
