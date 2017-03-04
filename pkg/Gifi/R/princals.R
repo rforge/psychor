@@ -11,11 +11,11 @@ princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsD
     missing <- match.arg(missing, c("m", "s", "a"), several.ok = FALSE)
     ## --- end sanity checks
   
-    aname <- deparse (substitute (data))
+    aname <- deparse(substitute(data))
     nvars <- ncol(data)
     nobs <- nrow(data)
-    g <- makeGifi(data = data, knots = knots, degrees = reshape (degrees, nvars), ordinal = reshape(ordinal, nvars),
-                  sets =  1:nvars, copies = reshape (copies, nvars), ties = reshape (ties, nvars), missing = reshape (missing, nvars),
+    g <- makeGifi(data = data, knots = knots, degrees = reshape(degrees, nvars), ordinal = reshape(ordinal, nvars),
+                  sets =  1:nvars, copies = reshape(copies, nvars), ties = reshape (ties, nvars), missing = reshape (missing, nvars),
                   active = reshape (active, nvars), names = names)
     h <- gifiEngine(gifi = g, ndim = ndim, itmax = itmax, eps = eps, seed = seed, verbose = verbose)
     a <- v <- z <- d <- y <- o <- as.list (1:nvars)
@@ -39,27 +39,32 @@ princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsD
     
    ## --- output cosmetics
    dnames <- paste0("D", 1:ndim)
-   transform <- do.call(cbind, v); colnames(transform) <- names; rownames(transform) <- rnames
    
-   rhat <- corList(v); rownames(rhat) <- colnames(rhat) <- names
+   transform <- do.call(cbind, v); try(colnames(transform) <- names, silent = TRUE); try(rownames(transform) <- rnames, silent = TRUE)
+   
+   rhat <- corList(v); try(rownames(rhat) <- colnames(rhat) <- names, silent = TRUE)
    evals <- eigen(rhat)$values
    
-   objectscores <- as.matrix(h$x); colnames(objectscores) <- dnames; rownames(objectscores) <- rnames
+   objectscores <- as.matrix(h$x); try(colnames(objectscores) <- dnames, silent = TRUE); try(rownames(objectscores) <- rnames, silent = TRUE)
    if (normobj.z) objectscores <- nobs^0.5 * objectscores  
    
-   scoremat <- sapply(y, function(xx) xx[,1]); colnames(scoremat) <- names; rownames(scoremat) <- rnames
-   quantifications <- as.matrix(z); names(quantifications) <- names; quantifications <- lapply(quantifications, "colnames<-", dnames)
+   scoremat <- sapply(y, function(xx) xx[,1]); try(colnames(scoremat) <- names, silent = TRUE); try(rownames(scoremat) <- rnames, silent = TRUE)
+   quantifications <- as.matrix(z); try(names(quantifications) <- names, silent = TRUE); try(quantifications <- lapply(quantifications, "colnames<-", dnames), silent = TRUE)
    
-   dmeasures <- d; names(dmeasures) <- names; dmeasures <- lapply(dmeasures, "colnames<-", dnames); dmeasures <- lapply(dmeasures, "rownames<-", dnames)
-   lambda <- dsum/ncol(data); rownames(lambda) <- colnames(lambda) <- dnames
-   weights <- do.call(rbind, a); rownames(weights) <- names; colnames(weights) <- dnames 
-   loadings <- do.call(cbind, o); rownames(loadings) <- dnames; colnames(loadings) <- names 
+   dmeasures <- d; try(names(dmeasures) <- names, silent = TRUE); try(dmeasures <- lapply(dmeasures, "colnames<-", dnames), silent = TRUE); try(dmeasures <- lapply(dmeasures, "rownames<-", dnames), silent = TRUE)
+   lambda <- dsum/ncol(data); try(rownames(lambda) <- colnames(lambda) <- dnames, silent = TRUE)
+   weights <- do.call(rbind, a); try(rownames(weights) <- names, silent = TRUE); try(colnames(weights) <- dnames, silent = TRUE)
+   loadings <- do.call(cbind, o); try(rownames(loadings) <- dnames, silent = TRUE); try(colnames(loadings) <- names, silent = TRUE)
    ntel <- h$ntel
    f <- h$f
    
+   knotlist <- knots; try(names(knotlist) <- names, silent = TRUE)
+   degvec <- reshape(degrees, nvars); try(names(degvec) <- names, silent = TRUE)
+   ordvec <- reshape(ordinal, nvars); try(names(ordvec) <- names, silent = TRUE)
+   
    res <- list(transform = transform, rhat = rhat, evals = evals, objectscores = objectscores, scoremat = scoremat, quantifications = quantifications,
                dmeasures = dmeasures, lambda = lambda, weights = weights, loadings = t(loadings), ntel = ntel, f = f, 
-               data = data_orig, datanum = data, ndim = ndim, 
+               data = data_orig, datanum = data, ndim = ndim, knots = knotlist, degrees = degvec, ordinal = ordvec,
                call = match.call())
    class(res) <- "princals"
    return(res)

@@ -74,41 +74,51 @@ plot.princals <- function(x, plot.type = "biplot", plot.dim = c(1, 2), var.subse
       posvec <- apply(xycoorL, 1, sign)[2,] + 2      
       text(xycoorL, labels = rownames(xycoorL), pos = posvec, cex = cex.loadings) 
     }
-    #------------------------------------trfplot------------------------------------
-    #draws transformation plots
+    #------------------------------------transplot------------------------------------
     
     if (plot.type == "transplot") {
       
-      if (missing(main)) main <- rownames(x$loadings)
       if (missing(xlab)) xlab <- "Observed"
       if (missing(ylab)) ylab <- "Transformed"
       
       if (var.subset[1] == "all") var.subset <- rownames(x$loadings)       ## extract variables and scores to be plotted
+      if (is.numeric(var.subset)) var.subset <- rownames(x$loadings)[var.subset]
+      if (missing(main)) main <- var.subset
+      
       nvars <- length(var.subset)                                 ## number of variables to be plotted
-      plotvars <- x$datanum[,var.subset]   
-      xlabels <- x$data[,var.subset]
-      ploty <- x$transform[,var.subset]
+      plotvars <- as.matrix(x$datanum[,var.subset])   
+      xlabels <- as.data.frame(x$data[,var.subset])
+      ploty <- as.matrix(x$transform[,var.subset])
+      knotsv <- x$knots[var.subset]
+      ordv <- x$ordinal[var.subset]
       
       ## set up number of vertical and horizontal panels  
       npanv <- ceiling(sqrt(nvars)) 
       npanh <- floor(sqrt(nvars))
       if (npanv * npanh < nvars) npanv <- npanv + 1
       
-      op <- par(mfrow = c(npanv, npanh))
+      if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      if (parop) op <- par(mfrow = c(npanv, npanh))
       for (i in 1:nvars) {
         x1 <- plotvars[,i]
         y1 <- ploty[,i]
         xy <- cbind(x1, y1)
         ord <- order(xy[,1])
-        #if (length(x1) > 10) pch <- "." else pch <- 19
-        plot(xy[ord,1], xy[ord,2], type = "l", xlab = xlab, ylab = ylab, main = main[i], xaxt = "n", 
-             col = col.lines, ...)
-        axis(1, labels = xlabels[,i], at = x1)  
+        
+        if (length(knotsv[[i]]) == (length(unique(plotvars[,i]))-2)) {    ## plot step function
+          sfun0  <- stepfun(xy[ord,1][-1], xy[ord,2], f = 0)    
+          if (ordv[i]) vert <- TRUE else vert <- FALSE
+          plot(sfun0, xlab = xlab, ylab = ylab, main = main[i], xaxt = "n", col = col.lines, do.points = FALSE, verticals = vert, ...)
+          axis(1, labels = xlabels[,i], at = x1) 
+        } else {
+          plot(xy[ord,1], xy[ord,2], type = "l", xlab = xlab, ylab = ylab, main = main[i], xaxt = "n", col = col.lines, ...)
+          axis(1, labels = xlabels[,i], at = x1) 
+        }
       }
-      par(op)
+      if (parop) par(op)
       
     }    
-    # #----------------------------------end trfplot----------------------------------
+    # #----------------------------------end transplot----------------------------------
     
     
     #---------------------------------- screeplot ----------------------------------
