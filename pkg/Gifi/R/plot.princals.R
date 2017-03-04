@@ -1,6 +1,7 @@
-plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.loadings = "black", arrows = TRUE, cex.scores = 0.8, 
-                          cex.loadings = 0.8, labels.scores = FALSE, labels.loadings = TRUE, var.subset = "all", plot.dim = c(1, 2), ask = FALSE,
-                            main, xlab, ylab, xlim, ylim, ...)
+plot.princals <- function(x, plot.type = "biplot", plot.dim = c(1, 2), var.subset = "all", 
+                          col.scores = "gray", col.loadings = "black", col.lines = "black", cex.scores = 0.8, 
+                          cex.loadings = 0.8, labels.scores = FALSE, labels.loadings = TRUE, asp = 1,
+                          main, xlab, ylab, xlim, ylim, ...)
   {
     
     ## S3 plot method for objects of class "princals"
@@ -33,7 +34,7 @@ plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.load
       if (missing(main)) main <- "Loadings Plot"
       
       plot(xycoor, type = "p", pch = ".", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, main = main, 
-           cex = cex.loadings, col = col.loadings, ...)
+           cex = cex.loadings, col = col.loadings, asp = asp, ...)
       abline(h = 0, v = 0, col = "gray", lty = 2)
       for (i in 1:nvar) arrows(0, 0, xycoor[i,1],xycoor[i,2], length = 0.08)   #lines(rbind(xycoor[i,],c(0,0)))
       posvec <- apply(xycoor, 1, sign)[2,] + 2      
@@ -61,10 +62,11 @@ plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.load
       if (missing(main)) main <- "Biplot"
       
       if (labels.scores) {
-        plot(xycoorS, type = "n", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, main = main, ...)
+        plot(xycoorS, type = "n", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, asp = asp, main = main, ...)
         text(xycoorS, labels = rownames(xycoorS), col = col.scores, cex = cex.scores)
       } else {
-        plot(xycoorS, type = "p", pch = 20, cex = cex.scores, xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, main = main, col = col.scores, ...)
+        plot(xycoorS, type = "p", pch = 20, cex = cex.scores, xlim = xlim, ylim = ylim, 
+             xlab = xlab, ylab = ylab, main = main, col = col.scores, asp = asp, ...)
       }
       points(xycoorL, pch = ".")
       abline(h = 0, v = 0, col = "gray", lty = 2)
@@ -99,7 +101,8 @@ plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.load
         xy <- cbind(x1, y1)
         ord <- order(xy[,1])
         #if (length(x1) > 10) pch <- "." else pch <- 19
-        plot(xy[ord,1], xy[ord,2], type = "l", xlab = xlab, ylab = ylab, main = main[i], xaxt = "n", ...)
+        plot(xy[ord,1], xy[ord,2], type = "l", xlab = xlab, ylab = ylab, main = main[i], xaxt = "n", 
+             col = col.lines, ...)
         axis(1, labels = xlabels[,i], at = x1)  
       }
       par(op)
@@ -112,11 +115,13 @@ plot.princals <- function(x, plot.type = "biplot", col.scores = "gray", col.load
     if (plot.type == "screeplot") {
       
       if (missing(main)) main <- "Scree Plot"
-      if (missing(xlab)) xlab <- "Number of Dimensions"
+      if (missing(xlab)) xlab <- "Number of Components"
       if (missing(ylab)) ylab <- "Eigenvalues"
+      if (missing(ylim)) ylim <- c(0, max(x$evals))
       
       nd <- length(x$evals)
-      plot(1:nd, x$evals, type = "b", xlab = xlab, ylab = ylab, main = main, xaxt = "n", pch = 20)
+      plot(1:nd, x$evals, type = "b", xlab = xlab, ylab = ylab, main = main, xaxt = "n", pch = 20,
+           ylim = ylim, col = col.lines, ...)
       axis(1, at = 1:nd, labels = 1:nd)
     }  
     #-------------------------------- end screeplot --------------------------------

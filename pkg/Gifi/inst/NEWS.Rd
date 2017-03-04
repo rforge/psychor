@@ -19,3 +19,12 @@
     \item \code{Knot functions now work for single variables as well}
   }
 }
+
+\section{Version 0.1-2}{
+ \itemize{
+    \item \code{ylim scree plot starts at 0}
+    \item \code{Help file for plot.princals added}
+    \item \code{Aspect ratio for 2D plots set to 1}
+    \item \code{Color argument for lines in transplot and screeplot}
+  }
+}
