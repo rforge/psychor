@@ -28,3 +28,12 @@
     \item \code{Color argument for lines in transplot and screeplot}
   }
 }
+
+\section{Version 0.2-0}{
+ \itemize{
+    \item \code{homals wrapper added}
+    \item \code{plot, summary, print S3 for homals added}
+    \item \code{Some cosmetics on the transformation plot}
+    \item \code{Attribute assigned to knot functions}
+  }
+}

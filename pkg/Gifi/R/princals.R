@@ -66,6 +66,6 @@ princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsD
                dmeasures = dmeasures, lambda = lambda, weights = weights, loadings = t(loadings), ntel = ntel, f = f, 
                data = data_orig, datanum = data, ndim = ndim, knots = knotlist, degrees = degvec, ordinal = ordvec,
                call = match.call())
-   class(res) <- "princals"
+   class(res) <- c("princals", "gifi")
    return(res)
   }

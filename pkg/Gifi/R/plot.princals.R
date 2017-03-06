@@ -1,6 +1,6 @@
-plot.princals <- function(x, plot.type = "biplot", plot.dim = c(1, 2), var.subset = "all", 
+plot.princals <- function(x, plot.type = "loadplot", plot.dim = c(1, 2), var.subset = "all", 
                           col.scores = "gray", col.loadings = "black", col.lines = "black", cex.scores = 0.8, 
-                          cex.loadings = 0.8, labels.scores = FALSE, labels.loadings = TRUE, asp = 1,
+                          cex.loadings = 0.8, labels.scores = FALSE, labels.loadings = TRUE, stepvec = NA, asp = 1,
                           main, xlab, ylab, xlim, ylim, ...)
   {
     
@@ -74,10 +74,9 @@ plot.princals <- function(x, plot.type = "biplot", plot.dim = c(1, 2), var.subse
       posvec <- apply(xycoorL, 1, sign)[2,] + 2      
       text(xycoorL, labels = rownames(xycoorL), pos = posvec, cex = cex.loadings) 
     }
-    #------------------------------------transplot------------------------------------
     
+    #------------------------------------transplot------------------------------------
     if (plot.type == "transplot") {
-      
       if (missing(xlab)) xlab <- "Observed"
       if (missing(ylab)) ylab <- "Transformed"
       
@@ -105,7 +104,9 @@ plot.princals <- function(x, plot.type = "biplot", plot.dim = c(1, 2), var.subse
         xy <- cbind(x1, y1)
         ord <- order(xy[,1])
         
-        if (length(knotsv[[i]]) == (length(unique(plotvars[,i]))-2)) {    ## plot step function
+        if (!is.factor(xlabels[,i])) xlabels[,i] <- round(xlabels[,i], 2)
+        if (is.na(stepvec[1])) crit <- length(knotsv[[i]]) == (length(unique(plotvars[,i]))-2) else crit <- stepvec[i]
+        if (crit) {    ## plot step function
           sfun0  <- stepfun(xy[ord,1][-1], xy[ord,2], f = 0)    
           if (ordv[i]) vert <- TRUE else vert <- FALSE
           plot(sfun0, xlab = xlab, ylab = ylab, main = main[i], xaxt = "n", col = col.lines, do.points = FALSE, verticals = vert, ...)
@@ -116,7 +117,6 @@ plot.princals <- function(x, plot.type = "biplot", plot.dim = c(1, 2), var.subse
         }
       }
       if (parop) par(op)
-      
     }    
     # #----------------------------------end transplot----------------------------------
     

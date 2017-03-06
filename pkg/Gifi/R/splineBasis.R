@@ -19,7 +19,9 @@ knotsQ <- function (x, n = 5) {
     return (y[-c(1, length(y))])
   }
   if (ncol(x) > 0) n <- rep (n, ncol (x))
-  if (ncol (x) > 0) lapply (1:ncol(x), function (i) do (x[,i], n[i]))
+  if (ncol(x) > 0) out <- lapply (1:ncol(x), function (i) do (x[,i], n[i]))
+  attr(out, "type") <- "knotsQ"
+  return(out)
 }
 
 knotsR <- function (x, n = rep (5, ncol (x))) {
@@ -29,13 +31,17 @@ knotsR <- function (x, n = rep (5, ncol (x))) {
     y <- seq (min(x[, i]), max(x[, i]), length = max (2, n[i]))
     return (y[-c(1, length(y))])
   }
-  lapply (1:ncol(x),  function (i) do (i))
+  out <- lapply (1:ncol(x),  function (i) do (i))
+  attr(out, "type") <- "knotsR"
+  return(out)
 }
 
 knotsE <- function (x) {
   x <- as.data.frame(x)
   x <- makeNumeric(x)
-  lapply (1:max(1, ncol(x)), function (i) numeric(0))
+  out <- lapply (1:max(1, ncol(x)), function (i) numeric(0))
+  attr(out, "type") <- "knotsE"
+  return(out)
 }
 
 knotsD <- function (x) {
@@ -45,5 +51,7 @@ knotsD <- function (x) {
     y <- sort (unique(x[, i]))
     return (y[-c(1, length(y))])
   }
-  lapply (1:ncol(x),  function (i) do (i))
+  out <- lapply (1:ncol(x),  function (i) do (i))
+  attr(out, "type") <- "knotsD"
+  return(out)
 }

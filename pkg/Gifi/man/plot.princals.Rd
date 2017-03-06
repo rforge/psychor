@@ -5,10 +5,10 @@
 \description{Various plotting options for objects of class \code{"princals"}.
 }
 \usage{
-\method{plot}{princals}(x, plot.type = "biplot", plot.dim = c(1, 2), var.subset = "all", 
+\method{plot}{princals}(x, plot.type = "loadplot", plot.dim = c(1, 2), var.subset = "all", 
 col.scores = "gray", col.loadings = "black", col.lines = "black", cex.scores = 0.8, 
-cex.loadings = 0.8, labels.scores = FALSE, labels.loadings = TRUE, asp = 1, main, xlab, 
-ylab, xlim, ylim, ...)
+cex.loadings = 0.8, labels.scores = FALSE, labels.loadings = TRUE, stepvec = NA, asp = 1, 
+main, xlab, ylab, xlim, ylim, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,6 +25,7 @@ ylab, xlim, ylim, ...)
   \item{asp}{Aspect ratio}
   \item{labels.scores}{Whether object score labels should be plotted.} 
   \item{labels.loadings}{Whether variable names should be plotted.}
+  \item{stepvec}{Vector whether step function should be plotted (see details).}
   \item{main}{Plot title.}
   \item{type}{Type of points/lines to be plotted.}
   \item{xlab}{Label of x-axis.}
@@ -44,6 +45,8 @@ transformed scale (first dimension) for each variable separately.
 - Loadings plot (\code{plot.type = "loadplot"}): Plots the loadings of the variables and connects them with the origin. 
 
 - Scree plot (\code{plot.type = "screeplot"}): Produces a scree plot based on the eigenvalues. 
+
+For transformation plots only: If \code{stepvec = NA}, the function tries to figure out which variable should be plotted as step function. Alternatively, a boolean vector (with length number of variables) can be specified (\code{TRUE} step function, \code{FALSE} smooth function).
 }
 
 \examples{

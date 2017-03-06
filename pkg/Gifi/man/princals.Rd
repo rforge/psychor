@@ -5,7 +5,7 @@
 Categorical principal component analysis (PRINCALS). 
 }
 \description{
-Fits a categorical PCA. 
+Fits a categorical PCA. The default is to take each input variable as ordinal but it works for mixed scale levels (incl. nominal) as well. Through a proper spline specification various continuous transformation functions can be specified: linear, polynomials, and (monotone) splines. 
 }
 \usage{
 princals(data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsD(data), 
@@ -30,7 +30,7 @@ itmax = 1000, eps = 1e-06, seed = 123, verbose = FALSE)
   \item{verbose}{Iteration printout}
 }
 \details{
-Details will follow.
+Fits PRINCALS as described in De Leeuw et al. (2017). 
 }
 \value{
 \item{transform}{Optimally transformed scores}
@@ -52,7 +52,11 @@ Details will follow.
 }
 \references{
 Gifi, A. (1990). Nonlinear Multivariate Analysis. New York: Wiley.
+
+De Leeuw, J., Mair, P., Groenen, P. J. F. (2017). Multivariate Analysis with Optimal Scaling. \url{http://gifi.stat.ucla.edu/gifi/_book/}. 
 }
+
+\seealso{\code{\link{homals}}, \code{\link{plot.princals}}}
 
 \examples{
 ABC6 <- ABC[,6:11]
@@ -62,15 +66,44 @@ fitord <- princals(ABC6)  ## ordinal PCA
 fitord
 summary(fitord)
 
+plot(fitord, plot.type = "transplot")
+plot(fitord, "loadplot", main = "Loadings Plot ABC Data")  ## aspect ratio = 1
+plot(fitord, "biplot", labels.scores = TRUE, main = "Biplot ABC Data")
+plot(fitord, "screeplot")
+
 ## linear restrictions (mimics standard PCA)
 abc_knots <- knotsE(ABC6)     ## 0 interior knots
 fitlin <- princals(ABC6, knots = abc_knots, degrees = 1)  
 fitlin 
 fitlin$evals
+plot(fitlin, plot.type = "transplot")
 
 ## compare with standard PCA
 ABCnum <- makeNumeric(ABC6)
 fitpca <- prcomp(ABCnum, scale = TRUE)
 fitpca$sdev^2   
+
+## more complicated specifications
+\dontrun{
+data(epi.bfi, package = "psych")
+epi6 <- epi.bfi[,1:6]
+fitepi1 <- princals(epi6, knots = knotsQ(epi6))    ## monotone splines (degree 2)
+fitepi1
+plot(fitepi1, "transplot")
+
+## no interior knots vars 1 and 2; data knots vars 3 and 4; 5 
+## interior percentile knots var 5; no interior knots var 6)
+knotList <- c(knotsE(epi6[,1:2]), 
+              knotsD(epi6[,3:4]), 
+              knotsQ(epi6[,5], n = 7),
+              knotsE(epi6[,6]))
+knotList  
+ordvec <- c(TRUE, FALSE, TRUE, FALSE, FALSE, TRUE) ## ordinal restrictions
+degvec <- c(3, -1, 2, 2, 3, 1)                     ## spline degrees (second variable nominal)
+fitepi2 <- princals(epi6, knots = knotList, ordinal = ordvec, degrees = degvec)
+fitepi2
+plot(fitepi2, "transplot")
+}
+
 }
 \keyword{multivariate}% use one of  RShowDoc("KEYWORDS")
