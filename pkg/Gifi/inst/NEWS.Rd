@@ -37,3 +37,10 @@
     \item \code{Attribute assigned to knot functions}
   }
 }
+
+\section{Version 0.3-0}{
+ \itemize{
+    \item \code{bug for plot.dim = 1 in transformation plot fixed}
+    \item \code{morals wrapper incl. S3 (print, plot) added}
+  }
+}

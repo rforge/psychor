@@ -112,7 +112,7 @@ plot.homals <- function(x, plot.type = "jointplot", plot.dim = c(1, 2), var.subs
       plotvars <- as.matrix(x$datanum[,var.subset])   
       xlabels <- as.data.frame(x$data[,var.subset])
       ploty <- x$transform[var.subset]   ## list
-      ploty <- lapply(ploty, function(cc) if (ncol(cc) < length(plot.dim)) cc else cc[, plot.dim])
+      ploty <- lapply(ploty, function(cc) if (ncol(cc) < length(plot.dim)) as.matrix(cc) else as.matrix(cc[, plot.dim]))
       knotsv <- x$knots[var.subset]
       ordv <- x$ordinal[var.subset]
       
@@ -157,7 +157,7 @@ plot.homals <- function(x, plot.type = "jointplot", plot.dim = c(1, 2), var.subs
   
         }
       }
-      if (parop) par(op)
+      if (parop) on.exit(par(op))
     }    
     
     # ----------------------------------end transplot----------------------------------

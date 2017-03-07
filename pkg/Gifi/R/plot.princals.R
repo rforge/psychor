@@ -116,7 +116,7 @@ plot.princals <- function(x, plot.type = "loadplot", plot.dim = c(1, 2), var.sub
           axis(1, labels = xlabels[,i], at = x1) 
         }
       }
-      if (parop) par(op)
+      if (parop) on.exit(par(op))
     }    
     # #----------------------------------end transplot----------------------------------
     
