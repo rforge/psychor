@@ -7,12 +7,12 @@
 Multidimensional scaling on a symmetric dissimilarity matrix using SMACOF. 
 }
 \usage{
-smacofSym(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
+smacofSym(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
           weightmat = NULL, init = "torgerson", ties = "primary", verbose = FALSE, 
           relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-06, 
           spline.degree = 2, spline.intKnots = 2)
 
-mds(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
+mds(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
     weightmat = NULL, init = "torgerson", ties = "primary", verbose = FALSE, 
     relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-06, 
     spline.degree = 2, spline.intKnots = 2)

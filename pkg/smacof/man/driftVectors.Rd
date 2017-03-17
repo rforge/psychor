@@ -9,7 +9,7 @@ Fits an MDS on the symmetric part and computes drift vectors for the skew-symmet
 it possible to see how these two components are related to each other. It is limited to two dimensions only.
 }
 \usage{
-driftVectors(data, type = c("ratio", "interval", "ordinal","mspline"), 
+driftVectors(data, type = c("interval", "ratio", "ordinal","mspline"), 
              weightmat = NULL, init = "torgerson", ties = "primary",  verbose = FALSE, 
              relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-6, 
              spline.degree = 2, spline.intKnots = 2)

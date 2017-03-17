@@ -9,18 +9,18 @@ INDSCAL and IDIOSCAL.
 }
 
 \usage{
-smacofIndDiff(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
+smacofIndDiff(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
               constraint = c("indscal", "idioscal", "identity"),
               weightmat = NULL, init = "torgerson", ties = "primary",  
               verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
               spline.degree = 2, spline.intKnots = 2)
               
-indscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
+indscal(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
         weightmat = NULL, init = "torgerson", ties = "primary", 
         verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
         spline.degree = 2, spline.intKnots = 2)
 
-idioscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
+idioscal(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
          weightmat = NULL, init = "torgerson", ties = "primary", 
          verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
          spline.degree = 2, spline.intKnots = 2)
@@ -56,7 +56,7 @@ Addtional weight restrictions can be imposed with \code{"identity"} which restri
 \value{
   \item{delta}{Observed dissimilarities}
   \item{obsdiss}{List of observed dissimilarities, normalized}
-  \item{confdiss}{List of configuration dissimilarities}
+  \item{confdist}{List of configuration dissimilarities}
   \item{conf}{List of matrices of final configurations}
   \item{gspace}{Joint configurations aka group stimulus space}
   \item{cweights}{Configuration weights}

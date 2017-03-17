@@ -1,6 +1,6 @@
 #SMACOF for individual differences (list of dissimilarity matrices)
 
-smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
+smacofIndDiff <- function(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
                           constraint = c("indscal", "idioscal", "identity"),
                           weightmat = NULL, init = "torgerson", ties = "primary", 
                           verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
@@ -11,7 +11,7 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
 # ties ... primary, secondary, tertiary
 {
   
-  type <- match.arg(type, c("ratio", "interval", "ordinal", "mspline"), several.ok = FALSE)
+  type <- match.arg(type, c("interval", "ratio", "ordinal", "mspline"), several.ok = FALSE)
   constraint <- match.arg(constraint, c("indscal", "idioscal", "identity"), several.ok = FALSE)
   
   diss <- delta
@@ -170,8 +170,6 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
     
     snon <- scon   
     
-    #dhat2 <- transform(e, disobj, w = wgths, normq = nn)  ## dhat update
-    #dh <- dhat2$res
     snon<-0
     dh <- list()
     for (j in 1:m) {
@@ -179,38 +177,8 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
       dh <- appendList(dh, do)
       snon <- snon+sum(wgths[[j]]*(dh[[j]]-er[[j]])^2)
     }
-    #-------- nonmetric MDS ----------
-#     if (type == "ordinal") {
-# 	    if ((itel%%modulus) == 0) {
-#         snon<-0
-#         dh<-list()
-# 	       for(j in 1:m) {
-# 		            ds <- diss[[j]]
-#                 es <- er[[j]]
-#                 ws <- wgths[[j]]
-# 	            	if (ties=="primary") do <- monregP(ds,es,ws)
-# 	            	if (ties=="secondary") do <- monregS(ds,es,ws)
-# 	            	if (ties=="tertiary") do <- monregT(ds,es,ws)
-# 		            dh <- appendList(dh,normDissN(do,ws,1))
-# 		            snon <- snon+sum(ws*(dh[[j]]-es)^2)
-# 	       }
-#       }
-#     }
-#     
-#     if (type == "interval") {
-#       snon<-0
-#       dh<-list()
-#       for(j in 1:m) {
-#         ds <- diss[[j]]
-#         es <- er[[j]]
-#         ws <- wgths[[j]]
-#         Amat <- cbind(1, as.vector(ds), as.vector(ds)^2) 
-#         do <- nnlsPred(Amat, as.vector(es), as.vector(ws))$pred
-#         dh <- appendList(dh,normDissN(do,ws,1))
-#         snon <- snon+sum(ws*(dh[[j]]-es)^2)
-#       }
-#     }
-#     
+ 
+     
     if (verbose) cat("Iteration: ",formatC(itel,width=3, format="d")," Stress (not normalized): ", formatC(c(snon),digits=8,width=12,format="f"),"\n")
 
     if (((sold-snon)<eps) || (itel == itmax)) break()         #convergence
@@ -261,13 +229,14 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordina
   colnames(sps) <- rnames
   rownames(sps) <- names(delta)
   spp <- colMeans(sps)                                      ## SPP
-  rss <- sum(rss)                                           ## total RSS
+  ## FIXME: stress per subject
+  rss <- sum(rss)                                           ## total RSS (raw stress)
   
   if (itel == itmax) warning("Iteration limit reached! Increase itmax argument!")
   
   #return configurations, configuration distances, normalized observed distances 
-  result <- list(delta = diss, dhat = dh, confdiss = confdiss, conf = yr, gspace = aconf, cweights = bconf,
-                 stress = stress, spp = spp, weightmat = wgths, resmat = spoint$resmat, rss = rss, sps = sps, ndim = p, 
+  result <- list(delta = diss, dhat = dh, confdist = confdiss, conf = yr, gspace = aconf, cweights = bconf,
+                 stress = stress, spp = spp, weightmat = wgths, resmat = spointj$resmat, rss = rss, sps = sps, ndim = p, 
                  model = "Three-way SMACOF", niter = itel, nobj = n, type = type, call = match.call()) 
   class(result) <- "smacofID"
   result 

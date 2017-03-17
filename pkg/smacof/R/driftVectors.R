@@ -1,12 +1,13 @@
 ## embedding skew-symmetries as drift vectors
 
-driftVectors <- function(data, type = c("ratio", "interval", "ordinal","mspline"), 
+driftVectors <- function(data, type = c("interval", "ratio", "ordinal","mspline"), 
                          weightmat = NULL, init = "torgerson", ties = "primary",  verbose = FALSE, 
                          relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-6, 
                          spline.degree = 2, spline.intKnots = 2)  {
   
 ## data ... asymmetric dissimilarity matrix
   
+  type <- match.arg(type, c("interval", "ratio", "ordinal","mspline"), several.ok = FALSE)
   symres <- symdecomp(data)   ## decompose data into symmetric and skew-symmetric portion
   M <- symres$M               ## symmetric matrix
   N <- symres$N               ## skew-symmetric matrix

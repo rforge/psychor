@@ -5,7 +5,7 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
                           type = "p", pch = 20,  asp = 1, main, xlab, ylab, xlim, ylim, ...)
 
 # x ... object of class smacofID
-# plot.type ... types available: "confplot", "bubbleplot", "stressplot"
+# plot.type ... types available: "confplot", "bubbleplot", "stressplot", "Shepard"
 # Shepard plot and resplot are performed over sum of distances
   
 {
@@ -21,7 +21,7 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
   
   
   if (plot.type == "confplot") {
-    if (missing(main)) main <- paste("Group Configurations") else main <- main
+    if (missing(main)) main <- paste("Group Configuration") else main <- main
     if (missing(xlab)) xlab <- paste("Dimension", x1,sep = " ") else xlab <- xlab
     if (missing(ylab)) ylab <- paste("Dimension", y1,sep = " ") else ylab <- ylab
 
@@ -40,7 +40,7 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
     }
   }
 
-  # inserted from 1.7 by LOH 30 April 2016
+  ## FIXME: needs to work for splines as well
   
   #---------------- Shepard diagram ------------------
   if (plot.type == "Shepard") {
@@ -49,19 +49,19 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
       if (missing(ylab)) ylab <- "Aggregated Configuration Distances" else ylab <- ylab
       
       delta <- sumList(x$delta)
-      confdiss <- sumList(x$confdiss)
+      confdist <- sumList(x$confdist)
       
       if (missing(xlim)) xlim <- range(as.vector(delta))
-      if (missing(ylim)) ylim <- range(as.vector(confdiss))
+      if (missing(ylim)) ylim <- range(as.vector(confdist))
       
-      plot(as.vector(delta), as.vector(confdiss), main = main, type = "p", pch = 1,
+      plot(as.vector(delta), as.vector(confdist), main = main, type = "p", pch = 1,
            xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim, ...)
       
       if (x$type == "ordinal") {
-          isofit <- isoreg(as.vector(delta), as.vector(confdiss))  #isotonic regression
+          isofit <- isoreg(as.vector(delta), as.vector(confdist))  #isotonic regression
           points(sort(isofit$x), isofit$yf, type = "b", pch = 16)
       } else {
-          regfit <- lsfit(as.vector(delta), as.vector(confdiss))   #linear regression
+          regfit <- lsfit(as.vector(delta), as.vector(confdist))   #linear regression
           abline(regfit, lwd = 0.5)
       }
   }
@@ -72,16 +72,16 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
       if (missing(xlab)) xlab <- "Aggregated Normalized Dissimilarities (d-hats)" else xlab <- xlab
       if (missing(ylab)) ylab <- "Aggregated Configuration Distances" else ylab <- ylab
       obsdiss <- sumList(x$dhat)
-      confdiss <- sumList(x$confdiss)
+      confdist <- sumList(x$confdist)
       
       if (missing(xlim)) xlim <- range(as.vector(obsdiss))
-      if (missing(ylim)) ylim <- range(as.vector(confdiss))
+      if (missing(ylim)) ylim <- range(as.vector(confdist))
       
-      plot(as.vector(obsdiss), as.vector(confdiss), main = main, type = "p", col = "darkgray", xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim,...)
-      abline(lsfit(as.vector(obsdiss), as.vector(confdiss)))
+      plot(as.vector(obsdiss), as.vector(confdist), main = main, type = "p", col = "darkgray", xlab = xlab, ylab = ylab, xlim = xlim, ylim = ylim,...)
+      abline(lsfit(as.vector(obsdiss), as.vector(confdist)))
       
   }
-  # end of insert by LOH
+  
   
   
   #----------------------- Stress decomposition -----------------

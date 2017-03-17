@@ -1,6 +1,6 @@
 # plot method for rectangular smacof
 
-plot.smacofR <- function(x, plot.type = "confplot", joint = TRUE, plot.dim = c(1,2), 
+plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", "rows"), plot.dim = c(1,2), 
                          col.rows = hcl(0), 
                          col.columns = hcl(240),
                          label.conf.rows = list(label = TRUE, pos = 3, col = hcl(0, l = 50), cex = 0.8), 
@@ -12,6 +12,8 @@ plot.smacofR <- function(x, plot.type = "confplot", joint = TRUE, plot.dim = c(1
 # joint ... if TRUE, row and column configurations in 1 plot
   
 {
+  what <- match.arg(what, c("both", "columns", "rows"), several.ok = FALSE)
+  
   x1 <- plot.dim[1]
   y1 <- plot.dim[2]
   
@@ -20,6 +22,7 @@ plot.smacofR <- function(x, plot.type = "confplot", joint = TRUE, plot.dim = c(1
   if (is.null(label.conf.rows$pos)) label.conf.rows$pos <- 3
   if (is.null(label.conf.rows$col)) label.conf.rows$col <- hcl(0, l = 50)
   if (is.null(label.conf.rows$cex)) label.conf.rows$cex <- 0.8
+ 
   if (is.null(label.conf.columns$label)) label.conf.columns$label <- TRUE
   if (is.null(label.conf.columns$pos)) label.conf.columns$pos <- 3
   if (is.null(label.conf.columns$col)) label.conf.columns$col <- hcl(240, l = 50)
@@ -31,36 +34,39 @@ plot.smacofR <- function(x, plot.type = "confplot", joint = TRUE, plot.dim = c(1
     #if (missing(type)) type <- "n" else type <- type
     if (missing(xlab)) xlab1 <- paste("Dimension", x1,sep = " ") else xlab1 <- xlab  
     if (missing(ylab)) ylab1 <- paste("Dimension", y1,sep = " ") else ylab1 <- ylab
-    ppos.rows <- label.conf.rows[[2]]
-    ppos.columns <- label.conf.columns[[2]]
+    ppos.rows <- label.conf.rows$pos
+    ppos.columns <- label.conf.columns$pos
     if (type == "n") ppos.rows <- ppos.columns <- NULL
 
-    if (!joint) {                                                                                 
-      op <- par(mfrow = c(1,2))
+    if (what == "columns") {                                                                                 
       if (missing(main)) main1 <- paste("Configuration Plot - Columns") else main1 <- main        #plot column configurations
       #if (missing(xlab)) xlab1 <- paste("Column Configurations D", x1,sep = "") else xlab1 <- xlab
       #if (missing(xlab)) ylab1 <- paste("Column Configurations D", y1,sep = "") else ylab1 <- ylab
 
       if (missing(xlim)) xlim <- range(x$conf.col[,c(x1,y1)])
-      if (missing(ylim)) ylim <- range(x$conf.row[,c(x1,y1)])
-
+      if (missing(ylim)) ylim <- range(x$conf.col[,c(x1,y1)])
+      
       plot(x$conf.col[,x1], x$conf.col[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = type, 
            xlim = xlim, ylim = ylim, col = col.columns, pch = pch, asp = asp, ...)
-      if (label.conf.columns[[1]]) text(x$conf.col[,x1], x$conf.col[,y1], labels = rownames(x$conf.col), 
+      if (label.conf.columns$label) text(x$conf.col[,x1], x$conf.col[,y1], labels = rownames(x$conf.col), 
                                         cex = label.conf.columns$cex, pos = ppos.columns, 
-                                        col = label.conf.columns[[3]])
-
+                                        col = label.conf.columns$col)
+    }
+    if (what == "rows") {                                                                                 
       if (missing(main)) main1 <- paste("Configuration Plot - Rows") else main1 <- main       #plot row configurations
       #if (missing(xlab)) xlab1 <- paste("Column Configurations D", x1,sep = "") else xlab1 <- xlab
       #if (missing(ylab)) ylab1 <- paste("Column Configurations D", y1,sep = "") else ylab1 <- ylab
       
+      if (missing(xlim)) xlim <- range(x$conf.row[,c(x1,y1)])
+      if (missing(ylim)) ylim <- range(x$conf.row[,c(x1,y1)])
+      
       plot(x$conf.row[,x1], x$conf.row[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = type, 
            xlim = xlim, ylim = ylim, col = col.rows, pch = pch, asp = asp, ...)
-      if (label.conf.rows[[1]]) text(x$conf.row[,x1], x$conf.row[,y1], labels = rownames(x$conf.row), 
-                                     cex = label.conf.rows$cex, pos = ppos.rows, col = label.conf.rows[[3]])      
-      par(op)
+      if (label.conf.rows$label) text(x$conf.row[,x1], x$conf.row[,y1], labels = rownames(x$conf.row), 
+                                     cex = label.conf.rows$cex, pos = ppos.rows, col = label.conf.rows$col)      
+    }
     
-    } else { #joint plot
+    if (what == "both") {  #joint plot
       if (missing(main)) main1 <- paste("Joint Configuration Plot") else main1 <- main        
       
       fullconf <- rbind(x$conf.col[,c(x1,y1)],x$conf.row[,c(x1,y1)])
@@ -69,13 +75,13 @@ plot.smacofR <- function(x, plot.type = "confplot", joint = TRUE, plot.dim = c(1
       
       plot(x$conf.row[,x1], x$conf.row[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = type, 
              xlim = xlim, ylim = ylim, col = col.rows, pch = pch, asp = asp,...)
-      if (label.conf.rows[[1]]) text(x$conf.row[,x1], x$conf.row[,y1], labels = rownames(x$conf.row),
-                                     cex = label.conf.rows$cex, pos = ppos.rows, col = label.conf.rows[[3]])    
+      if (label.conf.rows$label) text(x$conf.row[,x1], x$conf.row[,y1], labels = rownames(x$conf.row),
+                                     cex = label.conf.rows$cex, pos = ppos.rows, col = label.conf.rows$col)    
       points(x$conf.col[,x1], x$conf.col[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = type, 
            xlim = xlim, ylim = ylim, col = col.columns, pch = pch, ...)
-      if (label.conf.columns[[1]]) text(x$conf.col[,x1], x$conf.col[,y1], labels = rownames(x$conf.col), 
+      if (label.conf.columns$label) text(x$conf.col[,x1], x$conf.col[,y1], labels = rownames(x$conf.col), 
                                         cex = label.conf.columns$cex, pos = ppos.columns, 
-                                        col = label.conf.columns[[3]])
+                                        col = label.conf.columns$col)
     }
   }
 

@@ -1,4 +1,4 @@
-indscal <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
+indscal <- function(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
                    weightmat = NULL, init = "torgerson", ties = "primary", 
                    verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
                    spline.degree = 2, spline.intKnots = 2) {

@@ -2,6 +2,23 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.9-0}{
+  \itemize{
+    \item Crime dataset added. 
+    \item \code{smacofConstraint()} updated to allow for regional restrictions (diagonal case). 
+    \item \code{type = "interval"} as new default in \code{mds()}. 
+    \item \code{confdist} instead of \code{confdiss} as output value in \code{mds()}.
+    \item Labels in \code{plot.smacof()} are now positioned using \code{thigmophobe.labels()}. 
+    \item Rectangle data corrected, help file updated. 
+    \item Convex hull option added to \code{plot.smacof}.
+    \item Age and gender added as attributes to \code{PVQ40} dataset.
+    \item New \code{what} argument in \code{plot.smacofR} for row/column/joint plots added. 
+    \item \code{bootmds()} incl. plot and print S3 added for bootstrapping MDS solutions.
+    \item Help file for \code{perception} data updated.
+}  
+}
+
+
 
 \section{Changes in Version 1.8-16}{
   \itemize{
