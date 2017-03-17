@@ -12,7 +12,7 @@
                       bubscale = 1, col = 1, label.conf = list(label = TRUE, pos = 3, 
                       col = 1, cex = 0.8), hull.conf = list(hull = FALSE, col = 1, 
                       lwd = 1, ind = NULL), shepard.x = NULL, identify = FALSE, 
-                      type = "p", pch = 20, asp = 1, main, xlab, ylab, 
+                      type = "p", pch = 20, cex = 0.5, asp = 1, main, xlab, ylab, 
                       xlim, ylim, col.hist = NULL, ...)
 
 \method{plot}{smacofR}(x, plot.type = "confplot", what = c("both", "columns", "rows"), 
@@ -41,6 +41,7 @@
   \item{ylim}{Scale y-axis.}
   \item{type}{What type of plot should be drawn (see also \code{\link[graphics]{plot}}).}
   \item{pch}{Plot symbol.}
+  \item{cex}{Symbol size.}
   \item{asp}{Aspect ratio.}
   \item{col}{Point color.}
   \item{sphere}{In case of spherical smacof, whether sphere should be plotted or not.}

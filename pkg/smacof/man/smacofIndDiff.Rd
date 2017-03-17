@@ -58,13 +58,14 @@ Addtional weight restrictions can be imposed with \code{"identity"} which restri
   \item{obsdiss}{List of observed dissimilarities, normalized}
   \item{confdist}{List of configuration dissimilarities}
   \item{conf}{List of matrices of final configurations}
-  \item{gspace}{Joint configurations aka group stimulus space}
-  \item{cweights}{Configuration weights}
+  \item{gspace}{Joint configuration aka group stimulus space}
+  \item{cweights}{Individual weights}
   \item{stress}{Stress-1 value}
   \item{resmat}{Matrix with squared residuals}
   \item{rss}{Residual sum-of-squares}
-  \item{spp}{Stress per point}
-  \item{sps}{Stress per point per subject}
+  \item{spp}{Stress per point (in percent)}
+  \item{spps}{Stress per point per subject (in percent, conditional on subject)}
+  \item{sps}{Stress per subject (in percent)}
   \item{ndim}{Number of dimensions}
   \item{model}{Type of smacof model}
   \item{niter}{Number of iterations}
@@ -80,28 +81,27 @@ The R package smacof. Journal of Statistical Software, 31(3), 1-30, \url{http://
 \seealso{\code{\link{smacofConstraint}}, \code{\link{smacofSym}}, \code{\link{smacofRect}}, \code{\link{smacofSphere}}}
 
 \examples{
-data(perception)
-
+## Example 1: rectangle perception data
 res.id <- smacofIndDiff(perception, constraint = "identity")     ## identity restricted weights
 summary(res.id)
 res.id$cweights
 plot(res.id)
 plot(res.id, type = "p", pch = 25, col = 4, label.conf = list(label = TRUE, pos = 3, col = 4))
 
-res.diag <- smacofIndDiff(perception, constraint = "indscal")  ## diagonally restricted weights
+res.diag <- indscal(perception, type = "ordinal")        ## INDSCAL
 res.diag$cweights
 plot(res.diag)
 plot(res.diag, type = "p", pch = 25, col = 4, label.conf = list(label = TRUE, pos = 3, col = 4))
 
-res.idio <- smacofIndDiff(perception, constraint = "idioscal")  ## IDIOSCAL
+res.idio <- idioscal(perception)  ## IDIOSCAL
 Wk <- res.idio$cweights
 G <- res.idio$gspace
-G%*%Wk[[1]]  ## configurations subject 1 (cf. res.idio$conf[[1]])
-G%*%Wk[[2]]  ## configurations subject 2 (cf. res.idio$conf[[3]])
+G%*%Wk[[1]]  ## configuration subject 1 (cf. res.idio$conf[[1]])
+G%*%Wk[[2]]  ## configuration subject 2 (cf. res.idio$conf[[3]])
 
-
+## Example 2: Helm's color data
 data(helm)
-res.helm <- smacofIndDiff(helm, constraint = "indscal")
+res.helm <- indscal(helm)
 plot(res.helm, plot.type = "confplot")
 barplot(sort(res.helm$sps, decreasing = TRUE), main = "Stress per Subject", cex.names = 0.8) 
 plot(res.helm, plot.type = "bubbleplot")
@@ -109,7 +109,7 @@ plot(res.helm, plot.type = "stressplot")
 plot(res.helm, plot.type = "Shepard")
 plot(res.helm, plot.type = "resplot")
 
-## idioscal and indscal with starting configurations:
+## idioscal and indscal with random starting configuration:
 startconf <- matrix(rnorm(20), 10, 2)
 idioscal(helm, init = startconf)
 indscal(helm, init = startconf)

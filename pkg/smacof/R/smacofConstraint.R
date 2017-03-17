@@ -324,7 +324,7 @@ smacofConstraint <- function(delta, constraint = "linear", external, ndim = 2, t
     extvars = NULL
   }
   
-  result <- list(delta = diss, dhat = dhat, confdiss = confdiss, conf = y, C = C, 
+  result <- list(delta = diss, dhat = dhat, confdist = confdiss, conf = y, C = C, 
                  stress = stress, spp = spoint$spp, ndim = p, iord = dhat2$iord.prim, extvars = extvars,
                  external = external, weightmat = wgths, resmat = spoint$resmat, rss = rss, init = xstart, model = "SMACOF constraint", 
                  niter = itel, nobj = n, type = type, call = match.call()) 

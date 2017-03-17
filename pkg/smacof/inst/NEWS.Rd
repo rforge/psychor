@@ -2,6 +2,16 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.9-1}{
+  \itemize{
+    \item Canadian newspaper dataset added (word co-occurrences). 
+    \item \code{stress0()} function added to compute stress for a particular (starting) configuration.
+    \item Bug in \code{smacofIndDiff} with missing input dissimilarities fixed. 
+    \item \code{icExplore()} function incl. print/plot S3 added for initial configuration exploration.
+    \item \code{KIPT} dataset added.
+}
+}
+
 \section{Changes in Version 1.9-0}{
   \itemize{
     \item Crime dataset added. 

@@ -3,8 +3,8 @@
 plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = TRUE, bubscale = 1, 
                         col = 1, label.conf = list(label = TRUE, pos = 3, col = 1, cex = 0.8), 
                         hull.conf = list(hull = FALSE, col = 1, lwd = 1, ind = NULL),
-                        shepard.x = NULL, identify = FALSE, type = "p", pch = 20, asp = 1, main, xlab, ylab, xlim, ylim, 
-                        col.hist = NULL, ...)
+                        shepard.x = NULL, identify = FALSE, type = "p", pch = 20, cex = 0.5, asp = 1, 
+                        main, xlab, ylab, xlim, ylim, col.hist = NULL, ...)
 
 # x ... object of class smacof
 # plot.type ... types available: "confplot", "Shepard", "resplot", "histogram"
@@ -124,13 +124,13 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
       xcoor <- as.vector(as.dist(shepard.x))
 
     }  
-      if (missing(xlim)) xlim <- range(xcoor[notmiss], na.rm = TRUE)
-      if (missing(ylim)) ylim <- range(as.vector(x$confdist)[notmiss])
-      
-    plot(xcoor[notmiss], as.vector(x$confdist)[notmiss], main = main, type = "p", pch = 20, cex = .5,
+    if (missing(xlim)) xlim <- range(xcoor[notmiss], na.rm = TRUE)
+    if (missing(ylim)) ylim <- range(as.vector(x$confdist)[notmiss])
+    
+    plot(xcoor[notmiss], as.vector(x$confdist)[notmiss], main = main, type = "p", pch = pch, cex = cex,
          xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim, ...)
     notmiss.iord <- notmiss[x$iord]
-    points((xcoor[x$iord])[notmiss.iord], (as.vector(x$dhat[x$iord]))[notmiss.iord], type = "b", pch = 20, cex = .5)
+    points((xcoor[x$iord])[notmiss.iord], (as.vector(x$dhat[x$iord]))[notmiss.iord], type = "b", pch = pch, cex = cex)
     
     #points(as.vector(x$delta[x$iord]),as.vector(x$dhat[x$iord]), type = "b", pch = 20, cex = .5)
  }

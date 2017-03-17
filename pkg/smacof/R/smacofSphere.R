@@ -221,7 +221,7 @@ smacofSphere <- function(delta, algorithm = c("dual", "primal"), ndim = 2, type 
 }
   
   
-result <- list(delta = diss, dhat = dhat, confdiss = confdiss, conf = y, 
+result <- list(delta = diss, dhat = dhat, confdist = confdiss, conf = y, 
                stress = stress, spp = spoint$spp, ndim = p, weightmat = wgths, resmat = spoint$resmat, rss = rss, 
                dummyvec = dummyvec, init = xstart, 
                model = "Spherical SMACOF", niter = itel, nobj = n, type = type, 

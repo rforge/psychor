@@ -120,7 +120,7 @@ congdenom <- sqrt(diag(diss0 %*% t(diss0)) * diag(d %*% t(d)))
 congvec <- congnum/congdenom
   
 #return configuration distances, row and column configurations, stress 
-result <- list(obsdiss = diss, confdiss = d, conf.row = x, conf.col = y, stress = lnew, 
+result <- list(obsdiss = diss, confdist = d, conf.row = x, conf.col = y, stress = lnew, 
                spp.row = spp.row, spp.col = spp.col, congvec = congvec,
                ndim = p, model = "Rectangular smacof", niter = itel, nind = n, nobj = m, call = match.call()) 
 class(result) <- "smacofR"

@@ -33,7 +33,7 @@ smacofSphere(delta, algorithm = c("dual", "primal"), ndim = 2,
   \item{obsdiss}{Observed dissimilarities, normalized}
   \item{obsdiss1}{Dual SMACOF: Observed dissimilarities}
   \item{obsdiss2}{Dual SMACOF: Restriction matrix}
-  \item{confdiss}{Configuration dissimilarities}
+  \item{confdist}{Configuration dissimilarities}
   \item{conf}{Matrix with fitted configurations}
   \item{spp}{Stress per point}
   \item{resmat}{Matrix with squared residuals}
