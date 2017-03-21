@@ -2,13 +2,17 @@
 
 plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale = 1, col = 1, 
                           label.conf = list(label = TRUE, pos = 3, col = 1), identify = FALSE, 
-                          type = "p", pch = 20,  asp = 1, main, xlab, ylab, xlim, ylim, ...)
+                          type = "p", pch = 20,  cex = 0.5, asp = 1, main, xlab, ylab, xlim, ylim, ...)
 
 # x ... object of class smacofID
 # plot.type ... types available: "confplot", "bubbleplot", "stressplot", "Shepard"
 # Shepard plot and resplot are performed over sum of distances
   
 {
+  ## --- check type args:
+  plot.type <- match.arg(plot.type, c("confplot", "Shepard", "resplot","bubbleplot", "stressplot"), several.ok = FALSE)
+  
+  
   ## --- check label lists
   if (is.null(label.conf$label)) label.conf$label <- TRUE
   if (is.null(label.conf$pos)) label.conf$pos <- 3
@@ -40,31 +44,35 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
     }
   }
 
-  ## FIXME: needs to work for splines as well
-  
   #---------------- Shepard diagram ------------------
   if (plot.type == "Shepard") {
-      if (missing(main)) main <- paste("Shepard Diagram") else main <- main
-      if (missing(xlab)) xlab <- "Aggregated Observed Dissimilarities" else xlab <- xlab
-      if (missing(ylab)) ylab <- "Aggregated Configuration Distances" else ylab <- ylab
+      if (missing(xlab)) xlab <- "Observed Dissimilarities" else xlab <- xlab
+      if (missing(ylab)) ylab <- "Configuration Distances" else ylab <- ylab
       
-      delta <- sumList(x$delta)
-      confdist <- sumList(x$confdist)
+      #delta <- sumList(x$delta)
+      #confdist <- sumList(x$confdist)
       
-      if (missing(xlim)) xlim <- range(as.vector(delta))
-      if (missing(ylim)) ylim <- range(as.vector(confdist))
-      
-      plot(as.vector(delta), as.vector(confdist), main = main, type = "p", pch = 1,
-           xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim, ...)
-      
-      if (x$type == "ordinal") {
-          isofit <- isoreg(as.vector(delta), as.vector(confdist))  #isotonic regression
-          points(sort(isofit$x), isofit$yf, type = "b", pch = 16)
-      } else {
-          regfit <- lsfit(as.vector(delta), as.vector(confdist))   #linear regression
-          abline(regfit, lwd = 0.5)
+      nvars <- length(x$delta)
+      npanv <- ceiling(sqrt(nvars)) 
+      npanh <- floor(sqrt(nvars))
+      if (npanv * npanh < nvars) npanv <- npanv + 1
+      if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      if (parop) op <- par(mfrow = c(npanv, npanh))
+      if (is.null(names(x$conf))) namevec <- 1:nvars else namevec <- names(x$conf)
+      for (i in 1:nvars) {
+        main <- paste("Shepard Diagram", namevec[i])
+        notmiss <- as.vector(x$weightmat[[i]] > 0)
+        xcoor <- (as.vector(x$delta)[[i]])[notmiss]
+        ycoor <- (as.vector(x$confdist)[[i]])[notmiss]
+        xlim <- range(xcoor)
+        ylim <- range(ycoor)
+        plot(xcoor, ycoor, main = main, type = "p", pch = pch, cex = cex,
+             xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim)
+        iord <- order(xcoor)
+        points(xcoor[iord], x$dhat[[i]][iord], type = "b", pch = pch, cex = cex)
       }
-  }
+      if (parop) on.exit(par(op))
+}
   
   #--------------- Residual plot -------------------- 
   if (plot.type == "resplot") {

@@ -3,6 +3,7 @@ import("stats", "graphics", "Hmisc", "colorspace", "polynom", "nnls", "MASS", "w
 importFrom("grDevices", "dev.new", "hcl", "chull")
 importFrom("ellipse", "ellipse")
 importFrom("wordcloud", "textplot")
+importFrom("candisc", "vecscale")
 export(smacofSym)
 export(smacofRect)
 export(smacofIndDiff)

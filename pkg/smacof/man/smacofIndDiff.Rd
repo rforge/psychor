@@ -82,12 +82,6 @@ The R package smacof. Journal of Statistical Software, 31(3), 1-30, \url{http://
 
 \examples{
 ## Example 1: rectangle perception data
-res.id <- smacofIndDiff(perception, constraint = "identity")     ## identity restricted weights
-summary(res.id)
-res.id$cweights
-plot(res.id)
-plot(res.id, type = "p", pch = 25, col = 4, label.conf = list(label = TRUE, pos = 3, col = 4))
-
 res.diag <- indscal(perception, type = "ordinal")        ## INDSCAL
 res.diag$cweights
 plot(res.diag)
@@ -99,21 +93,27 @@ G <- res.idio$gspace
 G%*%Wk[[1]]  ## configuration subject 1 (cf. res.idio$conf[[1]])
 G%*%Wk[[2]]  ## configuration subject 2 (cf. res.idio$conf[[3]])
 
-## Example 2: Helm's color data
-data(helm)
+res.id <- smacofIndDiff(perception, constraint = "identity")     ## identity restricted weights
+summary(res.id)
+res.id$cweights
+plot(res.id)
+plot(res.id, type = "p", pch = 25, col = 4, label.conf = list(label = TRUE, pos = 3, col = 4))
+
+
+## Example 2: Helm's color data 
 res.helm <- indscal(helm)
 plot(res.helm, plot.type = "confplot")
 barplot(sort(res.helm$sps, decreasing = TRUE), main = "Stress per Subject", cex.names = 0.8) 
 plot(res.helm, plot.type = "bubbleplot")
 plot(res.helm, plot.type = "stressplot")
 plot(res.helm, plot.type = "Shepard")
-plot(res.helm, plot.type = "resplot")
 
 ## idioscal and indscal with random starting configuration:
+set.seed(123)
 startconf <- matrix(rnorm(20), 10, 2)
 idioscal(helm, init = startconf)
 indscal(helm, init = startconf)
 
 }
 
-\keyword{models}
+\keyword{multivariate}

@@ -15,14 +15,14 @@ smacofSphere(delta, algorithm = c("dual", "primal"), ndim = 2,
 \arguments{
   \item{delta}{Either a symmetric dissimilarity matrix or an object of class \code{dist}}
   \item{algorithm}{Algorithm type}
-  \item{penalty}{Penalty parameter for dual algorithm (larger 0)}
+  \item{penalty}{Penalty parameter for dual algorithm (larger 0), see details}
   \item{ndim}{Number of dimensions}
   \item{weightmat}{Optional matrix with dissimilarity weights}
   \item{init}{Either \code{"torgerson"} (classical scaling starting solution), \code{"random"} (random configuration), or a user-defined matrix}
   \item{type}{MDS type: \code{"interval"}, \code{"ratio"}, or \code{"ordinal"} (nonmetric MDS)}
   \item{ties}{Tie specification for non-metric MDS only}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
-  \item{relax}{If \code{TRUE}, block relaxation is used for majorization (dual algorith)}
+  \item{relax}{If \code{TRUE}, block relaxation is used for majorization (dual algorithm)}
   \item{modulus}{Number of smacof iterations per monotone regression call}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
@@ -49,7 +49,8 @@ smacofSphere(delta, algorithm = c("dual", "primal"), ndim = 2,
 
 \details{
 For large scale problems it is suggested to use the dual algorithm. The primal algorithm gets pretty slow, especially for 
-ordinal scaling.
+ordinal scaling. Using the penalty parameter (dual algorithm), the user allow for slight point deviations from the circle 
+(the higher the penalty, the stricter the algorithm is in terms of placing points in the sphere, see examples section below).
 }
 
 \references{De Leeuw, J. & Mair, P. (2009). Multidimensional scaling using majorization: 
@@ -60,12 +61,16 @@ The R package smacof. Journal of Statistical Software, 31(3), 1-30, \url{http://
 \examples{
 
 ## spherical SMACOF solution for trading data
-data(trading)
-res <- smacofSphere(trading)
+## dual algorithm
+res <- smacofSphere(trading)  
 res
-summary(res)
+plot(res)
 
+## lower penalty
+res <- smacofSphere(trading, penalty = 20)  
+res
+plot(res)
 
 }
 
-\keyword{models}
+\keyword{multivariate}

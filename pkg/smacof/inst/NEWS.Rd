@@ -2,6 +2,14 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+
+\section{Changes in Version 1.9-2}{
+  \itemize{
+    \item Shepard plots for IndDiff-models and unfolding fixed. For IndDiff, a Shepard plot for each individual is produced.
+    \item New \code{scale} argument added for scaling the arrow endpoints (coefficients) in \code{plot.mdsbi}.
+}
+}
+
 \section{Changes in Version 1.9-1}{
   \itemize{
     \item Canadian newspaper dataset added (word co-occurrences). 

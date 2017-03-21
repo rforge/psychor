@@ -4,7 +4,7 @@
 
 \title{Zero-Iterations Stress}
 \description{
-Computes the stress for 0 iterations based on a starting configuration provided by the user
+Computes the stress for 0 iterations based on a starting configuration provided by the user.
 }
 \usage{
 stress0(delta, init, type = c("interval", "ratio", "ordinal", "mspline"), 
@@ -38,4 +38,4 @@ tstart <- torgerson(rectangles)
 stress0(rectangles, init = tstart)
 }
 
-\keyword{models}
+\keyword{utilities}

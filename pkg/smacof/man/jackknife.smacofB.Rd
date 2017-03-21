@@ -58,15 +58,15 @@ col.p, col.l, plot.lines = TRUE, main, xlab, ylab, xlim, ylim, asp = 1, ...)
 }
 \author{Jan de Leeuw and Patrick Mair}
 
-\seealso{\code{\link{smacofSym}}, \code{\link{smacofConstraint}}, \code{\link{plot.smacof}}}
+\seealso{\code{\link{bootmds}}}
 
 \examples{
 
 ## symmetric smacof
-data(kinshipdelta)
-res.smacof <- smacofSym(kinshipdelta)
-res.jk <- jackknife(res.smacof)
-res.jk
+data <- na.omit(PVQ40[,1:5])
+diss <- dist(t(data))   ## Euclidean distances 
+fit <- mds(diss) 
+res.jk <- jackknife(fit)
 
 plot(res.jk, col.p = "black", col.l = "gray")
 plot(res.jk, hclpar = list(c = 80, l = 40))
@@ -74,4 +74,5 @@ plot(res.jk, hclpar = list(c = 80, l = 40), plot.lines = FALSE)
 
 }
 
+\keyword{ models }
 \keyword{ hplot }

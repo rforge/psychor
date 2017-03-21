@@ -52,14 +52,20 @@ The R package smacof. Journal of Statistical Software, 31(3), 1-30, \url{http://
 \examples{
 res <- unfolding(breakfast)
 res
-summary(res)
 
 ## various configuration plots
 plot(res)
 plot(res, type = "p", pch = 25)
 plot(res, type = "p", pch = 25, col.columns = 3, 
-label.conf.columns = list(label = TRUE, pos = 3, col = 3), 
-col.rows = 8, label.conf.rows = list(label = TRUE, pos = 3, col = 8))
+     label.conf.columns = list(label = TRUE, pos = 3, col = 3), 
+     col.rows = 8, label.conf.rows = list(label = TRUE, pos = 3, col = 8))
+
+## Shepard plot
+plot(res, "Shepard")
+
+## Stress decomposition chart
+plot(res, "stressplot")
+
 }
 
 \keyword{models}

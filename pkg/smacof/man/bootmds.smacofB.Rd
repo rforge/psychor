@@ -6,14 +6,16 @@
 
 \title{SMACOF Bootstrap}
 \description{Performs a bootstrap on a SMACOF solution. It works for derived dissimilarities only. The original data matrix needs to 
-be provided as well as the type of dissimilarity measure. 
+be provided, as well as the type of dissimilarity measure used to compute the input dissimilarities.
 }
 \usage{
-\method{bootmds}{smacofB}(object, data,  method.dat = "pearson", nrep = 100, alpha = 0.05, verbose = FALSE, ...)
+\method{bootmds}{smacofB}(object, data,  method.dat = "pearson", nrep = 100, 
+alpha = 0.05, verbose = FALSE, ...)
 
-\method{plot}{smacofboot}(x, plot.dim = c(1,2), col = 1, label.conf = list(label = TRUE, pos = 3, cex = 0.8), 
-                          ell = list(lty = 1, lwd = 1, col = 1), main, xlab, ylab, xlim, ylim, asp = 1, type = "p", pch = 20, ...)
-
+\method{plot}{smacofboot}(x, plot.dim = c(1,2), col = 1, 
+label.conf = list(label = TRUE, pos = 3, cex = 0.8), 
+ell = list(lty = 1, lwd = 1, col = 1), main, xlab, ylab, xlim, ylim, asp = 1, 
+type = "p", pch = 20, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -81,4 +83,5 @@ ellipses <- plot(resboot, plot.dim = c(1,3), ell = list(lty = 2, col = "gray", l
 str(ellipses)  ## list of ellipse coordinates for each object
 }
 
+\keyword{ models }
 \keyword{ hplot }

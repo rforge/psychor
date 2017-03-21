@@ -139,4 +139,4 @@ res.circ <- smacofConstraint(kinshipdelta, constraint = "diagonal",
 plot(res.circ)
 }
 
-\keyword{models}
+\keyword{multivariate}

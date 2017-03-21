@@ -22,7 +22,7 @@ Borg, I., Groenen, P. J. F., & Mair, P. (2017). Applied Multidimensional Scaling
 
 }
 \examples{
-data(rectangles)
-data(rect_constr)
+rectangles
+rect_constr
 }
 \keyword{datasets}

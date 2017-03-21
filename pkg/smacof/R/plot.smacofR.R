@@ -5,13 +5,14 @@ plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", 
                          col.columns = hcl(240),
                          label.conf.rows = list(label = TRUE, pos = 3, col = hcl(0, l = 50), cex = 0.8), 
                          label.conf.columns = list(label = TRUE, pos = 3, col = hcl(240, l = 50), cex = 0.8), 
-                         type = "p", pch = 20, asp = 1, main, xlab, ylab, xlim, ylim, ...)
+                         type = "p", pch = 20, cex = 0.5, asp = 1, main, xlab, ylab, xlim, ylim, ...)
 
 # x ... object of class smacofR
 # plot.type ... types available: "confplot", "Shepard", "stressplot", "resplot"
 # joint ... if TRUE, row and column configurations in 1 plot
   
 {
+  plot.type <- match.arg(plot.type, c("confplot", "stressplot", "Shepard"), several.ok = FALSE)
   what <- match.arg(what, c("both", "columns", "rows"), several.ok = FALSE)
   
   x1 <- plot.dim[1]
@@ -86,25 +87,26 @@ plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", 
   }
 
   #---------------- Shepard diagram ------------------
-#   if (plot.type == "Shepard") {
-#     if (missing(main)) main <- paste("Shepard Diagram") else main <- main
-#     if (missing(xlab)) xlab <- "Dissimilarities" else xlab <- xlab
-#     if (missing(ylab)) ylab <- "Configuration Distances" else ylab <- ylab
-# 
-#     if (missing(xlim)) xlim <- range(as.vector(x$obsdiss))
-#     if (missing(ylim)) ylim <- range(as.vector(x$confdiss))
-# 
-#     plot(as.vector(x$obsdiss), as.vector(x$confdiss), main = main, type = "p", pch = 1,
-#          xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim, ...)
-# 
-#     if (!x$metric) {
-#       isofit <- isoreg(as.vector(x$obsdiss), as.vector(x$confdiss))  #isotonic regression
-#       points(sort(isofit$x), isofit$yf, type = "b", pch = 16)
-#     } else {
-#       abline(0,1, lty = 2)
-#     }
-#    
-#   }
+  if (plot.type == "Shepard") {
+    if (missing(main)) main <- paste("Shepard Diagram") else main <- main
+    if (missing(xlab)) xlab <- "Dissimilarities" else xlab <- xlab
+    if (missing(ylab)) ylab <- "Configuration Distances" else ylab <- ylab
+
+    if (missing(xlim)) xlim <- range(as.vector(x$obsdiss))
+    if (missing(ylim)) ylim <- range(as.vector(x$confdist))
+    
+    notmiss <- as.vector(x$weightmat > 0)
+    xcoor <- as.vector(x$obsdiss)
+    ycoor <- as.vector(x$confdist)
+    plot(xcoor[notmiss], ycoor[notmiss], main = main, type = "p", pch = pch, cex = cex,
+         xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim, ...)
+    yax <- ycoor[notmiss]
+    xax <- xcoor[notmiss]
+    fitlm <- lm(yax ~ -1 + xax)       ## ratio unfolding
+    xvals <- unique(sort(xax))
+    preds <- predict(fitlm, newdata = data.frame(xax = xvals))
+    points(xvals, preds, type = "b", pch = pch, cex = cex)
+}
 
 
   #--------------- Residual plot --------------------
@@ -156,6 +158,6 @@ plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", 
          xlab = xlab2, ylab = ylab, main = main2, xlim = xlim1, ylim = ylim1, ...)
     text(1:length(spp.perc.col), spp.perc.col, labels = xaxlab, pos = 3, cex = 0.8)
     for (i in 1:length(spp.perc.col)) lines(c(i,i), c(spp.perc.col[i],0), col = "lightgray", lty = 2)  
-    par(op)  
+    on.exit(par(op))  
   }
 }

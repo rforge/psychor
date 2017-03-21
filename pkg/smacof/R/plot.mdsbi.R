@@ -1,4 +1,4 @@
-plot.mdsbi <- function(x, plot.dim = c(1,2), sphere = TRUE, col = 1, label.conf = list(label = TRUE, pos = 3, col = 1, cex = 0.8), 
+plot.mdsbi <- function(x, vecscale = NULL, plot.dim = c(1,2), sphere = TRUE, col = 1, label.conf = list(label = TRUE, pos = 3, col = 1, cex = 0.8), 
                        vec.conf = list(col = 1, cex = 0.8, length = 0.1), 
                        identify = FALSE, type = "p", pch = 20, 
                        asp = 1, main, xlab, ylab, xlim, ylim, ...) {
@@ -29,6 +29,10 @@ plot.mdsbi <- function(x, plot.dim = c(1,2), sphere = TRUE, col = 1, label.conf 
   }
   
   x$conf <- x$model$X           ## configurations
+  
+  if (is.null(vecscale)) vecscale <- vecscale(x$coef)  ## scale
+  x$coef <- vecscale * x$coef
+  
   temp <- rbind(x$conf, t(x$coef))
   if (missing(xlim)) xlim <- range(temp[,x1])*1.1
   if (missing(ylim)) ylim <- range(temp[,y1])*1.1
@@ -50,6 +54,7 @@ plot.mdsbi <- function(x, plot.dim = c(1,2), sphere = TRUE, col = 1, label.conf 
   
   ## add vectors
   abline(h = 0, v = 0, lty = 2, col = "darkgray")
+  
   n <- ncol(x$coef)
   xycoor <- t(x$coef[c(x1, y1), ])
   posvec <- apply(xycoor, 1, sign)[2,] + 2     

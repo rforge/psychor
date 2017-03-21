@@ -122,8 +122,8 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
       xcoor <- as.vector(x$delta)
     } else {
       xcoor <- as.vector(as.dist(shepard.x))
-
     }  
+    
     if (missing(xlim)) xlim <- range(xcoor[notmiss], na.rm = TRUE)
     if (missing(ylim)) ylim <- range(as.vector(x$confdist)[notmiss])
     
