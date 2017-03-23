@@ -8,7 +8,7 @@ Allows to user to explore the effect of various random starting configurations w
 }
 \usage{
 icExplore(delta, nrep = 100, returnfit = FALSE, ndim = 2, 
-type = c("interval", "ratio", "ordinal","mspline"), weightmat = NULL, ties = "primary",	
+type = c("ratio", "interval", "ordinal","mspline"), weightmat = NULL, ties = "primary",	
 verbose = FALSE, relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-6, 
 spline.degree = 2, spline.intKnots = 2)
 }

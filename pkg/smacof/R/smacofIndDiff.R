@@ -1,6 +1,6 @@
 #SMACOF for individual differences (list of dissimilarity matrices)
 
-smacofIndDiff <- function(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
+smacofIndDiff <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
                           constraint = c("indscal", "idioscal", "identity"),
                           weightmat = NULL, init = "torgerson", ties = "primary", 
                           verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
@@ -11,7 +11,7 @@ smacofIndDiff <- function(delta, ndim = 2, type = c("interval", "ratio", "ordina
 # ties ... primary, secondary, tertiary
 {
   
-  type <- match.arg(type, c("interval", "ratio", "ordinal", "mspline"), several.ok = FALSE)
+  type <- match.arg(type, c("ratio", "interval", "ordinal", "mspline"), several.ok = FALSE)
   constraint <- match.arg(constraint, c("indscal", "idioscal", "identity"), several.ok = FALSE)
   
   diss <- delta

@@ -7,12 +7,12 @@
 Multidimensional scaling on a symmetric dissimilarity matrix using SMACOF. 
 }
 \usage{
-smacofSym(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
+smacofSym(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
           weightmat = NULL, init = "torgerson", ties = "primary", verbose = FALSE, 
           relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-06, 
           spline.degree = 2, spline.intKnots = 2)
 
-mds(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
+mds(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
     weightmat = NULL, init = "torgerson", ties = "primary", verbose = FALSE, 
     relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-06, 
     spline.degree = 2, spline.intKnots = 2)
@@ -69,7 +69,7 @@ Borg, I., Groenen, P. J. F., & Mair, P. (2013). Applied Multidimensional Scaling
 \examples{
 
 ## simple SMACOF solution (interval MDS) for kinship data
-res <- mds(kinshipdelta)
+res <- mds(kinshipdelta, type = "interval")
 res
 summary(res)
 plot(res)
@@ -77,7 +77,7 @@ plot(res, type = "p", label.conf = list(label = TRUE, col = "darkgray"), pch = 2
 
 ## ratio MDS, random starts
 set.seed(123)
-res <- mds(kinshipdelta, type = "ratio", init = "random")
+res <- mds(kinshipdelta, init = "random")
 res
 
 ## 3D ordinal SMACOF solution for trading data (secondary approach to ties)

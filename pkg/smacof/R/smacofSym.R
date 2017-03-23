@@ -1,4 +1,4 @@
-smacofSym <- function(delta, ndim = 2, type = c("interval", "ratio", "ordinal","mspline"), 
+smacofSym <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal","mspline"), 
                         weightmat = NULL, init = "torgerson", ties = "primary",	verbose = FALSE, 
                         relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-6, 
                         spline.degree = 2, spline.intKnots = 2)  {
@@ -16,7 +16,7 @@ smacofSym <- function(delta, ndim = 2, type = c("interval", "ratio", "ordinal","
   # spline.intKnots ... number of interior knots for the spline in case a spline transformation is chosen
   
   ## --- sanity checks
-  type <- match.arg(type, c("interval", "ratio", "ordinal","mspline"), several.ok = FALSE)
+  type <- match.arg(type, c("ratio", "interval", "ordinal","mspline"), several.ok = FALSE)
   
   diss <- delta
   if ((is.matrix(diss)) || (is.data.frame(diss))) {

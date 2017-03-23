@@ -1,10 +1,10 @@
 ## exploring initial configurations
-icExplore <- function(delta, nrep = 100, returnfit = FALSE, ndim = 2, type = c("interval", "ratio", "ordinal","mspline"), 
+icExplore <- function(delta, nrep = 100, returnfit = FALSE, ndim = 2, type = c("ratio", "interval", "ordinal","mspline"), 
                        weightmat = NULL, ties = "primary",	verbose = FALSE, 
                        relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
 {
   ## sanity checks
-  type <- match.arg(type, c("interval", "ratio", "ordinal","mspline"), several.ok = FALSE)
+  type <- match.arg(type, c("ratio", "interval", "ordinal","mspline"), several.ok = FALSE)
   diss <- delta
   if ((is.matrix(diss)) || (is.data.frame(diss))) {
     diss <- strucprep(diss)  #if data are provided as dissimilarity matrix

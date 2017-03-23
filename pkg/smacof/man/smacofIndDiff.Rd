@@ -9,18 +9,18 @@ INDSCAL and IDIOSCAL.
 }
 
 \usage{
-smacofIndDiff(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
+smacofIndDiff(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
               constraint = c("indscal", "idioscal", "identity"),
               weightmat = NULL, init = "torgerson", ties = "primary",  
               verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
               spline.degree = 2, spline.intKnots = 2)
               
-indscal(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
+indscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
         weightmat = NULL, init = "torgerson", ties = "primary", 
         verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
         spline.degree = 2, spline.intKnots = 2)
 
-idioscal(delta, ndim = 2, type = c("interval", "ratio", "ordinal", "mspline"), 
+idioscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"), 
          weightmat = NULL, init = "torgerson", ties = "primary", 
          verbose = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
          spline.degree = 2, spline.intKnots = 2)
@@ -87,13 +87,14 @@ res.diag$cweights
 plot(res.diag)
 plot(res.diag, type = "p", pch = 25, col = 4, label.conf = list(label = TRUE, pos = 3, col = 4))
 
-res.idio <- idioscal(perception)  ## IDIOSCAL
+res.idio <- idioscal(perception, type = "ordinal")  ## IDIOSCAL
 Wk <- res.idio$cweights
 G <- res.idio$gspace
 G%*%Wk[[1]]  ## configuration subject 1 (cf. res.idio$conf[[1]])
 G%*%Wk[[2]]  ## configuration subject 2 (cf. res.idio$conf[[3]])
 
-res.id <- smacofIndDiff(perception, constraint = "identity")     ## identity restricted weights
+## identity restricted weights
+res.id <- smacofIndDiff(perception, type = "ordinal", constraint = "identity")     
 summary(res.id)
 res.id$cweights
 plot(res.id)
@@ -101,7 +102,7 @@ plot(res.id, type = "p", pch = 25, col = 4, label.conf = list(label = TRUE, pos 
 
 
 ## Example 2: Helm's color data 
-res.helm <- indscal(helm)
+res.helm <- indscal(helm, type = "interval")
 plot(res.helm, plot.type = "confplot")
 barplot(sort(res.helm$sps, decreasing = TRUE), main = "Stress per Subject", cex.names = 0.8) 
 plot(res.helm, plot.type = "bubbleplot")
@@ -111,8 +112,8 @@ plot(res.helm, plot.type = "Shepard")
 ## idioscal and indscal with random starting configuration:
 set.seed(123)
 startconf <- matrix(rnorm(20), 10, 2)
-idioscal(helm, init = startconf)
-indscal(helm, init = startconf)
+idioscal(helm, init = startconf, type = "interval")
+indscal(helm, init = startconf, type = "interval")
 
 }
 

@@ -2,6 +2,11 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.9-3}{
+  \itemize{
+    \item \code{type = "ratio"} for all models restored.
+}
+}
 
 \section{Changes in Version 1.9-2}{
   \itemize{
