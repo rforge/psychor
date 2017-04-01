@@ -40,9 +40,19 @@ plot.mdsbi <- function(x, vecscale = NULL, plot.dim = c(1,2), sphere = TRUE, col
   ## configuration plot
   plot(x$conf[,x1], x$conf[,y1], main = main, type = type, xlab = xlab, ylab = ylab, 
        xlim = xlim, ylim = ylim, pch = pch, asp = asp, col = col, ...)
-  if (label.conf$label) text(x$conf[,x1], x$conf[,y1], labels = rownames(x$conf), 
-                             cex = label.conf$cex, pos = label.conf$pos, 
-                             col = label.conf$col)
+  if (label.conf$label) {
+    if (label.conf$pos == 5) {
+      thigmophobe.labels(x$conf[,x1], x$conf[,y1], labels = rownames(x$conf), 
+                         cex = label.conf$cex, text.pos = NULL, 
+                         col = label.conf$col)  
+    } else {
+      text(x$conf[,x1], x$conf[,y1], labels = rownames(x$conf), 
+           cex = label.conf$cex, pos = label.conf$pos, 
+           col = label.conf$col)
+      
+    }
+  }
+ 
   if ((any(class(x) == "smacofSP")) && (sphere)) {
     radius <- sqrt(x$conf[2,1]^2 + x$conf[2,2]^2)
     circle(0, 0, radius, lty = 2, border = "lightgray")

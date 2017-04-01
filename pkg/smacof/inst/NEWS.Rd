@@ -2,6 +2,18 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.9-4}{
+  \itemize{
+    \item Fast optimal scaling in \code{smacofSphere} including msplines. 
+    \item Primal algorithm in \code{smacofSphere} accelerated.
+    \item Bug for smacofSP Shepard plots fixed. 
+    \item \code{cex} argument for unfolding configuration plot activated.
+    \item Thigmophobe label option in \code{plot.mdsbi} added. 
+    \item Multiple panels for \code{plot.smacofID} improved (thanks to Lew Harvey for the fix). 
+}
+}
+
+
 \section{Changes in Version 1.9-3}{
   \itemize{
     \item \code{type = "ratio"} for all models restored.

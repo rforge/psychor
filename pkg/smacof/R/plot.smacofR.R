@@ -48,7 +48,7 @@ plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", 
       if (missing(ylim)) ylim <- range(x$conf.col[,c(x1,y1)])
       
       plot(x$conf.col[,x1], x$conf.col[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = type, 
-           xlim = xlim, ylim = ylim, col = col.columns, pch = pch, asp = asp, ...)
+           xlim = xlim, ylim = ylim, col = col.columns, pch = pch, asp = asp, cex = cex, ...)
       if (label.conf.columns$label) text(x$conf.col[,x1], x$conf.col[,y1], labels = rownames(x$conf.col), 
                                         cex = label.conf.columns$cex, pos = ppos.columns, 
                                         col = label.conf.columns$col)
@@ -62,7 +62,7 @@ plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", 
       if (missing(ylim)) ylim <- range(x$conf.row[,c(x1,y1)])
       
       plot(x$conf.row[,x1], x$conf.row[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = type, 
-           xlim = xlim, ylim = ylim, col = col.rows, pch = pch, asp = asp, ...)
+           xlim = xlim, ylim = ylim, col = col.rows, pch = pch, asp = asp, cex = cex, ...)
       if (label.conf.rows$label) text(x$conf.row[,x1], x$conf.row[,y1], labels = rownames(x$conf.row), 
                                      cex = label.conf.rows$cex, pos = ppos.rows, col = label.conf.rows$col)      
     }
@@ -75,11 +75,11 @@ plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", 
       if (missing(ylim)) ylim <- range(fullconf)
       
       plot(x$conf.row[,x1], x$conf.row[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = type, 
-             xlim = xlim, ylim = ylim, col = col.rows, pch = pch, asp = asp,...)
+             xlim = xlim, ylim = ylim, col = col.rows, pch = pch, asp = asp, cex = cex, ...)
       if (label.conf.rows$label) text(x$conf.row[,x1], x$conf.row[,y1], labels = rownames(x$conf.row),
                                      cex = label.conf.rows$cex, pos = ppos.rows, col = label.conf.rows$col)    
       points(x$conf.col[,x1], x$conf.col[,y1], main = main1, xlab = xlab1, ylab = ylab1, type = type, 
-           xlim = xlim, ylim = ylim, col = col.columns, pch = pch, ...)
+           xlim = xlim, ylim = ylim, col = col.columns, pch = pch, cex = cex, ...)
       if (label.conf.columns$label) text(x$conf.col[,x1], x$conf.col[,y1], labels = rownames(x$conf.col), 
                                         cex = label.conf.columns$cex, pos = ppos.columns, 
                                         col = label.conf.columns$col)

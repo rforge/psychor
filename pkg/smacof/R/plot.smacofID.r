@@ -2,7 +2,8 @@
 
 plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale = 1, col = 1, 
                           label.conf = list(label = TRUE, pos = 3, col = 1), identify = FALSE, 
-                          type = "p", pch = 20,  cex = 0.5, asp = 1, main, xlab, ylab, xlim, ylim, ...)
+                          type = "p", pch = 20,  cex = 0.5, asp = 1,  max.plot.array = c(2,2),
+                          main, xlab, ylab, xlim, ylim, ...)
 
 # x ... object of class smacofID
 # plot.type ... types available: "confplot", "bubbleplot", "stressplot", "Shepard"
@@ -53,11 +54,31 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
       #confdist <- sumList(x$confdist)
       
       nvars <- length(x$delta)
-      npanv <- ceiling(sqrt(nvars)) 
-      npanh <- floor(sqrt(nvars))
-      if (npanv * npanh < nvars) npanv <- npanv + 1
-      if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      # npanv <- ceiling(sqrt(nvars)) 
+      # npanh <- floor(sqrt(nvars))
+      # if (npanv * npanh < nvars) npanv <- npanv + 1
+      # if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      # if (parop) op <- par(mfrow = c(npanv, npanh))
+      
+      if (missing(max.plot.array)) {
+        npanv <- ceiling(sqrt(nvars))
+        npanh <- floor(sqrt(nvars))
+        if (npanv * npanh < nvars) npanv <- npanv + 1
+        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      } else {
+        if (length(max.plot.array) < 2){
+          npanv <- max.plot.array[1]
+          npanh <- max.plot.array[1]
+        } else {
+          npanv <- max.plot.array[1]
+          npanh <- max.plot.array[2]
+        }
+        npanv <- max(npanv, 1)
+        npanh <- max(npanh, 1)
+        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      }
       if (parop) op <- par(mfrow = c(npanv, npanh))
+      
       if (is.null(names(x$conf))) namevec <- 1:nvars else namevec <- names(x$conf)
       for (i in 1:nvars) {
         main <- paste("Shepard Diagram", namevec[i])

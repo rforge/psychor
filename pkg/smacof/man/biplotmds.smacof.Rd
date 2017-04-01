@@ -61,7 +61,7 @@ Greenacre, M. (2010). Biplots in Practice. Fundacion BBVA, Bilbao, Spain
 ## morse code data with external scales
 res <- mds(morse)
 fitbi <- biplotmds(res, morsescales[,2:3])
-plot(fitbi, main = "MDS Biplot")
+plot(fitbi, main = "MDS Biplot", vecscale = 0.5)
 
 ## wish data with external economic development factor
 diss <- sim2diss(wish, method = 7)

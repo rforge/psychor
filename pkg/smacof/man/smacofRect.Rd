@@ -47,7 +47,7 @@ The R package smacof. Journal of Statistical Software, 31(3), 1-30, \url{http://
 }
 \author{Jan de Leeuw and Patrick Mair}
 
-\seealso{\code{\link{smacofConstraint}}, \code{\link{smacofSym}}, \code{\link{smacofIndDiff}}, \code{\link{smacofSphere}}}
+\seealso{\code{\link{plot.smacof}}, \code{\link{smacofConstraint}}, \code{\link{smacofSym}}, \code{\link{smacofIndDiff}}, \code{\link{smacofSphere}}}
 
 \examples{
 res <- unfolding(breakfast)

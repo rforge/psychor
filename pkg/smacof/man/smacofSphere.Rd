@@ -6,26 +6,29 @@
 \description{Dual and primal approach for spherical SMACOF.
 }
 \usage{
-smacofSphere(delta, algorithm = c("dual", "primal"), ndim = 2, 
-             type = c("ratio", "interval", "ordinal"), weightmat = NULL, 
+smacofSphere(delta, ndim = 2, type = c("ratio", "interval", "ordinal","mspline"), 
+             algorithm = c("dual", "primal"), weightmat = NULL, 
              init = "torgerson", ties = "primary", verbose = FALSE, penalty = 100, 
-             relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-6)
+             relax = FALSE, modulus = 1, itmax = 1000, eps = 1e-6,
+             spline.degree = 2, spline.intKnots = 2)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{delta}{Either a symmetric dissimilarity matrix or an object of class \code{dist}}
-  \item{algorithm}{Algorithm type}
-  \item{penalty}{Penalty parameter for dual algorithm (larger 0), see details}
   \item{ndim}{Number of dimensions}
+  \item{type}{MDS type: \code{"interval"}, \code{"ratio"}, or \code{"ordinal"} (nonmetric MDS)}
+  \item{algorithm}{Algorithm type (see details)}
   \item{weightmat}{Optional matrix with dissimilarity weights}
   \item{init}{Either \code{"torgerson"} (classical scaling starting solution), \code{"random"} (random configuration), or a user-defined matrix}
-  \item{type}{MDS type: \code{"interval"}, \code{"ratio"}, or \code{"ordinal"} (nonmetric MDS)}
   \item{ties}{Tie specification for non-metric MDS only}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
+  \item{penalty}{Penalty parameter for dual algorithm (larger 0), see details}
   \item{relax}{If \code{TRUE}, block relaxation is used for majorization (dual algorithm)}
   \item{modulus}{Number of smacof iterations per monotone regression call}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
+  \item{spline.degree}{Degree of the spline for \code{"mspline"} MDS type}
+  \item{spline.intKnots}{Number of interior knots of the spline for \code{"mspline"} MDS type}
 }
 
 \value{
@@ -48,9 +51,7 @@ smacofSphere(delta, algorithm = c("dual", "primal"), ndim = 2,
 }
 
 \details{
-For large scale problems it is suggested to use the dual algorithm. The primal algorithm gets pretty slow, especially for 
-ordinal scaling. Using the penalty parameter (dual algorithm), the user allow for slight point deviations from the circle 
-(the higher the penalty, the stricter the algorithm is in terms of placing points in the sphere, see examples section below).
+For large scale problems it is suggested to use the dual algorithm. Using the penalty parameter (dual algorithm), the user allow for slight point deviations from the circle (the higher the penalty, the stricter the algorithm is in terms of placing points in the sphere, see examples section below).
 }
 
 \references{De Leeuw, J. & Mair, P. (2009). Multidimensional scaling using majorization: 
@@ -62,15 +63,18 @@ The R package smacof. Journal of Statistical Software, 31(3), 1-30, \url{http://
 
 ## spherical SMACOF solution for trading data
 ## dual algorithm
-res <- smacofSphere(trading)  
+res <- smacofSphere(trading, type = "ordinal")  
 res
 plot(res)
 
 ## lower penalty
-res <- smacofSphere(trading, penalty = 20)  
+res <- smacofSphere(trading, penalty = 20, type = "ordinal")  
 res
 plot(res)
 
+## primal algorithm, interval
+res <- smacofSphere(trading, type = "interval", algorithm = "primal")  
+res
 }
 
 \keyword{multivariate}

@@ -26,7 +26,7 @@
 \method{plot}{smacofID}(x, plot.type = "confplot", plot.dim = c(1,2), bubscale = 1, 
                         col = 1, label.conf = list(label = TRUE, pos = 3, col = 1), 
                         identify = FALSE, type = "p", pch = 20,  cex = 0.5, asp = 1, 
-                        main, xlab, ylab, xlim, ylim, ...)
+                        max.plot.array = c(2,2), main, xlab, ylab, xlim, ylim, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -56,6 +56,7 @@
   \item{label.conf.rows}{List with arguments for plotting the labels of the row configurations in an unfolding configuration plot (logical value whether to plot labels or not, label position, label color).} 
   \item{label.conf.columns}{List with arguments for plotting the labels of the columns configurations in an unfolding configuration plot (logical value whether to plot labels or not, label position, label color).}
   \item{col.hist}{Color of the borders of the histogram.}
+  \item{max.plot.array}{Maximum number of panels for 3-way Shepard plot.}
   \item{\dots}{Further plot arguments passed: see \code{\link[graphics]{plot}} for detailed information.}
 }
 
