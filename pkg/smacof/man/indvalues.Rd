@@ -2,7 +2,7 @@
 \alias{indvalues}
 \docType{data}
 \title{Individual Psychological Values}
-\description{Responses from a representative sample in Britain were collected varying in value measures of the Schwartz value theory. 
+\description{Responses from a sample in Britain were collected varying in value measures of the Schwartz value theory. 
 The instruments used was the Schwartz Value Survey (SVS).
 }
 
