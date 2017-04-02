@@ -8,8 +8,8 @@ Multiple Regression (MORALS).
 Fits multiple regression within the Gifi framework.  
 }
 \usage{
-morals(x, y, xknots = knotsQ(x), yknots = knotsQ(y), xdegrees = 2, ydegrees = 2, 
-xordinal = TRUE, yordinal = TRUE, xties = "s", yties = "s", xmissing = "m", 
+morals(x, y, xknots = knotsGifi(x, "Q"), yknots = knotsGifi(y, "Q"), xdegrees = 2, 
+ydegrees = 2, xordinal = TRUE, yordinal = TRUE, xties = "s", yties = "s", xmissing = "m", 
 ymissing = "m", xactive = TRUE, xcopies = 1, itmax = 1000, eps = 1e-6, 
 seed = 123, verbose = FALSE)
 }
@@ -17,8 +17,8 @@ seed = 123, verbose = FALSE)
 \arguments{
   \item{x}{Vector or data frame with predictor variables (all numeric)}
   \item{y}{Vector with response variable}
-  \item{xknots}{Knots specification for predictors}
-  \item{yknots}{Knots specification for response}
+  \item{xknots}{Knots specification for predictors (see \code{\link{knotsGifi}})}
+  \item{yknots}{Knots specification for response (see \code{\link{knotsGifi}})}
   \item{xdegrees}{Degree specification for predictors}
   \item{ydegrees}{Degree specification for response}
   \item{xordinal}{Whether predictors should be considered as ordinal or not. Alternatively, one can specify a boolean vector of length m denoting which variables should be ordinally restricted or not}
@@ -59,7 +59,7 @@ De Leeuw, J., Mair, P., Groenen, P. J. F. (2017). Multivariate Analysis with Opt
 \examples{
 x <- scale(as.matrix(seq(0, pi, length = 20)), scale = FALSE)
 y <- scale(as.matrix(sin(x)), scale = FALSE)
-fitxy <- morals(x, y, xknots = knotsE(x), xdegrees = 2)
+fitxy <- morals(x, y, xknots = knotsGifi(x, "E"), xdegrees = 2)
 plot(fitxy, main = c("x", "y"))
 plot(fitxy, plot.type = "resplot")
 

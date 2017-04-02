@@ -1,4 +1,4 @@
-princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsD(data), degrees = 2, copies = 1, 
+princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsGifi(data, "D"), degrees = 2, copies = 1, 
                       missing = "m", normobj.z = TRUE, active = TRUE, itmax = 1000, eps = 1e-6, 
                       seed = 123, verbose = FALSE)  {
     

@@ -6,7 +6,7 @@
 }
 \usage{
 \method{plot}{morals}(x, plot.type = "transplot", var.subset = "all", col.lines = "black", 
-stepvec = NA, main, xlab, ylab, xlim, ylim, ...)
+stepvec = NA, max.plot.array = c(2, 2), main, xlab, ylab, xlim, ylim, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -15,6 +15,7 @@ stepvec = NA, main, xlab, ylab, xlim, ylim, ...)
   \item{var.subset}{Numeric vector for subsetting variables to be plotted. If missing, all variables are taken into account. Ignored for non separate variable plots.} 
   \item{col.lines}{Line colors for transformation}
   \item{stepvec}{Vector whether step function should be plotted}
+  \item{max.plot.array}{Number of panels in transformation plot.}
   \item{main}{Plot title.}
   \item{type}{Type of points/lines to be plotted.}
   \item{xlab}{Label of x-axis.}
@@ -31,7 +32,7 @@ The transformation plot (\code{plot.type = "transplot"}): Plots the original sca
 \examples{
 x <- scale(as.matrix(seq(0, pi, length = 20)), scale = FALSE)
 y <- scale(as.matrix(sin(x)), scale = FALSE)
-fitxy <- morals(x, y, xknots = knotsE(x), xdegrees = 2)
+fitxy <- morals(x, y, xknots = knotsGifi(x, "E"), xdegrees = 2)
 plot(fitxy, main = c("x", "y"))
 plot(fitxy, plot.type = "resplot")
 }

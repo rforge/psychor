@@ -6,10 +6,9 @@
 }
 \usage{
 \method{plot}{homals}(x, plot.type = "jointplot", plot.dim = c(1, 2), 
-var.subset = "all", col.points = rainbow_hcl(ncol(x$data)),
-col.scores = "gray", col.lines = 1:x$ndim, cex.scores = 0.8, 
-cex.loadings = 0.8, labels.scores = FALSE, stepvec = NA, asp = 1,
-main, xlab, ylab, xlim, ylim, ...)
+var.subset = "all", col.points = rainbow_hcl(ncol(x$data)), col.scores = "gray", 
+col.lines = 1:x$ndim, cex.scores = 0.8, cex.loadings = 0.8, labels.scores = FALSE, 
+stepvec = NA, max.plot.array = c(2, 2), asp = 1, main, xlab, ylab, xlim, ylim, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,6 +25,7 @@ main, xlab, ylab, xlim, ylim, ...)
   \item{asp}{Aspect ratio}
   \item{labels.scores}{Whether object score labels should be plotted.} 
   \item{stepvec}{Vector whether step function should be plotted (see details).}
+  \item{max.plot.array}{Number of panels in transformation plot.}
   \item{main}{Plot title.}
   \item{type}{Type of points/lines to be plotted.}
   \item{xlab}{Label of x-axis.}
@@ -59,7 +59,7 @@ plot(fithart, plot.type = "biplot", col.scores = "black")
 plot(fithart, plot.type = "biplot", col.scores = "black", labels.scores = TRUE, col.points = 1:6)
 plot(fithart, plot.type = "screeplot", col.lines = "red")
 plot(fithart, plot.type = "transplot", plot.dim = 1:3, col.lines = c(1, 2, 4))
-plot(fithart, plot.type = "transplot", stepvec = rep(FALSE, 6))
+plot(fithart, plot.type = "transplot", stepvec = rep(FALSE, 6), max.plot.array = c(2,2))
 }
 
 \keyword{ hplot }

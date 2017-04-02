@@ -1,4 +1,4 @@
-homals <- function (data, ndim = 2, ordinal = FALSE, ties = "s", knots = knotsD (data), degrees = -1, missing = "m",
+homals <- function (data, ndim = 2, ordinal = FALSE, ties = "s", knots = knotsGifi(data, "D"), degrees = -1, missing = "m",
                     normobj.z = TRUE, active = TRUE, itmax = 1000, eps = 1e-6, seed = 123, verbose = FALSE)  {
     
   ## --- sanity checks

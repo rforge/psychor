@@ -1,7 +1,7 @@
 plot.princals <- function(x, plot.type = "loadplot", plot.dim = c(1, 2), var.subset = "all", 
-                          col.scores = "gray", col.loadings = "black", col.lines = "black", cex.scores = 0.8, 
-                          cex.loadings = 0.8, labels.scores = FALSE, labels.loadings = TRUE, stepvec = NA, asp = 1,
-                          main, xlab, ylab, xlim, ylim, ...)
+                          col.scores = "black", col.loadings = "black", col.lines = "black", cex.scores = 0.8, 
+                          cex.loadings = 0.8, stepvec = NA, max.plot.array = c(2, 2), expand = 1, 
+                          asp = 1, main, xlab, ylab, xlim, ylim, ...)
   {
     
     ## S3 plot method for objects of class "princals"
@@ -36,43 +36,24 @@ plot.princals <- function(x, plot.type = "loadplot", plot.dim = c(1, 2), var.sub
       plot(xycoor, type = "p", pch = ".", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, main = main, 
            cex = cex.loadings, col = col.loadings, asp = asp, ...)
       abline(h = 0, v = 0, col = "gray", lty = 2)
-      for (i in 1:nvar) arrows(0, 0, xycoor[i,1],xycoor[i,2], length = 0.08)   #lines(rbind(xycoor[i,],c(0,0)))
+      for (i in 1:nvar) arrows(0, 0, xycoor[i,1],xycoor[i,2], length = 0.08, col = col.loadings)   #lines(rbind(xycoor[i,],c(0,0)))
       posvec <- apply(xycoor, 1, sign)[2,] + 2      
-      text(xycoor, labels = rownames(xycoor), pos = posvec, cex = cex.loadings)
+      text(xycoor, labels = rownames(xycoor), pos = posvec, cex = cex.loadings, col = col.loadings)
       
     }
     #-------------------------------- end loadplot ---------------------------------
     
     ## --------------------------------- biplot ------------------------------------
     if (plot.type == "biplot") {
-      xycoorL <- x$loadings[, plot.dim]
-      xycoorS <- x$objectscores[, plot.dim]
-      if (missing(xlim)) {                            ## x limits
-        xlim.min <- min(c(xycoorL[,1], xycoorS[,1]), 0)
-        xlim.max <- max(c(xycoorL[,1], xycoorS[,1]), 0)
-        xlim <- c(xlim.min, xlim.max)*1.05
-      }
-      if (missing(ylim)) {                            ## y limits
-        ylim.min <- min(c(xycoorL[,2], xycoorS[,2]), 0)
-        ylim.max <- max(c(xycoorL[,2], xycoorS[,2]), 0)
-        ylim <- c(ylim.min, ylim.max)*1.05
-      }
-      if (missing(xlab)) xlab <- paste("Component", plot.dim[1])        ## labels
-      if (missing(ylab)) ylab <- paste("Component", plot.dim[2]) 
       if (missing(main)) main <- "Biplot"
+      if (missing(xlab)) xlab <- paste("Component", plot.dim[1])       ## labels
+      if (missing(ylab)) ylab <- paste("Component", plot.dim[2])  
       
-      if (labels.scores) {
-        plot(xycoorS, type = "n", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, asp = asp, main = main, ...)
-        text(xycoorS, labels = rownames(xycoorS), col = col.scores, cex = cex.scores)
-      } else {
-        plot(xycoorS, type = "p", pch = 20, cex = cex.scores, xlim = xlim, ylim = ylim, 
-             xlab = xlab, ylab = ylab, main = main, col = col.scores, asp = asp, ...)
-      }
-      points(xycoorL, pch = ".")
-      abline(h = 0, v = 0, col = "gray", lty = 2)
-      for (i in 1:nvar) arrows(0, 0, xycoorL[i,1],xycoorL[i,2], length = 0.08)   #lines(rbind(xycoor[i,],c(0,0)))
-      posvec <- apply(xycoorL, 1, sign)[2,] + 2      
-      text(xycoorL, labels = rownames(xycoorL), pos = posvec, cex = cex.loadings) 
+      cols <- c(col.scores, col.loadings)
+      cexs <- c(cex.scores, cex.loadings)
+      biplot(x$objectscores[,plot.dim], x$loadings[,plot.dim], expand = expand,
+                             col = cols, cex = cexs, main = main, xlab = xlab, ylab = ylab, 
+                             arrow.len = 0.08, ...)
     }
     
     #------------------------------------transplot------------------------------------
@@ -91,13 +72,26 @@ plot.princals <- function(x, plot.type = "loadplot", plot.dim = c(1, 2), var.sub
       knotsv <- x$knots[var.subset]
       ordv <- x$ordinal[var.subset]
       
-      ## set up number of vertical and horizontal panels  
-      npanv <- ceiling(sqrt(nvars)) 
-      npanh <- floor(sqrt(nvars))
-      if (npanv * npanh < nvars) npanv <- npanv + 1
-      
-      if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      if (missing(max.plot.array)) {
+        npanv <- ceiling(sqrt(nvars))
+        npanh <- floor(sqrt(nvars))
+        if (npanv * npanh < nvars) npanv <- npanv + 1
+        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      } else {
+        if (length(max.plot.array) < 2){
+          npanv <- max.plot.array[1]
+          npanh <- max.plot.array[1]
+        } else {
+          npanv <- max.plot.array[1]
+          npanh <- max.plot.array[2]
+        }
+        npanv <- max(npanv, 1)
+        npanh <- max(npanh, 1)
+        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      }
       if (parop) op <- par(mfrow = c(npanv, npanh))
+      
+      ## begin plotting
       for (i in 1:nvars) {
         x1 <- plotvars[,i]
         y1 <- ploty[,i]

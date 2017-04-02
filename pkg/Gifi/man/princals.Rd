@@ -8,7 +8,7 @@ Categorical principal component analysis (PRINCALS).
 Fits a categorical PCA. The default is to take each input variable as ordinal but it works for mixed scale levels (incl. nominal) as well. Through a proper spline specification various continuous transformation functions can be specified: linear, polynomials, and (monotone) splines. 
 }
 \usage{
-princals(data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsD(data), 
+princals(data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsGifi(data, "D"), 
 degrees = 2, copies = 1, missing = "m", normobj.z = TRUE, active = TRUE,
 itmax = 1000, eps = 1e-06, seed = 123, verbose = FALSE)
 }
@@ -18,7 +18,7 @@ itmax = 1000, eps = 1e-06, seed = 123, verbose = FALSE)
   \item{ndim}{Number of dimensions to be computed}
   \item{ordinal}{Whether variables should be considered as ordinal or not. Alternatively, one can specify a boolean vector of length m denoting which variables should be ordinally restricted or not.}
   \item{ties}{How ties should be handled: primary (\code{"p"}), secondary (\code{"s"}), or tertiary (\code{"t"})}
-  \item{knots}{Knots specification for spline transformation (see details)}
+  \item{knots}{Knots specification for spline transformation (see \code{\link{knotsGifi}})}
   \item{degrees}{Spline degrees. If different degrees should be used across variables, a vector of length m can be specified.}
   \item{copies}{Number of copies for each variables (also as vector of length m)}
   \item{missing}{How missing values should be handled: multiple (\code{"m"}), single (\code{"s"}), or average (\code{"a"})}
@@ -72,7 +72,7 @@ plot(fitord, "biplot", labels.scores = TRUE, main = "Biplot ABC Data")
 plot(fitord, "screeplot")
 
 ## linear restrictions (mimics standard PCA)
-abc_knots <- knotsE(ABC6)     ## 0 interior knots
+abc_knots <- knotsGifi(ABC6, "E")     ## 0 interior knots
 fitlin <- princals(ABC6, knots = abc_knots, degrees = 1)  
 fitlin 
 fitlin$evals
@@ -87,16 +87,16 @@ fitpca$sdev^2
 \dontrun{
 data(epi.bfi, package = "psych")
 epi6 <- epi.bfi[,1:6]
-fitepi1 <- princals(epi6, knots = knotsQ(epi6))    ## monotone splines (degree 2)
+fitepi1 <- princals(epi6, knots = knotsGifi(epi6, "Q"))    ## monotone splines (degree 2)
 fitepi1
 plot(fitepi1, "transplot")
 
 ## no interior knots vars 1 and 2; data knots vars 3 and 4; 5 
 ## interior percentile knots var 5; no interior knots var 6)
-knotList <- c(knotsE(epi6[,1:2]), 
-              knotsD(epi6[,3:4]), 
-              knotsQ(epi6[,5], n = 7),
-              knotsE(epi6[,6]))
+knotList <- c(knotsGifi(epi6[,1:2], "E"), 
+              knotsGifi(epi6[,3:4], "D"), 
+              knotsGifi(epi6[,5], "Q", n = 5),
+              knotsGifi(epi6[,6], "E"))
 knotList  
 ordvec <- c(TRUE, FALSE, TRUE, FALSE, FALSE, TRUE) ## ordinal restrictions
 degvec <- c(3, -1, 2, 2, 3, 1)                     ## spline degrees (second variable nominal)

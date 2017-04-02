@@ -1,4 +1,4 @@
-morals <- function (x, y, xknots = knotsQ(x), yknots = knotsQ(y), xdegrees = 2, ydegrees = 2, xordinal = TRUE, yordinal = TRUE, 
+morals <- function (x, y, xknots = knotsGifi(x, "Q"), yknots = knotsGifi(y, "Q"), xdegrees = 2, ydegrees = 2, xordinal = TRUE, yordinal = TRUE, 
                     xties = "s", yties = "s", xmissing = "m", ymissing = "m", xactive = TRUE, xcopies = 1, itmax = 1000, 
                     eps = 1e-6, seed = 123, verbose = FALSE) {
     

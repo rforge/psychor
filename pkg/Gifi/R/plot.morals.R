@@ -1,4 +1,5 @@
-plot.morals <- function(x, plot.type = "transplot", var.subset = "all", col.lines = "black", stepvec = NA, main, xlab, ylab, xlim, ylim, ...)
+plot.morals <- function(x, plot.type = "transplot", var.subset = "all", col.lines = "black", 
+                        stepvec = NA, max.plot.array = c(2, 2), main, xlab, ylab, xlim, ylim, ...)
   {
     
     ## S3 plot method for objects of class "morals"
@@ -35,12 +36,25 @@ plot.morals <- function(x, plot.type = "transplot", var.subset = "all", col.line
       ordv <- c(x$yordinal, x$xordinal)[var.subset]
       
       ## set up number of vertical and horizontal panels  
-      npanv <- ceiling(sqrt(nvars)) 
-      npanh <- floor(sqrt(nvars))
-      if (npanv * npanh < nvars) npanv <- npanv + 1
-      
-      if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      if (missing(max.plot.array)) {
+        npanv <- ceiling(sqrt(nvars))
+        npanh <- floor(sqrt(nvars))
+        if (npanv * npanh < nvars) npanv <- npanv + 1
+        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      } else {
+        if (length(max.plot.array) < 2){
+          npanv <- max.plot.array[1]
+          npanh <- max.plot.array[1]
+        } else {
+          npanv <- max.plot.array[1]
+          npanh <- max.plot.array[2]
+        }
+        npanv <- max(npanv, 1)
+        npanh <- max(npanh, 1)
+        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      }
       if (parop) op <- par(mfrow = c(npanv, npanh))
+      
       for (i in 1:nvars) {
         x1 <- plotvars[,i]
         y1 <- ploty[,i]

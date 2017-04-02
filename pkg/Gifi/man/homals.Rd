@@ -8,7 +8,7 @@ Multiple Correspondence Analysis (HOMALS).
 Fits a multiple correspondence analysis (MCA). The default is to take each input variable as nominal. Through restrictions on the transformations (ordinal in conjunction with splines) various generalizations of MCA can be achieved. 
 }
 \usage{
-homals(data, ndim = 2, ordinal = FALSE, ties = "s", knots = knotsD (data), 
+homals(data, ndim = 2, ordinal = FALSE, ties = "s", knots = knotsGifi(data, "D"), 
 degrees = -1, missing = "m", normobj.z = TRUE, active = TRUE, itmax = 1000, 
 eps = 1e-6, seed = 123, verbose = FALSE)
 }
@@ -18,7 +18,7 @@ eps = 1e-6, seed = 123, verbose = FALSE)
   \item{ndim}{Number of dimensions to be computed}
   \item{ordinal}{Whether variables should be considered as ordinal or not. Alternatively, one can specify a boolean vector of length m denoting which variables should be ordinally restricted or not.}
   \item{ties}{How ties should be handled: primary (\code{"p"}), secondary (\code{"s"}), or tertiary (\code{"t"})}
-  \item{knots}{Knots specification for spline transformation (see details)}
+  \item{knots}{Knots specification for spline transformation (see \code{\link{knotsGifi}})}
   \item{degrees}{Spline degrees. If different degrees should be used across variables, a vector of length m can be specified. The default value of -1 indicates nominal scale level (overrides the ordinal argument).}
   \item{missing}{How missing values should be handled: multiple (\code{"m"}), single (\code{"s"}), or average (\code{"a"})}
   \item{active}{Which variables should be active or inactive (also as vector of length m)}

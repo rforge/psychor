@@ -1,8 +1,8 @@
 plot.homals <- function(x, plot.type = "jointplot", plot.dim = c(1, 2), var.subset = "all", 
-                        col.points = rainbow_hcl(ncol(x$data)),
-                        col.scores = "gray", col.lines = 1:x$ndim, cex.scores = 0.8, 
-                        cex.loadings = 0.8, labels.scores = FALSE, stepvec = NA, asp = 1,
-                        main, xlab, ylab, xlim, ylim, ...)
+                        col.points = rainbow_hcl(ncol(x$data)), col.scores = "gray", 
+                        col.lines = 1:x$ndim, cex.scores = 0.8, cex.loadings = 0.8, 
+                        labels.scores = FALSE, stepvec = NA, max.plot.array = c(2, 2), 
+                        asp = 1, main, xlab, ylab, xlim, ylim, ...)
   {
     
     ## S3 plot method for objects of class "princals"
@@ -41,7 +41,7 @@ plot.homals <- function(x, plot.type = "jointplot", plot.dim = c(1, 2), var.subs
         if (is.numeric(var.subset)) vars <- var.subset else vars <- match(var.subset, vnames)
       }  
       if (length(col.points) == 1) rep(col.points, nvar)
-      plot(xycoor, type = "n", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, main = main, ...)
+      plot(xycoor, type = "n", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, main = main, asp = asp, ...)
       for (i in vars) {
         points(x$quantifications[[i]][,plot.dim], col = col.points[i], pch = 20, cex = 0.8)
         text(x$quantifications[[i]][,plot.dim], labels = paste(names(x$quantifications)[i], rownames(x$quantifications[[i]]), sep = "."), 
@@ -54,7 +54,7 @@ plot.homals <- function(x, plot.type = "jointplot", plot.dim = c(1, 2), var.subs
     ## --------------------------------- biplot ------------------------------------
     if (plot.type == "biplot") {
       normobj <- round(apply(x$objectscores^2, 2, sum)[1])
-      if (normobj != 1) stop("For biplot re-fit the model with normobj.z = FALSE.")
+      #if (normobj != 1) stop("For biplot re-fit the model with normobj.z = FALSE.")
      
       xycoorS <- x$objectscores[,plot.dim]
       xycoor <- rbind(do.call(rbind, x$quantifications)[,plot.dim], xycoorS)
@@ -79,7 +79,7 @@ plot.homals <- function(x, plot.type = "jointplot", plot.dim = c(1, 2), var.subs
       }  
       if (length(col.points) == 1) rep(col.points, nvar)
       
-      plot(xycoor, type = "n", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, main = main, ...)
+      plot(xycoor, type = "n", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, main = main, asp = asp, ...)
       
       ## objectscores
       if (labels.scores) {
@@ -116,13 +116,25 @@ plot.homals <- function(x, plot.type = "jointplot", plot.dim = c(1, 2), var.subs
       knotsv <- x$knots[var.subset]
       ordv <- x$ordinal[var.subset]
       
-      ## set up number of vertical and horizontal panels  
-      npanv <- ceiling(sqrt(nvars)) 
-      npanh <- floor(sqrt(nvars))
-      if (npanv * npanh < nvars) npanv <- npanv + 1
-      
-      if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      if (missing(max.plot.array)) {
+        npanv <- ceiling(sqrt(nvars))
+        npanh <- floor(sqrt(nvars))
+        if (npanv * npanh < nvars) npanv <- npanv + 1
+        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      } else {
+        if (length(max.plot.array) < 2){
+          npanv <- max.plot.array[1]
+          npanh <- max.plot.array[1]
+        } else {
+          npanv <- max.plot.array[1]
+          npanh <- max.plot.array[2]
+        }
+        npanv <- max(npanv, 1)
+        npanh <- max(npanh, 1)
+        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
+      }
       if (parop) op <- par(mfrow = c(npanv, npanh))
+      
       for (i in 1:nvars) {
         ylims <- range(c(ploty[[i]]))*1.05
         for (j in 1:ncol(ploty[[i]])) {
