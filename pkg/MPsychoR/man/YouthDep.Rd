@@ -44,7 +44,7 @@ Contains Children's Depression Inventory (CDI) measures of sixth and seventh gra
 }
 
 \source{
-Vaughn-Coaxum, R. A., Mair, P., & Weisz, J. R. (2015). Racial/ethnic differences in youth depression indicators: An Item Response Theory analysis of symptoms reported by White, Black, Asian, and Latino youths. Clinical Psychological Science, forthcoming. 
+Vaughn-Coaxum, R. A., Mair, P., & Weisz, J. R. (2015). Racial/ethnic differences in youth depression indicators: An Item Response Theory analysis of symptoms reported by White, Black, Asian, and Latino youths. Clinical Psychological Science, 4, 239-253. 
 }
 \examples{
 data(YouthDep)
