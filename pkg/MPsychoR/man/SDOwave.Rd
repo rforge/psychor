@@ -23,7 +23,6 @@ at the bottom.}
 
 \references{
 Sidanius, J., & Pratto, F. (2001). Social Dominance: An Intergroup Theory of Social Hierarchy and Oppression. Cambridge University Press, Cambridge, UK.
-
 }
 
 \note{

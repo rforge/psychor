@@ -15,31 +15,31 @@ data("ASTI")
 \format{
 A data frame with 1215 individuals, 25 ASTI items (3 or 4 categories per items), and 2 covariates (gender, group). Item wordings: 
   \describe{
-	\item{\code{ASTI01_r}}{I often engage in quiet contemplation. (PM; reversed)}
-	\item{\code{ASTI02}}{I feel that my individual life is a part of a greater whole. (ST)}
-	\item{\code{ASTI03}}{I don't worry about other people's opinions of me. (NA)}
-	\item{\code{ASTI06}}{I feel a sense of belonging with both earlier and future generations. (ST)}
-	\item{\code{ASTI07}}{TMy peace of mind is not easily upset. (PM)}
-	\item{\code{ASTI09}}{My sense of well-being does not depend on a busy social life. (NA)}
-	\item{\code{ASTI10}}{I feel part of something greater than myself. (ST)}
-	\item{\code{ASTI11_r}}{My happiness is not dependent on other people and things. (NA; reversed)}
-	\item{\code{ASTI12}}{I do not become angry easily. (PM)}
-	\item{\code{ASTI13_r}}{I have a good sense of humor about myself. (SI; reversed)}
-	\item{\code{ASTI15_r}}{I find much joy in life. (PG; reversed)}
-	\item{\code{ASTI16}}{Material possessions don't mean much to me. (NA)}
-	\item{\code{ASTI18_r}}{I feel compassionate even toward people who have been unkind to me. (ST)}
-	\item{\code{ASTI19}}{I am not often fearful. (PG)}
-	\item{\code{ASTI20_r}}{I can learn a lot from others. (PG)}
-	\item{\code{ASTI22}}{I often have a sense of oneness with nature. (ST)}
-	\item{\code{ASTI24_r}}{I am able to accept my mortality. (PG)}
-	\item{\code{ASTI25}}{I often "lose myself" in what I am doing. (PG)}
-	\item{\code{ASTI26_r}}{I feel that I know myself. (SI; reversed)}
-	\item{\code{ASTI27_r}}{I am accepting of myself, including my faults. (SI; reversed)}
-	\item{\code{ASTI30_r}}{I am able to integrate the different aspects of my life. (SI; reversed)}
-	\item{\code{ASTI32_r}}{I can accept the impermanence of things. (PM; reversed)}
-	\item{\code{ASTI33_r}}{I have grown as a result of losses I have suffered. (PG; reversed)}
-	\item{\code{ASTI34_r}}{Whatever [good] I do for others, I do for myself. (ST; reversed)}
-	\item{\code{ASTI35}}{Whatever [bad] I do to others, I do to myself. (ST)}
+	\item{\code{ASTI1}}{I often engage in quiet contemplation. (PM; reversed)}
+	\item{\code{ASTI2}}{I feel that my individual life is a part of a greater whole. (ST)}
+	\item{\code{ASTI3}}{I don't worry about other people's opinions of me. (NA)}
+	\item{\code{ASTI4}}{I feel a sense of belonging with both earlier and future generations. (ST)}
+	\item{\code{ASTI5}}{My peace of mind is not easily upset. (PM)}
+	\item{\code{ASTI6}}{My sense of well-being does not depend on a busy social life. (NA)}
+	\item{\code{ASTI7}}{I feel part of something greater than myself. (ST)}
+	\item{\code{ASTI8}}{My happiness is not dependent on other people and things. (NA; reversed)}
+	\item{\code{ASTI9}}{I do not become angry easily. (PM)}
+	\item{\code{ASTI10}}{I have a good sense of humor about myself. (SI; reversed)}
+	\item{\code{ASTI11}}{I find much joy in life. (PG; reversed)}
+	\item{\code{ASTI12}}{Material possessions don't mean much to me. (NA)}
+	\item{\code{ASTI13}}{I feel compassionate even toward people who have been unkind to me. (ST)}
+	\item{\code{ASTI14}}{I am not often fearful. (PG)}
+	\item{\code{ASTI15}}{I can learn a lot from others. (PG)}
+	\item{\code{ASTI16}}{I often have a sense of oneness with nature. (ST)}
+	\item{\code{ASTI17}}{I am able to accept my mortality. (PG)}
+	\item{\code{ASTI18}}{I often "lose myself" in what I am doing. (PG)}
+	\item{\code{ASTI19}}{I feel that I know myself. (SI; reversed)}
+	\item{\code{ASTI20}}{I am accepting of myself, including my faults. (SI; reversed)}
+	\item{\code{ASTI21}}{I am able to integrate the different aspects of my life. (SI; reversed)}
+	\item{\code{ASTI22}}{I can accept the impermanence of things. (PM; reversed)}
+	\item{\code{ASTI23}}{I have grown as a result of losses I have suffered. (PG; reversed)}
+	\item{\code{ASTI24}}{Whatever [good] I do for others, I do for myself. (ST; reversed)}
+	\item{\code{ASTI25}}{Whatever [bad] I do to others, I do to myself. (ST)}
 	\item{\code{gender}}{gender}
 	\item{\code{group}}{student vs. non-student}
 }
