@@ -1,0 +1,1 @@
+cv <- function(object, verbose = FALSE, ...)UseMethod("cv")
