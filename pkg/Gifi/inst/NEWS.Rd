@@ -58,3 +58,9 @@
     \item Panel option added for transformation plots. 
   }
 }
+
+\section{Version 0.3-4}{
+ \itemize{
+    \item \code{cv.morals} for cross-validating morals objects added.
+  }
+}
