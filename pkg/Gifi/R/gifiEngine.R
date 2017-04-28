@@ -1,11 +1,18 @@
-gifiEngine <- function (gifi, ndim, itmax, eps, seed, verbose) {
-    set.seed(seed)
+gifiEngine <- function (gifi, ndim, itmax, eps, verbose) {
+    
+    ## keep global random seed instead of 123
+    if(!exists(".Random.seed")) set.seed(runif(1)) 
+    old <- .Random.seed
+    on.exit({ .Random.seed <<- old })
+      
+    set.seed(123)      ## just for rnorm call below
     nobs <- nrow(as.matrix (gifi[[1]][[1]]$data))
     nsets <- length(gifi)
     nvars <- sum(sapply(gifi, length))
     itel <- 1
     if (nvars == 1) stop("a gifiAnalysis needs more than one variable")
-    x <- matrix(rnorm (nobs * ndim), nobs, ndim)
+    
+    x <- matrix(rnorm(nobs * ndim), nobs, ndim)
     x <- gsRC(center(x))$q
     xGifi <- xGifi(gifi, x)
     fold <- 0

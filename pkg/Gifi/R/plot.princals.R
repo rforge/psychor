@@ -36,7 +36,8 @@ plot.princals <- function(x, plot.type = "loadplot", plot.dim = c(1, 2), var.sub
       plot(xycoor, type = "p", pch = ".", xlim = xlim, ylim = ylim, xlab = xlab, ylab = ylab, main = main, 
            cex = cex.loadings, col = col.loadings, asp = asp, ...)
       abline(h = 0, v = 0, col = "gray", lty = 2)
-      for (i in 1:nvar) arrows(0, 0, xycoor[i,1],xycoor[i,2], length = 0.08, col = col.loadings)   #lines(rbind(xycoor[i,],c(0,0)))
+      if (length(col.loadings) == 1) arcol <- rep(col.loadings, nvar) else arcol <- col.loadings
+      for (i in 1:nvar) arrows(0, 0, xycoor[i,1],xycoor[i,2], length = 0.08, col = arcol[i])   
       posvec <- apply(xycoor, 1, sign)[2,] + 2      
       text(xycoor, labels = rownames(xycoor), pos = posvec, cex = cex.loadings, col = col.loadings)
       

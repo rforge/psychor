@@ -7,14 +7,17 @@ cv.morals <- function(object, folds = 10, verbose = FALSE, ...) {
   
   nleave <- trunc(N/folds)        ## number of observations to be left out per fold
   obssort <- 1:(nleave*folds)
-  obsran <- sample(obssort)
+  obsran <- sample(obssort, replace = FALSE)
   indmat <- matrix(obsran, nrow = folds)  ## observations to be left out per fold (row-wise)
   
-  ypreds <- numeric(N)
+  #ypreds <- numeric(N)
+  
+  mse <- numeric(folds)
   for (j in 1:nrow(indmat)) {
     i <- indmat[j,]
     if (verbose) cat("Left-out observations: ", i, "\n")
     dat <- object$data[-i,]          ## data for new model fit (training)
+    yobs <- object$yhat[i]
     morcall <- object$call
     morcall$x <- dat[,-1]
     morcall$y <- dat[, 1]             
@@ -22,11 +25,11 @@ cv.morals <- function(object, folds = 10, verbose = FALSE, ...) {
     xleft <- object$xhat[i,]         ## left-out observations
     class(xleft) <- "numeric"
     qxy <- lsRC(morres$xhat, morres$yhat)$solution   ## coefficient
-    ypreds[i] <- xleft %*% qxy                       ## predict left-out observation
+    #ypreds[i] <- xleft %*% qxy                       ## predict left-out observation
+    ypreds <- xleft %*% qxy
+    mse[j] <- mean((ypreds - yobs)^2)
   }
-  yobs <- object$yhat
-  ei <- ypreds - yobs
-  1/folds*(sum(ei^2))    ##  CV estimate
+  mean(mse)   ##  CV estimate
 } 
 
 

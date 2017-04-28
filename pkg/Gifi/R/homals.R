@@ -1,5 +1,5 @@
 homals <- function (data, ndim = 2, ordinal = FALSE, ties = "s", knots = knotsGifi(data, "D"), degrees = -1, missing = "m",
-                    normobj.z = TRUE, active = TRUE, itmax = 1000, eps = 1e-6, seed = 123, verbose = FALSE)  {
+                    normobj.z = TRUE, active = TRUE, itmax = 1000, eps = 1e-6, verbose = FALSE)  {
     
   ## --- sanity checks
   names <- colnames(data, do.NULL = FALSE) 
@@ -16,7 +16,7 @@ homals <- function (data, ndim = 2, ordinal = FALSE, ties = "s", knots = knotsGi
                 ties = reshape (ties, nvars), copies = rep (ndim, ncol (data)), missing = reshape (missing, nvars),
                 active = reshape(active, nvars), names = names, sets = 1:nvars)
   
-  h <- gifiEngine(gifi = g, ndim = ndim, itmax = itmax, eps = eps, seed = seed, verbose = verbose)
+  h <- gifiEngine(gifi = g, ndim = ndim, itmax = itmax, eps = eps, verbose = verbose)
   a <- v <- z <- d <- y <- o <- as.list (1:ncol(data))
   dsum <- matrix (0, ndim, ndim)
   nact <- 0

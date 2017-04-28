@@ -10,8 +10,7 @@ Fits multiple regression within the Gifi framework.
 \usage{
 morals(x, y, xknots = knotsGifi(x, "Q"), yknots = knotsGifi(y, "Q"), xdegrees = 2, 
 ydegrees = 2, xordinal = TRUE, yordinal = TRUE, xties = "s", yties = "s", xmissing = "m", 
-ymissing = "m", xactive = TRUE, xcopies = 1, itmax = 1000, eps = 1e-6, 
-seed = 123, verbose = FALSE)
+ymissing = "m", xactive = TRUE, xcopies = 1, itmax = 1000, eps = 1e-6, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -31,7 +30,6 @@ seed = 123, verbose = FALSE)
   \item{xcopies}{Number of copies for each predictor}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
-  \item{seed}{Random number seed (for starting solution of the object scores)}
   \item{verbose}{Iteration printout}
 }
 \details{

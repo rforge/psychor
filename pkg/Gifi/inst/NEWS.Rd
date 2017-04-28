@@ -64,3 +64,9 @@
     \item \code{cv.morals} for cross-validating morals objects added.
   }
 }
+
+\section{Version 0.3-5}{
+ \itemize{
+    \item \code{seed} arguments removed from all functions.
+  }
+}

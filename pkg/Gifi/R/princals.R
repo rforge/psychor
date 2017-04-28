@@ -1,6 +1,5 @@
 princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsGifi(data, "D"), degrees = 2, copies = 1, 
-                      missing = "m", normobj.z = TRUE, active = TRUE, itmax = 1000, eps = 1e-6, 
-                      seed = 123, verbose = FALSE)  {
+                      missing = "m", normobj.z = TRUE, active = TRUE, itmax = 1000, eps = 1e-6, verbose = FALSE)  {
     
     ## --- sanity checks
     names <- colnames(data, do.NULL = FALSE) 
@@ -17,7 +16,7 @@ princals <- function (data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsG
     g <- makeGifi(data = data, knots = knots, degrees = reshape(degrees, nvars), ordinal = reshape(ordinal, nvars),
                   sets =  1:nvars, copies = reshape(copies, nvars), ties = reshape (ties, nvars), missing = reshape (missing, nvars),
                   active = reshape (active, nvars), names = names)
-    h <- gifiEngine(gifi = g, ndim = ndim, itmax = itmax, eps = eps, seed = seed, verbose = verbose)
+    h <- gifiEngine(gifi = g, ndim = ndim, itmax = itmax, eps = eps, verbose = verbose)
     a <- v <- z <- d <- y <- o <- as.list (1:nvars)
     dsum <- matrix (0, ndim, ndim)
     for (j in 1:nvars) {

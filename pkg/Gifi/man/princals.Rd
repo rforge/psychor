@@ -10,7 +10,7 @@ Fits a categorical PCA. The default is to take each input variable as ordinal bu
 \usage{
 princals(data, ndim = 2, ordinal = TRUE, ties = "s", knots = knotsGifi(data, "D"), 
 degrees = 2, copies = 1, missing = "m", normobj.z = TRUE, active = TRUE,
-itmax = 1000, eps = 1e-06, seed = 123, verbose = FALSE)
+itmax = 1000, eps = 1e-06, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,7 +26,6 @@ itmax = 1000, eps = 1e-06, seed = 123, verbose = FALSE)
   \item{normobj.z}{If \code{TRUE}, object scores are z-scores, if \code{FALSE}, they are restriction to SS of 1.}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
-  \item{seed}{Random number seed (for starting solution of the object scores)}
   \item{verbose}{Iteration printout}
 }
 \details{

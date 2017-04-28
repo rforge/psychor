@@ -10,7 +10,7 @@ Fits a multiple correspondence analysis (MCA). The default is to take each input
 \usage{
 homals(data, ndim = 2, ordinal = FALSE, ties = "s", knots = knotsGifi(data, "D"), 
 degrees = -1, missing = "m", normobj.z = TRUE, active = TRUE, itmax = 1000, 
-eps = 1e-6, seed = 123, verbose = FALSE)
+eps = 1e-6, verbose = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,7 +25,6 @@ eps = 1e-6, seed = 123, verbose = FALSE)
   \item{normobj.z}{If \code{TRUE}, object scores are z-scores, if \code{FALSE}, they are restriction to SS of 1.}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
-  \item{seed}{Random number seed (for starting solution of the object scores)}
   \item{verbose}{Iteration printout}
 }
 \details{
