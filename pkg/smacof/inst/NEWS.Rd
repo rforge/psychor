@@ -2,6 +2,12 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.9-5}{
+  \itemize{
+    \item Plot option for summed distances for \code{smacofIndDiff} models added. 
+}
+}
+
 \section{Changes in Version 1.9-4}{
   \itemize{
     \item Fast optimal scaling in \code{smacofSphere} including msplines. 

@@ -2,7 +2,7 @@
 
 plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale = 1, col = 1, 
                           label.conf = list(label = TRUE, pos = 3, col = 1), identify = FALSE, 
-                          type = "p", pch = 20,  cex = 0.5, asp = 1,  max.plot.array = c(2,2),
+                          type = "p", pch = 20,  cex = 0.5, asp = 1, plot.array,
                           main, xlab, ylab, xlim, ylim, ...)
 
 # x ... object of class smacofID
@@ -47,36 +47,36 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
 
   #---------------- Shepard diagram ------------------
   if (plot.type == "Shepard") {
-      if (missing(xlab)) xlab <- "Observed Dissimilarities" else xlab <- xlab
-      if (missing(ylab)) ylab <- "Configuration Distances" else ylab <- ylab
+    if (missing(main)) main <- paste("Shepard Diagram (Summed Distances)") else main <- main
+    if (missing(xlab)) xlab <- "Observed Dissimilarities" else xlab <- xlab
+    if (missing(ylab)) ylab <- "Configuration Distances" else ylab <- ylab
+    
+    if(missing(plot.array)) use_individual_distances <- FALSE else use_individual_distances <- TRUE
+    
+    if (use_individual_distances) {
       
-      #delta <- sumList(x$delta)
-      #confdist <- sumList(x$confdist)
-      
+      # do Shepard plots of each subject
       nvars <- length(x$delta)
-      # npanv <- ceiling(sqrt(nvars)) 
-      # npanh <- floor(sqrt(nvars))
-      # if (npanv * npanh < nvars) npanv <- npanv + 1
-      # if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
-      # if (parop) op <- par(mfrow = c(npanv, npanh))
       
-      if (missing(max.plot.array)) {
-        npanv <- ceiling(sqrt(nvars))
+      if (length(plot.array) < 2){
+        npanv <- plot.array[1]
+        npanh <- plot.array[1]
+      } else {
+        npanv <- plot.array[1]
+        npanh <- plot.array[2]
+      }
+      
+      if (npanv == 0 | npanh == 0) {
+        npanv <- ceiling(sqrt(nvars)) 
         npanh <- floor(sqrt(nvars))
         if (npanv * npanh < nvars) npanv <- npanv + 1
-        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
-      } else {
-        if (length(max.plot.array) < 2){
-          npanv <- max.plot.array[1]
-          npanh <- max.plot.array[1]
-        } else {
-          npanv <- max.plot.array[1]
-          npanh <- max.plot.array[2]
-        }
-        npanv <- max(npanv, 1)
-        npanh <- max(npanh, 1)
-        if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
       }
+      
+      # prevent invalid dimensions
+      npanv <- max(npanv, 1)
+      npanh <- max(npanh, 1)
+      
+      if (npanv == 1 && npanh == 1) parop <- FALSE else parop <- TRUE
       if (parop) op <- par(mfrow = c(npanv, npanh))
       
       if (is.null(names(x$conf))) namevec <- 1:nvars else namevec <- names(x$conf)
@@ -84,7 +84,7 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
         main <- paste("Shepard Diagram", namevec[i])
         notmiss <- as.vector(x$weightmat[[i]] > 0)
         xcoor <- (as.vector(x$delta)[[i]])[notmiss]
-        ycoor <- (as.vector(x$confdist)[[i]])[notmiss]
+        ycoor <- (as.vector(x$confdiss)[[i]])[notmiss]
         xlim <- range(xcoor)
         ylim <- range(ycoor)
         plot(xcoor, ycoor, main = main, type = "p", pch = pch, cex = cex,
@@ -92,8 +92,33 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
         iord <- order(xcoor)
         points(xcoor[iord], x$dhat[[i]][iord], type = "b", pch = pch, cex = cex)
       }
+      # restore old parameter setting
       if (parop) on.exit(par(op))
-}
+      
+    } else {
+      
+      # Make a Shepard plot of the distance data summed across subjects
+      delta <- sumList(x$delta)
+      confdiss <- sumList(x$confdist)
+      weightdiss <- sumList(x$weightmat)
+      notmiss <- as.vector(weightdiss > 0)
+      xcoor <- as.vector(delta)[notmiss]
+      ycoor <- as.vector(confdiss)[notmiss]
+      if (missing(xlim)) xlim <- range(xcoor)
+      if (missing(ylim)) ylim <- range(ycoor)
+      
+      plot(xcoor, ycoor, main = main, type = "p", pch = 1,
+           xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim, ...)
+      
+      if (x$type == "ordinal") {
+        isofit <- isoreg(xcoor, ycoor)  #isotonic regression
+        points(sort(isofit$x), isofit$yf, type = "b", pch = 16)
+      } else {
+        regfit <- lsfit(xcoor, ycoor)   #linear regression
+        abline(regfit, lwd = 0.5)
+      }
+    }
+  }
   
   #--------------- Residual plot -------------------- 
   if (plot.type == "resplot") {

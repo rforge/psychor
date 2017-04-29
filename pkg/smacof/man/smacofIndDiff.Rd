@@ -42,6 +42,7 @@ idioscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
    \item{spline.degree}{Degree of the spline for \code{"mspline"} MDS type}
   \item{spline.intKnots}{Number of interior knots of the spline for \code{"mspline"} MDS type}
 }
+
 \details{
 If the constraint is \code{"indscal"}, INDSCAL is performed with configuration weight matrices restricted to be diagonal. \code{indscal()} is a corresponding wrapper function that can be used instead of \code{smacofIndDiff()} with 
 \code{"indscal"} constraints.

@@ -26,7 +26,7 @@
 \method{plot}{smacofID}(x, plot.type = "confplot", plot.dim = c(1,2), bubscale = 1, 
                         col = 1, label.conf = list(label = TRUE, pos = 3, col = 1), 
                         identify = FALSE, type = "p", pch = 20,  cex = 0.5, asp = 1, 
-                        max.plot.array = c(2,2), main, xlab, ylab, xlim, ylim, ...)
+                        plot.array, main, xlab, ylab, xlim, ylim, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -56,7 +56,7 @@
   \item{label.conf.rows}{List with arguments for plotting the labels of the row configurations in an unfolding configuration plot (logical value whether to plot labels or not, label position, label color).} 
   \item{label.conf.columns}{List with arguments for plotting the labels of the columns configurations in an unfolding configuration plot (logical value whether to plot labels or not, label position, label color).}
   \item{col.hist}{Color of the borders of the histogram.}
-  \item{max.plot.array}{Maximum number of panels for 3-way Shepard plot.}
+  \item{plot.array}{Array arrangements of plots for IndDiff models (see details).}
   \item{\dots}{Further plot arguments passed: see \code{\link[graphics]{plot}} for detailed information.}
 }
 
@@ -80,8 +80,8 @@ smacof function to percentages (sum is 100). The higher the contribution, the wo
 
 - Histogram (\code{plot.type = "histogram"}: gives a weighted histogram of the dissimilarities. For optional arguments, see \code{\link[weights]{wtd.hist}}.
 
-For \code{smacofIndDiff()} the residual plot, Shepard diagram, and stress plot are based on the sum of the residuals across individuals/ways. The configuration plot represents the group stimulus space (i.e., joint configurations).
-
+For \code{smacofIndDiff()} the residual plot, Shepard diagram, and stress plot are based on the sum of the residuals across individuals/ways. The configuration plot represents the group stimulus space (i.e., joint configuration).
+If \code{plot.array} is not specified, it produces a Shepard plot of the distances summed across subjects, if \code{plot.array = 0} it produces a sqrt(nsubjects) times sqrt(nsubjects) array of graph panels, if \code{plot.array = 3} it produces 3x3 arrays of graph panels, if \code{plot.array = c(2, 3)} it produces 2x3 arrays of graph panels, and if \code{plot.array = c(3, 2, 5)} produces 3x2 arrays of panels (only the first two values are used).
 }
 
 \seealso{\code{\link{plot.procr}}}
