@@ -1,4 +1,4 @@
-useDynLib("smacof")
+useDynLib("smacof", .registration = TRUE)
 import("stats", "graphics", "Hmisc", "colorspace", "polynom", "nnls", "MASS", "weights", "plotrix")
 importFrom("grDevices", "dev.new", "hcl", "chull")
 importFrom("ellipse", "ellipse")
