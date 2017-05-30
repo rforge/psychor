@@ -2,6 +2,12 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.9-7}{
+  \itemize{
+    \item Some help files fixed.
+}
+}
+
 \section{Changes in Version 1.9-6}{
   \itemize{
     \item Registration for C function calls fixed.

@@ -29,7 +29,7 @@ unfolding(delta, ndim = 2, circle = c("none","row","column"), weightmat = NULL,
 
 \value{
   \item{obsdiss}{Observed dissimilarities, corresponds to delta}
-  \item{confdiss}{Configuration dissimilarities}
+  \item{confdist}{Configuration dissimilarities}
   \item{conf.row}{Matrix of final row configurations}
   \item{conf.col}{Matrix of final column configurations}
   \item{stress}{Final, normalized stress value}

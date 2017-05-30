@@ -43,7 +43,7 @@ uniscale <- function(delta, weightmat = NULL) {
   stress <- sqrt(fmin)         ## stress-1 normalization (/2 because of full matrix instead of dist in loop)
   names(xmin) <- colnames(diss)
   
-  res <- list(delta = as.dist(diss), conf = xmin, confdiss = as.dist(confdiss), stress = stress, weightmat = as.dist(w), npermtot = k, 
+  res <- list(delta = as.dist(diss), conf = xmin, confdist = as.dist(confdiss), stress = stress, weightmat = as.dist(w), npermtot = k, 
               npermscale = m, nobj = n, call = match.call())
   class(res) <- "uniscale"
   return(res)

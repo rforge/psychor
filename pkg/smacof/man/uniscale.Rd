@@ -18,7 +18,7 @@ uniscale(delta, weightmat = NULL)
 
 \value{
   \item{delta}{Observed dissimilarities, not normalized}
-  \item{confdiss}{Configuration distances}
+  \item{confdist}{Configuration distances}
   \item{conf}{Vector with fitted configurations}
   \item{stress}{Stress-1 value}
   \item{weightmat}{Weight matrix}
