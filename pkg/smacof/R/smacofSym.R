@@ -115,7 +115,7 @@ smacofSym <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal","
   confdiss <- normDissN(e, wgths, 1)        #final normalization to n(n-1)/2
   
   ## stress-per-point 
-  spoint <- spp(dhat, confdiss, wgths)
+  spoint <- spp(dhat, dist(y), wgths)
   rss <- sum(spoint$resmat[lower.tri(spoint$resmat)])  ## residual sum-of-squares
   
   if (itel == itmax) warning("Iteration limit reached! You may want to increase the itmax argument!") 

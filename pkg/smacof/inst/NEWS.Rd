@@ -4,6 +4,14 @@
 
 \section{Changes in Version 1.9-7}{
   \itemize{
+    \item Procrustes help file updated.
+    \item Bug in SPP fixed. 
+}
+}
+
+
+\section{Changes in Version 1.9-7}{
+  \itemize{
     \item Some help files fixed.
 }
 }
