@@ -84,7 +84,7 @@ plot.smacofID <- function(x, plot.type = "confplot", plot.dim = c(1,2), bubscale
         main <- paste("Shepard Diagram", namevec[i])
         notmiss <- as.vector(x$weightmat[[i]] > 0)
         xcoor <- (as.vector(x$delta)[[i]])[notmiss]
-        ycoor <- (as.vector(x$confdiss)[[i]])[notmiss]
+        ycoor <- (as.vector(x$confdist)[[i]])[notmiss]
         xlim <- range(xcoor)
         ylim <- range(ycoor)
         plot(xcoor, ycoor, main = main, type = "p", pch = pch, cex = cex,
