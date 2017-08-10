@@ -19,7 +19,7 @@ A data frame in long format with 194 individuals and the following variables:
 	\item{\code{raterID}}{Rater ID.}
 	\item{\code{item}}{Items for 3 subtests.}
 	\item{\code{score}}{7-point response score.}
-	\item{\code{subtest}}{Subtests (cognitive, affective, physical}
+	\item{\code{subtest}}{Subtests (cognitive, affective, physical).}
 }
 }
 
