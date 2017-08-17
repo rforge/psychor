@@ -16,7 +16,7 @@ data("Rmotivation")
 }
 
 \format{
-A data frame with 852 individuals and the following 36 variables.
+A data frame with 852 individuals, 36 motivation items, and 9 covariates:
   \describe{
 	\item{\code{ext1}}{I can publish the packages in scientific journals.}
 	\item{\code{ext2}}{they are part of my master / PhD thesis.}
@@ -54,6 +54,15 @@ A data frame with 852 individuals and the following 36 variables.
 	\item{\code{int3}}{it means pure fun for me.}
 	\item{\code{int4}}{I feel that it is an interesting exercise.}
 	\item{\code{int5}}{it is a joyful activity.}
+	\item{\code{lists}}{Participation in R lists.}
+	\item{\code{meet}}{Participation in R meetings/conferences.}
+	\item{\code{npkgs}}{Number of packages developed/contributed.}
+	\item{\code{gender}}{Gender.}
+	\item{\code{phd}}{PhD degree.}
+	\item{\code{statseduc}}{Education in statistics.}
+	\item{\code{fulltime}}{Full-time vs. part-time employment.}
+	\item{\code{academia}}{Work in acedemia.}
+	\item{\code{statswork}}{Work in the area of statistics.}
 }
 }
 
