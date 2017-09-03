@@ -28,7 +28,7 @@ A data frame with 932 individuals and the following 8 variables.
 }
 
 \source{
-Paskvan, M., Kubicek, B., Prem, R., & Korunka, C. (2015). Cognitive appraisal of work intensification. International Journal of Stress Management. Forthcoming.
+Paskvan, M., Kubicek, B., Prem, R., & Korunka, C. (2016). Cognitive appraisal of work intensification. International Journal of Stress Management, 23, 124-146.
 }
 
 
