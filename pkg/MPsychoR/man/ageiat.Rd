@@ -5,7 +5,7 @@
 Time Series Implicit Association Test (Age)
 }
 \description{
-The implicit association test (IAT) measures differential association of two target concepts with an attribute. The outcome measure is the IAT score D (similar to Cohen's d effect size). There are different types of IAT. This dataset contains D-measures from the Age IAT (where most individuals have an implicit preference for young over old). They were collected on the ProjectImplicit platform (\url{http://implicit.harvard.edu/}) from May 2005 to December 2015. Within each each month the participants D-measures were averaged. This leads to a time series with 140 observations.
+The implicit association test (IAT) measures differential association of two target concepts with an attribute. The outcome measure is the IAT score D (similar to Cohen's d effect size). There are different types of IAT. This dataset contains D-measures from the Age IAT (where most individuals have an implicit preference for young over old). They were collected on the ProjectImplicit platform (\url{http://implicit.harvard.edu/}) from January 2007 to December 2015. Within each each month the participants D-measures were averaged. This leads to a time series with 140 observations.
 }
 
 \usage{
@@ -13,7 +13,7 @@ data("ageiat")
 }
 
 \format{
-A vector of D-scores, measured at 140 points in time (May 2005 - December 2015). 
+A vector of D-scores, measured at 108 points in time (January 2007 - December 2015). 
 }
 
 \source{

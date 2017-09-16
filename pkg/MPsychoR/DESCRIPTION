@@ -1,9 +1,9 @@
 Package: MPsychoR
 Type: Package
 Title: Modern Psychometrics with R
-Version: 0.9-1
-Date: 2017-09-03
-Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email = "mair@fas.harvard.edu"), person("Christian", "Korunka", role = "cph", comment = "Copyright holder of Paskvan dataset"))
+Version: 0.10-0
+Date: 2017-09-16
+Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email = "mair@fas.harvard.edu"))
 Maintainer: Patrick Mair <mair@fas.harvard.edu>
 Description: Supplementary materials and datasets for the book "Modern Psychometrics With R" (Mair, 2018, Springer useR! series).
 Imports: graphics, stats
