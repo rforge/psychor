@@ -30,6 +30,7 @@ export(dissWeights)
 export(bootmds)
 export(icExplore)
 export(stress0)
+export(prefscal)
 
 S3method(print, smacofB)
 S3method(summary, smacofB)

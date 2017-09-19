@@ -2,6 +2,14 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.10-0}{
+  \itemize{
+    \item Prefscal for nonlinear unfolding added (only matrix conditional).
+    \item plot.smacofR updated to show transformations by prefscal.
+}
+}
+
+
 \section{Changes in Version 1.9-7}{
   \itemize{
     \item Procrustes help file updated.

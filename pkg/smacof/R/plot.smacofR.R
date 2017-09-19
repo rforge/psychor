@@ -5,6 +5,7 @@ plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", 
                          col.columns = hcl(240),
                          label.conf.rows = list(label = TRUE, pos = 3, col = hcl(0, l = 50), cex = 0.8), 
                          label.conf.columns = list(label = TRUE, pos = 3, col = hcl(240, l = 50), cex = 0.8), 
+                         shepard.x = NULL,
                          type = "p", pch = 20, cex = 0.5, asp = 1, main, xlab, ylab, xlim, ylim, ...)
 
 # x ... object of class smacofR
@@ -89,23 +90,30 @@ plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", 
   #---------------- Shepard diagram ------------------
   if (plot.type == "Shepard") {
     if (missing(main)) main <- paste("Shepard Diagram") else main <- main
-    if (missing(xlab)) xlab <- "Dissimilarities" else xlab <- xlab
+    if (missing(xlab)) {
+      if (is.null(shepard.x)) xlab <- "Dissimilarities" else xlab <- "Proximities"
+    } else xlab <- xlab
     if (missing(ylab)) ylab <- "Configuration Distances" else ylab <- ylab
 
-    if (missing(xlim)) xlim <- range(as.vector(x$obsdiss))
-    if (missing(ylim)) ylim <- range(as.vector(x$confdist))
+    if (missing(xlim)) xlim <- range(c(0, as.vector(x$obsdiss )))
+    if (missing(ylim)) ylim <- range(c(0, as.vector(x$confdist), as.vector(x$dhat)))
     
     notmiss <- as.vector(x$weightmat > 0)
     xcoor <- as.vector(x$obsdiss)
     ycoor <- as.vector(x$confdist)
     plot(xcoor[notmiss], ycoor[notmiss], main = main, type = "p", pch = pch, cex = cex,
          xlab = xlab, ylab = ylab, col = "darkgray", xlim = xlim, ylim = ylim, ...)
-    yax <- ycoor[notmiss]
-    xax <- xcoor[notmiss]
-    fitlm <- lm(yax ~ -1 + xax)       ## ratio unfolding
-    xvals <- unique(sort(xax))
-    preds <- predict(fitlm, newdata = data.frame(xax = xvals))
-    points(xvals, preds, type = "b", pch = pch, cex = cex)
+    if ("prefscal" %in% class(x)){
+      notmiss.iord <- notmiss[x$iord]
+      points((xcoor[x$iord])[notmiss.iord], (as.vector(x$dhat[x$iord]))[notmiss.iord], type = "b", pch = pch, cex = cex, col = "blue")
+    } else {  # Class is "smacofR"
+      yax <- ycoor[notmiss]
+      xax <- xcoor[notmiss]
+      fitlm <- lm(yax ~ -1 + xax)       ## ratio unfolding
+      xvals <- unique(sort(xax))
+      preds <- predict(fitlm, newdata = data.frame(xax = xvals))
+      points(xvals, preds, type = "b", pch = pch, cex = cex)
+    }
 }
 
 
