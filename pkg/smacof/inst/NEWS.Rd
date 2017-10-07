@@ -2,10 +2,19 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.10-1}{
+  \itemize{
+    \item smacofRect() updated to do nonlinear unfolding added matrix and row conditional).
+    \item prefscal() is an alias for unfolding() and smacofRect()
+    \item plot.smacofR() updated to show row transformations by smacofR and show column labels.
+    \item mspline transformation in mds() and smacofSym() now includes an intercept.
+    }
+}
+
 \section{Changes in Version 1.10-0}{
   \itemize{
-    \item Prefscal for nonlinear unfolding added (only matrix conditional).
-    \item plot.smacofR updated to show transformations by prefscal.
+    \item smacofRect updated for nonlinear unfolding added (only matrix conditional).
+    \item plot.smacofR updated to show transformations by smacofR.
 }
 }
 
