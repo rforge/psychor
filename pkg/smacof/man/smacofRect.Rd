@@ -29,7 +29,7 @@ prefscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
 \arguments{
   \item{delta}{Data frame or matrix of preferences, ratings, dissimilarities.}
   \item{ndim}{Number of dimensions}
-  \item{type}{MDS type: \code{"interval"}, \code{"ratio"}, \code{"ordinal"} (nonmetric MDS), or \code{"mspline"}}
+  \item{type}{MDS type: \code{"interval"}, \code{"ratio"}, \code{"ordinal"}, or \code{"mspline"}}
   \item{conditionality}{A single transformations are applied for the entire matrix \code{"matrix"} or for each row separately \code{"row"}}
   \item{lambda}{Penalty strength balancing the loss contribution of stress and the penalty}
   \item{omega}{Penalty width determines for what values of the variation coefficient the penalty should become active.}
@@ -40,8 +40,8 @@ prefscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
-  \item{spline.degree}{Degree of the spline for \code{"mspline"} MDS type}
-  \item{spline.intKnots}{Number of interior knots of the spline for \code{"mspline"} MDS type}
+  \item{spline.degree}{Degree of the spline for an \code{"mspline"} transformation}
+  \item{spline.intKnots}{Number of interior knots of the spline for a \code{"mspline"} transformation}
 }
 \details{Unfolding tries to match a rectangular matrix \code{delta} of dissimilarities between row and column objects by Euclidean distances between row and column points. Badness of fit is measured by raw Stress as the sum of squared differences between \code{delta} and the Euclidean distances. Instead of dissimilarities optimal transformations (dhats) can be found. The dhats should be a function of the original \code{delta} restricted to be \code{"ratio"}, \code{"interval"}, \code{"ordinal"}, or \code{"mspline"}. These transformations can be the same for the entire matrix (\code{conditionality = "matrix"}) of data or different per row (\code{conditionality = "row"}). To avoid a degenerate solution with all dhats and distances equal to 1, the prefscal penalty is is used. A penalty is added based on the variation coefficient of the dhats (mean dhat divided by the standard deviation of the dhats). The penalty width (\code{omega}) weights the penalty and determines from what value of the variation coefficient of the dhats the penalty should become active. The penalty strength (\code{lambda}) is needed to ensure that the penalty can be strong enough. 
 
