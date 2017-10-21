@@ -10,20 +10,20 @@
 unfolding(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
          conditionality = c("matrix", "row"), lambda = 0.5, omega = 0.1, 
          circle = c("none", "row", "column"), weightmat = NULL, init = NULL, 
-         ties = c("primary", "secondary"), verbose = FALSE, itmax = 10000,  
-         eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
+         ties = c("primary", "secondary"), verbose = FALSE, relax = TRUE, 
+         itmax = 10000, eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
 
 smacofRect(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
          conditionality = c("matrix", "row"), lambda = 0.5, omega = 0.1, 
          circle = c("none", "row", "column"), weightmat = NULL, init = NULL, 
-         ties = c("primary", "secondary"), verbose = FALSE, itmax = 10000,  
-         eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
+         ties = c("primary", "secondary"), verbose = FALSE, relax = TRUE, 
+         itmax = 10000, eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
 
 prefscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
          conditionality = c("matrix", "row"), lambda = 0.5, omega = 0.1, 
          circle = c("none", "row", "column"), weightmat = NULL, init = NULL, 
-         ties = c("primary", "secondary"), verbose = FALSE, itmax = 10000,  
-         eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
+         ties = c("primary", "secondary"), verbose = FALSE, relax = TRUE, 
+         itmax = 10000, eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
 }
 
 \arguments{
@@ -38,6 +38,7 @@ prefscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
   \item{init}{Matrix with starting values for configurations (optional)}
   \item{ties}{Tie specification for \code{ordinal} transformations: \code{primary} unties the ties and \code{secondary} keeps the ties tied}
   \item{verbose}{If \code{TRUE}, intermediate stress is printed out}
+  \item{relax}{If \code{TRUE}, block relaxation is used for majorization after 100 iterations. It tends to reduce the number of iterations by a factor 2.}
   \item{itmax}{Maximum number of iterations}
   \item{eps}{Convergence criterion}
   \item{spline.degree}{Degree of the spline for an \code{"mspline"} transformation}

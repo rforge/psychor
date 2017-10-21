@@ -1,7 +1,7 @@
 smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
                        conditionality = c("matrix", "row"), lambda = 0.5, omega = 0.1, 
                        circle = c("none", "row", "column"), weightmat = NULL, init = NULL, 
-                       ties = c("primary", "secondary"), verbose = FALSE, itmax = 10000,  
+                       ties = c("primary", "secondary"), verbose = FALSE, relax = TRUE, itmax = 10000,  
                        eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
   
   # init ... either a list of 2 matrices of dimension n \times p and m \times p with 
@@ -35,8 +35,6 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
     trans <- "ordinalp"
   } else if(trans=="ordinal" & ties=="secondary"){
     trans <- "ordinals"
-  } else if(trans=="ordinal" & ties=="tertiary"){
-    trans <- "ordinalt"
   } else if(trans=="spline"){
     trans <- "mspline"
   }
@@ -44,7 +42,7 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   if (conditionality == "matrix"){
     disobj[[1]] <- transPrep(as.vector(delta), trans = trans, spline.intKnots = spline.intKnots, spline.degree = spline.degree)
     if (trans == "mspline") disobj[[1]]$base <- cbind(rep(1, nrow(disobj[[1]]$base)), disobj[[1]]$base)
-    tt <- transform(as.vector(delta), disobj[[1]], w = as.vector(w), normq = wpp)
+    tt <- transform(as.vector(delta), disobj[[1]], w = as.vector(w)) #, normq = wpp
     dhat <- matrix(tt$res, n, m)  ## dhat update
     tt <- vector(mode = "list", length = 1)
   } else { ## conditionality == "row"
@@ -143,8 +141,16 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
       xraw <- (br * x) - ( b %*% y)
       yraw <- (bc * y) - crossprod(b, x)
 
+
+      xold <- x
+      yold <- y
       y <- v %*% (yraw + crossprod(ww, xraw/wr)) #x update
       x <- (xraw + (ww %*% y))/wr                #y update
+      if (relax & itel > 100){
+        x <- 2 * x - xold
+        y <- 2 * y - yold
+      }
+      
     } else {
       b  <- w * (1 - (!d.is.0) * dhat / (d + d.is.0))  #B matrix
       br <- rowSums(b)                   #rows B
@@ -244,8 +250,10 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
                      "   Dif:",     formatC(lold - lnew, digits=6,width=12, format="f"),
                      "\n")
 
-    if ( ( (lold-lnew) < eps & itel > 1) || (itel==itmax)) break()
-
+    #if ( ( (lold-lnew) < eps & itel > 1) || (itel==itmax)) break()
+    if ( itel == itmax ) break() 
+    if ( 2 * ( lold - lnew ) <= eps * ( lold + lnew + 1e-15 ) ) break()
+    
     lold <- lnew                       #update stress
     itel <- itel+1
   }
@@ -264,6 +272,27 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   names(spp.row) <- rownames(x) <- rownames(diss) <- rownames(d) <- rnames
   names(spp.col) <- rownames(y) <- colnames(delta)
 
+  # final dilation
+  # first re-scale distances (unconditional)
+  ssqd <- sum( w * d^2 )
+  # if ( ssqd != 0 ) {
+    scale <- sqrt( sum( w ) / ssqd )
+    d <- scale * d
+    x <- scale * x
+    y <- scale * y
+    dhat <- scale * dhat
+  # }
+  # then optimally adapt d-hats depending on conditionality
+  #if ( conditionality == "matrix" ) {
+    # fwd <- sum( dhat * w * d )
+    # dwd <- sum( dhat * w * dhat )
+    # if (dwd != 0) ( fwd / dwd ) * dhat
+  #} 
+  #else { ## conditionality == "row"
+  #  fwd <- rowSums( dhat * w * d)
+  #  dwd <- rowSums( d * w * d)
+  #  for ( i in 1:n ) dhat[i] <- ifelse( fwd[i] == 0, dhat[i], ( dwd[i] / fwd[i] ) * dhat[i] )
+  #}
 
   if (itel == itmax) warning("Iteration limit reached! Increase itmax argument!")
 

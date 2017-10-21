@@ -2,6 +2,14 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.10-2}{
+  \itemize{
+    \item unfolding() updated with relaxed update that often reduces the iterations by a factor 2).
+    \item unfolding() updated with an overal rescaling to the coordinates, distances, and d-hats.
+    }
+}
+
+
 \section{Changes in Version 1.10-1}{
   \itemize{
     \item smacofRect() updated to do nonlinear unfolding added matrix and row conditional).
