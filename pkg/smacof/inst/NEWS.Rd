@@ -2,6 +2,12 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.10-3}{
+  \itemize{
+    \item plot.smacofboot() updated.
+    }
+}
+
 \section{Changes in Version 1.10-2}{
   \itemize{
     \item unfolding() updated with relaxed update that often reduces the iterations by a factor 2).
