@@ -31,6 +31,7 @@ export(bootmds)
 export(icExplore)
 export(stress0)
 export(prefscal)
+export(transform)
 
 S3method(print, smacofB)
 S3method(summary, smacofB)
