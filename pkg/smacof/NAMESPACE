@@ -32,6 +32,7 @@ export(icExplore)
 export(stress0)
 export(prefscal)
 export(transform)
+export(transPrep)
 
 S3method(print, smacofB)
 S3method(summary, smacofB)
