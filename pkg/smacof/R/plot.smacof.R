@@ -57,7 +57,7 @@ plot.smacof <- function(x, plot.type = "confplot", plot.dim = c(1,2), sphere = T
     #if (identify) type <- "p"
     
     plot(x$conf[,x1], x$conf[,y1], main = main, type = type, xlab = xlab, ylab = ylab, 
-         xlim = xlim, ylim = ylim, pch = pch, asp = asp, col = col, ...)
+         xlim = xlim, ylim = ylim, pch = pch, asp = asp, col = col, cex = cex, ...)
     if (label.conf$label) {
       if (label.conf$pos == 5) {
         thigmophobe.labels(x$conf[,x1], x$conf[,y1], labels = rownames(x$conf), 
