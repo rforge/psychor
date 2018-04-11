@@ -2,6 +2,12 @@
 \title{News for Package \pkg{WRS2}}
 \encoding{UTF-8}
 
+\section{Changes in Version 0.9-4}{
+  \itemize{
+    \item Label bugfix in \code{lincon}.
+    } 
+}
+
 \section{Changes in Version 0.9-3}{
   \itemize{
     \item Reports error in \code{t1way} if Winsorized variance becomes 0. 

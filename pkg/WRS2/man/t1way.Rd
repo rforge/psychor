@@ -6,7 +6,7 @@
 \title{A heteroscedastic one-way ANOVA for trimmed means.
 }
 \description{
-The \code{t1way} function computes a one-way ANOVA for the medians. Homoscedasticity assumption not required. It uses a generalization of Welch's method. Corresponding post hoc tests can be performed using \code{lincon}.
+The \code{t1way} function computes a one-way ANOVA on trimmed means. Homoscedasticity assumption not required. It uses a generalization of Welch's method. Corresponding post hoc tests can be performed using \code{lincon}.
 }
 \usage{
 t1way(formula, data, tr = 0.2)
