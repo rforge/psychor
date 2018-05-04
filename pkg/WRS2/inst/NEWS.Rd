@@ -2,6 +2,13 @@
 \title{News for Package \pkg{WRS2}}
 \encoding{UTF-8}
 
+
+\section{Changes in Version 0.9-5}{
+  \itemize{
+    \item \code{med2way} now reports df.
+    } 
+}
+
 \section{Changes in Version 0.9-4}{
   \itemize{
     \item Label bugfix in \code{lincon}.

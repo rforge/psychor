@@ -2,13 +2,20 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.10-5}{
+  \itemize{
+    \item some fixes in the output structure of inverseMDS().  
+    \item biplotmds() and plot.mdsbi() fixed for single covariate vectors.
+    \item Additional conversion options added to sim2diss().
+    }
+}
+
 \section{Changes in Version 1.10-4}{
   \itemize{
     \item verbose output in uniscale(). 
     \item transform() exported. 
     }
 }
-
 
 
 \section{Changes in Version 1.10-3}{
