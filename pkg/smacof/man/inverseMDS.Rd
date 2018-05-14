@@ -33,7 +33,8 @@ De Leeuw, J., Groenen P. J. F., & Mair, P. (2016). On Inverse Multidimensional S
 
 \examples{
 ## Inverse MDS on theoretical rectangle configuration
-ifit <- inverseMDS(rect_constr)        
+ifit <- inverseMDS(rect_constr)   
+str(ifit)
 }
 
 \keyword{models}

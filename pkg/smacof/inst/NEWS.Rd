@@ -2,6 +2,15 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.10-6}{
+  \itemize{
+    \item print.imds() for inverseMDS() added.  
+    \item Gravity computation slightly modified.
+    \item Vaziri-Xu dataset added. 
+    }
+}
+
+
 \section{Changes in Version 1.10-5}{
   \itemize{
     \item some fixes in the output structure of inverseMDS().  

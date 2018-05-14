@@ -27,8 +27,9 @@ inverseMDS <- function (x) {
     baselist[[i]] <- as.dist(dmat)
     attr(baselist[[i]], "Labels") <- rownames(x)
   }  
-  result <- list(confdist = dist(x), dissmat = baselist)
-  result
+  result <- list(confdist = dist(x), dissmat = baselist, call = match.call())
+  class(result) <- "imds"
+  return(result)
 }
 
 
