@@ -2,11 +2,14 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+
 \section{Changes in Version 1.10-6}{
   \itemize{
     \item print.imds() for inverseMDS() added.  
     \item Gravity computation slightly modified.
     \item Vaziri-Xu dataset added. 
+    \item Facial expression data added.  
+    \item Legend arguments for Procrustes plots added.
     }
 }
 
