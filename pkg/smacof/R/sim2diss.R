@@ -15,7 +15,7 @@ sim2diss <- function(s, method = "corr", to.dist = FALSE)
   
   if (method == "corr") {
     if (any(s < -1) || any(s > 1)) stop( "Correlations expected for correlation transform." )
-    dissmat <- sqrt(2*(1-s))
+    dissmat <- sqrt(1-s)
   } 
   if (method == "reverse") dissmat <- max(s, na.rm = TRUE) + min(s, na.rm = TRUE) - s
   if (method == "reciprocal") {

@@ -2,6 +2,12 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.10-7}{
+  \itemize{
+    \item sanity check in smacofConstraint for diagonal C. 
+    \item stability coefficient for bootstrap added. 
+    }
+}
 
 \section{Changes in Version 1.10-6}{
   \itemize{

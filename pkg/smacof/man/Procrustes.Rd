@@ -98,7 +98,8 @@ plot(fit.proc, ylim = c(-1, 1),  col.X = "cadetblue", col.Yhat = "brown", pch = 
     
 ## Procrustes transformations (Y and Yhat)
 plot(fit.proc, plot.type = "transplot", length = 0.05, ylim = c(-1,1), 
-     legend = list(pos = "bottomright", labels = c("West Germany (untransformed)", "West Germany (transformed)")))
+     legend = list(pos = "bottomright", 
+     labels = c("West Germany (untransformed)", "West Germany (transformed)")))
 }
 
 \keyword{multivariate}
