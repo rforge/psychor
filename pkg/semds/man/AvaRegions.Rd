@@ -20,10 +20,10 @@ Contains dissimilarity matrices across mountain regions in British Columbia and 
  \item{\code{Spring}}{Spring-like}
  \item{\code{Storm}}{Storm slab}
  \item{\code{StormDeepP}}{Storm & deep persistent slab}
- \item{\code{Storm & persistent slab}}{StormPers}
- \item{\code{Storm & wind slab}}{StormWind}
- \item{\code{Storm, wind, & persistent slab}}{StormWindPers}
- \item{\code{Wind slab}}{Wind}
+ \item{\code{StormPers}}{Storm & persistent slab}
+ \item{\code{StormWind}}{Storm & wind slab}
+ \item{\code{StormWindPers}}{Storm, wind, & persistent slab}
+ \item{\code{Wind}}{Wind slab}
 }
 }
 
