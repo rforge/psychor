@@ -33,7 +33,7 @@ PTSD (posttraumatic stress disorder) symptoms reported by survivors of the Wench
 }
 
 \source{
-McNally, R. J., Robinaugh, D. J., Wu, G. W. Y., Wang, L., Deserno, M. K., & Borsboom, D. (2015). Mental disorders as causal systems: A network approach to posttraumatic stress disorder. Clinical Psychological Science, forthcoming. 
+McNally, R. J., Robinaugh, D. J., Wu, G. W. Y., Wang, L., Deserno, M. K., & Borsboom, D. (2015). Mental disorders as causal systems: A network approach to posttraumatic stress disorder. Clinical Psychological Science, 3(6), 836-849.
 }
 \examples{
 data(Wenchuan)

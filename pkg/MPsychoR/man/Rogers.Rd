@@ -45,7 +45,7 @@ A data frame with 408 individuals and the following 26 variables (16 depression 
 }
 
 \source{
-McNally, R. J., Mair, P., Mugno, B. L., and Riemann, B. C. (2017). Comorbid obsessive-compulsive disorder and depression: A Bayesian network approach. Psychological Medicine. Forthcoming.
+McNally, R. J., Mair, P., Mugno, B. L., and Riemann, B. C. (2017). Comorbid obsessive-compulsive disorder and depression: A Bayesian network approach. Psychological Medicine, 47(7), 1204-1214.
 }
 
 
