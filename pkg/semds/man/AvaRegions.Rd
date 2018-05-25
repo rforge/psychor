@@ -28,7 +28,7 @@ Contains dissimilarity matrices across mountain regions in British Columbia and 
 }
 
 \note{
-Thanks for Pascal Haegeli from SFU for sharing this dataset. 
+Thanks to Pascal Haegeli from SFU for sharing this dataset. 
 }
 \examples{
 data(AvaRegions)
