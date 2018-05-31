@@ -2,6 +2,13 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.10-8}{
+  \itemize{
+    \item variable names in morsescales corrected.
+    \item adjust argument in plot.driftvec added.
+    }
+}
+
 \section{Changes in Version 1.10-7}{
   \itemize{
     \item sanity check in smacofConstraint for diagonal C. 
