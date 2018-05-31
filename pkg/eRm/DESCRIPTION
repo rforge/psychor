@@ -7,7 +7,7 @@ Authors@R: c(person(given="Patrick", family="Mair", email="mair@fas.harvard.edu"
              person(given="Reinhold", family="Hatzinger", role="aut"),
              person(given=c("Marco", "J."), family="Maier", email="marco.maier@wu.ac.at", role="aut"),
              person(given="Thomas", family="Rusch", email="thomas.rusch@wu.ac.at", role="ctb"))
-Description: Fits Rasch models (RM), linear logistic test models (LLTM), rating scale model (RSM), linear rating scale models (LRSM), partial credit models (PCM), and linear partial credit models (LPCM).  Missing values are allowed in the data matrix.  Additional features are the ML estimation of the person parameters, Andersen's LR-test, item-specific Wald test, Martin-Loef-Test, nonparametric Monte-Carlo Tests, itemfit and personfit statistics including infit and outfit measures, various ICC and related plots, automated stepwise item elimination, simulation module for various binary data matrices.
+Description: Fits Rasch models (RM), linear logistic test models (LLTM), rating scale model (RSM), linear rating scale models (LRSM), partial credit models (PCM), and linear partial credit models (LPCM).  Missing values are allowed in the data matrix.  Additional features are the ML estimation of the person parameters, Andersen's LR-test, item-specific Wald test, Martin-Loef-Test, nonparametric Monte-Carlo Tests, itemfit and personfit statistics including infit and outfit measures, ICC and other plots, automated stepwise item elimination, simulation module for various binary data matrices.
 License: GPL-2
 URL: http://r-forge.r-project.org/projects/erm/
 Imports: graphics, grDevices, stats, methods, MASS, splines, Matrix, lattice
