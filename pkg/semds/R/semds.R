@@ -3,6 +3,7 @@ semds <- function(D, dim = 2, saturated = FALSE, theta0 = NULL, maxiter = 1000, 
   cl <- match.call()
   
   ## ---- data preparation
+  if (is.data.frame(D)) D <- as.matrix(D)
   if (is.matrix(D)) {                         ## asymmetric case
     if (nrow(D) == ncol(D)) {
       d11 <- as.vector(D[lower.tri(D)])
