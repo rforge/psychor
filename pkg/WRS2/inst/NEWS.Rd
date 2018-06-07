@@ -3,6 +3,15 @@
 \encoding{UTF-8}
 
 
+\section{Changes in Version 0.9-7}{
+  \itemize{
+    \item \code{onesampb} added.
+    \item \code{bwtrim} now reports dfs. 
+    \item \code{winvar}, \code{onestep}, \code{mom} exported.
+    \item diet dataset added. 
+    } 
+}
+
 \section{Changes in Version 0.9-5}{
   \itemize{
     \item \code{med2way} now reports df.
