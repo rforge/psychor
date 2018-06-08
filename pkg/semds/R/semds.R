@@ -23,7 +23,7 @@ semds <- function(D, dim = 2, saturated = FALSE, theta0 = NULL, maxiter = 1000, 
   
   if (is.list(D)) {                          ## three-way case
     D1 <- sapply(D, function(dd) as.vector(as.dist(dd)))
-    D1 <- apply(D1, 2, normDissN, 1, ncol(D1))   ## normalization
+    D1 <- apply(D1, 2, normDissN, 1, 1)   ## normalization
     n <- ncol(as.matrix(D[[1]]))
     cnames <- rownames(as.matrix(D[[1]]))
   }
