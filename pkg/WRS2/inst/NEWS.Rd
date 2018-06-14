@@ -3,6 +3,13 @@
 \encoding{UTF-8}
 
 
+\section{Changes in Version 0.10-0}{
+  \itemize{
+    \item Vignette added.
+    } 
+}
+
+
 \section{Changes in Version 0.9-7}{
   \itemize{
     \item \code{onesampb} added.
