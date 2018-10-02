@@ -1,4 +1,4 @@
-amalgm <- function (x, w = rep (1, length (x))) {
+amalgm1 <- function (x, w = rep (1, length (x))) {
   n <- length (x)
   a <- rep (0, n)
   b <- rep (0, n)
@@ -21,7 +21,7 @@ isotone <- function (x, y, w = rep (1, length (x)), ties = ties) {
       w <- sapply (g, length)
       h <- lapply (g, function (z) y[z])
       m <- sapply (h, sum) / w
-      r <- amalgm (m, w)
+      r <- amalgm1 (m, w)
       s <- rep (0, n)
       for (i in 1:k)
         s[g[[i]]] <- r[i]
@@ -37,7 +37,7 @@ isotone <- function (x, y, w = rep (1, length (x)), ties = ties) {
         h[[i]] <- h[[i]][ii]
       }
       m <- unlist (h)
-      r <- amalgm (m, w)
+      r <- amalgm1 (m, w)
       s[there] <- r[order (unlist (g))]
       s[notthere] <- y[notthere]
     }
@@ -46,7 +46,7 @@ isotone <- function (x, y, w = rep (1, length (x)), ties = ties) {
       h <- lapply (g, function (x)
         y[x])
       m <- sapply (h, sum) / w
-      r <- amalgm (m, w)
+      r <- amalgm1 (m, w)
       s <- rep (0, n)
       for (i in 1:k)
         s[g[[i]]] <- y[g[[i]]] + (r[i] - m[i])

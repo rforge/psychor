@@ -10,7 +10,6 @@ Imports: graphics, stats, colorspace
 Depends: R (>= 3.1.0)
 License: GPL-3
 Suggests: knitr, psych
-VignetteBuilder: knitr
 LazyData: yes
 LazyLoad: yes
 ByteCompile: yes
