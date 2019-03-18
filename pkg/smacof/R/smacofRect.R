@@ -59,7 +59,6 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
 
   itel <- 1
   #delta <- delta/sqrt(sum(w*delta^2))*sqrt(n*m)       #normalize dissimilarities
-
   #delta_plus <- ifelse(delta>=0,delta,0)  #delta decomposition (+)
   #delta_min <- ifelse(delta<=0,-delta,0)  #delta decomposition (-) (if all >0 --> complete 0)
 
@@ -82,44 +81,12 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
     y <- r$y
     wr <- rowSums(w)
     wc <- colSums(w)
-    lambda <- 2*max(c(wr,wc))
+    lambda1 <- 2*max(c(wr,wc))
   }
 
   d <- distRect(x,y,0)                  #n times m of reproduced diss
-  coefOfVar <- function(x, w){            # Compute coefficient of variation
-    av <- sum(x * w)/sum(w)
-    va <- sum((x - av)^2 * w)/sum(w)
-    return(va/av)
-  }
-
-  # psychometrika stress
-  pstress <- function( dhat, d, w, omega, lambda, wpp ){
-    if ( conditionality == "matrix" ){
-      c1 <- nrmd2 <- sum( w * ( dhat - d )^2 )
-      sumw <- sum( w )
-      mnc1 <- nrmd2 / wpp
-      wsum <- sum( w * dhat )
-      nrmw2 <- sum( w * dhat^2 )
-      nrmm2 <- wsum^2 / wpp
-      nrmv2 <- nrmw2 - nrmm2
-      c2 <- mnc2 <- ( nrmv2 + omega * nrmm2 ) / nrmv2
-      g <- sqrt( mnc1^lambda * mnc2 )
-    } else { ## conditionality == "row"
-      c1 <- nrmd2 <- rowSums( w * ( dhat - d )^2 )
-      sumw <- rowSums( w )
-      wsum <- rowSums( w * dhat )
-      nrmw2 <- rowSums( w * dhat^2 )
-      nrmm2 <- wsum^2 / sumw
-      nrmv2 <- nrmw2 - nrmm2
-      c2 <- ( nrmv2 + omega * nrmm2 ) / nrmv2
-      mnc1 <- sum( c1 )
-      mnc2 <- sum( c2 )
-      g <- sqrt( ( mnc1 / wpp )^lambda * mnc2 )
-    }
-    return( list( pstress = g, g = g, c1 = c1, c2 = c2, nrmd2 = nrmd2, sumw = sumw, wsum = wsum, nrmw2 = nrmw2, nrmm2 = nrmm2, nrmv2 = nrmv2 ) )
-  } # psychometrika pstress
-
-  ps   <- pstress(dhat, d, w, omega, lambda, wpp)   #pstress value
+  
+  ps   <- pstress(dhat, d, w, omega, lambda, wpp, conditionality)   #pstress value
   lold <- ps$pstress
 
   if (circle == "none") {
@@ -137,11 +104,8 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
       b  <- w * dhat * (!d.is.0) / (d + d.is.0) # B matrix
       br <- rowSums(b)                   #rows B
       bc <- colSums(b)                   #columns W
-
       xraw <- (br * x) - ( b %*% y)
       yraw <- (bc * y) - crossprod(b, x)
-
-
       xold <- x
       yold <- y
       y <- v %*% (yraw + crossprod(ww, xraw/wr)) #x update
@@ -150,25 +114,19 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
         x <- 2 * x - xold
         y <- 2 * y - yold
       }
-      
     } else {
       b  <- w * (1 - (!d.is.0) * dhat / (d + d.is.0))  #B matrix
       br <- rowSums(b)                   #rows B
       bc <- colSums(b)                   #columns W
-      xunc <- x - outer(br, rep(1/lambda, p), "*") * x + b %*% (y/lambda)
-      yunc <- y - outer(bc, rep(1/lambda, p), "*") * y + t(b) %*% (x/lambda)
+      xunc <- x - outer(br, rep(1/lambda1, p), "*") * x + b %*% (y/lambda1)
+      yunc <- y - outer(bc, rep(1/lambda1, p), "*") * y + t(b) %*% (x/lambda1)
       r <- projCircle(xunc, yunc, x, y, circle = circle)
       x <- r$x
       y <- r$y
     }
 
     d <- distRect(x,y,0)             #compute distances (update)
-
-    #lnew <- sum(w*(dhat - d)^2)/wpp     #compute stress
-
-    # Update dhats
-
-    dhat.old <- dhat
+    dhat.old <- dhat  
 
     # psychometrika target
     if ( conditionality == "matrix" ) {
@@ -242,7 +200,7 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
       }
     } # psychometrika target
 
-    ps   <- pstress( dhat, d, w, omega, lambda, wpp )   #pstress value
+    ps   <- pstress( dhat, d, w, omega, lambda, wpp, conditionality )   #pstress value
     lnew <- ps$pstress
 
     if (verbose) cat("Iteration: ", formatC(itel, digits=6, width=6),
@@ -275,24 +233,11 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   # final dilation
   # first re-scale distances (unconditional)
   ssqd <- sum( w * d^2 )
-  # if ( ssqd != 0 ) {
-    scale <- sqrt( sum( w ) / ssqd )
-    d <- scale * d
-    x <- scale * x
-    y <- scale * y
-    dhat <- scale * dhat
-  # }
-  # then optimally adapt d-hats depending on conditionality
-  #if ( conditionality == "matrix" ) {
-    # fwd <- sum( dhat * w * d )
-    # dwd <- sum( dhat * w * dhat )
-    # if (dwd != 0) ( fwd / dwd ) * dhat
-  #} 
-  #else { ## conditionality == "row"
-  #  fwd <- rowSums( dhat * w * d)
-  #  dwd <- rowSums( d * w * d)
-  #  for ( i in 1:n ) dhat[i] <- ifelse( fwd[i] == 0, dhat[i], ( dwd[i] / fwd[i] ) * dhat[i] )
-  #}
+  scale <- sqrt( sum( w ) / ssqd )
+  d <- scale * d
+  x <- scale * x
+  y <- scale * y
+  dhat <- scale * dhat
 
   if (itel == itmax) warning("Iteration limit reached! Increase itmax argument!")
 

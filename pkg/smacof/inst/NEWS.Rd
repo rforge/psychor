@@ -2,6 +2,12 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.11-0}{
+  \itemize{
+    \item Circular unfolding for all unfolding versions implemented.
+    }
+}
+
 \section{Changes in Version 1.10-8}{
   \itemize{
     \item variable names in morsescales corrected.
