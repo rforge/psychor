@@ -2,6 +2,15 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+
+\section{Changes in Version 1.12-0}{
+  \itemize{
+    \item External unfolding added.
+    \item In case of NA's, proper weight matrix is created in unfolding.
+    \item Vector unfolding model added. 
+    }
+}
+
 \section{Changes in Version 1.11-0}{
   \itemize{
     \item Circular unfolding for all unfolding versions implemented.

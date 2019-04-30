@@ -5,7 +5,7 @@ coefOfVar <- function(x, w){            # Compute coefficient of variation
 }
 
 # psychometrika stress
-pstress <- function(dhat, d, w, omega, lambda, wpp, conditionality ){
+pstress <- function( dhat, d, w, omega, lambda, wpp, conditionality ){
   if ( conditionality == "matrix" ){
     c1 <- nrmd2 <- sum( w * ( dhat - d )^2 )
     sumw <- sum( w )

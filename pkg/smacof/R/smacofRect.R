@@ -1,6 +1,7 @@
 smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
                        conditionality = c("matrix", "row"), lambda = 0.5, omega = 0.1, 
                        circle = c("none", "row", "column"), weightmat = NULL, init = NULL, 
+                       fixed = c("none", "row", "column"), fixed.coord = NULL,
                        ties = c("primary", "secondary"), verbose = FALSE, relax = TRUE, itmax = 10000,  
                        eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
   
@@ -11,6 +12,7 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   type <- match.arg(type, c("ratio", "interval", "ordinal", "mspline"), several.ok = FALSE)
   ties <- match.arg(ties, c("primary","secondary"), several.ok = FALSE)
   conditionality <- match.arg(conditionality, c("matrix", "row"), several.ok = FALSE)
+  fixed <- match.arg(fixed, c("none", "row", "column"), several.ok = FALSE)
   diss <- delta
   rnames <- rownames(delta)
   if (is.data.frame(diss)) diss <- as.matrix(diss)
@@ -19,12 +21,24 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   n <- dim(diss)[1]                       #number of individuals
   m <- dim(diss)[2]                       #number of objects
   p <- ndim
+  
+  ## --- sanity check external unfolding
+  if (fixed == "row"){
+    if (nrow(fixed.coord) != n | ncol(fixed.coord) < p) 
+      stop("Matrix of fixed row coordinates specified by fixed.coord has an incorrect size")
+  } else if (fixed == "col"){
+    if (nrow(fixed.coord) != m | ncol(fixed.coord) < p) 
+      stop("Matrix of fixed column coordinates specified by fixed.coord has an incorrect size")
+  }  
 
+  ## --- weight init
   if (is.null(weightmat)) {
-    w <- matrix(1,n,m)                    #initialize weights (as 1)
+    w <- matrix(1,n,m)                      #initialize weights (as 1)
+    if (any(is.na(diss))) w[is.na(diss)] <- 0  # blank out missings
   } else w <- weightmat
   wpp <- sum(w)
 
+  
   delta <- ifelse(is.na(diss),0,diss)     #replace NA's by 0
 
   ## --- Prepare for optimal scaling
@@ -38,14 +52,18 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   } else if(trans=="spline"){
     trans <- "mspline"
   }
+  ## --- end optimal scaling prep
+  
+  ## --- conditionality prep
   disobj <- list()
   if (conditionality == "matrix"){
     disobj[[1]] <- transPrep(as.vector(delta), trans = trans, spline.intKnots = spline.intKnots, spline.degree = spline.degree)
     if (trans == "mspline") disobj[[1]]$base <- cbind(rep(1, nrow(disobj[[1]]$base)), disobj[[1]]$base)
-    tt <- transform(as.vector(delta), disobj[[1]], w = as.vector(w)) #, normq = wpp
+    ##tt <- transform(as.vector(delta), disobj[[1]], w = as.vector(w)) #, normq = wpp
+    tt <- smacof::transform(as.vector(delta), disobj[[1]], w = as.vector(w)) #, normq = wpp
     dhat <- matrix(tt$res, n, m)  ## dhat update
     tt <- vector(mode = "list", length = 1)
-  } else { ## conditionality == "row"
+  } else {                             ## conditionality == "row"
     dhat <- matrix(0, n, m)
     for (i in 1:n) {
       disobj[[i]] <- transPrep(delta[i, ], trans = trans, spline.intKnots = spline.intKnots, spline.degree = spline.degree)
@@ -54,38 +72,56 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
     }
     tt <- vector(mode = "list", length = n)
   }
-  ## --- end optimal scaling prep
+ ## --- end conditionality prep
 
 
   itel <- 1
-  #delta <- delta/sqrt(sum(w*delta^2))*sqrt(n*m)       #normalize dissimilarities
-  #delta_plus <- ifelse(delta>=0,delta,0)  #delta decomposition (+)
-  #delta_min <- ifelse(delta<=0,-delta,0)  #delta decomposition (-) (if all >0 --> complete 0)
-
-  if (is.list(init)) {
-    x <-init[[1]]                         #list as input structure
-    y <-init[[2]]
-  } else {
-    e <- dhat^2
-    e <- -0.5*(e-outer(rowSums(e)/m,colSums(e)/n,"+")+(sum(e)/(n*m)))
-    #e <- e/sqrt(sum(e^2))*sqrt(n*m)
-
-    z <- svd(e,nu=p,nv=0)                 #SVD for e (pos. distances)
-    x<-z$u                                #starting value for x
-    y<-crossprod(e,x)                     #starting value for y
+  e <- dhat^2
+  e <- -0.5*(e - outer(rowSums(e)/m, colSums(e)/n, "+") + (sum(e)/(n*m)))
+  
+  ## --------- external unfolding ------------
+  if (is.list(init) & fixed == "none") {          ## Initial coordinates given
+    x <- init[[1]][, 1:p]                         
+    y <- init[[2]][, 1:p]
+  } else if (is.list(init) & fixed == "row") {    ## Initial coordinates given + fixed rows
+    fixed.coord <- fixed.coord[, 1:p]
+    x <- fixed.coord            
+    y <- init[[2]][, 1:p]
+  } else if (is.list(init) & fixed == "column") {    ## Initial coordinates given + fixed columns
+    fixed.coord <- fixed.coord[, 1:p]
+    x <- init[[1]][, 1:p]                     
+    y <- fixed.coord
+  } else if (!is.list(init) & fixed == "none") {  ## No initial coordinates given
+    z <- svd(e, nu = p, nv = 0)           #SVD for e (pos. distances)
+    x <- z$u                              #starting value for x
+    y <- crossprod(e, x)                  #starting value for y
+  } else if (!is.list(init) & fixed == "row") {  ## No initial coordinates given + fixed rows
+    fixed.coord <- fixed.coord[, 1:p]
+    x <- fixed.coord                       #starting value for x
+    y <- crossprod(e, x) %*% solve(crossprod(x)) #starting value for y
+  } else if (!is.list(init) & fixed == "column") {  ## No initial coordinates given + fixed cols
+    fixed.coord <- fixed.coord[, 1:p]
+    y <- fixed.coord                       #starting value for y
+    x <- solve(crossprod(y), crossprod(y, t(e))) #starting value for x
+    x <- t(x)
   }
+  ## Rescale x and y by a constant to fit e
+  dil <- sum(diag(t(x) %*% (e %*% y))) / sum(diag(crossprod(x) %*% crossprod(y)))
+  x   <- (dil^.5/ sum(x^2)^.5 ) * x
+  y   <- (dil^.5/ sum(y^2)^.5 ) * y
 
+  
+  ## --------- circular restriction 
   if (circle != "none"){
     r <- projCircle(x,y,x,y,circle=circle)
     x <- r$x
     y <- r$y
     wr <- rowSums(w)
     wc <- colSums(w)
-    lambda1 <- 2*max(c(wr,wc))
+    lambda.circ <- 2*max(c(wr,wc))
   }
 
   d <- distRect(x,y,0)                  #n times m of reproduced diss
-  
   ps   <- pstress(dhat, d, w, omega, lambda, wpp, conditionality)   #pstress value
   lold <- ps$pstress
 
@@ -104,31 +140,55 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
       b  <- w * dhat * (!d.is.0) / (d + d.is.0) # B matrix
       br <- rowSums(b)                   #rows B
       bc <- colSums(b)                   #columns W
+
       xraw <- (br * x) - ( b %*% y)
       yraw <- (bc * y) - crossprod(b, x)
+
       xold <- x
       yold <- y
-      y <- v %*% (yraw + crossprod(ww, xraw/wr)) #x update
-      x <- (xraw + (ww %*% y))/wr                #y update
+      yunc <- v %*% (yraw + crossprod(ww, xraw/wr))
+      xunc <- (xraw + (ww %*% yunc))/wr
+      ## x update
+      if (fixed != "column") {
+        y <- yunc                
+      } else {
+        y <- (sum(diag(crossprod(fixed.coord, yunc))/sum(fixed.coord^2))) * fixed.coord
+      }
+      ## y update
+      if (fixed != "row") {
+        x <- xunc        
+      } else {
+        x <- (sum(diag(crossprod(fixed.coord, xunc))/sum(fixed.coord^2))) * fixed.coord
+      }
       if (relax & itel > 100){
         x <- 2 * x - xold
         y <- 2 * y - yold
       }
+      
     } else {
       b  <- w * (1 - (!d.is.0) * dhat / (d + d.is.0))  #B matrix
       br <- rowSums(b)                   #rows B
       bc <- colSums(b)                   #columns W
-      xunc <- x - outer(br, rep(1/lambda1, p), "*") * x + b %*% (y/lambda1)
-      yunc <- y - outer(bc, rep(1/lambda1, p), "*") * y + t(b) %*% (x/lambda1)
+      xunc <- x - outer(br, rep(1/lambda.circ, p), "*") * x + b %*% (y/lambda.circ)
+      yunc <- y - outer(bc, rep(1/lambda.circ, p), "*") * y + t(b) %*% (x/lambda.circ)
       r <- projCircle(xunc, yunc, x, y, circle = circle)
-      x <- r$x
-      y <- r$y
+      if (fixed != "row") {
+        x <- r$x
+      } else {
+        x <- (sum(diag(crossprod(fixed.coord, xunc))/sum(fixed.coord^2))) * fixed.coord
+      }
+      if (fixed != "column") {
+        y <- r$y
+      } else {
+        y <- (sum(diag(crossprod(fixed.coord, yunc))/sum(fixed.coord^2))) * fixed.coord
+      }
+      
     }
 
-    d <- distRect(x,y,0)             #compute distances (update)
-    dhat.old <- dhat  
+    d <- distRect(x, y, 0)               #compute distances (update)
+    dhat.old <- dhat
 
-    # psychometrika target
+    
     if ( conditionality == "matrix" ) {
       nrmw <- sqrt( ps$nrmw2 )
       nrmm <- sqrt( ps$nrmm2 )
@@ -155,9 +215,10 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
       b3     <- ifelse( as.vector( dhat ) <= eps, 0, t2 + tau4 * t1 )
       upper  <- alpha2 * b1 + alpha3 * b2 + g * b3
       ksi    <- upper / lower
-      tt[[1]]     <- transform( ksi, disobj[[1]], w = as.vector( w ) )
+      ##tt[[1]]     <- transform( ksi, disobj[[1]], w = as.vector( w ) )
+      tt[[1]]     <- smacof::transform( ksi, disobj[[1]], w = as.vector( w ) )
       dhat   <- matrix( tt[[1]]$res, n, m )  ## dhat update
-    } else { ## conditionality == "row"
+    } else {                      ## conditionality == "row"
       for ( i in 1:n ) {
         mnc1 <- sum( ps$c1 )
         mnc2 <- sum( ps$c2 )
@@ -198,13 +259,13 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
         ps$nrmv2[i] <- ps$nrmw2[i] - ps$nrmm2[i]
         ps$c2[i] <- ( ps$nrmv2[i] + omega * ps$nrmm2[i] ) / ps$nrmv2[i]
       }
-    } # psychometrika target
+    }
 
     ps   <- pstress( dhat, d, w, omega, lambda, wpp, conditionality )   #pstress value
     lnew <- ps$pstress
 
     if (verbose) cat("Iteration: ", formatC(itel, digits=6, width=6),
-                     "   Stress:",  formatC(lnew, digits=6, width=12, format="f"),
+                     "  P-Stress:",  formatC(lnew, digits=6, width=12, format="f"),
                      "   Dif:",     formatC(lold - lnew, digits=6,width=12, format="f"),
                      "\n")
 
@@ -267,6 +328,5 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
                  pstress = ps$pstress, spp.row = spp.row, spp.col = spp.col, congvec = congvec, weightmat = w,
                  ndim = p, model = "Rectangular smacof", niter = itel, nind = n, nobj = m, trans = trans, conditionality = conditionality, call = match.call())
   class(result) <- c("smacofR")
-  result
+  return(result)
 }
-prefscal <- smacofRect
