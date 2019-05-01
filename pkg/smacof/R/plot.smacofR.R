@@ -118,9 +118,10 @@ plot.smacofR <- function(x, plot.type = "confplot", what = c("both", "columns", 
         points((x$obsdiss[x$iord[[1]]])[notmiss.iord], (as.vector(x$dhat[x$iord[[1]]]))[notmiss.iord], 
                type = "b", pch = pch, cex = cex, col = 1)
       } else { ## Row conditional
+        notmiss <- x$weightmat > 0 
         for (i in 1:length(x$iord)){
-          notmiss.iord <- notmiss[x$iord[[i]]]
-          xcoord      <- x$obsdiss[i, x$iord[[i]]][notmiss.iord]
+          notmiss.iord <- notmiss[i,][x$iord[[i]]]       ## FIXME!!!can't use vectorized notmiss
+          xcoord      <- x$obsdiss[i, x$iord[[i]]][notmiss.iord]  ## FIXME
           ycoord.d    <- (as.vector(x$confdist[i, x$iord[[i]] ]))[notmiss.iord]
           ycoord.dhat <- (as.vector(x$dhat[i, x$iord[[i]] ]))[notmiss.iord]
           points(xcoord, ycoord.d, pch = pch, cex = cex, col = col.dhat[i])
