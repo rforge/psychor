@@ -8,7 +8,7 @@ Description: Implements the following approaches for multidimensional scaling (M
 Imports: graphics, stats, polynom, Hmisc, colorspace, nnls, grDevices, MASS, weights, ellipse, wordcloud, candisc
 Depends: R (>= 3.2.0), plotrix
 License: GPL-3
-Suggests: knitr
+Suggests: knitr, prefmod
 LazyData: yes
 LazyLoad: yes
 ByteCompile: yes

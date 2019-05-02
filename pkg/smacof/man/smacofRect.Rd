@@ -38,7 +38,7 @@ prefscal(delta, ndim = 2, type = c("ratio", "interval", "ordinal", "mspline"),
   \item{omega}{Penalty width determines for what values of the variation coefficient the penalty should become active.}
   \item{circle}{If \code{"column"}, the column configurations are restricted to be on a circle, if \code{"row"}, row configurations are on a circle, if \code{"none"}, there are no restrictions on row and column configurations}
   \item{weightmat}{Optional matrix with dissimilarity weights}
-  \item{init}{Matrix with starting values for configurations (optional)}
+  \item{init}{Optional list of length two with starting values for the row coordinates (first element) and column coordinates (second element).}
   \item{fixed}{Do external unfolding by fixing the \code{row} coordinates, \code{column} coordinate, or choose \code{none} (default) to do normal unfolding. Even fixed coordinates are uniformly scaled by a constant to fit the loss function.}
   \item{fixed.coord}{Matrix with fixed coordinates of the appropriate size.}
   \item{ties}{Tie specification for \code{ordinal} transformations: \code{primary} unties the ties and \code{secondary} keeps the ties tied}

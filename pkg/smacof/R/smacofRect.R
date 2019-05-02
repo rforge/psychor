@@ -59,8 +59,7 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   if (conditionality == "matrix"){
     disobj[[1]] <- transPrep(as.vector(delta), trans = trans, spline.intKnots = spline.intKnots, spline.degree = spline.degree)
     if (trans == "mspline") disobj[[1]]$base <- cbind(rep(1, nrow(disobj[[1]]$base)), disobj[[1]]$base)
-    ##tt <- transform(as.vector(delta), disobj[[1]], w = as.vector(w)) #, normq = wpp
-    tt <- smacof::transform(as.vector(delta), disobj[[1]], w = as.vector(w)) #, normq = wpp
+    tt <- transform(as.vector(delta), disobj[[1]], w = as.vector(w)) #, normq = wpp
     dhat <- matrix(tt$res, n, m)  ## dhat update
     tt <- vector(mode = "list", length = 1)
   } else {                             ## conditionality == "row"

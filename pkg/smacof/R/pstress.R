@@ -9,13 +9,13 @@ pstress <- function( dhat, d, w, omega, lambda, wpp, conditionality ){
   if ( conditionality == "matrix" ){
     c1 <- nrmd2 <- sum( w * ( dhat - d )^2 )
     sumw <- sum( w )
-    mnc1 <- nrmd2 / wpp
+    mnc1 <- nrmd2 / wpp                                    ## raw stress
     wsum <- sum( w * dhat )
     nrmw2 <- sum( w * dhat^2 )
     nrmm2 <- wsum^2 / wpp
-    nrmv2 <- nrmw2 - nrmm2
-    c2 <- mnc2 <- ( nrmv2 + omega * nrmm2 ) / nrmv2
-    g <- sqrt( mnc1^lambda * mnc2 )
+    nrmv2 <- nrmw2 - nrmm2                                 ## coefficient of variation (weighted d-hats)
+    c2 <- mnc2 <- ( nrmv2 + omega * nrmm2 ) / nrmv2        ## penalty term \mu
+    g <- sqrt( mnc1^lambda * mnc2 )                        ## p-stress   
   } else { ## conditionality == "row"
     c1 <- nrmd2 <- rowSums( w * ( dhat - d )^2 )
     sumw <- rowSums( w )
