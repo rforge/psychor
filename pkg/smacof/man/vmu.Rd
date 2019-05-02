@@ -5,7 +5,7 @@
 
 \title{Vector Model of Unfolding}
 \description{
-Computes the metric vector model of unfolding (VMU) on rectangular input data (preferences, ratings) with the objects represented as vectors. 
+Computes the metric vector model of unfolding (VMU) on rectangular input data (preferences, ratings) with the individuals (rows) represented as vectors in the biplot. 
 }
 \usage{
 vmu(delta, ndim = 2, center = TRUE, scale = FALSE)
@@ -44,7 +44,7 @@ Tucker, L. R. (1960). Intra-individual and inter-individual multidimensionality.
 ## VMU on portrait value questionnaire ratings
 fit_vmu <- vmu(PVQ40agg)         ## fit 2D VMU
 fit_vmu
-plot(fit_vmu, cex = c(0.7, 1))   ## call biplot from stats
+plot(fit_vmu, cex = c(1, 0.7))   ## call biplot from stats
 }
 
 \keyword{multivariate}
