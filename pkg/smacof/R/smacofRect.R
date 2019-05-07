@@ -3,7 +3,7 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
                        circle = c("none", "row", "column"), weightmat = NULL, init = NULL, 
                        fixed = c("none", "row", "column"), fixed.coord = NULL,
                        ties = c("primary", "secondary"), verbose = FALSE, relax = TRUE, itmax = 10000,  
-                       eps = 1e-6, spline.degree = 2, spline.intKnots = 2)
+                       eps = 1e-6, spline.degree = 2, spline.intKnots = 2, parallelize = FALSE)
   
   # init ... either a list of 2 matrices of dimension n \times p and m \times p with 
   # starting values. if NULL, svd is used.
@@ -23,6 +23,7 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   p <- ndim
   
   ## --- sanity check external unfolding
+  if (is.null(fixed.coord) & fixed != "none") stop("fixed.coord is not specified.")
   if (fixed == "row"){
     if (nrow(fixed.coord) != n | ncol(fixed.coord) < p) 
       stop("Matrix of fixed row coordinates specified by fixed.coord has an incorrect size")
@@ -38,6 +39,13 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   } else w <- weightmat
   wpp <- sum(w)
 
+  ## --- Prepare for parallization
+  if (parallelize) {
+    noCores <- detectCores()/2
+    cl <- parallel::makeCluster(noCores)
+    #cl <- parallel::makeCluster(4)
+    doParallel::registerDoParallel(cl)
+  } 
   
   delta <- ifelse(is.na(diss),0,diss)     #replace NA's by 0
 
@@ -218,48 +226,59 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
       tt[[1]]     <- smacof::transform( ksi, disobj[[1]], w = as.vector( w ) )
       dhat   <- matrix( tt[[1]]$res, n, m )  ## dhat update
     } else {                      ## conditionality == "row"
-      for ( i in 1:n ) {
-        mnc1 <- sum( ps$c1 )
-        mnc2 <- sum( ps$c2 )
-        nrmw <- sqrt( ps$nrmw2[i] )
-        nrmm <- sqrt( ps$nrmm2[i] )
-        nrmv <- sqrt( ps$nrmv2[i] )
-        sqrtn <- sqrt( n )
-        sumc1 <- mnc1 - ps$nrmd2[i]
-        sumc2 <- mnc2 - ( ps$nrmv2[i] + omega * ps$nrmm2[i] ) / ps$nrmv2[i]
-        g1 = ( sumc1 + ps$nrmd2[i] ) / wpp
-        g2 = ( 1 + sumc2 ) * ps$nrmv2[i] + omega * ps$nrmm2[i]
-        g3 = n * ps$nrmv2[i]
-        g = sqrt ( g1^lambda * g2 / g3 )
-        alpha2 <- 0.5 * lambda * sqrt( g2 ) * g1^( lambda/2 - 1 )
-        alpha3 <- 0.5 * g1^( lambda / 2 ) / sqrt( g2 )
-        fmin <- min( dhat[i, ] )
-        tau1 <- ps$wsum[i] / ps$sumw[i]
-        tau2   <- 0.5 / eps
-        if ( fmin >= eps ) tau2 <- 0.5 / fmin
-        tau4   <- tau1 / nrmv
-        beta1  <- 1 / wpp
-        beta3  <- 1 + sumc2 + omega + 2 * omega * tau1 * tau2
-        beta5  <- sqrtn * tau2 * tau4
-        lower  <- alpha2 * beta1 + alpha3 * beta3 + g * beta5
-        t1     <- tau2 * dhat[i, ] - 0.5
-        t2     <- dhat[i, ] / ( 2 * nrmv )
-        b1     <- d[i, ] / wpp
-        b2     <- ifelse( dhat[i, ] <= eps, tau1 + tau1 * sumc2, tau1 + tau1 * sumc2 + omega * dhat[i, ] + ( 2 * omega * tau1 ) * t1 )
-        b3     <- ifelse( dhat[i, ] <= eps, 0, sqrtn * t2 + sqrtn * tau4 * t1 )
-        upper  <- alpha2 * b1 + alpha3 * b2 + g * b3
-        ksi    <- upper / lower
-        tt[[i]] <- transform(ksi, disobj[[i]], w = w[i, ])
-        dhat[i, ] <- tt[[i]]$res  ## dhat update
-        ps$c1[i] <- ps$nrmd2[i] <- sum( w[i, ] * ( dhat[i, ] - d[i, ] )^2 )
-        ps$wsum[i] <- sum( w[i, ] * dhat[i, ] )
-        ps$nrmw2[i] <- sum( w[i, ] * dhat[i, ]^2 )
-        ps$nrmm2[i] <- ps$wsum[i]^2 / ps$sumw[i]
-        ps$nrmv2[i] <- ps$nrmw2[i] - ps$nrmm2[i]
-        ps$c2[i] <- ( ps$nrmv2[i] + omega * ps$nrmm2[i] ) / ps$nrmv2[i]
+      if (parallelize){
+        ii <- c(0, floor(n * (1:noCores)/noCores))
+        tt <- foreach(s = 2:(noCores + 1), .combine = c, .verbose = FALSE, 
+                      .maxcombine = noCores, .multicombine = TRUE) %dopar% {
+          dhatRowUpdateBlock(ps, s, ii, n, omega, lambda, wpp, eps, dhat, d, w, disobj)
+        }
+        for (i in 1:n) {
+          dhat[i, ] <- tt[[i]]$res
+        }
+      } else {
+        for ( i in 1:n ) {
+          mnc1 <- sum( ps$c1 )
+          mnc2 <- sum( ps$c2 )
+          nrmw <- sqrt( ps$nrmw2[i] )
+          nrmm <- sqrt( ps$nrmm2[i] )
+          nrmv <- sqrt( ps$nrmv2[i] )
+          sqrtn <- sqrt( n )
+          sumc1 <- mnc1 - ps$nrmd2[i]
+          sumc2 <- mnc2 - ( ps$nrmv2[i] + omega * ps$nrmm2[i] ) / ps$nrmv2[i]
+          g1 = ( sumc1 + ps$nrmd2[i] ) / wpp
+          g2 = ( 1 + sumc2 ) * ps$nrmv2[i] + omega * ps$nrmm2[i]
+          g3 = n * ps$nrmv2[i]
+          g = sqrt ( g1^lambda * g2 / g3 )
+          alpha2 <- 0.5 * lambda * sqrt( g2 ) * g1^( lambda/2 - 1 )
+          alpha3 <- 0.5 * g1^( lambda / 2 ) / sqrt( g2 )
+          fmin <- min( dhat[i, ] )
+          tau1 <- ps$wsum[i] / ps$sumw[i]
+          tau2   <- 0.5 / eps
+          if ( fmin >= eps ) tau2 <- 0.5 / fmin
+          tau4   <- tau1 / nrmv
+          beta1  <- 1 / wpp
+          beta3  <- 1 + sumc2 + omega + 2 * omega * tau1 * tau2
+          beta5  <- sqrtn * tau2 * tau4
+          lower  <- alpha2 * beta1 + alpha3 * beta3 + g * beta5
+          t1     <- tau2 * dhat[i, ] - 0.5
+          t2     <- dhat[i, ] / ( 2 * nrmv )
+          b1     <- d[i, ] / wpp
+          b2     <- ifelse( dhat[i, ] <= eps, tau1 + tau1 * sumc2, tau1 + tau1 * sumc2 + omega * dhat[i, ] + ( 2 * omega * tau1 ) * t1 )
+          b3     <- ifelse( dhat[i, ] <= eps, 0, sqrtn * t2 + sqrtn * tau4 * t1 )
+          upper  <- alpha2 * b1 + alpha3 * b2 + g * b3
+          ksi    <- upper / lower
+          tt[[i]] <- transform(ksi, disobj[[i]], w = w[i, ])
+          dhat[i, ] <- tt[[i]]$res  ## dhat update
+          # ps$c1[i] <- ps$nrmd2[i] <- sum( w[i, ] * ( dhat[i, ] - d[i, ] )^2 )
+          # ps$wsum[i] <- sum( w[i, ] * dhat[i, ] )
+          # ps$nrmw2[i] <- sum( w[i, ] * dhat[i, ]^2 )
+          # ps$nrmm2[i] <- ps$wsum[i]^2 / ps$sumw[i]
+          # ps$nrmv2[i] <- ps$nrmw2[i] - ps$nrmm2[i]
+          # ps$c2[i] <- ( ps$nrmv2[i] + omega * ps$nrmm2[i] ) / ps$nrmv2[i]
+        }
       }
     }
-
+    
     ps   <- pstress( dhat, d, w, omega, lambda, wpp, conditionality )   #pstress value
     lnew <- ps$pstress
 
@@ -277,6 +296,10 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
   }
   #-------------------- end majorization --------------------------
 
+  ## --- Finish for parallization
+  if (parallelize) parallel::stopCluster(cl)
+  
+  
   # point stress
   resmat <- as.matrix(d - dhat)^2    #point stress
   spp.col <- colSums(w * resmat, na.rm = TRUE) / colSums(w, na.rm = TRUE)

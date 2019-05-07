@@ -3,6 +3,14 @@
 \encoding{UTF-8}
 
 
+\section{Changes in Version 1.12-1}{
+  \itemize{
+    \item Extra sanity check added for fixed coordinates in unfolding added.
+    \item Parallelization is added for rowconditional unfolding.
+    }
+}
+
+
 \section{Changes in Version 1.12-0}{
   \itemize{
     \item External unfolding added.
