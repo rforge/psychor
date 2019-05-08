@@ -28,7 +28,8 @@ dhatRowUpdateBlock <- function(ps, s, ii, n, omega, lambda, wpp, eps, dhat, d, w
     t2     <- dhat[i, ] / ( 2 * nrmv )
     b1     <- d[i, ] / wpp
     b2     <- ifelse( dhat[i, ] <= eps, tau1 + tau1 * sumc2, tau1 + tau1 * sumc2 + omega * dhat[i, ] + ( 2 * omega * tau1 ) * t1 )
-    b3     <- ifelse( dhat[i, ] <= eps, 0, sqrtn * t2 + sqrtn * tau4 * t1 )
+    #b3     <- ifelse( dhat[i, ] <= eps, 0, sqrtn * t2 + sqrtn * tau4 * t1 )
+    b3     <- (dhat[i, ] > eps) * sqrtn * (t2 +  tau4 * t1)
     upper  <- alpha2 * b1 + alpha3 * b2 + g * b3
     ksi    <- upper / lower
     tt[[i - ii[s-1]]]  <- transform(ksi, disobj[[i]], w = w[i, ])

@@ -2,6 +2,12 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.13-1}{
+  \itemize{
+    \item Slight acceleration in unfolding when using transformations.
+    }
+}
+
 \section{Changes in Version 1.13-0}{
   \itemize{
     \item Pseudo-confidence ellipses added via confEllipse().

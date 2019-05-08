@@ -218,8 +218,10 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
       t1     <- tau2 * as.vector( dhat ) - 0.5
       t2     <- as.vector( dhat ) / ( 2 * nrmv )
       b1     <- as.vector( d ) / wpp
-      b2     <- ifelse( as.vector( dhat ) <= eps, tau1, tau1 + omega * as.vector( dhat ) + ( 2 * omega * tau1 ) * t1 )
-      b3     <- ifelse( as.vector( dhat ) <= eps, 0, t2 + tau4 * t1 )
+      #b2     <- ifelse( as.vector( dhat ) <= eps, tau1, tau1 + omega * as.vector( dhat ) + ( 2 * omega * tau1 ) * t1 )
+      b2     <- tau1 +  (as.vector(dhat) > eps) * omega * (dhat + ( 2 * tau1 ) * t1)
+      #b3     <- ifelse( as.vector( dhat ) <= eps, 0, t2 + tau4 * t1 )
+      b3     <- (as.vector(dhat) > eps) * (t2 +  tau4 * t1)
       upper  <- alpha2 * b1 + alpha3 * b2 + g * b3
       ksi    <- upper / lower
       ##tt[[1]]     <- transform( ksi, disobj[[1]], w = as.vector( w ) )
@@ -229,7 +231,7 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
       if (parallelize){
         ii <- c(0, floor(n * (1:noCores)/noCores))
         tt <- foreach(s = 2:(noCores + 1), .combine = c, .verbose = FALSE, 
-                      .maxcombine = noCores, .multicombine = TRUE) %dopar% {
+                      .maxcombine = noCores, .multicombine = TRUE, export = ps) %dopar% {
           dhatRowUpdateBlock(ps, s, ii, n, omega, lambda, wpp, eps, dhat, d, w, disobj)
         }
         for (i in 1:n) {
@@ -263,8 +265,11 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
           t1     <- tau2 * dhat[i, ] - 0.5
           t2     <- dhat[i, ] / ( 2 * nrmv )
           b1     <- d[i, ] / wpp
-          b2     <- ifelse( dhat[i, ] <= eps, tau1 + tau1 * sumc2, tau1 + tau1 * sumc2 + omega * dhat[i, ] + ( 2 * omega * tau1 ) * t1 )
-          b3     <- ifelse( dhat[i, ] <= eps, 0, sqrtn * t2 + sqrtn * tau4 * t1 )
+          #b2     <- ifelse( dhat[i, ] <= eps, tau1 + tau1 * sumc2, tau1 + tau1 * sumc2 + omega * dhat[i, ] + ( 2 * omega * tau1 ) * t1 )
+          b2     <- (tau1 + tau1 * sumc2) + (dhat[i, ] > eps) * omega * (dhat[i, ] + ( 2 * tau1 ) * t1)
+          #b2     <- ifelse( dhat[i, ] <= eps, tau1 + tau1 * sumc2, tau1 + tau1 * sumc2 + omega * dhat[i, ] + ( 2 * omega * tau1 ) * t1 )
+          #b3     <- ifelse( dhat[i, ] <= eps, 0, sqrtn * (t2 +  tau4 * t1) )
+          b3     <- (dhat[i, ] > eps) * sqrtn * (t2 +  tau4 * t1)
           upper  <- alpha2 * b1 + alpha3 * b2 + g * b3
           ksi    <- upper / lower
           tt[[i]] <- transform(ksi, disobj[[i]], w = w[i, ])
