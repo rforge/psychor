@@ -1,13 +1,13 @@
 # plot method for confidence ellipses
 
-plot.confell <- function(x, eps = 0.05, s = 1, t = 2, plot.dim = c(1,2), col = 1, label.conf = list(label = TRUE, pos = 3, cex = 0.8), 
+plot.confell <- function(x, eps = 0.05, plot.dim = c(1,2), col = 1, label.conf = list(label = TRUE, pos = 3, cex = 0.8), 
                          ell = list(lty = 1, lwd = 1, col = 1), main, xlab, ylab, xlim, ylim, asp = 1, type = "p", pch = 20, ...)
                             
                             
 {
 # x ... object of class confeff
-  x1 <- plot.dim[1]
-  y1 <- plot.dim[2]
+  s <- x1 <- plot.dim[1]
+  t <- y1 <- plot.dim[2]
   
   if (missing(main)) main <- paste("Pseudo-Confidence Ellipses") else main <- main
   if (missing(xlab)) xlab <- paste("Dimension", x1,sep = " ") else xlab <- xlab

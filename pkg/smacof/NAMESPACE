@@ -1,5 +1,5 @@
 useDynLib("smacof", .registration = TRUE)
-import("stats", "graphics", "Hmisc", "colorspace", "polynom", "nnls", "MASS", "weights", "plotrix")
+import("stats", "graphics", "Hmisc", "colorspace", "polynom", "nnls", "MASS", "weights", "plotrix", "parallel", "foreach", "doParallel")
 importFrom("grDevices", "dev.new", "hcl", "chull")
 importFrom("ellipse", "ellipse")
 importFrom("wordcloud", "textplot")
