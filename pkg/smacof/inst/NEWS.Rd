@@ -2,6 +2,11 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.13-0}{
+  \itemize{
+    \item Pseudo-confidence ellipses added via confEllipse().
+    }
+}
 
 \section{Changes in Version 1.12-1}{
   \itemize{
