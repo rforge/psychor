@@ -230,7 +230,8 @@ smacofRect <- function(delta, ndim = 2, type = c("ratio", "interval", "ordinal",
     } else {                      ## conditionality == "row"
       if (parallelize){
         ii <- c(0, floor(n * (1:noCores)/noCores))
-        tt <- foreach(s = 2:(noCores + 1), .combine = c, .verbose = FALSE, 
+        s <- 2:(noCores + 1)
+        tt <- foreach(s = s, .combine = c, .verbose = FALSE, 
                       .maxcombine = noCores, .multicombine = TRUE, export = ps) %dopar% {
           dhatRowUpdateBlock(ps, s, ii, n, omega, lambda, wpp, eps, dhat, d, w, disobj)
         }
