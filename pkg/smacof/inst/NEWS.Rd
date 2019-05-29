@@ -2,6 +2,13 @@
 \title{News for Package \pkg{smacof}}
 \encoding{UTF-8}
 
+\section{Changes in Version 2.0-0}{
+  \itemize{
+    \item Color shading added to plot.icexplore().
+    \item Fixed column coordinates version of vmu() implemented. 
+    }
+}
+
 \section{Changes in Version 1.13-1}{
   \itemize{
     \item Slight acceleration in unfolding when using transformations.
@@ -11,6 +18,7 @@
 \section{Changes in Version 1.13-0}{
   \itemize{
     \item Pseudo-confidence ellipses added via confEllipse().
+    \item Inverse MDS removed because it was buggy. Will be added later on again. 
     }
 }
 
