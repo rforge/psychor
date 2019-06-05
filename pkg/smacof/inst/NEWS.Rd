@@ -6,6 +6,9 @@
   \itemize{
     \item Color shading added to plot.icexplore().
     \item Fixed column coordinates version of vmu() implemented. 
+    \item Vignette added.
+    \item Help files for indvalues and PVQ40 data updated.
+    \item method.dat = "rows" as default in permtest.smacofR(). 
     }
 }
 
