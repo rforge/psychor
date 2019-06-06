@@ -148,15 +148,15 @@ Debelak, R., & Koller, I. (2019). Testing the Local Independence Assumption of t
 ### Preparation:
 
 # data for examples below
-X <- raschdat1
+X <- as.matrix(raschdat1)
 
 # generate 100 random matrices based on original data matrix
 rmat <- rsampler(X, rsctrl(burn_in = 100, n_eff = 100, seed = 123))
 
 ## the following examples can also directly be used by setting
-## rmat <- raschdat1
-## without calling rsampler() first, e.g.,
-t1 <- NPtest(raschdat1, n = 100, method = "T1")
+## rmat <- as.matrix(raschdat1)
+## without calling rsampler() first
+t1 <- NPtest(rmat, n = 100, method = "T1")
 
 
 ### Examples ###################################################################
