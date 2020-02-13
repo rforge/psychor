@@ -32,10 +32,8 @@ plot.smacofJK <- function(x, plot.dim = c(1,2), hclpar = list(c = 50, l = 70), c
   if (missing(xlim)) xlim <- range(xcoor)
   if (missing(ylim)) ylim <- range(ycoor)
   
-  dev.new()
   if (legend) op <- par(mar = c(5.1, 4.1, 4.1, 8.1), xpd = TRUE)
-  plot(x0[, 1:2], type = "n", xlab = xlab, ylab = ylab, main = main, col = hclcolors, xlim = xlim, ylim = ylim, 
-       asp = asp)
+  plot(x0[, 1:2], type = "n", xlab = xlab, ylab = ylab, main = main, col = hclcolors, xlim = xlim, ylim = ylim, asp = asp, ...)
   points(y0[, 1:2], col = hclcolors1, cex = 0.6, pch = 16)
 	
   if (plot.lines) {

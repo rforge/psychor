@@ -14,7 +14,8 @@
     \item omega default in unfolding() set to 1. 
     \item Guttman datasets added (Guttman1965, Guttman1991). 
     \item Second rectangle dataset added (area-shape). 
-    \item svm_mdsplot() added for facet plotting based on SVM fit. 
+    \item svm_mdsplot() added for facet plotting based on SVM fit.
+    \item Argument "scale" in biplotmds() added. 
     }
 }
 
