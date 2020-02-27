@@ -5,7 +5,8 @@
 \description{Plots 2D MDS configuration including facets as determined by an SVM. 
 }
 \usage{
-svm_mdsplot(mds_object, svm_object, class, legend1 = TRUE, legend2 = TRUE, inset = c(-0.2, 0.5))
+svm_mdsplot(mds_object, svm_object, class, legend1 = TRUE, legend2 = TRUE, 
+            inset = c(-0.2, 0.5))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
