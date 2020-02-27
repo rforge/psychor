@@ -1,6 +1,4 @@
 plotTR <-function(object,...){
-  #TODO : *Add CI around point estimates
-#  require(lattice) # MJM20141101: lattice is imported
   #plot trend over time for all items
   itms <- object$itms
   tps <- object$mpoints
