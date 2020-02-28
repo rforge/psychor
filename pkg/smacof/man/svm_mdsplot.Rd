@@ -6,7 +6,7 @@
 }
 \usage{
 svm_mdsplot(mds_object, svm_object, class, legend1 = TRUE, legend2 = TRUE, 
-            inset = c(-0.2, 0.5))
+            inset = c(-0.2, 0.5), plot.dim = c(1,2), main, xlab, ylab, xlim, ylim, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,6 +16,13 @@ svm_mdsplot(mds_object, svm_object, class, legend1 = TRUE, legend2 = TRUE,
   \item{legend1}{If \code{TRUE}, facet legend is added.}
   \item{legend2}{If \code{TRUE}, class legend is added.}
   \item{inset}{Inset distance from the margins for both legends as a fraction of the plot region when legend is placed by keyword.}
+  \item{plot.dim}{Vector with dimensions to be plotted.}
+  \item{main}{Plot title.}
+  \item{xlab}{Label of x-axis.}
+  \item{ylab}{Label of y-axis.}
+  \item{xlim}{Scale x-axis.}
+  \item{ylim}{Scale y-axis.}
+  \item{\dots}{Further plot arguments passed: see \code{\link[graphics]{image}} for detailed information.}
 }
 
 \details{Using the SVM implementation of \code{e1071} one can determine facets in an MDS configuration based on an SVM fit. This function plots the resulting facets on top of the 2D MDS configuration. Note that this function is work in progress. 
