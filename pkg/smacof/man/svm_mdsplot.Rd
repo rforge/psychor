@@ -6,7 +6,8 @@
 }
 \usage{
 svm_mdsplot(mds_object, svm_object, class, legend1 = TRUE, legend2 = TRUE, 
-            inset = c(-0.2, 0.5), plot.dim = c(1,2), main, xlab, ylab, xlim, ylim, ...)
+            inset = c(-0.2, 0.5), plot.dim = c(1,2), by = 0.01, 
+            main, xlab, ylab, xlim, ylim, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,6 +18,7 @@ svm_mdsplot(mds_object, svm_object, class, legend1 = TRUE, legend2 = TRUE,
   \item{legend2}{If \code{TRUE}, class legend is added.}
   \item{inset}{Inset distance from the margins for both legends as a fraction of the plot region when legend is placed by keyword.}
   \item{plot.dim}{Vector with dimensions to be plotted.}
+  \item{by}{Scaling factor for resolution (the smaller, the higher the resolution).}
   \item{main}{Plot title.}
   \item{xlab}{Label of x-axis.}
   \item{ylab}{Label of y-axis.}
