@@ -1358,6 +1358,7 @@ binom.conf<-function(x = sum(y), nn = length(y),AUTO=TRUE,
   #  WIL:  Wilson type CI. Included for completeness; was used in simulations  relevant to binom2g
   #   SD: Schilling--Doi
   #
+  method <- 'SD'
   if(nn<35){
     if(AUTO)method='SD'
   }
