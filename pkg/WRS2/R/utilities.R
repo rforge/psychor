@@ -1528,3 +1528,99 @@ LCO.CI <- function(n,level,dp)
   # print(ci.matrix)
   ci.matrix
 }
+
+
+## effect size rmanova
+rmES.pro<-function(x, est = tmean, ...){
+  #
+  #  Measure of effect size based on the depth of 
+  #  estimated measure of location relative to the 
+  #  null distribution
+  #
+ 
+  if(is.list(x))x=matl(x)
+  x=elimna(x)
+  E=apply(x,2,est,...)
+  GM=mean(E)
+  J=ncol(x)
+  GMvec=rep(GM,J)
+  DN=pdis(x,GMvec,center=E)
+  DN
+}
+
+pdis<-function(m,pts=m,MM=FALSE,cop=3,dop=1,center=NA,na.rm=TRUE){
+  #
+  # Compute projection distances for points in pts relative to points in m
+  #  That is, the projection distance from the center of m
+  #
+  #
+  #  MM=F  Projected distance scaled
+  #  using interquatile range.
+  #  MM=T  Scale projected distances using MAD.
+  #
+  #  There are five options for computing the center of the
+  #  cloud of points when computing projections:
+  #  cop=1 uses Donoho-Gasko median
+  #  cop=2 uses MCD center
+  #  cop=3 uses median of the marginal distributions.
+  #  cop=4 uses MVE center
+  #  cop=5 uses skipped mean
+  #
+  m<-elimna(m) # Remove missing values
+  pts=elimna(pts)
+  m<-as.matrix(m)
+  nm=nrow(m)
+  pts<-as.matrix(pts)
+  if(ncol(m)>1){
+    if(ncol(pts)==1)pts=t(pts)
+  }
+  npts=nrow(pts)
+  mp=rbind(m,pts)
+  np1=nrow(m)+1
+  if(ncol(m)==1){
+    m=as.vector(m)
+    pts=as.vector(pts)
+    if(is.na(center[1]))center<-median(m)
+    dis<-abs(pts-center)
+    disall=abs(m-center)
+    temp=idealf(disall)
+    if(!MM){
+      pdis<-dis/(temp$qu-temp$ql)
+    }
+    if(MM)pdis<-dis/mad(disall)
+  }
+  #if(ncol(m)>1){
+  else{
+    if(is.na(center[1])){
+      if(cop==1)center<-dmean(m,tr=.5,dop=dop)
+      if(cop==2)center<-cov.mcd(m)$center
+      if(cop==3)center<-apply(m,2,median)
+      if(cop==4)center<-cov.mve(m)$center
+      if(cop==5)center<-smean(m)
+    }
+    dmat<-matrix(NA,ncol=nrow(mp),nrow=nrow(mp))
+    for (i in 1:nrow(mp)){
+      B<-mp[i,]-center
+      dis<-NA
+      BB<-B^2
+      bot<-sum(BB)
+      if(bot!=0){
+        for (j in 1:nrow(mp)){
+          A<-mp[j,]-center
+          temp<-sum(A*B)*B/bot
+          dis[j]<-sqrt(sum(temp^2))
+        }
+        dis.m=dis[1:nm]
+        if(!MM){
+          #temp<-idealf(dis)
+          temp<-idealf(dis.m)
+          dmat[,i]<-dis/(temp$qu-temp$ql)
+        }
+        #if(MM)dmat[,i]<-dis/mad(dis)
+        if(MM)dmat[,i]<-dis/mad(dis.m)
+      }}
+    pdis<-apply(dmat,1,max,na.rm=na.rm)
+    pdis=pdis[np1:nrow(mp)]
+  }
+  pdis
+}

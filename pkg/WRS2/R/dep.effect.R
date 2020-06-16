@@ -30,7 +30,7 @@ dep.effect <-function(x, y, tr = 0.2, nboot = 1000){
   n=length(x)
   output=matrix(NA,ncol=7,nrow=4)
   dimnames(output)=list(c('AKP','QS (median)','QStr','SIGN'),c('NULL','Est','S','M','L','ci.low','ci.up'))
-  output[1,1:2]=c(0,D.akp.effect(x))
+  output[1,1:2]=c(0,D.akp.effect(x, tr=tr))
   output[2,1:2]=c(0.5,depQS(x)$Q.effect)
   output[3,1:2]=c(0.5,depQS(x,locfun=mean,tr=tr)$Q.effect)
   output[4,1:2]=c(0.5,mean(x[x!=0]<0))
