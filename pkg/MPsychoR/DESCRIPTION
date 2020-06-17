@@ -2,7 +2,7 @@ Package: MPsychoR
 Type: Package
 Title: Modern Psychometrics with R
 Version: 0.10-8
-Date: 2020-06-12
+Date: 2020-06-17
 Authors@R: c(person("Patrick", "Mair", role = c("aut", "cre"), email = "mair@fas.harvard.edu"))
 Maintainer: Patrick Mair <mair@fas.harvard.edu>
 Description: Supplementary materials and datasets for the book "Modern Psychometrics With R" (Mair, 2018, Springer useR! series).
