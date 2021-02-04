@@ -1,6 +1,12 @@
 \name{NEWS}
 \title{News for Package \pkg{eRm}}
 \encoding{UTF-8}
+\section{Changes in Version 1.0-2}{
+  \itemize{
+	  \item More flexibility to the legend in plotINFO added.
+	}
+}
+
 \section{Changes in Version 1.0-1}{
   \itemize{
 	  \item Legend in plotjointICC now uses proper item labels (and better default colors).
