@@ -2,6 +2,12 @@
 \title{News for Package \pkg{WRS2}}
 \encoding{UTF-8}
 
+\section{Changes in Version 1.1-1}{
+  \itemize{
+    \item wmcpAKP() added for dependent samples ANOVA effect size. 
+    } 
+}
+
 \section{Changes in Version 1.1-0}{
   \itemize{
     \item Bootstrap CI for effect size in t1way() added.
