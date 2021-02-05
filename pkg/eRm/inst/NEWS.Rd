@@ -3,7 +3,9 @@
 \encoding{UTF-8}
 \section{Changes in Version 1.0-2}{
   \itemize{
-	  \item More flexibility to the legend in plotINFO added.
+      \item \code{NPtest()} can now be applied to matrices up to 256 columns (Fortran code changed). 
+	  \item More flexibility for the legend in \code{plotINFO()} added.
+	  \item Full and 0 response patterns are not taken into account in \code{SepRel()}. 
 	}
 }
 
