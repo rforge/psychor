@@ -5,6 +5,7 @@
 \section{Changes in Version 1.1-1}{
   \itemize{
     \item wmcpAKP() added for dependent samples ANOVA effect size. 
+    \item Bug in post hoc function mcp2atm() and mcp2a() fixed. 
     } 
 }
 
