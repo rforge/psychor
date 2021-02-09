@@ -22,7 +22,7 @@ plotINFO <- function(ermobject, type = "both", theta = seq(-6, 6, length.out = 1
     if(is.character(legpos)) legend(legpos, legend = itmnames, pch = NULL, lty = 1:5, col = 1:6)  
   }
 
-  if(type %in% c("item", "both")){
+  if(type %in% c("test", "both")){
     tinfo <- test_info(ermobject, theta)
     plot(x = theta, y = tinfo, type = "l", main = get_dots("mainT", "Test Information"), xlab = get_dots("xlab", "Latent Trait"), ylab = get_dots("ylabT", "Scale Information"))
   }
