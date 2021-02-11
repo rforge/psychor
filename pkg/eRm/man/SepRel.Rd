@@ -63,7 +63,7 @@
 %
 %
 \references{%
-  Wright, B.D., and Stone, M.H. (1999). \emph{Measurement essentials.} Wide Range Inc., Wilmington. (\url{http://www.rasch.org/measess/me-all.pdf} 28Mb).%
+  Wright, B.D., and Stone, M.H. (1999). \emph{Measurement essentials.} Wide Range Inc., Wilmington. (\url{https://www.rasch.org/measess/me-all.pdf} 28Mb).%
 }
 \author{Original code by Adrian Brügger (\email{Adrian.Bruegger@imu.unibe.ch}), adapted by Marco J. Maier}
 %\note{}
