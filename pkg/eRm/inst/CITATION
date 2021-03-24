@@ -39,7 +39,7 @@ citEntry(
   journal = "{Journal of Statistical Software}",
   volume  = 20,
   issue   = 9,
-  url     = "http://www.jstatsoft.org/v20/i09",
+  url     = "https://www.jstatsoft.org/v20/i09",
   textVersion = paste0(
     "Mair, P., & Hatzinger, R. (2007). ",
     "Extended Rasch modeling: The eRm package for the application of IRT models in R. ",
